@@ -261,6 +261,7 @@ window.renderCart = renderCartPage;
 // Load single product
 export async function loadProduct(productId) {
     const container = document.getElementById('product-detail');
+    const pageTitle = document.getElementById('page-title');
     if (!container) return;
 
     try {
@@ -279,13 +280,30 @@ export async function loadProduct(productId) {
             return;
         }
 
+        if (pageTitle) {
+            pageTitle.textContent = `${product.name} - Hunny Collection PK`;
+        }
+
         window.currentProduct = product;
+        let selectedSize = null;
+
+        // Generate image gallery
+        const images = product.images || [];
+        const mainImage = images[0] || 'https://via.placeholder.com/500x500';
+        const thumbnails = images.length > 1 ? `
+            <div class="product-thumbnails">
+                ${images.map((img, idx) => `
+                    <img src="${img}" class="product-thumbnail ${idx === 0 ? 'active' : ''}" 
+                         onclick="changeImage('${img}', this)">
+                `).join('')}
+            </div>
+        ` : '';
 
         container.innerHTML = `
             <div class="product-detail-grid">
                 <div class="product-images">
-                    <img src="${product.images?.[0] || 'https://via.placeholder.com/500x500'}" 
-                         alt="${product.name}" class="product-main-image">
+                    <img src="${mainImage}" alt="${product.name}" class="product-main-image" id="main-image">
+                    ${thumbnails}
                 </div>
                 <div class="product-details">
                     <span class="badge">${product.category}</span>
@@ -298,7 +316,7 @@ export async function loadProduct(productId) {
                             <label>Size:</label>
                             <div class="size-options">
                                 ${product.variants.map(size => `
-                                    <button class="size-btn" onclick="selectSize('${size}')">${size}</button>
+                                    <button class="size-btn" onclick="selectSize('${size}', this)">${size}</button>
                                 `).join('')}
                             </div>
                         </div>
@@ -320,18 +338,23 @@ export async function loadProduct(productId) {
     }
 }
 
+// Change main image
+window.changeImage = (imageUrl, thumbnail) => {
+    document.getElementById('main-image').src = imageUrl;
+    document.querySelectorAll('.product-thumbnail').forEach(t => t.classList.remove('active'));
+    thumbnail.classList.add('active');
+};
+
 // Global functions for product page
-window.selectSize = (size) => {
-    selectedSize = size;
-    document.querySelectorAll('.size-btn').forEach(btn => {
-        btn.classList.remove('selected');
-        if (btn.textContent === size) btn.classList.add('selected');
-    });
+window.selectSize = (size, btn) => {
+    window.selectedSize = size;
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
 };
 
 window.addToCartClick = () => {
     const quantity = parseInt(document.getElementById('quantity')?.value || 1);
-    const variant = selectedSize ? { size: selectedSize } : {};
+    const variant = window.selectedSize ? { size: window.selectedSize } : {};
     
     if (addToCart(window.currentProduct, variant, quantity)) {
         alert('Added to cart!');
@@ -344,8 +367,6 @@ window.buyNow = () => {
         window.location.href = 'checkout.html';
     }, 500);
 };
-
-let selectedSize = null;
 
 // Place order
 export async function placeOrder(orderData) {

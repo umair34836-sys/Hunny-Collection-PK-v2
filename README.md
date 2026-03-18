@@ -1,6 +1,22 @@
 # 🌸 Hunny Collection PK - Complete WebStore
 
-✅ **FULLY WORKING | NO BUILD REQUIRED | DIRECT DEPLOY**
+✅ **FULLY WORKING | IMAGE UPLOAD | MULTIPLE IMAGES | NO BUILD REQUIRED**
+
+---
+
+## 🖼️ **Image Upload Features**
+
+### **Admin Panel Se:**
+- ✅ **Direct Upload** to Firebase Storage
+- ✅ **Multiple Images** per product
+- ✅ **Image Preview** before saving
+- ✅ **Drag & Drop** support
+- ✅ **Auto URL generation**
+
+### **Product Page:**
+- ✅ **Image Gallery** with thumbnails
+- ✅ **Click to enlarge**
+- ✅ **Multiple angles** support
 
 ---
 
@@ -91,11 +107,28 @@ service cloud.firestore {
 
 **Click Publish**
 
-### **6. Enable Storage (Optional - for image uploads)**
+### **3. Enable Storage (For Image Upload)**
 
 Firebase Console → Storage → Get Started:
 - **Mode:** Test mode
+- **Location:** Same as Firestore
 - **Save**
+
+**Storage Rules Update Karo:**
+
+Firebase Console → Storage → Rules:
+
+```javascript
+rules_version = '2';
+match /b/{bucket}/o {
+  match /{allPaths=**} {
+    allow read: if true;
+    allow write: if request.auth != null;
+  }
+}
+```
+
+**Publish** karo!
 
 ---
 
@@ -155,8 +188,69 @@ Hunny Collection PK/
 ### **For Admin:**
 1. Visit: `https://umair34836-sys.github.io/Hunny-Collection-PK/admin.html`
 2. Login with admin credentials
-3. Add products from dashboard
-4. Manage orders
+3. Click **"Add Product"**
+4. **Upload Images:**
+   - Click "Choose Files" button
+   - Select multiple images
+   - Click "📤 Upload Images to Firebase"
+   - Wait for upload to complete
+   - Preview dikhai dega
+5. Fill product details
+6. Click "Save Product"
+
+---
+
+## 🖼️ **Image Upload Guide**
+
+### **Method 1: Direct Upload (Recommended)**
+
+**Admin Panel Se:**
+1. Admin panel kholo
+2. Products → Add Product
+3. **"Choose Files"** button click karo
+4. Multiple images select karo
+5. **"📤 Upload Images to Firebase"** click karo
+6. Upload complete hone ka wait karo
+7. Preview mein images dikhengi
+8. Baaki details bharo
+9. Save Product
+
+**Features:**
+- ✅ Multiple images (unlimited)
+- ✅ Free Firebase Storage (5GB)
+- ✅ Auto URL generation
+- ✅ Preview before save
+
+---
+
+### **Method 2: External URLs**
+
+**Agar Firebase Storage use nahi karna:**
+
+1. **Image URLs kahan se lein:**
+   - **ImgBB:** https://imgbb.com/ (free unlimited)
+   - **Cloudinary:** https://cloudinary.com/ (free 25GB)
+   - **Postimages:** https://postimages.org/ (free)
+   - Apna server/website
+
+2. **URLs copy karo** (comma separated)
+
+3. **Admin panel mein:**
+   - "Or paste image URLs" field mein paste karo
+   - Example: `https://imgbb.com/abc.jpg, https://imgbb.com/def.jpg`
+
+---
+
+## 📹 **Video Support:**
+
+**Currently:** Sirf images support hoti hain
+
+**Video add karna hai toh:**
+1. YouTube par upload karo (unlisted)
+2. Video ka thumbnail image use karo
+3. Description mein YouTube link daal do
+
+**Ya future update mein video support aa jayegi!**
 
 ---
 

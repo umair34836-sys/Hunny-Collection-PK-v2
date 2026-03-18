@@ -349,10 +349,28 @@
                     <label>Sizes (comma separated)</label>
                     <input type="text" id="product-sizes" placeholder="S, M, L, XL">
                 </div>
+                
+                <!-- Image Upload Section -->
                 <div class="form-group">
-                    <label>Image URL</label>
-                    <input type="url" id="product-image" placeholder="https://example.com/image.jpg">
+                    <label>Product Images</label>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                        Upload multiple images or paste URLs (comma separated)
+                    </p>
+                    
+                    <!-- Upload Button -->
+                    <input type="file" id="product-image-upload" accept="image/*" multiple style="margin-bottom: 10px;">
+                    <button type="button" id="upload-btn" class="btn-sm" onclick="uploadImages()" style="margin-bottom: 10px;">
+                        📤 Upload Images to Firebase
+                    </button>
+                    <div id="upload-status" style="font-size: 0.85rem; margin-top: 5px;"></div>
+                    
+                    <!-- Image Preview -->
+                    <div id="image-preview" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;"></div>
+                    
+                    <!-- Manual URL Input -->
+                    <input type="text" id="product-image-urls" placeholder="Or paste image URLs (comma separated)" style="margin-top: 10px;">
                 </div>
+                
                 <button type="submit" class="btn-primary" style="width: 100%;">Save Product</button>
             </form>
         </div>
@@ -360,42 +378,95 @@
 
     <script type="module" src="firebase-config.js"></script>
     <script type="module">
-        import { auth, db } from './firebase-config.js';
+        import { auth, db, storage } from './firebase-config.js';
         import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
         let products = [];
         let categories = [];
         let orders = [];
+        let uploadedImageUrls = [];
+
+        // Global upload function
+        window.uploadImages = async () => {
+            const fileInput = document.getElementById('product-image-upload');
+            const statusDiv = document.getElementById('upload-status');
+            const previewDiv = document.getElementById('image-preview');
+            const urlsInput = document.getElementById('product-image-urls');
+            
+            if (fileInput.files.length === 0) {
+                statusDiv.innerHTML = '<span style="color: orange;">Please select images first</span>';
+                return;
+            }
+
+            statusDiv.innerHTML = '<span style="color: blue;">Uploading images... Please wait...</span>';
+            
+            try {
+                const uploadPromises = Array.from(fileInput.files).map(async (file) => {
+                    const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    return getDownloadURL(storageRef);
+                });
+
+                const urls = await Promise.all(uploadPromises);
+                uploadedImageUrls = [...uploadedImageUrls, ...urls];
+                
+                // Update URL input
+                urlsInput.value = uploadedImageUrls.join(',');
+                
+                // Show preview
+                previewDiv.innerHTML = urls.map(url => `
+                    <img src="${url}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1;">
+                `).join('');
+                
+                statusDiv.innerHTML = `<span style="color: green;">✓ ${urls.length} image(s) uploaded successfully!</span>`;
+                fileInput.value = '';
+            } catch (error) {
+                console.error('Upload error:', error);
+                statusDiv.innerHTML = `<span style="color: red;">Upload failed: ${error.message}</span>`;
+            }
+        };
 
         // Check admin auth
         onAuthStateChanged(auth, async (user) => {
+            console.log('Auth state changed:', user ? user.email : 'No user');
+            
             if (!user) {
                 document.getElementById('admin-login-view').style.display = 'flex';
                 document.getElementById('admin-dashboard-view').style.display = 'none';
             } else {
                 // Check if user email exists in admins collection
                 try {
+                    console.log('Checking admin status for:', user.email);
+                    
                     const q = query(collection(db, 'admins'), where('email', '==', user.email));
                     const snapshot = await getDocs(q);
                     
+                    console.log('Admin check result:', snapshot.empty ? 'NOT FOUND' : 'FOUND');
+                    console.log('Admins in collection:', snapshot.size);
+                    
                     if (snapshot.empty) {
-                        // Admin not found - show error but don't logout
-                        console.log('User email:', user.email);
-                        console.log('Admins collection check failed');
-                        alert('Not authorized as admin. Please add your email to Firestore admins collection.\n\nEmail: ' + user.email);
+                        // Show helpful error
+                        const errorMsg = `NOT AUTHORIZED AS ADMIN\n\nYour email: ${user.email}\n\nPlease add this email to Firestore:\n1. Go to Firestore Database\n2. Create collection: admins\n3. Add document with field: email = ${user.email}`;
+                        
+                        console.error(errorMsg);
+                        alert(errorMsg);
+                        
+                        // Keep user logged in for debugging
                         document.getElementById('admin-login-view').style.display = 'flex';
                         document.getElementById('admin-dashboard-view').style.display = 'none';
-                        await signOut(auth);
                         return;
                     }
                     
+                    // Admin found!
+                    console.log('Admin authorized! Loading dashboard...');
                     document.getElementById('admin-login-view').style.display = 'none';
                     document.getElementById('admin-dashboard-view').style.display = 'block';
                     loadDashboardData();
                 } catch (error) {
                     console.error('Admin check error:', error);
-                    alert('Error checking admin status: ' + error.message);
+                    alert('Error: ' + error.message + '\n\nCheck console for details (F12)');
                 }
             }
         });
@@ -552,7 +623,17 @@
             document.getElementById('product-category').value = product.category || '';
             document.getElementById('product-description').value = product.description || '';
             document.getElementById('product-sizes').value = product.variants?.join(', ') || '';
-            document.getElementById('product-image').value = product.images?.[0] || '';
+            document.getElementById('product-image-urls').value = product.images?.join(', ') || '';
+            uploadedImageUrls = product.images || [];
+            
+            // Show image preview
+            const previewDiv = document.getElementById('image-preview');
+            if (product.images && product.images.length > 0) {
+                previewDiv.innerHTML = product.images.map(url => `
+                    <img src="${url}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1;">
+                `).join('');
+            }
+            
             document.getElementById('product-modal-title').textContent = 'Edit Product';
             document.getElementById('product-modal').classList.add('active');
         };
@@ -566,15 +647,20 @@
         // Product form submit
         document.getElementById('product-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const id = document.getElementById('product-id').value;
+            const imageUrlsInput = document.getElementById('product-image-urls').value;
+            
+            // Parse images from comma-separated URLs
+            const images = imageUrlsInput.split(',').map(url => url.trim()).filter(url => url.length > 0);
+            
             const productData = {
                 name: document.getElementById('product-name').value,
                 price: Number(document.getElementById('product-price').value),
                 category: document.getElementById('product-new-category').value || document.getElementById('product-category').value,
                 description: document.getElementById('product-description').value,
                 variants: document.getElementById('product-sizes').value.split(',').map(s => s.trim()).filter(s => s),
-                images: document.getElementById('product-image').value ? [document.getElementById('product-image').value] : [],
+                images: images,
                 updatedAt: new Date().toISOString()
             };
 
@@ -595,6 +681,7 @@
             }
 
             closeProductModal();
+            uploadedImageUrls = [];
             loadDashboardData();
         });
 
