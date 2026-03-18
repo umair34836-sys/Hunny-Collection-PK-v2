@@ -1,0 +1,133 @@
+================================================================================
+                    HUNNY COLLECTION PK - UPDATE GUIDE
+================================================================================
+
+✅ Double-click UPDATE.bat to upload all changes to GitHub!
+
+================================================================================
+                         HOW TO USE
+================================================================================
+
+1. Make your changes (edit files, add products, etc.)
+
+2. Double-click: UPDATE.bat
+
+3. Wait for "SUCCESS!" message
+
+4. Wait 2-3 minutes for GitHub Pages to deploy
+
+5. Visit your site:
+   https://umair34836-sys.github.io/Hunny-Collection-PK/
+
+================================================================================
+                         WHAT IT DOES
+================================================================================
+
+UPDATE.bat will:
+1. Add all changed files to git
+2. Create a commit with timestamp
+3. Push to GitHub (main branch)
+4. Show success message
+
+GitHub Actions will:
+1. Automatically build your site
+2. Deploy to GitHub Pages
+3. Update your live website
+
+================================================================================
+                         WHEN TO USE
+================================================================================
+
+Use UPDATE.bat when:
+✅ You edit any HTML file
+✅ You update CSS styles
+✅ You change JavaScript
+✅ You add new products (via admin panel - auto saved)
+✅ You make any code changes
+
+Don't need to use when:
+❌ Just browsing the site
+❌ Adding products via admin panel (already saved to Firebase)
+
+================================================================================
+                         FIRST TIME SETUP
+================================================================================
+
+If you get "not a git repository" error:
+
+Run these commands once:
+   cd "c:\Users\MRCOP\OneDrive\Desktop\Hunny Collection Pk"
+   git init
+   git remote add origin https://github.com/umair34836-sys/Hunny-Collection-PK.git
+   git branch -M main
+   git push -u origin main
+
+Then UPDATE.bat will work forever!
+
+================================================================================
+                         TROUBLESHOOTING
+================================================================================
+
+Error: "nothing to commit"
+→ No changes to upload. That's OK!
+
+Error: "permission denied"
+→ Make sure you're logged into GitHub
+→ Run: git config --global user.email "your-email@gmail.com"
+
+Error: "remote origin already exists"
+→ That's OK! Just run UPDATE.bat again
+
+Error: "git not found"
+→ Install Git: https://git-scm.com/download/win
+
+================================================================================
+                         QUICK COMMANDS
+================================================================================
+
+Check git status:
+   git status
+
+Check if files changed:
+   git diff
+
+Manual push (if batch fails):
+   git add .
+   git commit -m "Manual update"
+   git push
+
+================================================================================
+                         LIVE URLS
+================================================================================
+
+Main Site:
+https://umair34836-sys.github.io/Hunny-Collection-PK/
+
+Shop Page:
+https://umair34836-sys.github.io/Hunny-Collection-PK/shop.html
+
+Admin Panel:
+https://umair34836-sys.github.io/Hunny-Collection-PK/admin.html
+
+GitHub Repo:
+https://github.com/umair34836-sys/Hunny-Collection-PK
+
+================================================================================
+                         FIREBASE UPDATES
+================================================================================
+
+Firebase changes (products, orders, etc.) are:
+✅ Saved directly to Firebase
+✅ No need to run UPDATE.bat
+✅ Instant on website
+
+Code changes (HTML, CSS, JS) are:
+✅ Saved to GitHub
+✅ Need UPDATE.bat
+✅ Take 2-3 minutes to deploy
+
+================================================================================
+
+🌸 Happy Selling!
+
+================================================================================
