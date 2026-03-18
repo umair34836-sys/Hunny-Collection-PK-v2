@@ -374,18 +374,29 @@
                 document.getElementById('admin-login-view').style.display = 'flex';
                 document.getElementById('admin-dashboard-view').style.display = 'none';
             } else {
-                const q = query(collection(db, 'admins'), where('email', '==', user.email));
-                const snapshot = await getDocs(q);
-                
-                if (snapshot.empty) {
-                    await signOut(auth);
-                    alert('Not authorized as admin');
-                    return;
+                // Check if user email exists in admins collection
+                try {
+                    const q = query(collection(db, 'admins'), where('email', '==', user.email));
+                    const snapshot = await getDocs(q);
+                    
+                    if (snapshot.empty) {
+                        // Admin not found - show error but don't logout
+                        console.log('User email:', user.email);
+                        console.log('Admins collection check failed');
+                        alert('Not authorized as admin. Please add your email to Firestore admins collection.\n\nEmail: ' + user.email);
+                        document.getElementById('admin-login-view').style.display = 'flex';
+                        document.getElementById('admin-dashboard-view').style.display = 'none';
+                        await signOut(auth);
+                        return;
+                    }
+                    
+                    document.getElementById('admin-login-view').style.display = 'none';
+                    document.getElementById('admin-dashboard-view').style.display = 'block';
+                    loadDashboardData();
+                } catch (error) {
+                    console.error('Admin check error:', error);
+                    alert('Error checking admin status: ' + error.message);
                 }
-                
-                document.getElementById('admin-login-view').style.display = 'none';
-                document.getElementById('admin-dashboard-view').style.display = 'block';
-                loadDashboardData();
             }
         });
 
