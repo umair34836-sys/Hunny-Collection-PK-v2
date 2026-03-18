@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .contact-section {
+            padding: 60px 0;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .contact-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+        }
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .contact-card h3 {
+            color: var(--dark-pink);
+            margin-bottom: 15px;
+        }
+        .contact-card p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        .contact-hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--soft-pink);
+            border-radius: 15px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="cart.html">🛒 Cart <span id="cart-count">0</span></a></li>
+                    <li><a href="login.html" id="auth-link">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-hero">
+                <h1 style="color: var(--dark-pink); margin-bottom: 15px;">Get In Touch</h1>
+                <p style="font-size: 1.2rem; color: var(--text-light);">
+                    We'd love to hear from you! Reach out to us for any queries.
+                </p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📱</div>
+                    <h3>WhatsApp</h3>
+                    <p>+92 301 8858303</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">📧</div>
+                    <h3>Email</h3>
+                    <p>info@hunnycollection.pk</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <h3>Location</h3>
+                    <p>Pakistan</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>🌸 Hunny Collection PK</h4>
+                    <p>Your premium destination for female fashion.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>📱 +92 301 8858303</li>
+                        <li>📧 info@hunnycollection.pk</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hunny Collection PK. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module">
+        import { updateCartCount } from './app.js';
+        updateCartCount();
+    </script>
+</body>
+</html>

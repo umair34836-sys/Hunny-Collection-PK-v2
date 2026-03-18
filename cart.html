@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cart-section {
+            padding: 60px 0;
+        }
+        .cart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 20px;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(255, 182, 193, 0.2);
+        }
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cart-item-details h4 {
+            margin-bottom: 5px;
+        }
+        .cart-item-category {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-sm {
+            padding: 5px 12px;
+            border: 1px solid var(--border-color);
+            background: var(--white);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-sm:hover {
+            background: var(--dark-pink);
+            color: var(--white);
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: var(--white);
+            border: none;
+        }
+        .cart-summary {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+            height: fit-content;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark-pink);
+            border-top: 2px solid var(--border-color);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        @media (max-width: 768px) {
+            .cart-grid {
+                grid-template-columns: 1fr;
+            }
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+            }
+            .cart-item-actions {
+                grid-column: 1 / -1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="cart.html">🛒 Cart <span id="cart-count">0</span></a></li>
+                    <li><a href="login.html" id="auth-link">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="cart-section">
+        <div class="container">
+            <h1 style="color: var(--dark-pink); margin-bottom: 30px;">Shopping Cart</h1>
+            
+            <div class="cart-grid">
+                <div id="cart-items">
+                    <div class="loading">Loading cart...</div>
+                </div>
+                
+                <div class="cart-summary">
+                    <h3 style="margin-bottom: 20px;">Order Summary</h3>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>Rs. <span id="cart-total">0</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span style="color: green;">FREE</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Total</span>
+                        <span>Rs. <span id="cart-total-final">0</span></span>
+                    </div>
+                    <a href="checkout.html" class="btn-primary" style="display: block; text-align: center; margin-top: 20px;">
+                        Proceed to Checkout
+                    </a>
+                    <a href="shop.html" class="btn-secondary" style="display: block; text-align: center; margin-top: 10px;">
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>🌸 Hunny Collection PK</h4>
+                    <p>Your premium destination for female fashion.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>📱 +92 301 8858303</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hunny Collection PK. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module">
+        import { updateCartCount, renderCart } from './app.js';
+
+        renderCart();
+        updateCartCount();
+
+        // Update total
+        const total = document.getElementById('cart-total')?.textContent || '0';
+        const totalFinal = document.getElementById('cart-total-final');
+        if (totalFinal) totalFinal.textContent = total;
+    </script>
+</body>
+</html>

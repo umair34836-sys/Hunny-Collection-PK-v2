@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .product-detail-section {
+            padding: 60px 0;
+        }
+        .product-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        .product-main-image {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+        }
+        .product-details {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+        }
+        .badge {
+            background: var(--primary-pink);
+            color: var(--text-dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .price {
+            font-size: 2rem;
+            color: var(--dark-pink);
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .description {
+            color: var(--text-light);
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+        .variant-group {
+            margin: 20px 0;
+        }
+        .size-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .size-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--border-color);
+            background: var(--white);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .size-btn:hover, .size-btn.selected {
+            border-color: var(--dark-pink);
+            background: var(--dark-pink);
+            color: var(--white);
+        }
+        .quantity-group {
+            margin: 20px 0;
+        }
+        .quantity-input {
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            width: 80px;
+            font-size: 1rem;
+        }
+        .btn-large {
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 768px) {
+            .product-detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="cart.html">🛒 Cart <span id="cart-count">0</span></a></li>
+                    <li><a href="login.html" id="auth-link">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="product-detail-section">
+        <div class="container">
+            <div id="product-detail">
+                <div class="loading">Loading product...</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>🌸 Hunny Collection PK</h4>
+                    <p>Your premium destination for female fashion.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>📱 +92 301 8858303</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hunny Collection PK. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module">
+        import { updateCartCount } from './app.js';
+
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+
+        if (productId) {
+            window.loadProduct(productId);
+        } else {
+            document.getElementById('product-detail').innerHTML = '<p>Product not found</p>';
+        }
+
+        updateCartCount();
+    </script>
+</body>
+</html>

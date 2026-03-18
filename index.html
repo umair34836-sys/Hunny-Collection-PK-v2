@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hunny Collection PK - Premium Female Fashion Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="cart.html" class="cart-link">🛒 Cart <span id="cart-count">0</span></a></li>
+                    <li><a href="login.html" id="auth-link">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>🌸 Welcome to Hunny Collection PK</h1>
+            <p>Your Premium Destination for Female Fashion</p>
+            <a href="shop.html" class="btn-primary">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick shipping across Pakistan</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💵</div>
+                    <h3>Cash on Delivery</h3>
+                    <p>Pay when you receive</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Quality Products</h3>
+                    <p>Premium quality guaranteed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Shop by Category</h2>
+            <div class="categories-grid" id="categories-container">
+                <!-- Categories will load here -->
+                <div class="loading">Loading categories...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="products">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="products-grid" id="products-container">
+                <!-- Products will load here -->
+                <div class="loading">Loading products...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>🌸 Hunny Collection PK</h4>
+                    <p>Your premium destination for female fashion. Quality products, affordable prices.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>📱 +92 301 8858303</li>
+                        <li>📧 MrCopper804@gmail.com</li>
+                        <li>📍 Pakistan</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Hunny Collection PK. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module">
+        // Load homepage data
+        import { loadCategories, loadFeaturedProducts, updateCartCount } from './app.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCategories();
+            loadFeaturedProducts();
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>

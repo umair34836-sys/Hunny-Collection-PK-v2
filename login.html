@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .auth-section {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--soft-pink) 0%, var(--light-pink) 100%);
+            padding: 40px 20px;
+        }
+        .auth-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3);
+            width: 100%;
+            max-width: 450px;
+        }
+        .auth-title {
+            text-align: center;
+            color: var(--dark-pink);
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--dark-pink);
+        }
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .auth-links a {
+            color: var(--dark-pink);
+            text-decoration: none;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="auth-section">
+        <div class="auth-card">
+            <h1 class="auth-title">Welcome Back! 🌸</h1>
+            
+            <div id="error-message" class="error-message"></div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+            </form>
+            
+            <div class="auth-links">
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+                <p><a href="index.html">← Back to Store</a></p>
+            </div>
+        </div>
+    </section>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module">
+        import { auth } from './firebase-config.js';
+        import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('error-message');
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = 'index.html';
+            } catch (error) {
+                errorEl.textContent = error.message.replace('Firebase: ', '');
+                errorEl.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
