@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Settings - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .settings-section {
+            padding: 60px 0;
+            min-height: calc(100vh - 200px);
+        }
+        .settings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+        .settings-sidebar {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+            height: fit-content;
+        }
+        .settings-sidebar h3 {
+            color: var(--dark-pink);
+            margin-bottom: 20px;
+        }
+        .sidebar-menu {
+            list-style: none;
+        }
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        .sidebar-menu a {
+            display: block;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--soft-pink);
+            color: var(--dark-pink);
+        }
+        .settings-content {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        .form-section h3 {
+            color: var(--dark-pink);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: var(--text-light);
+        }
+        .btn-save {
+            background: var(--dark-pink);
+            color: var(--white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-save:hover {
+            background: #FF1493;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .preview-section {
+            background: var(--soft-pink);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .section-content {
+            display: none;
+        }
+        .section-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                    <li><a href="index.html">Back to Store</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="settings-section">
+        <div class="settings-container">
+            <div class="settings-grid">
+                <!-- Sidebar -->
+                <aside class="settings-sidebar">
+                    <h3>⚙️ Settings</h3>
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="active" onclick="showSection('general')">🏪 General</a></li>
+                        <li><a href="#" onclick="showSection('contact')">📞 Contact Info</a></li>
+                        <li><a href="#" onclick="showSection('social')">📱 Social Media</a></li>
+                        <li><a href="#" onclick="showSection('seo')">🔍 SEO</a></li>
+                        <li><a href="#" onclick="showSection('shipping')">🚚 Shipping</a></li>
+                        <li><a href="#" onclick="showSection('payment')">💳 Payment</a></li>
+                    </ul>
+                </aside>
+
+                <!-- Content -->
+                <main class="settings-content">
+                    <div id="message-container" class="success-message"></div>
+
+                    <!-- General Settings -->
+                    <div id="general" class="section-content active">
+                        <div class="form-section">
+                            <h3>🏪 General Settings</h3>
+                            
+                            <form id="general-form">
+                                <div class="form-group">
+                                    <label>Store Name</label>
+                                    <input type="text" id="store-name" required>
+                                    <small>Your store name as it appears online</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Store Tagline</label>
+                                    <input type="text" id="store-tagline" placeholder="Your Premium Destination for Female Fashion">
+                                    <small>Brief description of your store</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Store Description</label>
+                                    <textarea id="store-description" rows="4"></textarea>
+                                    <small>About your store (shown in footer)</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Copyright Text</label>
+                                    <input type="text" id="copyright-text" placeholder="© 2025 Hunny Collection PK">
+                                </div>
+                                
+                                <button type="submit" class="btn-save">Save General Settings</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Contact Settings -->
+                    <div id="contact" class="section-content">
+                        <div class="form-section">
+                            <h3>📞 Contact Information</h3>
+                            
+                            <form id="contact-form">
+                                <div class="form-group">
+                                    <label>WhatsApp Number</label>
+                                    <input type="text" id="whatsapp-number" placeholder="+92 301 8858303">
+                                    <small>Format: +92 3XX XXXXXXX</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" id="contact-email" placeholder="info@hunnycollection.pk">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Location/City</label>
+                                    <input type="text" id="location" placeholder="Pakistan">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Support Hours</label>
+                                    <input type="text" id="support-hours" placeholder="Mon - Sat: 10:00 AM - 8:00 PM">
+                                </div>
+                                
+                                <button type="submit" class="btn-save">Save Contact Info</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Settings -->
+                    <div id="social" class="section-content">
+                        <div class="form-section">
+                            <h3>📱 Social Media Links</h3>
+                            
+                            <form id="social-form">
+                                <div class="form-group">
+                                    <label>Facebook URL</label>
+                                    <input type="url" id="facebook-url" placeholder="https://facebook.com/yourpage">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Instagram URL</label>
+                                    <input type="url" id="instagram-url" placeholder="https://instagram.com/yourprofile">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>TikTok URL</label>
+                                    <input type="url" id="tiktok-url" placeholder="https://tiktok.com/@yourprofile">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>YouTube URL</label>
+                                    <input type="url" id="youtube-url" placeholder="https://youtube.com/yourchannel">
+                                </div>
+                                
+                                <button type="submit" class="btn-save">Save Social Links</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- SEO Settings -->
+                    <div id="seo" class="section-content">
+                        <div class="form-section">
+                            <h3>🔍 SEO Settings</h3>
+                            
+                            <form id="seo-form">
+                                <div class="form-group">
+                                    <label>Meta Description</label>
+                                    <textarea id="meta-description" rows="3" maxlength="160"></textarea>
+                                    <small>Best for search engines (max 160 characters)</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Meta Keywords</label>
+                                    <input type="text" id="meta-keywords" placeholder="fashion, dresses, pakistan, online shopping">
+                                    <small>Comma separated keywords</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>OG Image URL</label>
+                                    <input type="url" id="og-image" placeholder="https://example.com/image.jpg">
+                                    <small>Social media sharing image (1200x630px recommended)</small>
+                                </div>
+                                
+                                <button type="submit" class="btn-save">Save SEO Settings</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Settings -->
+                    <div id="shipping" class="section-content">
+                        <div class="form-section">
+                            <h3>🚚 Shipping Settings</h3>
+                            
+                            <form id="shipping-form">
+                                <div class="form-group">
+                                    <label>Shipping Message</label>
+                                    <input type="text" id="shipping-message" placeholder="Free shipping across Pakistan">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Delivery Time</label>
+                                    <input type="text" id="delivery-time" placeholder="3-7 business days">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Shipping Cities</label>
+                                    <textarea id="shipping-cities" rows="3" placeholder="Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad..."></textarea>
+                                    <small>Comma separated list of cities you deliver to</small>
+                                </div>
+                                
+                                <button type="submit" class="btn-save">Save Shipping Info</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Payment Settings -->
+                    <div id="payment" class="section-content">
+                        <div class="form-section">
+                            <h3>💳 Payment Methods</h3>
+                            
+                            <form id="payment-form">
+                                <div class="form-group">
+                                    <label>Payment Message</label>
+                                    <input type="text" id="payment-message" placeholder="Cash on Delivery available">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Payment Instructions</label>
+                                    <textarea id="payment-instructions" rows="3" placeholder="You will pay when you receive your order"></textarea>
+                                </div>
+                                
+                                <div class="preview-section">
+                                    <h4>Current Payment Methods:</h4>
+                                    <p><strong>✅</strong> Cash on Delivery (COD)</p>
+                                    <p style="color: var(--text-light); margin-top: 10px;">More payment methods coming soon!</p>
+                                </div>
+                                
+                                <button type="submit" class="btn-save">Save Payment Info</button>
+                            </form>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p id="footer-copyright">&copy; 2025 Hunny Collection PK. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { collection, getDocs, doc, setDoc, getDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        let currentAdmin = null;
+
+        // Check admin auth
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            // Check if admin
+            const q = query(collection(db, 'admins'), where('email', '==', user.email));
+            const snapshot = await getDocs(q);
+            
+            if (snapshot.empty) {
+                alert('Not authorized');
+                await signOut(auth);
+                window.location.href = 'index.html';
+                return;
+            }
+
+            currentAdmin = user;
+            loadSettings();
+        });
+
+        // Load settings
+        async function loadSettings() {
+            try {
+                const settingsDoc = await getDoc(doc(db, 'settings', 'site'));
+                
+                if (settingsDoc.exists()) {
+                    const settings = settingsDoc.data();
+                    
+                    // General
+                    document.getElementById('store-name').value = settings.storeName || 'Hunny Collection PK';
+                    document.getElementById('store-tagline').value = settings.storeTagline || '';
+                    document.getElementById('store-description').value = settings.storeDescription || '';
+                    document.getElementById('copyright-text').value = settings.copyrightText || '';
+                    
+                    // Contact
+                    document.getElementById('whatsapp-number').value = settings.whatsappNumber || '+92 301 8858303';
+                    document.getElementById('contact-email').value = settings.contactEmail || '';
+                    document.getElementById('location').value = settings.location || 'Pakistan';
+                    document.getElementById('support-hours').value = settings.supportHours || '';
+                    
+                    // Social
+                    document.getElementById('facebook-url').value = settings.facebookUrl || '';
+                    document.getElementById('instagram-url').value = settings.instagramUrl || '';
+                    document.getElementById('tiktok-url').value = settings.tiktokUrl || '';
+                    document.getElementById('youtube-url').value = settings.youtubeUrl || '';
+                    
+                    // SEO
+                    document.getElementById('meta-description').value = settings.metaDescription || '';
+                    document.getElementById('meta-keywords').value = settings.metaKeywords || '';
+                    document.getElementById('og-image').value = settings.ogImage || '';
+                    
+                    // Shipping
+                    document.getElementById('shipping-message').value = settings.shippingMessage || '';
+                    document.getElementById('delivery-time').value = settings.deliveryTime || '';
+                    document.getElementById('shipping-cities').value = settings.shippingCities || '';
+                    
+                    // Payment
+                    document.getElementById('payment-message').value = settings.paymentMessage || '';
+                    document.getElementById('payment-instructions').value = settings.paymentInstructions || '';
+                } else {
+                    // Set defaults
+                    document.getElementById('store-name').value = 'Hunny Collection PK';
+                    document.getElementById('whatsapp-number').value = '+92 301 8858303';
+                    document.getElementById('location').value = 'Pakistan';
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        // Save settings
+        async function saveSettings(settingsData) {
+            try {
+                await setDoc(doc(db, 'settings', 'site'), settingsData, { merge: true });
+                showMessage('Settings saved successfully!');
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                showMessage('Error saving settings: ' + error.message, true);
+            }
+        }
+
+        // Show message
+        function showMessage(message, isError = false) {
+            const msgContainer = document.getElementById('message-container');
+            msgContainer.textContent = message;
+            msgContainer.style.background = isError ? '#f8d7da' : '#d4edda';
+            msgContainer.style.color = isError ? '#721c24' : '#155724';
+            msgContainer.style.display = 'block';
+            
+            setTimeout(() => {
+                msgContainer.style.display = 'none';
+            }, 3000);
+        }
+
+        // Form handlers
+        document.getElementById('general-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveSettings({
+                storeName: document.getElementById('store-name').value,
+                storeTagline: document.getElementById('store-tagline').value,
+                storeDescription: document.getElementById('store-description').value,
+                copyrightText: document.getElementById('copyright-text').value
+            });
+        });
+
+        document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveSettings({
+                whatsappNumber: document.getElementById('whatsapp-number').value,
+                contactEmail: document.getElementById('contact-email').value,
+                location: document.getElementById('location').value,
+                supportHours: document.getElementById('support-hours').value
+            });
+        });
+
+        document.getElementById('social-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveSettings({
+                facebookUrl: document.getElementById('facebook-url').value,
+                instagramUrl: document.getElementById('instagram-url').value,
+                tiktokUrl: document.getElementById('tiktok-url').value,
+                youtubeUrl: document.getElementById('youtube-url').value
+            });
+        });
+
+        document.getElementById('seo-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveSettings({
+                metaDescription: document.getElementById('meta-description').value,
+                metaKeywords: document.getElementById('meta-keywords').value,
+                ogImage: document.getElementById('og-image').value
+            });
+        });
+
+        document.getElementById('shipping-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveSettings({
+                shippingMessage: document.getElementById('shipping-message').value,
+                deliveryTime: document.getElementById('delivery-time').value,
+                shippingCities: document.getElementById('shipping-cities').value
+            });
+        });
+
+        document.getElementById('payment-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveSettings({
+                paymentMessage: document.getElementById('payment-message').value,
+                paymentInstructions: document.getElementById('payment-instructions').value
+            });
+        });
+
+        // Show section
+        window.showSection = function(sectionName) {
+            document.querySelectorAll('.section-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.sidebar-menu a').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            document.getElementById(sectionName).classList.add('active');
+            event.target.classList.add('active');
+        };
+    </script>
+</body>
+</html>

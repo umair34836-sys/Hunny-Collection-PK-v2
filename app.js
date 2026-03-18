@@ -324,6 +324,22 @@ export async function loadProduct(productId) {
                     
                     <button onclick="addToCartClick()" class="btn-primary btn-large">Add to Cart</button>
                     <button onclick="buyNow()" class="btn-secondary btn-large">Buy Now</button>
+                    
+                    <!-- Share Buttons -->
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color);">
+                        <h4 style="margin-bottom: 10px; color: var(--text-dark);">Share This Product</h4>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button onclick="shareProductWhatsApp('${product.id}', '${product.name}')" class="btn-sm" style="background: #25d366; color: white; border: none; cursor: pointer;">
+                                📱 WhatsApp
+                            </button>
+                            <button onclick="shareProductFacebook('${product.id}')" class="btn-sm" style="background: #1877f2; color: white; border: none; cursor: pointer;">
+                                📘 Facebook
+                            </button>
+                            <button onclick="copyProductLink('${product.id}')" class="btn-sm" style="background: #6c757d; color: white; border: none; cursor: pointer;">
+                                🔗 Copy Link
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -361,6 +377,27 @@ window.buyNow = () => {
     setTimeout(() => {
         window.location.href = 'checkout.html';
     }, 500);
+};
+
+// Share functions
+window.shareProductWhatsApp = function(productId, productName) {
+    const url = window.location.href.split('?')[0] + '?id=' + productId;
+    const message = '🌸 Check out this product: ' + productName + ' at Hunny Collection PK! Shop now: ' + url;
+    window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+};
+
+window.shareProductFacebook = function(productId) {
+    const url = window.location.href.split('?')[0] + '?id=' + productId;
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'width=600,height=400');
+};
+
+window.copyProductLink = function(productId) {
+    const url = window.location.href.split('?')[0] + '?id=' + productId;
+    navigator.clipboard.writeText(url).then(() => {
+        alert('✅ Product link copied to clipboard!\n\n' + url);
+    }).catch(() => {
+        prompt('Copy this link:', url);
+    });
 };
 
 // Place order

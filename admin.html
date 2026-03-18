@@ -199,6 +199,7 @@
                 <a href="#" onclick="showSection('products')">Products</a>
                 <a href="#" onclick="showSection('orders')">Orders</a>
                 <a href="#" onclick="showSection('categories')">Categories</a>
+                <a href="settings.html">⚙️ Site Settings</a>
                 <a href="#" onclick="logout()">Logout</a>
             </aside>
 
@@ -206,6 +207,26 @@
                 <!-- Dashboard -->
                 <div id="section-dashboard">
                     <h2 style="color: var(--dark-pink); margin-bottom: 30px;">Dashboard</h2>
+                    
+                    <!-- Advertisement Banner -->
+                    <div class="admin-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <h3 style="color: white; margin-bottom: 15px;">📢 Advertise Your Store</h3>
+                        <p style="margin-bottom: 15px;">Share your store on social media to get more customers!</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn-sm" onclick="shareOnFacebook()" style="background: #1877f2; color: white;">
+                                📘 Share on Facebook
+                            </button>
+                            <button class="btn-sm" onclick="shareOnWhatsApp()" style="background: #25d366; color: white;">
+                                📱 Share on WhatsApp
+                            </button>
+                            <button class="btn-sm" onclick="shareOnInstagram()" style="background: #e4405f; color: white;">
+                                📸 Share on Instagram
+                            </button>
+                            <button class="btn-sm" onclick="copyStoreLink()" style="background: #6c757d; color: white;">
+                                🔗 Copy Store Link
+                            </button>
+                        </div>
+                    </div>
                     
                     <div class="stats-grid">
                         <div class="stat-card">
@@ -357,18 +378,32 @@
                         Upload multiple images or paste URLs (comma separated)
                     </p>
                     
-                    <!-- Upload Button -->
-                    <input type="file" id="product-image-upload" accept="image/*" multiple style="margin-bottom: 10px;">
-                    <button type="button" id="upload-btn" class="btn-sm" onclick="uploadImages()" style="margin-bottom: 10px;">
-                        📤 Upload Images to Firebase
-                    </button>
-                    <div id="upload-status" style="font-size: 0.85rem; margin-top: 5px;"></div>
+                    <!-- Upload Buttons -->
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                        <button type="button" class="btn-sm" onclick="document.getElementById('product-image-upload').click()" style="background: var(--primary-pink); color: white;">
+                            📁 Upload from Device
+                        </button>
+                        <button type="button" class="btn-sm" onclick="openUploadGuide()" style="background: #25d366; color: white;">
+                            📤 Upload to ImgBB (Free)
+                        </button>
+                        <button type="button" class="btn-sm" onclick="window.open('https://cloudinary.com/', '_blank')" style="background: #FF6B6B; color: white;">
+                            ☁️ Cloudinary (25GB Free)
+                        </button>
+                        <button type="button" class="btn-sm" onclick="window.open('https://postimages.org/', '_blank')" style="background: #4ECDC4; color: white;">
+                            📌 PostImages (No Signup)
+                        </button>
+                    </div>
+                    <input type="file" id="product-image-upload" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(event)">
+                    <div id="upload-status" style="font-size: 0.85rem; margin-top: 10px;"></div>
                     
                     <!-- Image Preview -->
-                    <div id="image-preview" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;"></div>
+                    <div id="image-preview" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;"></div>
                     
                     <!-- Manual URL Input -->
-                    <input type="text" id="product-image-urls" placeholder="Or paste image URLs (comma separated)" style="margin-top: 10px;">
+                    <input type="text" id="product-image-urls" placeholder="Or paste image URLs here (comma separated)" style="margin-top: 15px;">
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        💡 Tip: Upload images to ImgBB and paste direct links here
+                    </small>
                 </div>
                 
                 <button type="submit" class="btn-primary" style="width: 100%;">Save Product</button>
@@ -388,44 +423,78 @@
         let orders = [];
         let uploadedImageUrls = [];
 
-        // Global upload function
-        window.uploadImages = async () => {
-            const fileInput = document.getElementById('product-image-upload');
+        // Handle file selection
+        window.handleFileSelect = function(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+            
             const statusDiv = document.getElementById('upload-status');
+            statusDiv.innerHTML = '<span style="color: blue;">Processing ' + files.length + ' image(s)...</span>';
+            
+            // For now, just show preview (actual upload would need backend)
             const previewDiv = document.getElementById('image-preview');
-            const urlsInput = document.getElementById('product-image-urls');
+            previewDiv.innerHTML = '';
             
-            if (fileInput.files.length === 0) {
-                statusDiv.innerHTML = '<span style="color: orange;">Please select images first</span>';
-                return;
-            }
-
-            statusDiv.innerHTML = '<span style="color: blue;">Uploading images... Please wait...</span>';
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1;';
+                    previewDiv.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
             
-            try {
-                const uploadPromises = Array.from(fileInput.files).map(async (file) => {
-                    const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
-                    await uploadBytes(storageRef, file);
-                    return getDownloadURL(storageRef);
-                });
+            statusDiv.innerHTML = '<span style="color: orange;">⚠️ For live upload, use ImgBB/Cloudinary buttons above</span>';
+        };
 
-                const urls = await Promise.all(uploadPromises);
-                uploadedImageUrls = [...uploadedImageUrls, ...urls];
-                
-                // Update URL input
-                urlsInput.value = uploadedImageUrls.join(',');
-                
-                // Show preview
-                previewDiv.innerHTML = urls.map(url => `
-                    <img src="${url}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1;">
-                `).join('');
-                
-                statusDiv.innerHTML = `<span style="color: green;">✓ ${urls.length} image(s) uploaded successfully!</span>`;
-                fileInput.value = '';
-            } catch (error) {
-                console.error('Upload error:', error);
-                statusDiv.innerHTML = `<span style="color: red;">Upload failed: ${error.message}</span>`;
-            }
+        // Open upload guide
+        window.openUploadGuide = function() {
+            const guide = window.open('', 'Upload Guide', 'width=600,height=500');
+            guide.document.write(`
+                <html>
+                <head>
+                    <title>Image Upload Guide</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h2 { color: #25d366; }
+                        .step { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 8px; }
+                        .btn { background: #25d366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0; }
+                    </style>
+                </head>
+                <body>
+                    <h2>📤 How to Upload Images to ImgBB</h2>
+                    
+                    <div class="step">
+                        <strong>Step 1:</strong> Go to <a href="https://imgbb.com/" target="_blank">ImgBB.com</a>
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 2:</strong> Click "Upload" button and select your images
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 3:</strong> After upload, click on the image
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 4:</strong> Copy "Direct link" (ends with .jpg or .png)
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 5:</strong> Paste in admin panel "Image URLs" field
+                    </div>
+                    
+                    <a href="https://imgbb.com/" target="_blank" class="btn">Open ImgBB Now</a>
+                    
+                    <p style="margin-top: 20px; color: #666;">
+                        <strong>Example URL:</strong><br>
+                        https://i.ibb.co/abc123/image.jpg
+                    </p>
+                </body>
+                </html>
+            `);
         };
 
         // Check admin auth
@@ -708,6 +777,44 @@
             if (!confirm('Delete this category?')) return;
             await deleteDoc(doc(db, 'categories', id));
             loadDashboardData();
+        };
+
+        // Share functions
+        window.shareOnFacebook = function() {
+            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
+            window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'width=600,height=400');
+        };
+
+        window.shareOnWhatsApp = function() {
+            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
+            const message = '🌸 Check out Hunny Collection PK - Premium Female Fashion Store! Shop now: ' + url;
+            window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+        };
+
+        window.shareOnInstagram = function() {
+            alert('📸 Instagram Sharing\n\n1. Take a screenshot of your store\n2. Open Instagram\n3. Create a new post/story\n4. Add the screenshot\n5. Add link in bio or story\n\nStore URL: https://umair34836-sys.github.io/Hunny-Collection-PK-v2/');
+        };
+
+        window.copyStoreLink = function() {
+            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
+            navigator.clipboard.writeText(url).then(() => {
+                alert('✅ Store link copied to clipboard!\n\n' + url);
+            }).catch(() => {
+                prompt('Copy this link:', url);
+            });
+        };
+
+        window.shareProduct = function(productId, productName) {
+            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/product.html?id=' + productId;
+            const message = '🌸 Check out this product: ' + productName + ' at Hunny Collection PK! Shop now: ' + url;
+            
+            if (confirm('Share this product on WhatsApp?\n\n' + productName + '\n\nClick OK for WhatsApp\nCancel to copy link')) {
+                window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('✅ Product link copied!\n\n' + url);
+                });
+            }
         };
     </script>
 </body>
