@@ -158,14 +158,22 @@
         const productId = params.get('id');
 
         if (productId) {
-            window.loadProduct(productId);
+            // Wait for app.js to load
+            setTimeout(() => {
+                if (window.loadProduct) {
+                    window.loadProduct(productId);
+                } else {
+                    document.getElementById('product-detail').innerHTML = '<p>Loading product...</p>';
+                    setTimeout(() => window.loadProduct(productId), 500);
+                }
+            }, 100);
         } else {
             document.getElementById('product-detail').innerHTML = '<p>Product not found</p>';
         }
 
         updateCartCount();
     </script>
-    
+
     <!-- Floating WhatsApp Button -->
     <link rel="stylesheet" href="whatsapp-float.css">
     <script src="whatsapp-float.js"></script>
