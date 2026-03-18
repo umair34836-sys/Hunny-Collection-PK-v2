@@ -214,7 +214,7 @@
                                 
                                 <div class="form-group">
                                     <label>Email Address</label>
-                                    <input type="email" id="contact-email" placeholder="MrCopper804@gmil.com">
+                                    <input type="email" id="contact-email" placeholder="info@hunnycollection.pk">
                                 </div>
                                 
                                 <div class="form-group">
@@ -359,6 +359,7 @@
     </footer>
 
     <script type="module" src="firebase-config.js"></script>
+    <!-- Don't load site-settings.js here to avoid infinite loop -->
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -442,10 +443,10 @@
         async function saveSettings(settingsData) {
             try {
                 await setDoc(doc(db, 'settings', 'site'), settingsData, { merge: true });
-                showMessage('✅ Settings saved successfully!');
+                showMessage('Settings saved successfully!');
             } catch (error) {
                 console.error('Error saving settings:', error);
-                showMessage('❌ Error saving settings: ' + error.message, true);
+                showMessage('Error saving settings: ' + error.message, true);
             }
         }
 
@@ -456,17 +457,10 @@
             msgContainer.style.background = isError ? '#f8d7da' : '#d4edda';
             msgContainer.style.color = isError ? '#721c24' : '#155724';
             msgContainer.style.display = 'block';
-            msgContainer.style.padding = '15px';
-            msgContainer.style.borderRadius = '8px';
-            msgContainer.style.marginBottom = '20px';
-            msgContainer.style.fontSize = '1rem';
-            msgContainer.style.fontWeight = '600';
             
             setTimeout(() => {
                 msgContainer.style.display = 'none';
-            }, 5000);
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 3000);
         }
 
         // Form handlers

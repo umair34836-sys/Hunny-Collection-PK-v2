@@ -1,7 +1,10 @@
 // Site Settings Loader
+// This script loads settings from Firestore and applies them to all pages
+
 import { db } from './firebase-config.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
+// Load settings from Firestore
 export async function loadSiteSettings() {
     try {
         const settingsDoc = await getDoc(doc(db, 'settings', 'site'));
@@ -9,48 +12,70 @@ export async function loadSiteSettings() {
         if (settingsDoc.exists()) {
             const settings = settingsDoc.data();
             applySettings(settings);
+            return settings;
         } else {
+            console.log('No settings found, using defaults');
             applyDefaultSettings();
+            return null;
         }
     } catch (error) {
-        console.log('Settings not loaded, using defaults');
+        console.error('Error loading settings:', error);
         applyDefaultSettings();
+        return null;
     }
 }
 
+// Apply settings to the page
 function applySettings(settings) {
     // Store Name
-    document.querySelectorAll('.store-name').forEach(el => {
+    const storeNameElements = document.querySelectorAll('.store-name');
+    storeNameElements.forEach(el => {
         if (settings.storeName) el.textContent = settings.storeName;
     });
+    document.title = settings.storeName ? settings.storeName + ' - Premium Female Fashion Store' : 'Hunny Collection PK';
     
-    // Tagline
-    document.querySelectorAll('.store-tagline').forEach(el => {
+    // Store Tagline
+    const taglineElements = document.querySelectorAll('.store-tagline');
+    taglineElements.forEach(el => {
         if (settings.storeTagline) el.textContent = settings.storeTagline;
     });
     
-    // Description
-    document.querySelectorAll('.store-description').forEach(el => {
+    // Store Description
+    const descElements = document.querySelectorAll('.store-description');
+    descElements.forEach(el => {
         if (settings.storeDescription) el.textContent = settings.storeDescription;
     });
     
-    // WhatsApp
-    document.querySelectorAll('.whatsapp-number').forEach(el => {
-        if (settings.whatsappNumber) el.textContent = settings.whatsappNumber;
+    // WhatsApp Number
+    const whatsappElements = document.querySelectorAll('.whatsapp-number');
+    whatsappElements.forEach(el => {
+        if (settings.whatsappNumber) {
+            el.textContent = settings.whatsappNumber;
+            el.href = 'https://wa.me/' + settings.whatsappNumber.replace(/[^0-9]/g, '');
+        }
     });
     
-    // Email
-    document.querySelectorAll('.contact-email').forEach(el => {
+    // Update WhatsApp float button
+    const whatsappFloat = document.getElementById('whatsapp-float');
+    if (whatsappFloat && settings.whatsappNumber) {
+        whatsappFloat.href = 'https://wa.me/' + settings.whatsappNumber.replace(/[^0-9]/g, '');
+    }
+    
+    // Contact Email
+    const emailElements = document.querySelectorAll('.contact-email');
+    emailElements.forEach(el => {
         if (settings.contactEmail) el.textContent = settings.contactEmail;
     });
     
     // Location
-    document.querySelectorAll('.location').forEach(el => {
+    const locationElements = document.querySelectorAll('.location');
+    locationElements.forEach(el => {
         if (settings.location) el.textContent = settings.location;
     });
     
-    // Copyright
-    document.querySelectorAll('.copyright-text').forEach(el => {
+    // Copyright Text
+    const copyrightElements = document.querySelectorAll('.copyright-text');
+    copyrightElements.forEach(el => {
         if (settings.copyrightText) {
             el.textContent = settings.copyrightText;
         } else {
@@ -58,37 +83,60 @@ function applySettings(settings) {
         }
     });
     
-    // Meta Description
+    // Update Meta Tags
     if (settings.metaDescription) {
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) metaDesc.setAttribute('content', settings.metaDescription);
     }
     
-    // Meta Keywords
     if (settings.metaKeywords) {
         const metaKeywords = document.querySelector('meta[name="keywords"]');
         if (metaKeywords) metaKeywords.setAttribute('content', settings.metaKeywords);
     }
+    
+    if (settings.ogImage) {
+        const ogImage = document.querySelector('meta[property="og:image"]');
+        if (ogImage) ogImage.setAttribute('content', settings.ogImage);
+    }
+    
+    // Shipping Message
+    const shippingElements = document.querySelectorAll('.shipping-message');
+    shippingElements.forEach(el => {
+        if (settings.shippingMessage) el.textContent = settings.shippingMessage;
+    });
+    
+    // Payment Message
+    const paymentElements = document.querySelectorAll('.payment-message');
+    paymentElements.forEach(el => {
+        if (settings.paymentMessage) el.textContent = settings.paymentMessage;
+    });
+    
+    console.log('Settings applied successfully');
 }
 
+// Apply default settings if none saved
 function applyDefaultSettings() {
     const defaults = {
         storeName: 'Hunny Collection PK',
         storeTagline: 'Your Premium Destination for Female Fashion',
-        storeDescription: 'Your premium destination for female fashion.',
+        storeDescription: 'Your premium destination for female fashion. Quality products, affordable prices.',
         whatsappNumber: '+92 301 8858303',
-        contactEmail: 'MrCopper804@gmil.com',
+        contactEmail: 'info@hunnycollection.pk',
         location: 'Pakistan',
-        copyrightText: '© ' + new Date().getFullYear() + ' Hunny Collection PK. All rights reserved.'
+        copyrightText: '© ' + new Date().getFullYear() + ' Hunny Collection PK. All rights reserved.',
+        shippingMessage: 'Free shipping across Pakistan',
+        paymentMessage: 'Cash on Delivery available'
     };
+    
     applySettings(defaults);
 }
 
-// Auto-load
+// Auto-load settings when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadSiteSettings);
 } else {
     loadSiteSettings();
 }
 
+// Export for manual use
 export { applySettings };

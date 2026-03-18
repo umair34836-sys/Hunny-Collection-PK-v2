@@ -285,16 +285,14 @@ export async function loadProduct(productId) {
         // Generate image gallery
         const images = product.images || [];
         const mainImage = images[0] || 'https://via.placeholder.com/500x500';
-        
-        // Create thumbnails HTML with scroll
-        let thumbnails = '';
-        if (images.length > 1) {
-            thumbnails = '<div class="product-thumbnails">';
-            images.forEach((img, idx) => {
-                thumbnails += '<img src="' + img + '" class="product-thumbnail ' + (idx === 0 ? 'active' : '') + '" onclick="changeImage(\'' + img + '\', this)">';
-            });
-            thumbnails += '</div>';
-        }
+        const thumbnails = images.length > 1 ? `
+            <div class="product-thumbnails">
+                ${images.map((img, idx) => `
+                    <img src="${img}" class="product-thumbnail ${idx === 0 ? 'active' : ''}" 
+                         onclick="changeImage('${img}', this)">
+                `).join('')}
+            </div>
+        ` : '';
 
         container.innerHTML = `
             <div class="product-detail-grid">

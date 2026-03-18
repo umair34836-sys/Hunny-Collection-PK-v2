@@ -47,7 +47,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="hero-section">
+    <section class="hero">
         <div class="container">
             <h1>🌸 Welcome to Hunny Collection PK</h1>
             <p>Your Premium Destination for Female Fashion</p>
@@ -119,7 +119,7 @@
                     <h4>Contact Us</h4>
                     <ul>
                         <li class="whatsapp-number">📱 +92 301 8858303</li>
-                        <li class="contact-email">📧 MrCopper804@gmil.com</li>
+                        <li class="contact-email">📧 info@hunnycollection.pk</li>
                         <li class="location">📍 Pakistan</li>
                     </ul>
                 </div>
@@ -142,43 +142,7 @@
             loadCategories();
             loadFeaturedProducts();
             updateCartCount();
-            initHeroSlideshow();
         });
-        
-        // Hero Slideshow
-        function initHeroSlideshow() {
-            const heroSection = document.getElementById('hero-section');
-            if (!heroSection) return;
-            
-            // Create slideshow container
-            const slideshowDiv = document.createElement('div');
-            slideshowDiv.className = 'hero-slideshow';
-            heroSection.insertBefore(slideshowDiv, heroSection.firstChild);
-            
-            // Sample product images (will be replaced with actual products)
-            const slides = [
-                'https://via.placeholder.com/1920x600/FFB6C1/333?text=New+Collection',
-                'https://via.placeholder.com/1920x600/FFC0CB/333?text=Fashion+Sale',
-                'https://via.placeholder.com/1920x600/FFE4E1/333?text=Premium+Quality'
-            ];
-            
-            // Create slide elements
-            slides.forEach((url, index) => {
-                const slide = document.createElement('div');
-                slide.className = 'hero-slide' + (index === 0 ? ' active' : '');
-                slide.style.backgroundImage = `url(${url})`;
-                slideshowDiv.appendChild(slide);
-            });
-            
-            // Auto-change slides every 5 seconds
-            let currentSlide = 0;
-            setInterval(() => {
-                const slideElements = document.querySelectorAll('.hero-slide');
-                slideElements[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % slides.length;
-                slideElements[currentSlide].classList.add('active');
-            }, 5000);
-        }
     </script>
     
     <!-- Floating WhatsApp Button -->

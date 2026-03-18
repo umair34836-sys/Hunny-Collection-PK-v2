@@ -375,7 +375,7 @@
                 <div class="form-group">
                     <label>Product Images</label>
                     <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
-                        Add multiple image URLs (one per line or comma separated)
+                        Upload multiple images or paste URLs (comma separated)
                     </p>
                     
                     <!-- Upload Buttons -->
@@ -396,22 +396,14 @@
                     <input type="file" id="product-image-upload" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(event)">
                     <div id="upload-status" style="font-size: 0.85rem; margin-top: 10px;"></div>
                     
-                    <!-- Image URLs Input -->
-                    <div style="margin-top: 15px;">
-                        <label style="font-size: 0.9rem; font-weight: 600;">Image URLs:</label>
-                        <textarea id="product-image-urls" rows="4" placeholder="Paste image URLs here (one per line or comma separated)&#10;Example:&#10;https://i.ibb.co/abc123/image1.jpg&#10;https://i.ibb.co/def456/image2.jpg&#10;https://i.ibb.co/ghi789/image3.jpg"></textarea>
-                        <small style="color: #666; display: block; margin-top: 5px;">
-                            💡 Tip: Add URLs one per line or separate with commas
-                        </small>
-                    </div>
-                    
                     <!-- Image Preview -->
-                    <div id="image-preview" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; max-width: 400px; overflow-x: auto;"></div>
+                    <div id="image-preview" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;"></div>
                     
-                    <!-- Add More Button -->
-                    <button type="button" class="btn-sm" onclick="addMoreImageField()" style="margin-top: 15px; background: #6c757d; color: white;">
-                        ➕ Add More URLs
-                    </button>
+                    <!-- Manual URL Input -->
+                    <input type="text" id="product-image-urls" placeholder="Or paste image URLs here (comma separated)" style="margin-top: 15px;">
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        💡 Tip: Upload images to ImgBB and paste direct links here
+                    </small>
                 </div>
                 
                 <button type="submit" class="btn-primary" style="width: 100%;">Save Product</button>
@@ -455,19 +447,6 @@
             });
             
             statusDiv.innerHTML = '<span style="color: orange;">⚠️ For live upload, use ImgBB/Cloudinary buttons above</span>';
-        };
-
-        // Add more image URLs field
-        window.addMoreImageField = function() {
-            const textarea = document.getElementById('product-image-urls');
-            const currentValue = textarea.value.trim();
-            if (currentValue && !currentValue.endsWith('\n')) {
-                textarea.value = currentValue + '\n';
-            }
-            textarea.value += 'https://\n';
-            textarea.rows = textarea.rows + 1;
-            textarea.focus();
-            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
         };
 
         // Open upload guide
@@ -741,8 +720,8 @@
             const id = document.getElementById('product-id').value;
             const imageUrlsInput = document.getElementById('product-image-urls').value;
             
-            // Parse images from URLs (split by new line or comma)
-            const images = imageUrlsInput.split(/[\n,]+/).map(url => url.trim()).filter(url => url.length > 0 && url.startsWith('http'));
+            // Parse images from comma-separated URLs
+            const images = imageUrlsInput.split(',').map(url => url.trim()).filter(url => url.length > 0);
             
             const productData = {
                 name: document.getElementById('product-name').value,
