@@ -383,3 +383,8 @@ export async function placeOrder(orderData) {
 
 // Export for global use
 window.updateCartCount = updateCartCount;
+window.loadProduct = loadProduct;
+window.changeImage = changeImage;
+window.selectSize = selectSize;
+window.addToCartClick = addToCartClick;
+window.buyNow = buyNow;

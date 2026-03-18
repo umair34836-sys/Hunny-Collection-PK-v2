@@ -107,28 +107,26 @@ service cloud.firestore {
 
 **Click Publish**
 
-### **3. Enable Storage (For Image Upload)**
+### **3. Enable Storage (Optional)**
 
-Firebase Console → Storage → Get Started:
-- **Mode:** Test mode
-- **Location:** Same as Firestore
-- **Save**
+**Firebase Storage mat use karo!** Use free alternatives:
 
-**Storage Rules Update Karo:**
+**Recommended: ImgBB (Free Unlimited)**
+1. Go to: https://imgbb.com/
+2. Create free account
+3. Upload product images
+4. Copy direct links
+5. Paste in admin panel
 
-Firebase Console → Storage → Rules:
+**Benefits:**
+- ✅ Unlimited storage
+- ✅ Free forever
+- ✅ No Firebase setup
+- ✅ Fast loading
 
-```javascript
-rules_version = '2';
-match /b/{bucket}/o {
-  match /{allPaths=**} {
-    allow read: if true;
-    allow write: if request.auth != null;
-  }
-}
-```
-
-**Publish** karo!
+**Other Options:**
+- Cloudinary: https://cloudinary.com/ (Free 25GB)
+- PostImages: https://postimages.org/ (Free, no signup)
 
 ---
 
