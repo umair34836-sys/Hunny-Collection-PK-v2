@@ -19,16 +19,11 @@ function updateAuthLink(user) {
     if (!authLink) return;
 
     if (user) {
-        authLink.textContent = 'Logout';
-        authLink.href = '#';
-        authLink.onclick = (e) => {
-            e.preventDefault();
-            performLogout();
-        };
+        authLink.textContent = '👤 Account';
+        authLink.href = 'account.html';
     } else {
         authLink.textContent = 'Login';
         authLink.href = 'login.html';
-        authLink.onclick = null;
     }
 }
 

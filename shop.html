@@ -43,7 +43,7 @@
                     <li><a href="shop.html">Shop</a></li>
                     <li><a href="contact.html">Contact</a></li>
                     <li><a href="cart.html">🛒 Cart <span id="cart-count">0</span></a></li>
-                    <li><a href="login.html" id="auth-link">Login</a></li>
+                    <li><a href="account.html" id="auth-link">Login</a></li>
                 </ul>
             </nav>
         </div>
@@ -107,7 +107,7 @@
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="shop.html">Shop</a></li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="account.html">Account</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -136,6 +136,137 @@
             document.getElementById('cart-count').textContent = count;
         }
         updateCart();
+    </script>
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        var allProducts = [];
+
+        async function loadProducts() {
+            var container = document.getElementById('products-container');
+            var categoryFilter = document.getElementById('category-filter');
+
+            try {
+                var q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
+                var querySnapshot = await getDocs(q);
+                allProducts = [];
+                var categories = [];
+
+                querySnapshot.forEach(function(doc) {
+                    var product = { id: doc.id };
+                    var data = doc.data();
+                    for (var key in data) {
+                        product[key] = data[key];
+                    }
+                    allProducts.push(product);
+                    if (product.category && categories.indexOf(product.category) === -1) {
+                        categories.push(product.category);
+                    }
+                });
+
+                // Populate category filter
+                var optionsHtml = '<option value="all">All Categories</option>';
+                for (var i = 0; i < categories.length; i++) {
+                    optionsHtml += '<option value="' + categories[i] + '">' + categories[i] + '</option>';
+                }
+                categoryFilter.innerHTML = optionsHtml;
+
+                renderProducts(allProducts);
+            } catch (error) {
+                console.error('Error loading products:', error);
+                container.innerHTML = '<p class="loading">Error loading products.</p>';
+            }
+        }
+
+        function renderProducts(products) {
+            var container = document.getElementById('products-container');
+            if (!container) return;
+
+            if (products.length === 0) {
+                container.innerHTML = '<p class="loading">No products found.</p>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < products.length; i++) {
+                var product = products[i];
+                var imageUrl = product.images && product.images.length > 0 
+                    ? product.images[0] 
+                    : 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image';
+
+                html += '<a href="product.html?id=' + product.id + '" class="product-card">';
+                html += '<img src="' + imageUrl + '" alt="' + product.name + '" class="product-image">';
+                html += '<div class="product-info">';
+                html += '<div class="product-category">' + product.category + '</div>';
+                html += '<div class="product-title">' + product.name + '</div>';
+                html += '<div class="product-price">Rs. ' + (product.price || 0).toLocaleString() + '</div>';
+                html += '</div></a>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        function filterProducts() {
+            var category = document.getElementById('category-filter').value;
+            var price = document.getElementById('price-filter').value;
+            var sort = document.getElementById('sort-filter').value;
+
+            var filtered = allProducts.slice();
+
+            // Category filter
+            if (category !== 'all') {
+                var newFiltered = [];
+                for (var i = 0; i < filtered.length; i++) {
+                    if (filtered[i].category === category) {
+                        newFiltered.push(filtered[i]);
+                    }
+                }
+                filtered = newFiltered;
+            }
+
+            // Price filter
+            if (price !== 'all') {
+                var parts = price.split('-');
+                var min = Number(parts[0]);
+                var max = parts[1] ? Number(parts[1]) : null;
+                
+                var newFiltered = [];
+                for (var i = 0; i < filtered.length; i++) {
+                    if (max) {
+                        if (filtered[i].price >= min && filtered[i].price <= max) {
+                            newFiltered.push(filtered[i]);
+                        }
+                    } else {
+                        if (filtered[i].price >= min) {
+                            newFiltered.push(filtered[i]);
+                        }
+                    }
+                }
+                filtered = newFiltered;
+            }
+
+            // Sort
+            if (sort === 'price-low') {
+                filtered.sort(function(a, b) { return (a.price || 0) - (b.price || 0); });
+            } else if (sort === 'price-high') {
+                filtered.sort(function(a, b) { return (b.price || 0) - (a.price || 0); });
+            } else {
+                filtered.sort(function(a, b) { 
+                    var dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                    var dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                    return dateB - dateA;
+                });
+            }
+
+            renderProducts(filtered);
+        }
+
+        document.getElementById('category-filter').addEventListener('change', filterProducts);
+        document.getElementById('price-filter').addEventListener('change', filterProducts);
+        document.getElementById('sort-filter').addEventListener('change', filterProducts);
+
+        loadProducts();
     </script>
 </body>
 </html>
