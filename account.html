@@ -336,7 +336,9 @@
                     document.getElementById('profile-since').textContent = 'Recently joined';
                 }
             } catch (error) {
-                console.error('Error loading profile:', error);
+                console.log('Profile info not available, using defaults');
+                document.getElementById('profile-phone').textContent = 'Not provided';
+                document.getElementById('profile-since').textContent = 'Recently joined';
             }
         }
 

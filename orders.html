@@ -204,10 +204,10 @@
             const container = document.getElementById('orders-container');
 
             try {
+                // Query without orderBy to avoid index requirement
                 const q = query(
                     collection(db, 'orders'),
-                    where('userId', '==', userId),
-                    orderBy('createdAt', 'desc')
+                    where('userId', '==', userId)
                 );
 
                 const querySnapshot = await getDocs(q);
@@ -223,16 +223,28 @@
                     return;
                 }
 
-                let html = '';
+                // Get all orders and sort client-side
+                let orders = [];
                 querySnapshot.forEach((doc) => {
-                    const order = { id: doc.id, ...doc.data() };
+                    orders.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort by createdAt (newest first)
+                orders.sort((a, b) => {
+                    const dateA = a.createdAt ? (a.createdAt.seconds || 0) : 0;
+                    const dateB = b.createdAt ? (b.createdAt.seconds || 0) : 0;
+                    return dateB - dateA;
+                });
+
+                let html = '';
+                orders.forEach(order => {
                     html += createOrderCard(order);
                 });
 
                 container.innerHTML = html;
             } catch (error) {
                 console.error('Error loading orders:', error);
-                container.innerHTML = '<p class="loading">Error loading orders. Please try again.</p>';
+                container.innerHTML = '<p class="loading">Error loading orders. Please make sure you are logged in.</p>';
             }
         }
 

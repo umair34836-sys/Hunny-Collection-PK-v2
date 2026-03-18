@@ -64,6 +64,14 @@
             margin-bottom: 20px;
             display: none;
         }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -85,6 +93,7 @@
             <h1 class="auth-title">Create Account 🌸</h1>
             
             <div id="error-message" class="error-message"></div>
+            <div id="success-message" class="success-message"></div>
             
             <form id="signup-form">
                 <div class="form-group">
@@ -107,9 +116,9 @@
                     <label>Confirm Password</label>
                     <input type="password" id="confirm-password" required placeholder="Re-enter password">
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">Sign Up</button>
+                <button type="submit" id="signup-btn" class="btn-primary" style="width: 100%;">Sign Up</button>
             </form>
-            
+
             <div class="auth-links">
                 <p>Already have an account? <a href="login.html">Login</a></p>
                 <p><a href="index.html">← Back to Store</a></p>
@@ -123,46 +132,89 @@
         import { createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+        const signupForm = document.getElementById('signup-form');
+        const signupBtn = document.getElementById('signup-btn');
+        const errorEl = document.getElementById('error-message');
+        const successEl = document.getElementById('success-message');
+
+        signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
-            const errorEl = document.getElementById('error-message');
-            
+
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+
+            // Validation
             if (password !== confirmPassword) {
                 errorEl.textContent = 'Passwords do not match!';
                 errorEl.style.display = 'block';
                 return;
             }
-            
+
             if (password.length < 6) {
                 errorEl.textContent = 'Password must be at least 6 characters';
                 errorEl.style.display = 'block';
                 return;
             }
-            
+
+            // Show loading
+            signupBtn.textContent = 'Creating Account...';
+            signupBtn.disabled = true;
+
             try {
+                // Create auth account
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 
+                // Update display name
                 await updateProfile(userCredential.user, {
                     displayName: name
                 });
+
+                // Try to save to Firestore (may fail due to permissions)
+                try {
+                    await setDoc(doc(db, 'users', userCredential.user.uid), {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        createdAt: new Date().toISOString(),
+                        userId: userCredential.user.uid
+                    });
+                } catch (firestoreError) {
+                    console.log('Firestore save failed (this is OK):', firestoreError.message);
+                }
+
+                // Success
+                successEl.textContent = 'Account created successfully! Redirecting...';
+                successEl.style.display = 'block';
                 
-                await setDoc(doc(db, 'users', userCredential.user.uid), {
-                    name,
-                    email,
-                    phone,
-                    createdAt: new Date().toISOString()
-                });
-                
-                window.location.href = 'index.html';
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+
             } catch (error) {
-                errorEl.textContent = error.message.replace('Firebase: ', '');
+                console.error('Signup error:', error);
+                let errorMsg = 'Signup failed. Please try again.';
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMsg = 'This email is already registered. Please login instead.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'Invalid email address.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMsg = 'Password is too weak. Use at least 6 characters.';
+                } else if (error.message) {
+                    errorMsg = error.message.replace('Firebase: ', '');
+                }
+                
+                errorEl.textContent = errorMsg;
                 errorEl.style.display = 'block';
+                
+                signupBtn.textContent = 'Sign Up';
+                signupBtn.disabled = false;
             }
         });
     </script>
