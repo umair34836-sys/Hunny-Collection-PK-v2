@@ -6,9 +6,7 @@
     <title>Checkout - Hunny Collection PK</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .checkout-section {
-            padding: 60px 0;
-        }
+        .checkout-section { padding: 60px 0; }
         .checkout-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -26,9 +24,7 @@
             gap: 20px;
             margin-bottom: 20px;
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -75,21 +71,16 @@
             border-radius: 8px;
             margin: 20px 0;
         }
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
+        .error-message, .success-message {
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 20px;
-            display: none;
         }
+        .error-message { background: #f8d7da; color: #721c24; }
+        .success-message { background: #d4edda; color: #155724; }
         @media (max-width: 768px) {
-            .checkout-grid {
-                grid-template-columns: 1fr;
-            }
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            .checkout-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -110,7 +101,7 @@
         <div class="container">
             <h1 style="color: var(--dark-pink); margin-bottom: 30px;">Checkout</h1>
             
-            <div id="error-message" class="error-message"></div>
+            <div id="message-container"></div>
             
             <div class="checkout-grid">
                 <div class="checkout-form">
@@ -130,7 +121,7 @@
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Email (Optional)</label>
+                                <label>Email</label>
                                 <input type="email" id="email">
                             </div>
                             <div class="form-group">
@@ -154,7 +145,7 @@
                             <small>You will pay when you receive your order</small>
                         </div>
                         
-                        <button type="submit" class="btn-primary" style="width: 100%;">
+                        <button type="submit" id="place-order-btn" class="btn-primary" style="width: 100%;">
                             Place Order
                         </button>
                     </form>
@@ -232,10 +223,16 @@
         }
 
         // Handle checkout
-        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+        const checkoutForm = document.getElementById('checkout-form');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const messageContainer = document.getElementById('message-container');
+
+        checkoutForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const errorEl = document.getElementById('error-message');
+            placeOrderBtn.textContent = 'Placing Order...';
+            placeOrderBtn.disabled = true;
+            messageContainer.innerHTML = '';
             
             const orderData = {
                 userId: auth.currentUser.uid,
@@ -257,11 +254,27 @@
             try {
                 await addDoc(collection(db, 'orders'), orderData);
                 localStorage.removeItem('cart');
-                alert('Order placed successfully! We will contact you soon.');
-                window.location.href = 'index.html';
+                
+                messageContainer.innerHTML = `
+                    <div class="success-message">
+                        <strong>Order placed successfully!</strong><br>
+                        We will contact you soon for confirmation.
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
             } catch (error) {
-                errorEl.textContent = 'Failed to place order. Please try again.';
-                errorEl.style.display = 'block';
+                console.error('Error placing order:', error);
+                messageContainer.innerHTML = `
+                    <div class="error-message">
+                        Failed to place order. Please try again.<br>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+                placeOrderBtn.textContent = 'Place Order';
+                placeOrderBtn.disabled = false;
             }
         });
     </script>

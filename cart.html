@@ -6,9 +6,7 @@
     <title>Shopping Cart - Hunny Collection PK</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .cart-section {
-            padding: 60px 0;
-        }
+        .cart-section { padding: 60px 0; }
         .cart-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -30,13 +28,8 @@
             object-fit: cover;
             border-radius: 8px;
         }
-        .cart-item-details h4 {
-            margin-bottom: 5px;
-        }
-        .cart-item-category {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
+        .cart-item-details h4 { margin-bottom: 5px; }
+        .cart-item-category { color: var(--text-light); font-size: 0.9rem; }
         .cart-item-actions {
             display: flex;
             align-items: center;
@@ -49,15 +42,8 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .btn-sm:hover {
-            background: var(--dark-pink);
-            color: var(--white);
-        }
-        .btn-danger {
-            background: #dc3545;
-            color: var(--white);
-            border: none;
-        }
+        .btn-sm:hover { background: var(--dark-pink); color: var(--white); }
+        .btn-danger { background: #dc3545; color: var(--white); border: none; }
         .cart-summary {
             background: var(--white);
             padding: 25px;
@@ -83,16 +69,9 @@
             padding: 60px 20px;
         }
         @media (max-width: 768px) {
-            .cart-grid {
-                grid-template-columns: 1fr;
-            }
-            .cart-item {
-                grid-template-columns: 80px 1fr;
-            }
-            .cart-item-actions {
-                grid-column: 1 / -1;
-                justify-content: center;
-            }
+            .cart-grid { grid-template-columns: 1fr; }
+            .cart-item { grid-template-columns: 80px 1fr; }
+            .cart-item-actions { grid-column: 1 / -1; justify-content: center; }
         }
     </style>
 </head>
@@ -135,7 +114,7 @@
                         <span>Total</span>
                         <span>Rs. <span id="cart-total-final">0</span></span>
                     </div>
-                    <a href="checkout.html" class="btn-primary" style="display: block; text-align: center; margin-top: 20px;">
+                    <a href="checkout.html" id="checkout-btn" class="btn-primary" style="display: block; text-align: center; margin-top: 20px; opacity: 0.5; pointer-events: none;">
                         Proceed to Checkout
                     </a>
                     <a href="shop.html" class="btn-secondary" style="display: block; text-align: center; margin-top: 10px;">
@@ -151,14 +130,6 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>🌸 Hunny Collection PK</h4>
-                    <p>Your premium destination for female fashion.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="shop.html">Shop</a></li>
-                    </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Contact Us</h4>
@@ -176,15 +147,20 @@
     <script type="module" src="firebase-config.js"></script>
     <script type="module" src="app.js"></script>
     <script type="module">
-        import { updateCartCount, renderCart } from './app.js';
+        import { updateCartCount, renderCartPage, getCartItems } from './app.js';
 
-        renderCart();
+        renderCartPage();
         updateCartCount();
 
-        // Update total
-        const total = document.getElementById('cart-total')?.textContent || '0';
-        const totalFinal = document.getElementById('cart-total-final');
-        if (totalFinal) totalFinal.textContent = total;
+        // Enable/disable checkout button
+        const cart = getCartItems();
+        const checkoutBtn = document.getElementById('checkout-btn');
+        if (checkoutBtn) {
+            if (cart.length > 0) {
+                checkoutBtn.style.opacity = '1';
+                checkoutBtn.style.pointerEvents = 'auto';
+            }
+        }
     </script>
 </body>
 </html>

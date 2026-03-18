@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Hunny Collection PK</title>
+    <title>Admin Panel - Hunny Collection PK</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .admin-layout {
@@ -64,9 +64,7 @@
             color: var(--text-light);
             margin-top: 10px;
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -84,10 +82,9 @@
         .btn-sm {
             padding: 8px 15px;
             font-size: 0.9rem;
+            margin: 2px;
         }
-        .table-responsive {
-            overflow-x: auto;
-        }
+        .table-responsive { overflow-x: auto; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -124,9 +121,7 @@
             align-items: center;
             justify-content: center;
         }
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
         .modal-content {
             background: var(--white);
             padding: 30px;
@@ -148,50 +143,43 @@
             font-size: 1.5rem;
             cursor: pointer;
         }
-        .image-preview {
+        .auth-container {
+            min-height: 100vh;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-        .image-preview img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--soft-pink) 0%, var(--light-pink) 100%);
         }
     </style>
 </head>
 <body>
-    <!-- Admin Login Page -->
-    <div id="admin-login" style="display: none;">
-        <section class="auth-section" style="display: flex;">
-            <div class="auth-card">
-                <h1 class="auth-title">🔐 Admin Login</h1>
-                
-                <div id="login-error" class="error-message" style="display: none;"></div>
-                
-                <form id="admin-login-form">
-                    <div class="form-group">
-                        <label>Admin Email</label>
-                        <input type="email" id="admin-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="admin-password" required>
-                    </div>
-                    <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
-                </form>
-                
-                <p style="text-align: center; margin-top: 20px;">
-                    <a href="index.html" style="color: var(--dark-pink);">← Back to Store</a>
-                </p>
-            </div>
-        </section>
+    <!-- Admin Login -->
+    <div id="admin-login-view" class="auth-container" style="display: none;">
+        <div class="auth-card" style="background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3); width: 100%; max-width: 450px;">
+            <h1 class="auth-title" style="text-align: center; color: var(--dark-pink); font-size: 2rem; margin-bottom: 30px;">🔐 Admin Login</h1>
+            
+            <div id="login-error" style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;"></div>
+            
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="admin-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="admin-password" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                <a href="index.html" style="color: var(--dark-pink);">← Back to Store</a>
+            </p>
+        </div>
     </div>
 
     <!-- Admin Dashboard -->
-    <div id="admin-dashboard" style="display: none;">
+    <div id="admin-dashboard-view" style="display: none;">
         <header class="header">
             <div class="container">
                 <nav class="navbar">
@@ -207,7 +195,7 @@
         <div class="admin-layout">
             <aside class="admin-sidebar">
                 <h3>🌸 Admin Panel</h3>
-                <a href="#" class="active" onclick="showSection('dashboard')">Dashboard</a>
+                <a href="#" onclick="showSection('dashboard')" class="active">Dashboard</a>
                 <a href="#" onclick="showSection('products')">Products</a>
                 <a href="#" onclick="showSection('orders')">Orders</a>
                 <a href="#" onclick="showSection('categories')">Categories</a>
@@ -308,7 +296,7 @@
                 <div id="section-categories" style="display: none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                         <h2 style="color: var(--dark-pink);">Categories Management</h2>
-                        <button class="btn-primary" onclick="openCategoryModal()">+ Add Category</button>
+                        <button class="btn-primary" onclick="addCategory()">+ Add Category</button>
                     </div>
 
                     <div class="admin-card">
@@ -364,7 +352,6 @@
                 <div class="form-group">
                     <label>Image URL</label>
                     <input type="url" id="product-image" placeholder="https://example.com/image.jpg">
-                    <div id="image-preview" class="image-preview"></div>
                 </div>
                 <button type="submit" class="btn-primary" style="width: 100%;">Save Product</button>
             </form>
@@ -375,7 +362,7 @@
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         let products = [];
         let categories = [];
@@ -384,10 +371,9 @@
         // Check admin auth
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                document.getElementById('admin-login').style.display = 'block';
-                document.getElementById('admin-dashboard').style.display = 'none';
+                document.getElementById('admin-login-view').style.display = 'flex';
+                document.getElementById('admin-dashboard-view').style.display = 'none';
             } else {
-                // Check if admin
                 const q = query(collection(db, 'admins'), where('email', '==', user.email));
                 const snapshot = await getDocs(q);
                 
@@ -397,8 +383,8 @@
                     return;
                 }
                 
-                document.getElementById('admin-login').style.display = 'none';
-                document.getElementById('admin-dashboard').style.display = 'block';
+                document.getElementById('admin-login-view').style.display = 'none';
+                document.getElementById('admin-dashboard-view').style.display = 'block';
                 loadDashboardData();
             }
         });
@@ -420,35 +406,39 @@
 
         // Load dashboard data
         async function loadDashboardData() {
-            // Load products
-            const productsSnapshot = await getDocs(collection(db, 'products'));
-            products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            
-            // Load categories
-            const categoriesSnapshot = await getDocs(collection(db, 'categories'));
-            categories = categoriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            
-            // Load orders
-            const ordersSnapshot = await getDocs(collection(db, 'orders'));
-            orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            try {
+                const productsSnapshot = await getDocs(collection(db, 'products'));
+                products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const categoriesSnapshot = await getDocs(collection(db, 'categories'));
+                categories = categoriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const ordersSnapshot = await getDocs(collection(db, 'orders'));
+                orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-            // Update stats
+                updateStats();
+                renderProducts();
+                renderOrders();
+                renderCategories();
+                renderRecentOrders();
+                updateCategoryDropdown();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function updateStats() {
             document.getElementById('stat-products').textContent = products.length;
             document.getElementById('stat-orders').textContent = orders.length;
             document.getElementById('stat-pending').textContent = orders.filter(o => o.status === 'pending').length;
             document.getElementById('stat-revenue').textContent = orders
                 .filter(o => o.status === 'delivered' || o.status === 'confirmed')
                 .reduce((sum, o) => sum + (o.total || 0), 0).toLocaleString();
-
-            renderProducts();
-            renderOrders();
-            renderCategories();
-            renderRecentOrders();
-            updateCategoryDropdown();
         }
 
         function renderProducts() {
             const tbody = document.querySelector('#products-table tbody');
+            if (!tbody) return;
             tbody.innerHTML = products.map(p => `
                 <tr>
                     <td><img src="${p.images?.[0] || 'https://via.placeholder.com/50'}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
@@ -465,6 +455,7 @@
 
         function renderOrders() {
             const tbody = document.querySelector('#orders-table tbody');
+            if (!tbody) return;
             tbody.innerHTML = orders.map(o => `
                 <tr>
                     <td>#${o.id.slice(0, 8).toUpperCase()}</td>
@@ -483,6 +474,7 @@
 
         function renderCategories() {
             const tbody = document.querySelector('#categories-table tbody');
+            if (!tbody) return;
             tbody.innerHTML = categories.map(c => `
                 <tr>
                     <td>${c.name}</td>
@@ -493,6 +485,7 @@
 
         function renderRecentOrders() {
             const tbody = document.querySelector('#recent-orders-table tbody');
+            if (!tbody) return;
             const recent = orders.slice(0, 5);
             tbody.innerHTML = recent.map(o => `
                 <tr>
@@ -506,6 +499,7 @@
 
         function updateCategoryDropdown() {
             const select = document.getElementById('product-category');
+            if (!select) return;
             select.innerHTML = '<option value="">Select Category</option>' +
                 categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
         }
@@ -579,7 +573,6 @@
                 productData.createdAt = new Date().toISOString();
                 await addDoc(collection(db, 'products'), productData);
                 
-                // Add new category if created
                 const newCat = document.getElementById('product-new-category').value;
                 if (newCat && !categories.find(c => c.name === newCat)) {
                     await addDoc(collection(db, 'categories'), {
@@ -600,8 +593,8 @@
             loadDashboardData();
         };
 
-        // Category modal
-        window.openCategoryModal = async () => {
+        // Add category
+        window.addCategory = async () => {
             const name = prompt('Enter category name:');
             if (!name) return;
 

@@ -1,43 +1,56 @@
 // Main Application JavaScript
 import { db, auth } from './firebase-config.js';
-import { collection, getDocs, query, orderBy, limit, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { collection, getDocs, query, orderBy, limit, addDoc, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
 // Check auth state
 let currentUser = null;
 
+// Global auth state listener
 onAuthStateChanged(auth, (user) => {
     currentUser = user;
     updateAuthLink(user);
+    updateCartCount();
 });
 
+// Update auth link in header
 function updateAuthLink(user) {
     const authLink = document.getElementById('auth-link');
-    if (authLink) {
-        if (user) {
-            authLink.textContent = 'Logout';
-            authLink.href = '#';
-            authLink.onclick = (e) => {
-                e.preventDefault();
-                signOut(auth).then(() => {
-                    window.location.href = 'index.html';
-                });
-            };
-        } else {
-            authLink.textContent = 'Login';
-            authLink.href = 'login.html';
-        }
+    if (!authLink) return;
+
+    if (user) {
+        authLink.textContent = 'Logout';
+        authLink.href = '#';
+        authLink.onclick = (e) => {
+            e.preventDefault();
+            performLogout();
+        };
+    } else {
+        authLink.textContent = 'Login';
+        authLink.href = 'login.html';
+        authLink.onclick = null;
+    }
+}
+
+// Perform logout
+async function performLogout() {
+    try {
+        await signOut(auth);
+        alert('Logged out successfully!');
+        window.location.href = 'index.html';
+    } catch (error) {
+        alert('Error logging out: ' + error.message);
     }
 }
 
 // Update cart count
 export function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
     const cartCountEl = document.getElementById('cart-count');
-    if (cartCountEl) {
-        cartCountEl.textContent = count;
-    }
+    if (!cartCountEl) return;
+    
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    cartCountEl.textContent = count;
 }
 
 // Load categories
@@ -58,7 +71,7 @@ export async function loadCategories() {
         }
 
         container.innerHTML = categories.map(cat => `
-            <a href="category.html?id=${cat.id}&name=${encodeURIComponent(cat.name)}" class="category-card">
+            <a href="shop.html?category=${encodeURIComponent(cat.name)}" class="category-card">
                 <div class="category-icon">🌸</div>
                 <div class="category-name">${cat.name}</div>
             </a>
@@ -104,7 +117,7 @@ export async function loadFeaturedProducts() {
     }
 }
 
-// Load all products
+// Load all products for shop page
 export async function loadAllProducts() {
     const container = document.getElementById('products-container');
     if (!container) return;
@@ -122,21 +135,30 @@ export async function loadAllProducts() {
             return;
         }
 
-        container.innerHTML = products.map(product => `
-            <a href="product.html?id=${product.id}" class="product-card">
-                <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}" 
-                     alt="${product.name}" class="product-image">
-                <div class="product-info">
-                    <div class="product-category">${product.category}</div>
-                    <div class="product-title">${product.name}</div>
-                    <div class="product-price">Rs. ${(product.price || 0).toLocaleString()}</div>
-                </div>
-            </a>
-        `).join('');
+        window.allProducts = products;
+        renderProducts(products);
     } catch (error) {
         console.error('Error loading products:', error);
         container.innerHTML = '<p class="loading">Error loading products</p>';
     }
+}
+
+// Render products helper
+function renderProducts(products) {
+    const container = document.getElementById('products-container');
+    if (!container) return;
+
+    container.innerHTML = products.map(product => `
+        <a href="product.html?id=${product.id}" class="product-card">
+            <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}" 
+                 alt="${product.name}" class="product-image">
+            <div class="product-info">
+                <div class="product-category">${product.category}</div>
+                <div class="product-title">${product.name}</div>
+                <div class="product-price">Rs. ${(product.price || 0).toLocaleString()}</div>
+            </div>
+        </a>
+    `).join('');
 }
 
 // Add to cart
@@ -153,7 +175,7 @@ export function addToCart(product, variant = {}, quantity = 1) {
     );
 
     if (existingIndex > -1) {
-        cart[existingIndex].quantity += quantity;
+        cart[existingIndex].quantity = (cart[existingIndex].quantity || 1) + quantity;
     } else {
         cart.push({ ...product, variant, quantity });
     }
@@ -174,7 +196,7 @@ export function removeFromCart(index) {
     cart.splice(index, 1);
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
-    renderCart();
+    if (window.renderCart) window.renderCart();
 }
 
 // Update cart quantity
@@ -187,20 +209,22 @@ export function updateCartQuantity(index, quantity) {
     cart[index].quantity = quantity;
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
-    renderCart();
+    if (window.renderCart) window.renderCart();
 }
 
 // Render cart page
-export function renderCart() {
+export function renderCartPage() {
     const container = document.getElementById('cart-items');
     const totalEl = document.getElementById('cart-total');
+    const totalFinalEl = document.getElementById('cart-total-final');
     if (!container) return;
 
     const cart = getCartItems();
 
     if (cart.length === 0) {
-        container.innerHTML = '<p class="loading">Your cart is empty</p>';
+        container.innerHTML = '<div class="empty-cart"><h2>Your cart is empty</h2><p class="loading">Add items to your cart to see them here</p><a href="shop.html" class="btn-primary" style="display:inline-block;margin-top:20px;">Start Shopping</a></div>';
         if (totalEl) totalEl.textContent = '0';
+        if (totalFinalEl) totalFinalEl.textContent = '0';
         return;
     }
 
@@ -224,13 +248,15 @@ export function renderCart() {
         </div>
     `).join('');
 
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const total = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
     if (totalEl) totalEl.textContent = total.toLocaleString();
+    if (totalFinalEl) totalFinalEl.textContent = total.toLocaleString();
 }
 
 // Make functions available globally
 window.removeFromCart = removeFromCart;
 window.updateQuantity = updateCartQuantity;
+window.renderCart = renderCartPage;
 
 // Load single product
 export async function loadProduct(productId) {
@@ -295,8 +321,6 @@ export async function loadProduct(productId) {
 }
 
 // Global functions for product page
-let selectedSize = null;
-
 window.selectSize = (size) => {
     selectedSize = size;
     document.querySelectorAll('.size-btn').forEach(btn => {
@@ -321,6 +345,8 @@ window.buyNow = () => {
     }, 500);
 };
 
+let selectedSize = null;
+
 // Place order
 export async function placeOrder(orderData) {
     try {
@@ -333,3 +359,6 @@ export async function placeOrder(orderData) {
         return { success: false, error: error.message };
     }
 }
+
+// Export for global use
+window.updateCartCount = updateCartCount;

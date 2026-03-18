@@ -62,7 +62,17 @@
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 20px;
-            display: none;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .btn-loading {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -84,7 +94,7 @@
         <div class="auth-card">
             <h1 class="auth-title">Welcome Back! 🌸</h1>
             
-            <div id="error-message" class="error-message"></div>
+            <div id="message-container"></div>
             
             <form id="login-form">
                 <div class="form-group">
@@ -95,7 +105,7 @@
                     <label>Password</label>
                     <input type="password" id="password" required placeholder="Enter your password">
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+                <button type="submit" id="login-btn" class="btn-primary" style="width: 100%;">Login</button>
             </form>
             
             <div class="auth-links">
@@ -105,24 +115,64 @@
         </div>
     </section>
 
-    <script type="module" src="firebase-config.js"></script>
     <script type="module">
         import { auth } from './firebase-config.js';
         import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
+        const loginForm = document.getElementById('login-form');
+        const loginBtn = document.getElementById('login-btn');
+        const messageContainer = document.getElementById('message-container');
+
+        function showMessage(message, isError = true) {
+            messageContainer.innerHTML = `
+                <div class="${isError ? 'error-message' : 'success-message'}">
+                    ${message}
+                </div>
+            `;
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const errorEl = document.getElementById('error-message');
+            
+            // Show loading state
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.classList.add('btn-loading');
+            messageContainer.innerHTML = '';
             
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                window.location.href = 'index.html';
+                
+                showMessage('Login successful! Redirecting...', false);
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+                
             } catch (error) {
-                errorEl.textContent = error.message.replace('Firebase: ', '');
-                errorEl.style.display = 'block';
+                console.error('Login error:', error);
+                
+                let errorMessage = 'Login failed. Please try again.';
+                
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email address.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = 'Too many failed attempts. Please try again later.';
+                } else if (error.message) {
+                    errorMessage = error.message.replace('Firebase: ', '');
+                }
+                
+                showMessage(errorMessage);
+                
+                // Reset button
+                loginBtn.textContent = 'Login';
+                loginBtn.classList.remove('btn-loading');
             }
         });
     </script>
