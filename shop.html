@@ -149,8 +149,11 @@
                 });
 
                 // Populate category filter
-                categoryFilter.innerHTML = '<option value="all">All Categories</option>' +
-                    Array.from(categories).map(cat => `<option value="${cat}">${cat}</option>`).join('');
+                let optionsHtml = '<option value="all">All Categories</option>';
+                categories.forEach(cat => {
+                    optionsHtml += '<option value="' + cat + '">' + cat + '</option>';
+                });
+                categoryFilter.innerHTML = optionsHtml;
 
                 renderProducts(allProducts);
             } catch (error) {
@@ -162,22 +165,29 @@
         function renderProducts(products) {
             const container = document.getElementById('products-container');
             
+            if (!container) return;
+            
             if (products.length === 0) {
                 container.innerHTML = '<p class="loading">No products found. Add products from admin panel.</p>';
                 return;
             }
 
-            container.innerHTML = products.map(product => `
-                <a href="product.html?id=${product.id}" class="product-card">
-                    <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}" 
-                         alt="${product.name}" class="product-image">
-                    <div class="product-info">
-                        <div class="product-category">${product.category}</div>
-                        <div class="product-title">${product.name}</div>
-                        <div class="product-price">Rs. ${(product.price || 0).toLocaleString()}</div>
-                    </div>
-                </a>
-            `).join('');
+            let html = '';
+            products.forEach(function(product) {
+                const imageUrl = product.images && product.images.length > 0 
+                    ? product.images[0] 
+                    : 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image';
+                
+                html += '<a href="product.html?id=' + product.id + '" class="product-card">';
+                html += '<img src="' + imageUrl + '" alt="' + product.name + '" class="product-image">';
+                html += '<div class="product-info">';
+                html += '<div class="product-category">' + product.category + '</div>';
+                html += '<div class="product-title">' + product.name + '</div>';
+                html += '<div class="product-price">Rs. ' + (product.price || 0).toLocaleString() + '</div>';
+                html += '</div></a>';
+            });
+            
+            container.innerHTML = html;
         }
 
         function filterProducts() {
@@ -185,30 +195,35 @@
             const price = document.getElementById('price-filter').value;
             const sort = document.getElementById('sort-filter').value;
 
-            let filtered = [...allProducts];
+            let filtered = allProducts.slice();
 
             // Category filter
             if (category !== 'all') {
-                filtered = filtered.filter(p => p.category === category);
+                filtered = filtered.filter(function(p) { return p.category === category; });
             }
 
             // Price filter
             if (price !== 'all') {
-                const [min, max] = price.split('-').map(Number);
+                var parts = price.split('-');
+                var min = Number(parts[0]);
+                var max = parts[1] ? Number(parts[1]) : null;
+                
                 if (max) {
-                    filtered = filtered.filter(p => p.price >= min && p.price <= max);
+                    filtered = filtered.filter(function(p) { return p.price >= min && p.price <= max; });
                 } else {
-                    filtered = filtered.filter(p => p.price >= min);
+                    filtered = filtered.filter(function(p) { return p.price >= min; });
                 }
             }
 
             // Sort
             if (sort === 'price-low') {
-                filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+                filtered.sort(function(a, b) { return (a.price || 0) - (b.price || 0); });
             } else if (sort === 'price-high') {
-                filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+                filtered.sort(function(a, b) { return (b.price || 0) - (a.price || 0); });
             } else {
-                filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                filtered.sort(function(a, b) { 
+                    return new Date(b.createdAt || 0) - new Date(a.createdAt || 0); 
+                });
             }
 
             renderProducts(filtered);
