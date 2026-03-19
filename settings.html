@@ -433,56 +433,27 @@
                                 <div class="form-group">
                                     <label>Position</label>
                                     <select id="video-ad-position">
-                                        <option value="top">Top (After Hero Section)</option>
+                                        <option value="top">Top (After Hero)</option>
                                         <option value="bottom">Bottom (Before Footer)</option>
                                     </select>
-                                    <small>Where to show video ad on page</small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Show Video On Pages</label>
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-                                        <label style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" id="page-index" value="index.html" checked>
-                                            🏠 Home Page
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" id="page-shop" value="shop.html">
-                                            🛍️ Shop Page
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" id="page-cart" value="cart.html">
-                                            🛒 Cart Page
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" id="page-checkout" value="checkout.html">
-                                            💳 Checkout Page
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" id="page-contact" value="contact.html">
-                                            📞 Contact Page
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" id="page-account" value="account.html">
-                                            👤 Account Page
-                                        </label>
-                                    </div>
-                                    <small>Select pages where video ad should appear</small>
+                                    <small>Where to show advertisement on this page</small>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Click Redirect URL (Optional)</label>
                                     <input type="url" id="video-ad-clickurl" placeholder="https://example.com/special-offer">
-                                    <small>When user clicks video, open this URL in new tab (leave empty for no redirect)</small>
+                                    <small>When user clicks ad, open this URL in new tab</small>
                                 </div>
 
-                                <button type="submit" class="btn-save">Save Video Ad Settings</button>
+                                <button type="submit" class="btn-save">Save for This Page</button>
                             </form>
 
                             <div class="preview-section" style="margin-top: 20px;">
-                                <h4>Current Status:</h4>
-                                <p><strong>Video Ad:</strong> <span id="video-ad-status">Loading...</span></p>
+                                <h4>Current Page Settings:</h4>
+                                <p><strong>Page:</strong> <span id="current-page-name">-</span></p>
+                                <p><strong>Ad Status:</strong> <span id="video-ad-status">Loading...</span></p>
                                 <p><strong>File:</strong> <span id="video-ad-file-status">-</span></p>
+                                <p style="color: var(--text-light); margin-top: 10px;">💡 Settings are saved per page. Configure each page separately.</p>
                             </div>
                         </div>
                     </div>
@@ -670,17 +641,11 @@
             saveVideoAdSettings();
         });
 
-        // Save video ad settings to localStorage
+        // Save video ad settings to localStorage (per-page)
         function saveVideoAdSettings() {
-            // Get selected pages
-            const selectedPages = [];
-            if (document.getElementById('page-index').checked) selectedPages.push('index.html');
-            if (document.getElementById('page-shop').checked) selectedPages.push('shop.html');
-            if (document.getElementById('page-cart').checked) selectedPages.push('cart.html');
-            if (document.getElementById('page-checkout').checked) selectedPages.push('checkout.html');
-            if (document.getElementById('page-contact').checked) selectedPages.push('contact.html');
-            if (document.getElementById('page-account').checked) selectedPages.push('account.html');
-
+            // Get current page
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
             // Get media type
             const mediaType = document.querySelector('input[name="media-type"]:checked')?.value || 'video';
 
@@ -692,23 +657,28 @@
                 autoPlay: document.getElementById('video-ad-autoplay').checked,
                 showCloseButton: document.getElementById('video-ad-closebutton').checked,
                 position: document.getElementById('video-ad-position').value,
-                showOnPages: selectedPages,
                 clickUrl: document.getElementById('video-ad-clickurl').value.trim()
             };
 
             try {
-                localStorage.setItem('videoAdSettings', JSON.stringify(settings));
-                showMessage('Advertisement settings saved successfully!');
+                // Save settings for current page only
+                localStorage.setItem(`videoAd_${currentPage}`, JSON.stringify(settings));
+                showMessage(`Advertisement settings saved for ${currentPage}!`);
                 updateVideoAdStatus();
             } catch (error) {
                 showMessage('Error saving settings: ' + error.message, true);
             }
         }
 
-        // Load and display video ad settings
+        // Load and display video ad settings (per-page)
         function loadVideoAdSettings() {
             try {
-                const stored = localStorage.getItem('videoAdSettings');
+                // Get current page
+                const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+                
+                // Load page-specific settings
+                const stored = localStorage.getItem(`videoAd_${currentPage}`);
+                
                 if (stored) {
                     const settings = JSON.parse(stored);
                     document.getElementById('video-ad-enabled').checked = settings.enabled || false;
@@ -723,20 +693,10 @@
                     document.getElementById('video-ad-autoplay').checked = settings.autoPlay !== false;
                     document.getElementById('video-ad-closebutton').checked = settings.showCloseButton !== false;
                     document.getElementById('video-ad-position').value = settings.position || 'top';
-                    
-                    // Load selected pages
-                    const showOnPages = settings.showOnPages || ['index.html'];
-                    document.getElementById('page-index').checked = showOnPages.includes('index.html');
-                    document.getElementById('page-shop').checked = showOnPages.includes('shop.html');
-                    document.getElementById('page-cart').checked = showOnPages.includes('cart.html');
-                    document.getElementById('page-checkout').checked = showOnPages.includes('checkout.html');
-                    document.getElementById('page-contact').checked = showOnPages.includes('contact.html');
-                    document.getElementById('page-account').checked = showOnPages.includes('account.html');
-                    
-                    // Load click URL
                     document.getElementById('video-ad-clickurl').value = settings.clickUrl || '';
                 }
                 updateVideoAdStatus();
+                console.log(`Loaded settings for ${currentPage}`);
             } catch (error) {
                 console.error('Error loading advertisement settings:', error);
             }

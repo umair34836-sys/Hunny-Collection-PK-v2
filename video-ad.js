@@ -10,29 +10,27 @@ const defaultVideoAdSettings = {
     autoPlay: true,
     showCloseButton: true,
     position: 'top',
-    showOnPages: ['index.html'],
     clickUrl: ''
 };
 
 // Get settings for current page
 export function getVideoAdSettings() {
     try {
-        const stored = localStorage.getItem('videoAdSettings');
-        if (stored) {
-            const allSettings = JSON.parse(stored);
-            
-            // Get current page
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-            
-            // Check if ad is enabled for this page
-            if (allSettings.showOnPages && allSettings.showOnPages.includes(currentPage)) {
-                return {
-                    ...defaultVideoAdSettings,
-                    ...allSettings,
-                    enabled: allSettings.enabled !== false
-                };
-            }
+        // Get current page
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        
+        // Get page-specific settings
+        const pageSettings = localStorage.getItem(`videoAd_${currentPage}`);
+        
+        if (pageSettings) {
+            const settings = JSON.parse(pageSettings);
+            console.log(`Loaded settings for ${currentPage}:`, settings);
+            return {
+                ...defaultVideoAdSettings,
+                ...settings
+            };
         }
+        
         return defaultVideoAdSettings;
     } catch (error) {
         console.error('Error loading video ad settings:', error);
