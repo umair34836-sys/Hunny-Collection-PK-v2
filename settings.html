@@ -361,29 +361,45 @@
                             <h3>📺 Video Advertisement Settings</h3>
                             
                             <div class="preview-section" style="margin-bottom: 20px;">
-                                <h4>📹 How to Add Video Advertisement:</h4>
+                                <h4>📹 How to Add Advertisement:</h4>
                                 <ol style="margin-left: 20px; line-height: 2;">
-                                    <li>Upload your video (MP4 format) to <strong>assets</strong> folder</li>
-                                    <li>Enter the video file name below (e.g., v1.mp4)</li>
+                                    <li>Upload your <strong>video (MP4)</strong> or <strong>image (JPG/PNG)</strong> to <strong>assets</strong> folder</li>
+                                    <li>Select media type below (Video or Image)</li>
+                                    <li>Enter the file name (e.g., v1.mp4 or banner.jpg)</li>
                                     <li>Configure settings and save</li>
-                                    <li>Video will appear on homepage automatically</li>
+                                    <li>Media will appear on selected pages automatically</li>
                                 </ol>
-                                <p style="color: var(--text-light); margin-top: 15px;"><strong>💡 Tip:</strong> Keep video size under 5MB for faster loading</p>
+                                <p style="color: var(--text-light); margin-top: 15px;"><strong>💡 Tip:</strong> Videos under 5MB load faster. Images should be optimized.</p>
                             </div>
 
                             <form id="video-ad-form">
                                 <div class="form-group">
                                     <label>
                                         <input type="checkbox" id="video-ad-enabled"> 
-                                        Enable Video Advertisement
+                                        Enable Advertisement
                                     </label>
-                                    <small>Turn on/off video ad on homepage</small>
+                                    <small>Turn on/off media ad on selected pages</small>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Video File Name *</label>
-                                    <input type="text" id="video-ad-filename" placeholder="v1.mp4" required>
-                                    <small>Exact file name in assets folder (e.g., v1.mp4, ad.mp4)</small>
+                                    <label>Media Type</label>
+                                    <div style="display: flex; gap: 20px; margin-top: 10px;">
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="radio" name="media-type" value="video" id="media-type-video" checked>
+                                            🎬 Video (MP4)
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="radio" name="media-type" value="image" id="media-type-image">
+                                            🖼️ Image (JPG/PNG)
+                                        </label>
+                                    </div>
+                                    <small>Select type of advertisement</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Media File Name *</label>
+                                    <input type="text" id="video-ad-filename" placeholder="v1.mp4 or banner.jpg" required>
+                                    <small>Exact file name in assets folder (e.g., v1.mp4, ad.jpg, banner.png)</small>
                                 </div>
 
                                 <div class="form-group">
@@ -415,6 +431,43 @@
                                         <option value="bottom">Bottom (Before Footer)</option>
                                     </select>
                                     <small>Where to show video ad on page</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Show Video On Pages</label>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" id="page-index" value="index.html" checked>
+                                            🏠 Home Page
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" id="page-shop" value="shop.html">
+                                            🛍️ Shop Page
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" id="page-cart" value="cart.html">
+                                            🛒 Cart Page
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" id="page-checkout" value="checkout.html">
+                                            💳 Checkout Page
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" id="page-contact" value="contact.html">
+                                            📞 Contact Page
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" id="page-account" value="account.html">
+                                            👤 Account Page
+                                        </label>
+                                    </div>
+                                    <small>Select pages where video ad should appear</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Click Redirect URL (Optional)</label>
+                                    <input type="url" id="video-ad-clickurl" placeholder="https://example.com/special-offer">
+                                    <small>When user clicks video, open this URL in new tab (leave empty for no redirect)</small>
                                 </div>
 
                                 <button type="submit" class="btn-save">Save Video Ad Settings</button>
@@ -610,18 +663,33 @@
 
         // Save video ad settings to localStorage
         function saveVideoAdSettings() {
+            // Get selected pages
+            const selectedPages = [];
+            if (document.getElementById('page-index').checked) selectedPages.push('index.html');
+            if (document.getElementById('page-shop').checked) selectedPages.push('shop.html');
+            if (document.getElementById('page-cart').checked) selectedPages.push('cart.html');
+            if (document.getElementById('page-checkout').checked) selectedPages.push('checkout.html');
+            if (document.getElementById('page-contact').checked) selectedPages.push('contact.html');
+            if (document.getElementById('page-account').checked) selectedPages.push('account.html');
+
+            // Get media type
+            const mediaType = document.querySelector('input[name="media-type"]:checked')?.value || 'video';
+
             const settings = {
                 enabled: document.getElementById('video-ad-enabled').checked,
-                videoFileName: document.getElementById('video-ad-filename').value.trim(),
+                mediaFileName: document.getElementById('video-ad-filename').value.trim(),
+                mediaType: mediaType,
                 videoTitle: document.getElementById('video-ad-title').value.trim(),
                 autoPlay: document.getElementById('video-ad-autoplay').checked,
                 showCloseButton: document.getElementById('video-ad-closebutton').checked,
-                position: document.getElementById('video-ad-position').value
+                position: document.getElementById('video-ad-position').value,
+                showOnPages: selectedPages,
+                clickUrl: document.getElementById('video-ad-clickurl').value.trim()
             };
 
             try {
                 localStorage.setItem('videoAdSettings', JSON.stringify(settings));
-                showMessage('Video Ad settings saved successfully!');
+                showMessage('Advertisement settings saved successfully!');
                 updateVideoAdStatus();
             } catch (error) {
                 showMessage('Error saving settings: ' + error.message, true);
@@ -635,15 +703,33 @@
                 if (stored) {
                     const settings = JSON.parse(stored);
                     document.getElementById('video-ad-enabled').checked = settings.enabled || false;
-                    document.getElementById('video-ad-filename').value = settings.videoFileName || '';
+                    
+                    // Load media type
+                    const mediaType = settings.mediaType || 'video';
+                    document.getElementById('media-type-video').checked = mediaType === 'video';
+                    document.getElementById('media-type-image').checked = mediaType === 'image';
+                    
+                    document.getElementById('video-ad-filename').value = settings.mediaFileName || '';
                     document.getElementById('video-ad-title').value = settings.videoTitle || '';
                     document.getElementById('video-ad-autoplay').checked = settings.autoPlay !== false;
                     document.getElementById('video-ad-closebutton').checked = settings.showCloseButton !== false;
                     document.getElementById('video-ad-position').value = settings.position || 'top';
+                    
+                    // Load selected pages
+                    const showOnPages = settings.showOnPages || ['index.html'];
+                    document.getElementById('page-index').checked = showOnPages.includes('index.html');
+                    document.getElementById('page-shop').checked = showOnPages.includes('shop.html');
+                    document.getElementById('page-cart').checked = showOnPages.includes('cart.html');
+                    document.getElementById('page-checkout').checked = showOnPages.includes('checkout.html');
+                    document.getElementById('page-contact').checked = showOnPages.includes('contact.html');
+                    document.getElementById('page-account').checked = showOnPages.includes('account.html');
+                    
+                    // Load click URL
+                    document.getElementById('video-ad-clickurl').value = settings.clickUrl || '';
                 }
                 updateVideoAdStatus();
             } catch (error) {
-                console.error('Error loading video ad settings:', error);
+                console.error('Error loading advertisement settings:', error);
             }
         }
 

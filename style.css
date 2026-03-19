@@ -787,6 +787,15 @@ body {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 8px 30px rgba(255, 105, 180, 0.3);
+    transition: all 0.3s ease;
+}
+
+.video-ad-wrapper:hover {
+    box-shadow: 0 12px 40px rgba(255, 105, 180, 0.5);
+}
+
+.video-ad-wrapper[style*="cursor: pointer"]:hover {
+    transform: scale(1.02);
 }
 
 .video-ad-wrapper video {

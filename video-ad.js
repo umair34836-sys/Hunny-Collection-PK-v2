@@ -4,11 +4,14 @@
 // Default video ad settings
 const defaultVideoAdSettings = {
     enabled: false,
-    videoFileName: '',
+    mediaFileName: '',
+    mediaType: 'video', // 'video' or 'image'
     videoTitle: 'Special Offer',
     autoPlay: true,
     showCloseButton: true,
-    position: 'top'
+    position: 'top',
+    showOnPages: ['index.html'],
+    clickUrl: ''
 };
 
 // Load video ad settings from localStorage
@@ -29,7 +32,16 @@ export function getVideoAdSettings() {
 export function renderVideoAd() {
     const settings = getVideoAdSettings();
 
-    if (!settings.enabled || !settings.videoFileName) {
+    if (!settings.enabled || !settings.mediaFileName) {
+        return;
+    }
+
+    // Check if video should show on current page
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const showOnPages = settings.showOnPages || ['index.html'];
+    
+    if (!showOnPages.includes(currentPage)) {
+        console.log('Media ad not shown on this page:', currentPage);
         return;
     }
 
@@ -38,17 +50,43 @@ export function renderVideoAd() {
         return;
     }
 
-    const videoAdHTML = `
-        <section class="video-ad-section" id="video-ad-section">
+    // Detect media type from file extension
+    const fileExt = settings.mediaFileName.toLowerCase().split('.').pop();
+    const isVideo = ['mp4', 'webm', 'ogg'].includes(fileExt);
+    const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt);
+
+    const clickUrl = settings.clickUrl || '';
+    const clickHandler = clickUrl ? `onclick="window.open('${escapeHtml(clickUrl)}', '_blank')"` : '';
+    const cursorStyle = clickUrl ? 'cursor: pointer;' : '';
+
+    let mediaContent = '';
+    
+    if (isVideo) {
+        // Video content
+        mediaContent = `
+            <video ${settings.autoPlay ? 'autoplay muted loop playsinline' : 'controls'} id="media-player">
+                <source src="assets/${escapeHtml(settings.mediaFileName)}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        `;
+    } else if (isImage) {
+        // Image content
+        mediaContent = `
+            <img src="assets/${escapeHtml(settings.mediaFileName)}" alt="${escapeHtml(settings.videoTitle)}" id="media-player" style="width: 100%; height: 100%; object-fit: contain;">
+        `;
+    } else {
+        console.error('Unsupported media type:', fileExt);
+        return;
+    }
+
+    const mediaAdHTML = `
+        <section class="video-ad-section" id="media-ad-section">
             <div class="video-ad-container">
                 ${settings.videoTitle ? `<h3 class="video-ad-title">${escapeHtml(settings.videoTitle)}</h3>` : ''}
-                <div class="video-ad-wrapper">
-                    ${settings.showCloseButton ? '<button class="video-ad-close" onclick="closeVideoAd()" aria-label="Close video">✕</button>' : ''}
-                    <button class="video-mute-btn" onclick="toggleMute()" aria-label="Toggle mute" id="mute-btn" style="display: none;">🔇</button>
-                    <video ${settings.autoPlay ? 'autoplay muted loop playsinline' : 'controls'} id="video-ad-player">
-                        <source src="assets/${escapeHtml(settings.videoFileName)}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                <div class="video-ad-wrapper" ${clickHandler} style="${cursorStyle}">
+                    ${settings.showCloseButton ? '<button class="video-ad-close" onclick="closeMediaAd(event)" aria-label="Close media">✕</button>' : ''}
+                    <button class="video-mute-btn" onclick="toggleMute(event)" aria-label="Toggle mute" id="mute-btn" style="display: none;">🔇</button>
+                    ${mediaContent}
                 </div>
             </div>
         </section>
@@ -56,69 +94,71 @@ export function renderVideoAd() {
 
     const container = document.getElementById('video-ad-container');
     if (container) {
-        container.innerHTML = videoAdHTML;
+        container.innerHTML = mediaAdHTML;
 
-        const videoPlayer = document.getElementById('video-ad-player');
+        const mediaPlayer = document.getElementById('media-player');
         const muteBtn = document.getElementById('mute-btn');
 
-        // Show mute button after video loads
-        if (videoPlayer && muteBtn) {
-            videoPlayer.onloadedmetadata = function() {
+        // Show mute button only for video
+        if (mediaPlayer && muteBtn && isVideo) {
+            mediaPlayer.onloadedmetadata = function() {
                 muteBtn.style.display = 'flex';
             };
 
-            videoPlayer.onvolumechange = function() {
-                muteBtn.textContent = videoPlayer.muted || videoPlayer.volume === 0 ? '🔇' : '🔊';
+            mediaPlayer.onvolumechange = function() {
+                muteBtn.textContent = mediaPlayer.muted || mediaPlayer.volume === 0 ? '🔇' : '🔊';
             };
         }
 
-        if (settings.autoPlay) {
-            if (videoPlayer) {
-                videoPlayer.play().then(() => {
-                    // Auto-play successful, but muted
-                    console.log('Video autoplayed (muted). User can unmute.');
-                }).catch(err => {
-                    console.log('Auto-play prevented, showing controls:', err);
-                    videoPlayer.controls = true;
-                    if (muteBtn) muteBtn.style.display = 'flex';
-                });
-            }
+        // Auto-play for video
+        if (isVideo && settings.autoPlay) {
+            mediaPlayer.play().then(() => {
+                console.log('Video autoplayed (muted). User can unmute.');
+            }).catch(err => {
+                console.log('Auto-play prevented, showing controls:', err);
+                mediaPlayer.controls = true;
+                if (muteBtn) muteBtn.style.display = 'flex';
+            });
         }
     }
 }
 
-// Close video ad function
-window.closeVideoAd = function() {
-    const adSection = document.getElementById('video-ad-section');
-    const videoPlayer = document.getElementById('video-ad-player');
+// Close media ad function (video or image)
+window.closeMediaAd = function(event) {
+    if (event) event.stopPropagation();
+    
+    const adSection = document.getElementById('media-ad-section');
+    const mediaPlayer = document.getElementById('media-player');
     
     if (adSection) {
         adSection.style.display = 'none';
     }
     
-    // Stop video and audio
-    if (videoPlayer) {
-        videoPlayer.pause();
-        videoPlayer.currentTime = 0;
-        videoPlayer.muted = true;
+    // Stop video if it's a video
+    if (mediaPlayer && mediaPlayer.tagName === 'VIDEO') {
+        mediaPlayer.pause();
+        mediaPlayer.currentTime = 0;
+        mediaPlayer.muted = true;
     }
     
     sessionStorage.setItem('videoAdClosed', 'true');
 };
 
-// Toggle mute/unmute
-window.toggleMute = function() {
-    const videoPlayer = document.getElementById('video-ad-player');
+// Toggle mute/unmute (only for video)
+window.toggleMute = function(event) {
+    if (event) event.stopPropagation();
+    
+    const mediaPlayer = document.getElementById('media-player');
     const muteBtn = document.getElementById('mute-btn');
     
-    if (videoPlayer && muteBtn) {
-        if (videoPlayer.muted) {
-            videoPlayer.muted = false;
-            videoPlayer.volume = 1.0;
+    if (mediaPlayer && muteBtn && mediaPlayer.tagName === 'VIDEO') {
+        if (mediaPlayer.muted) {
+            mediaPlayer.muted = false;
+            mediaPlayer.volume = 1.0;
             muteBtn.textContent = '🔊';
             muteBtn.style.background = 'rgba(255, 105, 180, 0.9)';
         } else {
-            videoPlayer.muted = true;
+            mediaPlayer.muted = true;
             muteBtn.textContent = '🔇';
             muteBtn.style.background = 'rgba(0, 0, 0, 0.7)';
         }
