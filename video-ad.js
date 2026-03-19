@@ -5,7 +5,7 @@
 const defaultVideoAdSettings = {
     enabled: false,
     mediaFileName: '',
-    mediaType: 'video', // 'video' or 'image'
+    mediaType: 'video',
     videoTitle: 'Special Offer',
     autoPlay: true,
     showCloseButton: true,
@@ -14,12 +14,24 @@ const defaultVideoAdSettings = {
     clickUrl: ''
 };
 
-// Load video ad settings from localStorage
+// Get settings for current page
 export function getVideoAdSettings() {
     try {
         const stored = localStorage.getItem('videoAdSettings');
         if (stored) {
-            return JSON.parse(stored);
+            const allSettings = JSON.parse(stored);
+            
+            // Get current page
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
+            // Check if ad is enabled for this page
+            if (allSettings.showOnPages && allSettings.showOnPages.includes(currentPage)) {
+                return {
+                    ...defaultVideoAdSettings,
+                    ...allSettings,
+                    enabled: allSettings.enabled !== false
+                };
+            }
         }
         return defaultVideoAdSettings;
     } catch (error) {
