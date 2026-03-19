@@ -257,21 +257,37 @@ window.renderCart = renderCartPage;
 export async function loadProduct(productId) {
     const container = document.getElementById('product-detail');
     const pageTitle = document.getElementById('page-title');
-    if (!container) return;
+    if (!container) {
+        console.error('Product detail container not found');
+        return;
+    }
+
+    console.log('Loading product with ID:', productId);
 
     try {
         // Get all products and find the matching one
         const querySnapshot = await getDocs(collection(db, 'products'));
         let product = null;
 
+        console.log('Total products in Firestore:', querySnapshot.size);
+
         querySnapshot.forEach((doc) => {
+            console.log('Checking product:', doc.id);
             if (doc.id === productId) {
                 product = { id: doc.id, ...doc.data() };
+                console.log('Found product:', product.name);
             }
         });
 
         if (!product) {
-            container.innerHTML = '<div class="loading">Product not found</div>';
+            console.error('Product not found. Available IDs:', querySnapshot.docs.map(d => d.id));
+            container.innerHTML = `
+                <div class="loading">
+                    <h2>Product not found</h2>
+                    <p>The product you're looking for doesn't exist or has been removed.</p>
+                    <a href="shop.html" class="btn-primary" style="display:inline-block;margin-top:20px;">Browse Shop</a>
+                </div>
+            `;
             return;
         }
 
