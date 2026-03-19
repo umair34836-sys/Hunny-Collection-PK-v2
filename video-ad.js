@@ -142,13 +142,6 @@ export function renderVideoAd() {
                 if (muteBtn) muteBtn.style.display = 'flex';
             });
         }
-        
-        // Scroll to ad if position is top
-        if (settings.position === 'top' && settings.autoPlay) {
-            setTimeout(() => {
-                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 500);
-        }
     }
 }
 
