@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload Test - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .upload-section {
+            padding: 60px 0;
+            min-height: calc(100vh - 200px);
+            background: var(--soft-pink);
+        }
+        .upload-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+        }
+        .upload-box {
+            border: 3px dashed var(--dark-pink);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        .upload-box:hover {
+            background: var(--soft-pink);
+            border-color: var(--primary-pink);
+        }
+        .upload-box.dragover {
+            background: var(--primary-pink);
+            border-color: var(--dark-pink);
+        }
+        .btn-upload {
+            background: var(--dark-pink);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn-upload:hover {
+            background: #FF1493;
+        }
+        .video-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .video-item {
+            background: var(--soft-pink);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .video-preview {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+        .video-preview video {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+        }
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+        .error-msg {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+        .info-box {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="logo-image">
+                    <span class="logo-text">🌸 Hunny Collection PK</span>
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="upload-section">
+        <div class="upload-container">
+            <h1 style="color: var(--dark-pink); text-align: center; margin-bottom: 10px;">📹 Video Upload Test</h1>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;">
+                Upload your video to assets folder and test it here
+            </p>
+
+            <div class="info-box">
+                <strong>📌 Instructions:</strong>
+                <ol style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    <li>Copy your video file (MP4 format)</li>
+                    <li>Paste it into the <strong>assets</strong> folder in your project directory</li>
+                    <li>Enter the file name below (e.g., v1.mp4)</li>
+                    <li>Click "Test Video" to preview</li>
+                    <li>If it works, configure settings in Settings page</li>
+                </ol>
+                <p style="margin-top: 15px; color: #856404;">
+                    <strong>⚠️ File Size Limits:</strong><br>
+                    ✅ Recommended: <strong>5MB or less</strong> (fast loading)<br>
+                    ⚠️ Maximum: <strong>100MB</strong> (GitHub limit - may be slow)<br>
+                    📱 Mobile users ke liye chhota size better hai!
+                </p>
+            </div>
+
+            <div id="success-msg" class="success-msg"></div>
+            <div id="error-msg" class="error-msg"></div>
+
+            <div class="upload-box">
+                <h3 style="color: var(--dark-pink); margin-bottom: 15px;">📁 Manual Upload Method</h3>
+                <p style="margin-bottom: 15px;">
+                    Since GitHub Pages is static, you need to manually copy video files to the assets folder.
+                </p>
+                <div style="text-align: left; background: var(--white); padding: 20px; border-radius: 8px; margin: 15px 0;">
+                    <strong>File Path:</strong><br>
+                    <code style="background: var(--soft-pink); padding: 5px 10px; border-radius: 5px; display: block; margin: 10px 0;">
+                        c:\Users\MRCOP\OneDrive\Desktop\Hunny Collection Pk\assets\
+                    </code>
+                    <strong>Supported Format:</strong> MP4 only<br>
+                    <strong>Recommended Size:</strong> 5MB or less (fast loading)<br>
+                    <strong>Maximum Size:</strong> 100MB (GitHub limit - slow on mobile)<br>
+                    <strong>File Naming:</strong> Use simple names (v1.mp4, ad.mp4, etc.)
+                    <p style="color: #856404; margin-top: 10px;">
+                        <strong>⚠️ Warning:</strong> 100MB videos mobile users ke liye slow ho sakte hain. 
+                        Compress karne ke liye <a href="https://handbrake.fr/" target="_blank">HandBrake</a> use karein.
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h3 style="color: var(--dark-pink); margin-bottom: 15px;">Test Your Video</h3>
+                <div class="form-group">
+                    <label>Video File Name</label>
+                    <input type="text" id="test-video-name" placeholder="v1.mp4" 
+                           style="width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 8px;">
+                </div>
+                <button class="btn-upload" onclick="testVideo()">🎬 Test Video</button>
+                <button class="btn-upload" onclick="loadFromSettings()" style="background: var(--primary-pink);">📋 Load from Settings</button>
+            </div>
+
+            <div id="video-preview" class="video-preview" style="display: none;">
+                <h3 style="color: var(--dark-pink); margin-bottom: 15px;">Video Preview:</h3>
+                <video controls>
+                    <source id="video-source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div style="margin-top: 15px;">
+                    <button class="btn-upload" onclick="applyToSettings()" style="background: green;">✅ Use This Video</button>
+                </div>
+            </div>
+
+            <div class="video-list" id="video-list">
+                <h3 style="color: var(--dark-pink); margin-bottom: 15px;">📁 Videos in Assets Folder</h3>
+                <p style="color: var(--text-light);">
+                    ⚠️ Automatic file listing is not available on GitHub Pages. 
+                    Please check your assets folder manually for uploaded videos.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>🌸 Hunny Collection PK</h4>
+                    <p>Your premium destination for female fashion.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="settings.html">Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Test video by file name
+        function testVideo() {
+            const fileName = document.getElementById('test-video-name').value.trim();
+            const preview = document.getElementById('video-preview');
+            const videoSource = document.getElementById('video-source');
+            const errorMsg = document.getElementById('error-msg');
+            const successMsg = document.getElementById('success-msg');
+
+            if (!fileName) {
+                showError('Please enter a video file name');
+                preview.style.display = 'none';
+                return;
+            }
+
+            // Check file extension
+            if (!fileName.toLowerCase().endsWith('.mp4')) {
+                showError('Please use MP4 format only (.mp4 extension)');
+                preview.style.display = 'none';
+                return;
+            }
+
+            videoSource.src = `assets/${fileName}`;
+            preview.style.display = 'block';
+            
+            // Show size warning
+            showSuccess('Video loaded! Click play to test. ⚠️ If file is large (>10MB), it may take time to load.');
+            
+            // Load video metadata to check duration
+            const videoElement = preview.querySelector('video');
+            videoElement.onloadedmetadata = function() {
+                const duration = videoElement.duration;
+                const sizeWarning = '';
+                console.log('Video duration:', duration, 'seconds');
+            };
+        }
+
+        // Load video from settings
+        function loadFromSettings() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('videoAdSettings') || '{}');
+                if (settings.videoFileName) {
+                    document.getElementById('test-video-name').value = settings.videoFileName;
+                    testVideo();
+                    showSuccess('Loaded from settings!');
+                } else {
+                    showError('No video configured in settings yet');
+                }
+            } catch (error) {
+                showError('Error loading settings: ' + error.message);
+            }
+        }
+
+        // Apply current video to settings
+        function applyToSettings() {
+            const fileName = document.getElementById('test-video-name').value.trim();
+            
+            if (!fileName) {
+                showError('Please enter a video file name first');
+                return;
+            }
+
+            const settings = {
+                enabled: true,
+                videoFileName: fileName,
+                videoTitle: 'Special Offer',
+                autoPlay: true,
+                showCloseButton: true,
+                position: 'top'
+            };
+
+            localStorage.setItem('videoAdSettings', JSON.stringify(settings));
+            showSuccess('Video applied to settings! Go to Settings page to configure more options.');
+        }
+
+        function showSuccess(message) {
+            const msg = document.getElementById('success-msg');
+            msg.textContent = message;
+            msg.style.display = 'block';
+            document.getElementById('error-msg').style.display = 'none';
+            setTimeout(() => msg.style.display = 'none', 5000);
+        }
+
+        function showError(message) {
+            const msg = document.getElementById('error-msg');
+            msg.textContent = message;
+            msg.style.display = 'block';
+            document.getElementById('success-msg').style.display = 'none';
+            setTimeout(() => msg.style.display = 'none', 5000);
+        }
+    </script>
+</body>
+</html>

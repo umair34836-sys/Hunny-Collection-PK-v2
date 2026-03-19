@@ -136,7 +136,10 @@
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <a href="index.html" class="logo">
+                    <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="logo-image">
+                    <span class="logo-text">🌸 Hunny Collection PK</span>
+                </a>
                 <ul class="nav-menu">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="admin.html">Admin Panel</a></li>
@@ -159,6 +162,7 @@
                         <li><a href="#" onclick="showSection('seo')">🔍 SEO</a></li>
                         <li><a href="#" onclick="showSection('shipping')">🚚 Shipping</a></li>
                         <li><a href="#" onclick="showSection('payment')">💳 Payment</a></li>
+                        <li><a href="#" onclick="showSection('video-ad')">📺 Video Ad</a></li>
                     </ul>
                 </aside>
 
@@ -345,6 +349,79 @@
                             </form>
                         </div>
                     </div>
+
+                    <!-- Video Ad Settings -->
+                    <div id="video-ad" class="section-content">
+                        <div class="form-section">
+                            <h3>📺 Video Advertisement Settings</h3>
+                            
+                            <div class="preview-section" style="margin-bottom: 20px;">
+                                <h4>📹 How to Add Video Advertisement:</h4>
+                                <ol style="margin-left: 20px; line-height: 2;">
+                                    <li>Upload your video (MP4 format) to <strong>assets</strong> folder</li>
+                                    <li>Enter the video file name below (e.g., v1.mp4)</li>
+                                    <li>Configure settings and save</li>
+                                    <li>Video will appear on homepage automatically</li>
+                                </ol>
+                                <p style="color: var(--text-light); margin-top: 15px;"><strong>💡 Tip:</strong> Keep video size under 5MB for faster loading</p>
+                            </div>
+
+                            <form id="video-ad-form">
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" id="video-ad-enabled"> 
+                                        Enable Video Advertisement
+                                    </label>
+                                    <small>Turn on/off video ad on homepage</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Video File Name *</label>
+                                    <input type="text" id="video-ad-filename" placeholder="v1.mp4" required>
+                                    <small>Exact file name in assets folder (e.g., v1.mp4, ad.mp4)</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Video Title (Optional)</label>
+                                    <input type="text" id="video-ad-title" placeholder="Special Offer">
+                                    <small>Title shown above video (leave empty for no title)</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" id="video-ad-autoplay" checked> 
+                                        Auto Play Video
+                                    </label>
+                                    <small>Video will start automatically (muted)</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" id="video-ad-closebutton" checked> 
+                                        Show Close Button
+                                    </label>
+                                    <small>Allow users to close the video ad</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Position</label>
+                                    <select id="video-ad-position">
+                                        <option value="top">Top (After Hero Section)</option>
+                                        <option value="bottom">Bottom (Before Footer)</option>
+                                    </select>
+                                    <small>Where to show video ad on page</small>
+                                </div>
+
+                                <button type="submit" class="btn-save">Save Video Ad Settings</button>
+                            </form>
+
+                            <div class="preview-section" style="margin-top: 20px;">
+                                <h4>Current Status:</h4>
+                                <p><strong>Video Ad:</strong> <span id="video-ad-status">Loading...</span></p>
+                                <p><strong>File:</strong> <span id="video-ad-file-status">-</span></p>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
@@ -520,18 +597,79 @@
             });
         });
 
+        // Video Ad Settings Handler
+        document.getElementById('video-ad-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveVideoAdSettings();
+        });
+
+        // Save video ad settings to localStorage
+        function saveVideoAdSettings() {
+            const settings = {
+                enabled: document.getElementById('video-ad-enabled').checked,
+                videoFileName: document.getElementById('video-ad-filename').value.trim(),
+                videoTitle: document.getElementById('video-ad-title').value.trim(),
+                autoPlay: document.getElementById('video-ad-autoplay').checked,
+                showCloseButton: document.getElementById('video-ad-closebutton').checked,
+                position: document.getElementById('video-ad-position').value
+            };
+
+            try {
+                localStorage.setItem('videoAdSettings', JSON.stringify(settings));
+                showMessage('Video Ad settings saved successfully!');
+                updateVideoAdStatus();
+            } catch (error) {
+                showMessage('Error saving settings: ' + error.message, true);
+            }
+        }
+
+        // Load and display video ad settings
+        function loadVideoAdSettings() {
+            try {
+                const stored = localStorage.getItem('videoAdSettings');
+                if (stored) {
+                    const settings = JSON.parse(stored);
+                    document.getElementById('video-ad-enabled').checked = settings.enabled || false;
+                    document.getElementById('video-ad-filename').value = settings.videoFileName || '';
+                    document.getElementById('video-ad-title').value = settings.videoTitle || '';
+                    document.getElementById('video-ad-autoplay').checked = settings.autoPlay !== false;
+                    document.getElementById('video-ad-closebutton').checked = settings.showCloseButton !== false;
+                    document.getElementById('video-ad-position').value = settings.position || 'top';
+                }
+                updateVideoAdStatus();
+            } catch (error) {
+                console.error('Error loading video ad settings:', error);
+            }
+        }
+
+        // Update video ad status display
+        function updateVideoAdStatus() {
+            const enabled = document.getElementById('video-ad-enabled').checked;
+            const fileName = document.getElementById('video-ad-filename').value.trim();
+            
+            document.getElementById('video-ad-status').textContent = enabled ? '✅ Enabled' : '❌ Disabled';
+            document.getElementById('video-ad-status').style.color = enabled ? 'green' : 'red';
+            
+            document.getElementById('video-ad-file-status').textContent = fileName || 'No file specified';
+        }
+
         // Show section
         window.showSection = function(sectionName) {
             document.querySelectorAll('.section-content').forEach(el => {
                 el.classList.remove('active');
             });
-            
+
             document.querySelectorAll('.sidebar-menu a').forEach(el => {
                 el.classList.remove('active');
             });
 
             document.getElementById(sectionName).classList.add('active');
             event.target.classList.add('active');
+            
+            // Load video ad settings when section is shown
+            if (sectionName === 'video-ad') {
+                setTimeout(loadVideoAdSettings, 100);
+            }
         };
     </script>
 </body>
