@@ -119,6 +119,3 @@ if (document.readyState === 'loading') {
 } else {
     renderVideoAd();
 }
-
-// Export for manual use
-export { renderVideoAd };
