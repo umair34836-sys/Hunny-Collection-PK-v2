@@ -28,7 +28,7 @@ export function getVideoAdSettings() {
 // Render video ad on page
 export function renderVideoAd() {
     const settings = getVideoAdSettings();
-    
+
     if (!settings.enabled || !settings.videoFileName) {
         return;
     }
@@ -44,6 +44,7 @@ export function renderVideoAd() {
                 ${settings.videoTitle ? `<h3 class="video-ad-title">${escapeHtml(settings.videoTitle)}</h3>` : ''}
                 <div class="video-ad-wrapper">
                     ${settings.showCloseButton ? '<button class="video-ad-close" onclick="closeVideoAd()" aria-label="Close video">✕</button>' : ''}
+                    <button class="video-mute-btn" onclick="toggleMute()" aria-label="Toggle mute" id="mute-btn" style="display: none;">🔇</button>
                     <video ${settings.autoPlay ? 'autoplay muted loop playsinline' : 'controls'} id="video-ad-player">
                         <source src="assets/${escapeHtml(settings.videoFileName)}" type="video/mp4">
                         Your browser does not support the video tag.
@@ -56,13 +57,30 @@ export function renderVideoAd() {
     const container = document.getElementById('video-ad-container');
     if (container) {
         container.innerHTML = videoAdHTML;
-        
+
+        const videoPlayer = document.getElementById('video-ad-player');
+        const muteBtn = document.getElementById('mute-btn');
+
+        // Show mute button after video loads
+        if (videoPlayer && muteBtn) {
+            videoPlayer.onloadedmetadata = function() {
+                muteBtn.style.display = 'flex';
+            };
+
+            videoPlayer.onvolumechange = function() {
+                muteBtn.textContent = videoPlayer.muted || videoPlayer.volume === 0 ? '🔇' : '🔊';
+            };
+        }
+
         if (settings.autoPlay) {
-            const videoPlayer = document.getElementById('video-ad-player');
             if (videoPlayer) {
-                videoPlayer.play().catch(err => {
+                videoPlayer.play().then(() => {
+                    // Auto-play successful, but muted
+                    console.log('Video autoplayed (muted). User can unmute.');
+                }).catch(err => {
                     console.log('Auto-play prevented, showing controls:', err);
                     videoPlayer.controls = true;
+                    if (muteBtn) muteBtn.style.display = 'flex';
                 });
             }
         }
@@ -76,6 +94,25 @@ window.closeVideoAd = function() {
         adSection.style.display = 'none';
     }
     sessionStorage.setItem('videoAdClosed', 'true');
+};
+
+// Toggle mute/unmute
+window.toggleMute = function() {
+    const videoPlayer = document.getElementById('video-ad-player');
+    const muteBtn = document.getElementById('mute-btn');
+    
+    if (videoPlayer && muteBtn) {
+        if (videoPlayer.muted) {
+            videoPlayer.muted = false;
+            videoPlayer.volume = 1.0;
+            muteBtn.textContent = '🔊';
+            muteBtn.style.background = 'rgba(255, 105, 180, 0.9)';
+        } else {
+            videoPlayer.muted = true;
+            muteBtn.textContent = '🔇';
+            muteBtn.style.background = 'rgba(0, 0, 0, 0.7)';
+        }
+    }
 };
 
 // Escape HTML to prevent XSS
