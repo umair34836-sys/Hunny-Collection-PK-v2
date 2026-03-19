@@ -92,7 +92,17 @@ export function renderVideoAd() {
         </section>
     `;
 
-    const container = document.getElementById('video-ad-container');
+    // Choose container based on position setting
+    const containerId = settings.position === 'bottom' 
+        ? 'video-ad-container-bottom' 
+        : 'video-ad-container-top';
+    const container = document.getElementById(containerId);
+    
+    if (!container) {
+        console.log('Container not found:', containerId);
+        return;
+    }
+    
     if (container) {
         container.innerHTML = mediaAdHTML;
 
@@ -119,6 +129,13 @@ export function renderVideoAd() {
                 mediaPlayer.controls = true;
                 if (muteBtn) muteBtn.style.display = 'flex';
             });
+        }
+        
+        // Scroll to ad if position is top
+        if (settings.position === 'top' && settings.autoPlay) {
+            setTimeout(() => {
+                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 500);
         }
     }
 }
