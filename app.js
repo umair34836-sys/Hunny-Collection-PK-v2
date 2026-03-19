@@ -260,10 +260,10 @@ export async function loadProduct(productId) {
     if (!container) return;
 
     try {
-        const q = query(collection(db, 'products'), limit(1));
-        const querySnapshot = await getDocs(q);
+        // Get all products and find the matching one
+        const querySnapshot = await getDocs(collection(db, 'products'));
         let product = null;
-        
+
         querySnapshot.forEach((doc) => {
             if (doc.id === productId) {
                 product = { id: doc.id, ...doc.data() };
@@ -271,7 +271,7 @@ export async function loadProduct(productId) {
         });
 
         if (!product) {
-            container.innerHTML = '<p>Product not found</p>';
+            container.innerHTML = '<div class="loading">Product not found</div>';
             return;
         }
 
@@ -286,7 +286,7 @@ export async function loadProduct(productId) {
         // Generate image gallery with navigation
         const images = product.images || [product.image || 'https://via.placeholder.com/500x500'];
         const mainImage = images[0] || 'https://via.placeholder.com/500x500';
-        
+
         container.innerHTML = `
             <div class="product-detail-grid">
                 <div class="product-images">
