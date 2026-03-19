@@ -8,7 +8,7 @@ const defaultVideoAdSettings = {
     videoTitle: 'Special Offer',
     autoPlay: true,
     showCloseButton: true,
-    position: 'top' // top, bottom, popup
+    position: 'top'
 };
 
 // Load video ad settings from localStorage
@@ -25,30 +25,6 @@ export function getVideoAdSettings() {
     }
 }
 
-// Save video ad settings to localStorage
-export function saveVideoAdSettings(settings) {
-    try {
-        localStorage.setItem('videoAdSettings', JSON.stringify(settings));
-        console.log('Video ad settings saved successfully');
-        return true;
-    } catch (error) {
-        console.error('Error saving video ad settings:', error);
-        return false;
-    }
-}
-
-// Check if video exists in assets folder
-export function videoExists(fileName) {
-    if (!fileName) return false;
-    // We'll try to load the video and check if it succeeds
-    return new Promise((resolve) => {
-        const video = document.createElement('video');
-        video.onloadedmetadata = () => resolve(true);
-        video.onerror = () => resolve(false);
-        video.src = `assets/${fileName}`;
-    });
-}
-
 // Render video ad on page
 export function renderVideoAd() {
     const settings = getVideoAdSettings();
@@ -57,7 +33,6 @@ export function renderVideoAd() {
         return;
     }
 
-    // Check if user has closed this ad session
     const closedSession = sessionStorage.getItem('videoAdClosed');
     if (closedSession && settings.position === 'popup') {
         return;
@@ -78,12 +53,10 @@ export function renderVideoAd() {
         </section>
     `;
 
-    // Insert video ad at appropriate position
     const container = document.getElementById('video-ad-container');
     if (container) {
         container.innerHTML = videoAdHTML;
         
-        // Auto-play if enabled
         if (settings.autoPlay) {
             const videoPlayer = document.getElementById('video-ad-player');
             if (videoPlayer) {
@@ -96,13 +69,12 @@ export function renderVideoAd() {
     }
 }
 
-// Close video ad (for popup mode)
+// Close video ad function
 window.closeVideoAd = function() {
     const adSection = document.getElementById('video-ad-section');
     if (adSection) {
         adSection.style.display = 'none';
     }
-    // Remember user closed it for this session
     sessionStorage.setItem('videoAdClosed', 'true');
 };
 
@@ -113,7 +85,7 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Initialize video ad when DOM is ready
+// Auto initialize
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderVideoAd);
 } else {

@@ -135,6 +135,11 @@
                     <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="logo-image">
                     <span class="logo-text">🌸 Hunny Collection PK</span>
                 </a>
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <ul class="nav-menu">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="shop.html">Shop</a></li>
@@ -336,9 +341,26 @@
             window.open('https://wa.me/923018858303?text=' + encodeURIComponent(message), '_blank');
         };
     </script>
-    
+
     <!-- Floating WhatsApp Button -->
     <link rel="stylesheet" href="whatsapp-float.css">
     <script src="whatsapp-float.js"></script>
+
+    <!-- Mobile Menu Toggle -->
+    <script>
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            const hamburger = document.querySelector('.hamburger');
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-menu').classList.remove('active');
+                document.querySelector('.hamburger').classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>
