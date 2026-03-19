@@ -90,9 +90,19 @@ export function renderVideoAd() {
 // Close video ad function
 window.closeVideoAd = function() {
     const adSection = document.getElementById('video-ad-section');
+    const videoPlayer = document.getElementById('video-ad-player');
+    
     if (adSection) {
         adSection.style.display = 'none';
     }
+    
+    // Stop video and audio
+    if (videoPlayer) {
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0;
+        videoPlayer.muted = true;
+    }
+    
     sessionStorage.setItem('videoAdClosed', 'true');
 };
 
