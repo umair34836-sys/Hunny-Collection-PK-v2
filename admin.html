@@ -205,6 +205,7 @@
                 <a href="#" onclick="showSection('products')">Products</a>
                 <a href="#" onclick="showSection('orders')">Orders</a>
                 <a href="#" onclick="showSection('categories')">Categories</a>
+                <a href="#" onclick="showSection('video-ads')">📺 Video Ads</a>
                 <a href="settings.html">⚙️ Site Settings</a>
                 <a href="#" onclick="logout()">Logout</a>
             </aside>
@@ -340,6 +341,46 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Video Ads Management -->
+                <div id="section-video-ads" style="display: none;">
+                    <h2 style="color: var(--dark-pink); margin-bottom: 30px;">📺 Video Ads Management</h2>
+
+                    <div class="admin-card">
+                        <h3>Page-wise Advertisement Configuration</h3>
+                        <p style="color: var(--text-light); margin-bottom: 20px;">
+                            Configure different video/image ads for each page of your website. 
+                            Go to <a href="settings.html" style="color: var(--dark-pink); font-weight: 600;">⚙️ Site Settings</a> to set up ads for each page.
+                        </p>
+
+                        <div class="table-responsive">
+                            <table id="video-ads-table">
+                                <thead>
+                                    <tr>
+                                        <th>Page</th>
+                                        <th>Status</th>
+                                        <th>Media Type</th>
+                                        <th>File Name</th>
+                                        <th>Position</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div style="margin-top: 30px; padding: 20px; background: var(--soft-pink); border-radius: 10px;">
+                            <h4 style="color: var(--dark-pink); margin-bottom: 15px;">💡 Quick Tips:</h4>
+                            <ul style="line-height: 2;">
+                                <li>Each page can have a <strong>different video or image</strong> ad</li>
+                                <li>Upload your media files to the <strong>assets</strong> folder</li>
+                                <li>Use <strong>MP4</strong> for videos and <strong>JPG/PNG</strong> for images</li>
+                                <li>Keep video files under <strong>5MB</strong> for faster loading</li>
+                                <li>Configure ads in <strong>Site Settings → Video Ad</strong> section</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -434,6 +475,7 @@
         import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+        import { getVideoAdSettings } from './video-ad.js';
 
         let products = [];
         let categories = [];
@@ -736,12 +778,62 @@
 
         // Show section
         window.showSection = (section) => {
-            ['dashboard', 'products', 'orders', 'categories'].forEach(s => {
+            ['dashboard', 'products', 'orders', 'categories', 'video-ads'].forEach(s => {
                 document.getElementById(`section-${s}`).style.display = s === section ? 'block' : 'none';
             });
             document.querySelectorAll('.admin-sidebar a').forEach(a => a.classList.remove('active'));
             event.target.classList.add('active');
+
+            // Load video ads table when section is shown
+            if (section === 'video-ads') {
+                loadVideoAdsTable();
+            }
         };
+
+        // Load video ads configuration table
+        function loadVideoAdsTable() {
+            const tbody = document.querySelector('#video-ads-table tbody');
+            if (!tbody) return;
+
+            const pageList = [
+                { value: 'index.html', label: '🏠 Home Page' },
+                { value: 'shop.html', label: '🛍️ Shop Page' },
+                { value: 'product.html', label: '📦 Product Detail Page' },
+                { value: 'cart.html', label: '🛒 Cart Page' },
+                { value: 'checkout.html', label: '💳 Checkout Page' },
+                { value: 'account.html', label: '👤 Account Page' },
+                { value: 'orders.html', label: '📋 Orders Page' },
+                { value: 'contact.html', label: '📞 Contact Page' },
+                { value: 'login.html', label: '🔑 Login Page' },
+                { value: 'signup.html', label: '✍️ Signup Page' }
+            ];
+
+            let html = '';
+            pageList.forEach(page => {
+                const settings = getVideoAdSettings(page.value);
+                const statusBadge = settings.enabled
+                    ? '<span class="badge" style="background: #D4EDDA; color: #155724;">✅ Enabled</span>'
+                    : '<span class="badge" style="background: #F8D7DA; color: #721C24;">❌ Disabled</span>';
+
+                const mediaIcon = settings.mediaType === 'image' ? '🖼️' : '🎬';
+                const positionText = settings.position === 'top' ? '⬆️ Top' : '⬇️ Bottom';
+
+                html += `
+                    <tr>
+                        <td><strong>${page.label}</strong></td>
+                        <td>${statusBadge}</td>
+                        <td>${mediaIcon} ${settings.mediaType || 'video'}</td>
+                        <td>${settings.mediaFileName || '-'}</td>
+                        <td>${positionText}</td>
+                        <td>
+                            <a href="settings.html" class="btn-sm" style="background: var(--primary-pink); color: white; text-decoration: none; border-radius: 5px; display: inline-block;">✏️ Configure</a>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
 
         // Logout
         window.logout = async () => {

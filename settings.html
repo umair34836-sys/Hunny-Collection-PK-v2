@@ -365,26 +365,36 @@
                     <div id="video-ad" class="section-content">
                         <div class="form-section">
                             <h3>📺 Video Advertisement Settings</h3>
-                            
+
                             <div class="preview-section" style="margin-bottom: 20px;">
                                 <h4>📹 How to Add Advertisement:</h4>
                                 <ol style="margin-left: 20px; line-height: 2;">
+                                    <li>Select the <strong>page</strong> you want to configure from the dropdown below</li>
                                     <li>Upload your <strong>video (MP4)</strong> or <strong>image (JPG/PNG)</strong> to <strong>assets</strong> folder</li>
                                     <li>Select media type below (Video or Image)</li>
                                     <li>Enter the file name (e.g., v1.mp4 or banner.jpg)</li>
-                                    <li>Configure settings and save</li>
-                                    <li>Media will appear on selected pages automatically</li>
+                                    <li>Configure settings and click "Save for This Page"</li>
+                                    <li>Repeat for each page you want to show ads on</li>
                                 </ol>
-                                <p style="color: var(--text-light); margin-top: 15px;"><strong>💡 Tip:</strong> Videos under 5MB load faster. Images should be optimized.</p>
+                                <p style="color: var(--text-light); margin-top: 15px;"><strong>💡 Tip:</strong> Each page can have different videos/images. Admin can control which ad shows on which page!</p>
                             </div>
 
                             <form id="video-ad-form">
+                                <!-- Page Selector -->
+                                <div class="form-group">
+                                    <label>📄 Select Page to Configure *</label>
+                                    <select id="video-ad-page-selector" required onchange="loadPageVideoSettings()">
+                                        <option value="">-- Choose a Page --</option>
+                                    </select>
+                                    <small>Configure advertisement for each page separately</small>
+                                </div>
+
                                 <div class="form-group">
                                     <label>
-                                        <input type="checkbox" id="video-ad-enabled"> 
+                                        <input type="checkbox" id="video-ad-enabled">
                                         Enable Advertisement
                                     </label>
-                                    <small>Turn on/off media ad on selected pages</small>
+                                    <small>Turn on/off media ad on selected page</small>
                                 </div>
 
                                 <div class="form-group">
@@ -416,7 +426,7 @@
 
                                 <div class="form-group">
                                     <label>
-                                        <input type="checkbox" id="video-ad-autoplay" checked> 
+                                        <input type="checkbox" id="video-ad-autoplay" checked>
                                         Auto Play Video
                                     </label>
                                     <small>Video will start automatically (muted)</small>
@@ -424,7 +434,7 @@
 
                                 <div class="form-group">
                                     <label>
-                                        <input type="checkbox" id="video-ad-closebutton" checked> 
+                                        <input type="checkbox" id="video-ad-closebutton" checked>
                                         Show Close Button
                                     </label>
                                     <small>Allow users to close the video ad</small>
@@ -446,13 +456,15 @@
                                 </div>
 
                                 <button type="submit" class="btn-save">Save for This Page</button>
+                                <button type="button" class="btn-save" onclick="clearVideoAdSettings()" style="background: #dc3545; margin-left: 10px;">Clear Settings</button>
                             </form>
 
                             <div class="preview-section" style="margin-top: 20px;">
                                 <h4>Current Page Settings:</h4>
-                                <p><strong>Page:</strong> <span id="current-page-name">-</span></p>
+                                <p><strong>Selected Page:</strong> <span id="current-page-name">-</span></p>
                                 <p><strong>Ad Status:</strong> <span id="video-ad-status">Loading...</span></p>
                                 <p><strong>File:</strong> <span id="video-ad-file-status">-</span></p>
+                                <p><strong>Position:</strong> <span id="video-ad-position-status">-</span></p>
                                 <p style="color: var(--text-light); margin-top: 10px;">💡 Settings are saved per page. Configure each page separately.</p>
                             </div>
                         </div>
@@ -479,8 +491,10 @@
         import { auth, db } from './firebase-config.js';
         import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { collection, getDocs, doc, setDoc, getDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { PAGE_LIST, getVideoAdSettings, saveVideoAdSettings, deletePageSettings } from './video-ad.js';
 
         let currentAdmin = null;
+        let currentPageName = '';
 
         // Check admin auth
         onAuthStateChanged(auth, async (user) => {
@@ -492,7 +506,7 @@
             // Check if admin
             const q = query(collection(db, 'admins'), where('email', '==', user.email));
             const snapshot = await getDocs(q);
-            
+
             if (snapshot.empty) {
                 alert('Not authorized');
                 await signOut(auth);
@@ -502,7 +516,93 @@
 
             currentAdmin = user;
             loadSettings();
+            initializePageSelector();
         });
+
+        // Initialize page selector dropdown
+        function initializePageSelector() {
+            const selector = document.getElementById('video-ad-page-selector');
+            if (!selector) return;
+
+            selector.innerHTML = '<option value="">-- Choose a Page --</option>';
+            
+            PAGE_LIST.forEach(page => {
+                const option = document.createElement('option');
+                option.value = page.value;
+                option.textContent = page.label;
+                selector.appendChild(option);
+            });
+
+            // Set current page as default selection
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            if (PAGE_LIST.find(p => p.value === currentPage)) {
+                selector.value = currentPage;
+                loadPageVideoSettings();
+            }
+        }
+
+        // Load video settings for selected page
+        window.loadPageVideoSettings = function() {
+            const selector = document.getElementById('video-ad-page-selector');
+            const selectedPage = selector.value;
+
+            if (!selectedPage) {
+                resetVideoAdForm();
+                return;
+            }
+
+            currentPageName = selectedPage;
+            const settings = getVideoAdSettings(selectedPage);
+
+            // Update UI
+            document.getElementById('current-page-name').textContent = PAGE_LIST.find(p => p.value === selectedPage)?.label || selectedPage;
+            document.getElementById('video-ad-enabled').checked = settings.enabled || false;
+
+            // Load media type
+            const mediaType = settings.mediaType || 'video';
+            document.getElementById('media-type-video').checked = mediaType === 'video';
+            document.getElementById('media-type-image').checked = mediaType === 'image';
+
+            document.getElementById('video-ad-filename').value = settings.mediaFileName || '';
+            document.getElementById('video-ad-title').value = settings.videoTitle || '';
+            document.getElementById('video-ad-autoplay').checked = settings.autoPlay !== false;
+            document.getElementById('video-ad-closebutton').checked = settings.showCloseButton !== false;
+            document.getElementById('video-ad-position').value = settings.position || 'top';
+            document.getElementById('video-ad-clickurl').value = settings.clickUrl || '';
+
+            updateVideoAdStatus();
+        }
+
+        // Reset video ad form
+        function resetVideoAdForm() {
+            document.getElementById('video-ad-enabled').checked = false;
+            document.getElementById('media-type-video').checked = true;
+            document.getElementById('video-ad-filename').value = '';
+            document.getElementById('video-ad-title').value = '';
+            document.getElementById('video-ad-autoplay').checked = true;
+            document.getElementById('video-ad-closebutton').checked = true;
+            document.getElementById('video-ad-position').value = 'top';
+            document.getElementById('video-ad-clickurl').value = '';
+            document.getElementById('current-page-name').textContent = '-';
+            updateVideoAdStatus();
+        }
+
+        // Clear video ad settings for selected page
+        window.clearVideoAdSettings = function() {
+            const selector = document.getElementById('video-ad-page-selector');
+            const selectedPage = selector.value;
+
+            if (!selectedPage) {
+                alert('Please select a page first');
+                return;
+            }
+
+            if (confirm(`Clear video ad settings for ${selectedPage}?`)) {
+                deletePageSettings(selectedPage);
+                resetVideoAdForm();
+                showMessage('Video ad settings cleared!');
+            }
+        };
 
         // Load settings
         async function loadSettings() {
@@ -638,14 +738,19 @@
         // Video Ad Settings Handler
         document.getElementById('video-ad-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
-            saveVideoAdSettings();
+            saveVideoAdForPage();
         });
 
-        // Save video ad settings to localStorage (per-page)
-        function saveVideoAdSettings() {
-            // Get current page
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-            
+        // Save video ad settings for selected page
+        function saveVideoAdForPage() {
+            const selector = document.getElementById('video-ad-page-selector');
+            const selectedPage = selector.value;
+
+            if (!selectedPage) {
+                showMessage('Please select a page first', true);
+                return;
+            }
+
             // Get media type
             const mediaType = document.querySelector('input[name="media-type"]:checked')?.value || 'video';
 
@@ -660,45 +765,24 @@
                 clickUrl: document.getElementById('video-ad-clickurl').value.trim()
             };
 
+            // Validate file name
+            if (settings.enabled && !settings.mediaFileName) {
+                showMessage('Please enter a media file name', true);
+                return;
+            }
+
             try {
-                // Save settings for current page only
-                localStorage.setItem(`videoAd_${currentPage}`, JSON.stringify(settings));
-                showMessage(`Advertisement settings saved for ${currentPage}!`);
-                updateVideoAdStatus();
+                // Save settings for selected page
+                const success = saveVideoAdSettings(selectedPage, settings);
+                if (success) {
+                    const pageLabel = PAGE_LIST.find(p => p.value === selectedPage)?.label || selectedPage;
+                    showMessage(`Advertisement settings saved for ${pageLabel}!`);
+                    updateVideoAdStatus();
+                } else {
+                    showMessage('Error saving settings', true);
+                }
             } catch (error) {
                 showMessage('Error saving settings: ' + error.message, true);
-            }
-        }
-
-        // Load and display video ad settings (per-page)
-        function loadVideoAdSettings() {
-            try {
-                // Get current page
-                const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-                
-                // Load page-specific settings
-                const stored = localStorage.getItem(`videoAd_${currentPage}`);
-                
-                if (stored) {
-                    const settings = JSON.parse(stored);
-                    document.getElementById('video-ad-enabled').checked = settings.enabled || false;
-                    
-                    // Load media type
-                    const mediaType = settings.mediaType || 'video';
-                    document.getElementById('media-type-video').checked = mediaType === 'video';
-                    document.getElementById('media-type-image').checked = mediaType === 'image';
-                    
-                    document.getElementById('video-ad-filename').value = settings.mediaFileName || '';
-                    document.getElementById('video-ad-title').value = settings.videoTitle || '';
-                    document.getElementById('video-ad-autoplay').checked = settings.autoPlay !== false;
-                    document.getElementById('video-ad-closebutton').checked = settings.showCloseButton !== false;
-                    document.getElementById('video-ad-position').value = settings.position || 'top';
-                    document.getElementById('video-ad-clickurl').value = settings.clickUrl || '';
-                }
-                updateVideoAdStatus();
-                console.log(`Loaded settings for ${currentPage}`);
-            } catch (error) {
-                console.error('Error loading advertisement settings:', error);
             }
         }
 
@@ -706,11 +790,13 @@
         function updateVideoAdStatus() {
             const enabled = document.getElementById('video-ad-enabled').checked;
             const fileName = document.getElementById('video-ad-filename').value.trim();
-            
+            const position = document.getElementById('video-ad-position').value;
+
             document.getElementById('video-ad-status').textContent = enabled ? '✅ Enabled' : '❌ Disabled';
             document.getElementById('video-ad-status').style.color = enabled ? 'green' : 'red';
-            
+
             document.getElementById('video-ad-file-status').textContent = fileName || 'No file specified';
+            document.getElementById('video-ad-position-status').textContent = position === 'top' ? 'Top of Page' : 'Bottom of Page';
         }
 
         // Show section
@@ -725,10 +811,12 @@
 
             document.getElementById(sectionName).classList.add('active');
             event.target.classList.add('active');
-            
-            // Load video ad settings when section is shown
+
+            // Initialize page selector when video ad section is shown
             if (sectionName === 'video-ad') {
-                setTimeout(loadVideoAdSettings, 100);
+                setTimeout(() => {
+                    initializePageSelector();
+                }, 100);
             }
         };
     </script>

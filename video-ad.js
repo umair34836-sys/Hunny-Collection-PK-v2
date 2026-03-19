@@ -1,6 +1,20 @@
 // Video Advertisement Manager - Works without Firebase
 // Stores settings in localStorage for GitHub Pages compatibility
 
+// List of all pages in the website
+export const PAGE_LIST = [
+    { value: 'index.html', label: '🏠 Home Page' },
+    { value: 'shop.html', label: '🛍️ Shop Page' },
+    { value: 'product.html', label: '📦 Product Detail Page' },
+    { value: 'cart.html', label: '🛒 Cart Page' },
+    { value: 'checkout.html', label: '💳 Checkout Page' },
+    { value: 'account.html', label: '👤 Account Page' },
+    { value: 'orders.html', label: '📋 Orders Page' },
+    { value: 'contact.html', label: '📞 Contact Page' },
+    { value: 'login.html', label: '🔑 Login Page' },
+    { value: 'signup.html', label: '✍️ Signup Page' }
+];
+
 // Default video ad settings
 const defaultVideoAdSettings = {
     enabled: false,
@@ -13,15 +27,19 @@ const defaultVideoAdSettings = {
     clickUrl: ''
 };
 
-// Get settings for current page
-export function getVideoAdSettings() {
+// Get current page name
+export function getCurrentPage() {
+    return window.location.pathname.split('/').pop() || 'index.html';
+}
+
+// Get settings for a specific page
+export function getVideoAdSettings(pageName = null) {
     try {
-        // Get current page
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        
+        const currentPage = pageName || getCurrentPage();
+
         // Get page-specific settings
         const pageSettings = localStorage.getItem(`videoAd_${currentPage}`);
-        
+
         if (pageSettings) {
             const settings = JSON.parse(pageSettings);
             console.log(`Loaded settings for ${currentPage}:`, settings);
@@ -30,11 +48,44 @@ export function getVideoAdSettings() {
                 ...settings
             };
         }
-        
+
         return defaultVideoAdSettings;
     } catch (error) {
         console.error('Error loading video ad settings:', error);
         return defaultVideoAdSettings;
+    }
+}
+
+// Save settings for a specific page
+export function saveVideoAdSettings(pageName, settings) {
+    try {
+        localStorage.setItem(`videoAd_${pageName}`, JSON.stringify(settings));
+        console.log(`Settings saved for ${pageName}:`, settings);
+        return true;
+    } catch (error) {
+        console.error('Error saving video ad settings:', error);
+        return false;
+    }
+}
+
+// Get all page settings
+export function getAllPageSettings() {
+    const allSettings = {};
+    PAGE_LIST.forEach(page => {
+        allSettings[page.value] = getVideoAdSettings(page.value);
+    });
+    return allSettings;
+}
+
+// Delete settings for a specific page
+export function deletePageSettings(pageName) {
+    try {
+        localStorage.removeItem(`videoAd_${pageName}`);
+        console.log(`Settings deleted for ${pageName}`);
+        return true;
+    } catch (error) {
+        console.error('Error deleting settings:', error);
+        return false;
     }
 }
 
@@ -43,15 +94,6 @@ export function renderVideoAd() {
     const settings = getVideoAdSettings();
 
     if (!settings.enabled || !settings.mediaFileName) {
-        return;
-    }
-
-    // Check if video should show on current page
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const showOnPages = settings.showOnPages || ['index.html'];
-    
-    if (!showOnPages.includes(currentPage)) {
-        console.log('Media ad not shown on this page:', currentPage);
         return;
     }
 
@@ -70,7 +112,7 @@ export function renderVideoAd() {
     const cursorStyle = clickUrl ? 'cursor: pointer;' : '';
 
     let mediaContent = '';
-    
+
     if (isVideo) {
         // Video content
         mediaContent = `
@@ -103,16 +145,16 @@ export function renderVideoAd() {
     `;
 
     // Choose container based on position setting
-    const containerId = settings.position === 'bottom' 
-        ? 'video-ad-container-bottom' 
+    const containerId = settings.position === 'bottom'
+        ? 'video-ad-container-bottom'
         : 'video-ad-container-top';
     const container = document.getElementById(containerId);
-    
+
     if (!container) {
         console.log('Container not found:', containerId);
         return;
     }
-    
+
     if (container) {
         container.innerHTML = mediaAdHTML;
 
