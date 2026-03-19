@@ -14,17 +14,49 @@
             align-items: start;
         }
         .product-images { position: sticky; top: 20px; }
+        
+        /* Image Gallery */
+        .product-image-wrapper {
+            position: relative;
+            width: 100%;
+        }
         .product-main-image {
             width: 100%;
+            height: 500px;
+            object-fit: cover;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
-            cursor: pointer;
         }
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .gallery-nav:hover {
+            background: var(--dark-pink);
+            color: white;
+        }
+        .gallery-prev { left: 10px; }
+        .gallery-next { right: 10px; }
+        
         .product-thumbnails {
             display: flex;
             gap: 10px;
             margin-top: 15px;
             overflow-x: auto;
+            padding: 10px 0;
         }
         .product-thumbnail {
             width: 80px;
@@ -34,11 +66,18 @@
             border: 2px solid transparent;
             cursor: pointer;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
         .product-thumbnail:hover,
         .product-thumbnail.active {
             border-color: var(--dark-pink);
             transform: scale(1.05);
+        }
+        .image-counter {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 10px;
         }
         .product-details {
             background: var(--white);

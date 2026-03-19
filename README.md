@@ -1,341 +1,484 @@
-# 🌸 Hunny Collection PK - Complete WebStore
+# 🌸 Hunny Collection PK
 
-✅ **FULLY WORKING | IMAGE UPLOAD | MULTIPLE IMAGES | NO BUILD REQUIRED**
+**Premium Female Fashion Store in Pakistan**
 
----
-
-## 🖼️ **Image Upload Features**
-
-### **Admin Panel Se:**
-- ✅ **Direct Upload** to Firebase Storage
-- ✅ **Multiple Images** per product
-- ✅ **Image Preview** before saving
-- ✅ **Drag & Drop** support
-- ✅ **Auto URL generation**
-
-### **Product Page:**
-- ✅ **Image Gallery** with thumbnails
-- ✅ **Click to enlarge**
-- ✅ **Multiple angles** support
+A complete e-commerce website built for GitHub Pages with Firebase backend.
 
 ---
 
-## 🚀 **Deploy to GitHub Pages (2 Easy Steps)**
+## 📋 Table of Contents
 
-### **Step 1: Upload All Files to GitHub**
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Setup Instructions](#-setup-instructions)
+- [Firebase Configuration](#-firebase-configuration)
+- [Video Advertisement](#-video-advertisement)
+- [Admin Panel](#-admin-panel)
+- [Site Settings](#-site-settings)
+- [File Upload Guide](#-file-upload-guide)
+- [Responsive Design](#-responsive-design)
+- [Deployment](#-deployment)
+- [Troubleshooting](#-troubleshooting)
+- [Support](#-support)
 
-1. Go to: https://github.com/umair34836-sys/Hunny-Collection-PK
-2. Click **"Add file"** → **"Upload files"**
-3. **Select ALL files** from this folder
-4. Click **"Commit changes"**
+---
 
-### **Step 2: Enable GitHub Pages**
+## ✨ Features
 
-1. Go to: **Settings** → **Pages**
-2. **Branch:** Select `main`
-3. **Folder:** `/ (root)`
-4. Click **Save**
+### 🛍️ **E-commerce**
+- ✅ Product catalog with categories
+- ✅ Shopping cart system
+- ✅ Checkout with order placement
+- ✅ Order tracking
+- ✅ User accounts (login/signup)
+- ✅ Cash on Delivery (COD)
+- ✅ **Multiple product images gallery**
+- ✅ **Image navigation (previous/next)**
 
-**Wait 2-3 minutes!**
+### 📱 **Mobile First**
+- ✅ Fully responsive design
+- ✅ Hamburger menu for mobile
+- ✅ Touch-friendly interface
+- ✅ Works on all screen sizes
 
-### **Your Live URL:**
+### 🎨 **Design**
+- ✅ Pink theme (customizable)
+- ✅ Banner images for sections
+- ✅ Logo + text branding
+- ✅ Video advertisements
+- ✅ Floating WhatsApp button
+
+### ⚙️ **Admin Features**
+- ✅ Add/Edit/Delete products
+- ✅ Manage categories
+- ✅ View all orders
+- ✅ Update order status
+- ✅ Site settings panel
+
+### 🔥 **Firebase Integration**
+- ✅ User authentication
+- ✅ Firestore database
+- ✅ Real-time updates
+- ✅ Cloud storage for images
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | HTML5, CSS3, JavaScript (ES6+) |
+| **Backend** | Firebase (Authentication + Firestore) |
+| **Hosting** | GitHub Pages |
+| **Storage** | Firebase Storage / Local assets |
+| **Styling** | Custom CSS (Pink theme) |
+
+---
+
+## 📁 Project Structure
+
 ```
-https://umair34836-sys.github.io/Hunny-Collection-PK-v2/
+Hunny Collection Pk/
+├── assets/                  # Images & Videos
+│   ├── logo.jpeg           # Store logo
+│   ├── home banner.jpeg    # Hero section banner
+│   ├── banner1-5.jpeg      # Section banners
+│   └── *.mp4               # Video ads (optional)
+│
+├── HTML Pages
+│   ├── index.html          # Homepage
+│   ├── shop.html           # Shop/Products page
+│   ├── cart.html           # Shopping cart
+│   ├── checkout.html       # Checkout page
+│   ├── contact.html        # Contact page
+│   ├── login.html          # Login page
+│   ├── signup.html         # Signup page
+│   ├── product.html        # Product detail
+│   ├── account.html        # User account
+│   ├── orders.html         # Order history
+│   ├── admin.html          # Admin panel
+│   └── settings.html       # Site settings
+│
+├── JavaScript
+│   ├── app.js              # Main app logic
+│   ├── firebase-config.js  # Firebase setup
+│   ├── site-settings.js    # Settings loader
+│   ├── video-ad.js         # Video ads system
+│   └── whatsapp-float.js   # WhatsApp button
+│
+├── CSS
+│   ├── style.css           # Main styles
+│   └── whatsapp-float.css  # WhatsApp styles
+│
+└── README.md               # This file
 ```
 
 ---
 
-## 🔥 **Firebase Setup (REQUIRED - 5 Minutes)**
+## 🚀 Setup Instructions
 
-### **1. Enable Authentication**
+### Step 1: Clone/Download Repository
 
-Firebase Console → Authentication → Get Started:
-- **Email/Password:** Enable
+```bash
+git clone <your-repo-url>
+cd "Hunny Collection Pk"
+```
 
-### **2. Create Firestore Database**
+### Step 2: Firebase Setup
 
-Firebase Console → Firestore Database → Create Database:
-- **Mode:** Test mode (for now)
-- **Location:** Any (closest to Pakistan)
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create new project
+3. Enable **Authentication** (Email/Password)
+4. Enable **Firestore Database**
+5. Copy Firebase config
 
-### **3. Create Admin User**
+### Step 3: Configure Firebase
 
-Firebase Console → Authentication → Users → Add User:
-- **Email:** `admin@hunnycollection.pk`
-- **Password:** (create a strong password - SAVE THIS!)
+Edit `firebase-config.js`:
 
-### **4. Add Admin to Firestore**
+```javascript
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+```
 
-Firebase Console → Firestore Database → Start Collection:
-- **Collection ID:** `admins`
-- **Document ID:** (auto-generate)
-- **Field:** `email` (string) = `admin@hunnycollection.pk`
-- **Save**
+### Step 4: Deploy to GitHub
 
-### **5. Update Firestore Rules**
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin <your-repo-url>
+git push -u origin main
+```
 
-Firebase Console → Firestore Database → Rules:
+### Step 5: Enable GitHub Pages
 
-**Copy-Paste This:**
+1. Go to Repository Settings
+2. Navigate to **Pages**
+3. Source: **main branch**
+4. Save
+
+---
+
+## 🔥 Firebase Configuration
+
+### Firestore Rules
+
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /products/{product} {
+    match /products/{productId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
-    match /categories/{category} {
+    match /categories/{categoryId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
-    match /orders/{order} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null;
+    match /orders/{orderId} {
+      allow read, write: if request.auth != null;
     }
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if request.auth != null;
     }
-    match /admins/{admin} {
-      allow read: if request.auth != null;
-      allow write: if false;
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
     }
   }
 }
 ```
 
-**Click Publish**
+### Firestore Indexes
 
-### **3. Enable Storage (Optional)**
-
-**Firebase Storage mat use karo!** Use free alternatives:
-
-**Recommended: ImgBB (Free Unlimited)**
-1. Go to: https://imgbb.com/
-2. Create free account
-3. Upload product images
-4. Copy direct links
-5. Paste in admin panel
-
-**Benefits:**
-- ✅ Unlimited storage
-- ✅ Free forever
-- ✅ No Firebase setup
-- ✅ Fast loading
-
-**Other Options:**
-- Cloudinary: https://cloudinary.com/ (Free 25GB)
-- PostImages: https://postimages.org/ (Free, no signup)
+Create composite indexes in Firestore Console for:
+- Products (category, featured, createdAt)
+- Orders (userId, status, createdAt)
 
 ---
 
-## 📁 **Files Included**
+## 📺 Video Advertisement
 
-```
-Hunny Collection PK/
-├── index.html           (Homepage)
-├── shop.html            (Shop with filters)
-├── product.html         (Product detail page)
-├── cart.html            (Shopping cart)
-├── checkout.html        (Checkout - COD)
-├── login.html           (User login)
-├── signup.html          (User signup)
-├── contact.html         (Contact page)
-├── admin.html           (Admin panel)
-├── style.css            (Light pink theme)
-├── app.js               (Main JavaScript)
-├── firebase-config.js   (Firebase setup)
-├── firestore.rules      (Database rules)
-├── storage.rules        (Storage rules)
-└── README.md            (This file)
-```
+### Setup (No Coding Required)
 
----
+1. **Upload Video** to `assets/` folder
+   - Format: MP4 only
+   - Recommended size: 5MB or less
+   - Maximum size: 100MB
+   - Name: Simple (e.g., `v1.mp4`, `ad.mp4`)
 
-## ✨ **Features**
+2. **Configure Settings**
+   - Go to `settings.html`
+   - Click **📺 Video Ad** section
+   - Enable video advertisement
+   - Enter file name (e.g., `v1.mp4`)
+   - Set title (optional)
+   - Choose position (Top/Bottom)
+   - Save settings
 
-### **Customer Side:**
-- ✅ Browse products without login
-- ✅ User signup/login
-- ✅ Shopping cart
-- ✅ Checkout (Cash on Delivery)
-- ✅ Order placement
-- ✅ Light pink theme
-- ✅ Responsive design
+3. **View on Homepage**
+   - Video appears automatically
+   - Auto-play (muted)
+   - Close button available
 
-### **Admin Side:**
-- ✅ Protected admin login
-- ✅ Dashboard with stats
-- ✅ Add/Edit/Delete products
-- ✅ Create categories
-- ✅ View orders
-- ✅ Update order status (Pending, Confirmed, Shipped, Delivered)
+### Features
+
+| Setting | Description |
+|---------|-------------|
+| **Enable/Disable** | Turn on/off without deleting settings |
+| **File Name** | Exact name in assets folder |
+| **Title** | Display title above video |
+| **Auto Play** | Video plays automatically (muted) |
+| **Close Button** | Allow users to close |
+| **Position** | Top (after hero) or Bottom |
 
 ---
 
-## 🎯 **How to Use**
+## ⚙️ Admin Panel
 
-### **For Customers:**
-1. Visit: `https://umair34836-sys.github.io/Hunny-Collection-PK/`
-2. Browse products
-3. Sign up / Login
-4. Add to cart
-5. Checkout (COD)
+### Access
 
-### **For Admin:**
-1. Visit: `https://umair34836-sys.github.io/Hunny-Collection-PK/admin.html`
+1. Go to `admin.html`
 2. Login with admin credentials
-3. Click **"Add Product"**
-4. **Upload Images:**
-   - Click "Choose Files" button
-   - Select multiple images
-   - Click "📤 Upload Images to Firebase"
-   - Wait for upload to complete
-   - Preview dikhai dega
-5. Fill product details
-6. Click "Save Product"
+3. Full access to:
+   - Products management
+   - Categories management
+   - Orders view
+   - Site settings
+
+### Features
+
+- ➕ Add new products
+- ✏️ Edit existing products
+- 🗑️ Delete products
+- 📊 View all orders
+- ✅ Update order status
+- 🏷️ Manage categories
 
 ---
 
-## 🖼️ **Image Upload Guide**
+## 🔧 Site Settings
 
-### **Method 1: Direct Upload (Recommended)**
+Access via `settings.html`
 
-**Admin Panel Se:**
-1. Admin panel kholo
-2. Products → Add Product
-3. **"Choose Files"** button click karo
-4. Multiple images select karo
-5. **"📤 Upload Images to Firebase"** click karo
-6. Upload complete hone ka wait karo
-7. Preview mein images dikhengi
-8. Baaki details bharo
-9. Save Product
+### Configurable Options
 
-**Features:**
-- ✅ Multiple images (unlimited)
-- ✅ Free Firebase Storage (5GB)
-- ✅ Auto URL generation
-- ✅ Preview before save
+| Section | Settings |
+|---------|----------|
+| **General** | Store name, tagline, description, copyright |
+| **Contact** | WhatsApp, email, location, support hours |
+| **Social** | Facebook, Instagram, TikTok, YouTube |
+| **SEO** | Meta description, keywords, OG image |
+| **Shipping** | Shipping message, delivery time, cities |
+| **Payment** | Payment methods, instructions |
+| **Video Ad** | Video advertisement settings |
 
----
+### How to Use
 
-### **Method 2: External URLs**
-
-**Agar Firebase Storage use nahi karna:**
-
-1. **Image URLs kahan se lein:**
-   - **ImgBB:** https://imgbb.com/ (free unlimited)
-   - **Cloudinary:** https://cloudinary.com/ (free 25GB)
-   - **Postimages:** https://postimages.org/ (free)
-   - Apna server/website
-
-2. **URLs copy karo** (comma separated)
-
-3. **Admin panel mein:**
-   - "Or paste image URLs" field mein paste karo
-   - Example: `https://imgbb.com/abc.jpg, https://imgbb.com/def.jpg`
+1. Open `settings.html`
+2. Navigate to desired section
+3. Update values
+4. Click **Save**
+5. Changes apply site-wide
 
 ---
 
-## 📹 **Video Support:**
+## 📤 File Upload Guide
 
-**Currently:** Sirf images support hoti hain
+### Images
 
-**Video add karna hai toh:**
-1. YouTube par upload karo (unlisted)
-2. Video ka thumbnail image use karo
-3. Description mein YouTube link daal do
+**Supported Formats:** JPEG, PNG, WebP
 
-**Ya future update mein video support aa jayegi!**
+**Upload to `assets/` folder:**
+- Logo: `logo.jpeg` (50x50px recommended)
+- Home Banner: `home banner.jpeg` (1920x600px)
+- Section Banners: `banner1.jpeg` to `banner5.jpeg`
 
----
+**Product Images (Multiple):**
+- Upload via Admin Panel → Add/Edit Product
+- Click "📁 Upload Multiple Images"
+- Select multiple images (hold Ctrl for multiple selection)
+- First image will be main display image
+- Other images shown in gallery with navigation
+- Or paste direct URLs from ImgBB/Cloudinary
+- Click on thumbnail to view full image
+- Use ← → buttons to navigate between images
 
-## ⚠️ **Important Notes**
+### Videos
 
-### **Before Going Live:**
+**Supported Format:** MP4 only
 
-1. **Add Some Products:**
-   - Go to admin panel
-   - Add at least 3-5 products
-   - Add categories
+**Upload to `assets/` folder:**
+- Recommended: 5MB or less
+- Maximum: 100MB
+- Duration: 15-30 seconds ideal
+- Resolution: 720p (HD) sufficient
 
-2. **Test Everything:**
-   - User signup
-   - Login/Logout
-   - Add to cart
-   - Checkout
-   - Order placement
+**Compression Tool:** [HandBrake](https://handbrake.fr/) (Free)
 
-3. **Firebase Security:**
-   - Update Firestore rules (done above)
-   - Update Storage rules (if using)
+### Steps
 
-### **Test Data:**
-
-**Add a Test Product:**
-- Name: "Test Dress"
-- Price: 2500
-- Category: "Dresses"
-- Image URL: `https://via.placeholder.com/300x300/FFB6C1/333?text=Dress`
-
-**Add a Test Category:**
-- Name: "Dresses"
+1. Copy file to `assets/` folder
+2. Use simple file names (no spaces)
+3. Reference in settings or HTML
 
 ---
 
-## 🔧 **Troubleshooting**
+## 📱 Responsive Design
 
-### **Blank Page:**
-- Check browser console (F12)
-- Verify Firebase config in `firebase-config.js`
-- Make sure Firebase project is created
+### Breakpoints
 
-### **Login Not Working:**
-- Enable Email/Password in Firebase Authentication
-- Check Firebase Console → Authentication → Sign-in method
+| Screen Size | Layout |
+|-------------|--------|
+| **Desktop** (1200px+) | 4-column grid, full navigation |
+| **Tablet** (768-1199px) | 2-3 column grid, adjusted spacing |
+| **Mobile** (481-767px) | 2-column grid, hamburger menu |
+| **Small Mobile** (≤480px) | 1-column grid, compact layout |
 
-### **Products Not Showing:**
-- Add products from admin panel
-- Check Firestore rules
-- Verify products collection exists
+### Mobile Features
 
-### **Can't Login to Admin:**
-- Create admin user in Firebase Authentication
-- Add admin to Firestore `admins` collection
-- Email must match exactly
+- ✅ Hamburger menu (animated)
+- ✅ Touch-friendly buttons
+- ✅ Optimized images
+- ✅ Readable fonts
+- ✅ Full-width buttons (small screens)
+- ✅ Slide-out navigation
+
+### Test Responsive Design
+
+1. **Browser DevTools:** F12 → Toggle Device Toolbar
+2. **Real Device:** Open on phone/tablet
+3. **Online Tool:** [Responsive Design Checker](https://responsivedesignchecker.com/)
 
 ---
 
-## 📞 **Contact Information**
+## 🚀 Deployment
 
-Pre-configured in the store:
+### GitHub Pages
+
+1. Push code to GitHub
+2. Settings → Pages
+3. Source: main branch
+4. Wait 2-3 minutes
+5. Site live at: `https://username.github.io/repo-name`
+
+### Custom Domain (Optional)
+
+1. Buy domain (GoDaddy, Namecheap, etc.)
+2. Add CNAME file to repository
+3. Configure DNS in domain provider
+4. Update in GitHub Pages settings
+
+### Update Site
+
+```bash
+git add .
+git commit -m "Update description"
+git push
+```
+
+Changes live in 2-3 minutes.
+
+---
+
+## 🔧 Troubleshooting
+
+### Video Not Showing?
+
+- ✅ Check file is in `assets/` folder
+- ✅ Verify exact file name in settings
+- ✅ Check browser console (F12)
+- ✅ Ensure file size < 100MB
+
+### Firebase Errors?
+
+- ✅ Verify Firebase config is correct
+- ✅ Check Firestore rules
+- ✅ Ensure authentication is enabled
+- ✅ Review browser console errors
+
+### Images Not Loading?
+
+- ✅ Check file paths (case-sensitive)
+- ✅ Verify files exist in `assets/`
+- ✅ Clear browser cache
+- ✅ Check file permissions
+
+### Mobile Menu Not Working?
+
+- ✅ Clear browser cache
+- ✅ Check JavaScript console
+- ✅ Ensure all scripts loaded
+- ✅ Test on different browsers
+
+### Site Not Updating?
+
+- ✅ Hard refresh (Ctrl + Shift + R)
+- ✅ Clear browser cache
+- ✅ Check GitHub Pages build status
+- ✅ Wait 2-3 minutes after push
+
+---
+
+## 📞 Support
+
+### Contact Information
+
 - **WhatsApp:** +92 301 8858303
 - **Email:** info@hunnycollection.pk
 - **Location:** Pakistan
 
----
+### Useful Links
 
-## 🎉 **You're Done!**
-
-Your complete e-commerce store is ready!
-
-**Live URL:** `https://umair34836-sys.github.io/Hunny-Collection-PK/`
-
-**Admin Panel:** `https://umair34836-sys.github.io/Hunny-Collection-PK/admin.html`
+- [Firebase Documentation](https://firebase.google.com/docs)
+- [GitHub Pages Guide](https://pages.github.com/)
+- [HandBrake (Video Compressor)](https://handbrake.fr/)
+- [Responsive Design Testing](https://responsivedesignchecker.com/)
 
 ---
 
-## 📊 **What's Included:**
+## 📄 License
 
-✅ Frontend: HTML, CSS, JavaScript (No framework!)
-✅ Backend: Firebase (Firestore + Auth)
-✅ Hosting: GitHub Pages (Free)
-✅ Theme: Light Pink (Professional)
-✅ Payment: Cash on Delivery
-✅ Admin Panel: Full featured
+This project is proprietary software for Hunny Collection PK.
 
 ---
 
-**🌸 Happy Selling!**
+## 🎉 Credits
+
+**Developed with ❤️ for Hunny Collection PK**
+
+- Frontend: HTML, CSS, JavaScript
+- Backend: Firebase
+- Hosting: GitHub Pages
+- Design: Custom Pink Theme
+
+---
+
+## 📊 Quick Stats
+
+| Metric | Value |
+|--------|-------|
+| **Pages** | 12 HTML pages |
+| **Features** | 20+ features |
+| **Mobile Ready** | 100% responsive |
+| **Video Ads** | Supported (up to 100MB) |
+| **Payment** | Cash on Delivery |
+| **Delivery** | 3-7 business days |
+
+---
+
+**Last Updated:** March 2026  
+**Version:** 2.0
+
+---
+
+**Happy Shopping! 🌸**

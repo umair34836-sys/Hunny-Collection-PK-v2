@@ -281,24 +281,29 @@ export async function loadProduct(productId) {
 
         window.currentProduct = product;
         let selectedSize = null;
+        let currentImageIndex = 0;
 
-        // Generate image gallery
-        const images = product.images || [];
+        // Generate image gallery with navigation
+        const images = product.images || [product.image || 'https://via.placeholder.com/500x500'];
         const mainImage = images[0] || 'https://via.placeholder.com/500x500';
-        const thumbnails = images.length > 1 ? `
-            <div class="product-thumbnails">
-                ${images.map((img, idx) => `
-                    <img src="${img}" class="product-thumbnail ${idx === 0 ? 'active' : ''}" 
-                         onclick="changeImage('${img}', this)">
-                `).join('')}
-            </div>
-        ` : '';
-
+        
         container.innerHTML = `
             <div class="product-detail-grid">
                 <div class="product-images">
-                    <img src="${mainImage}" alt="${product.name}" class="product-main-image" id="main-image">
-                    ${thumbnails}
+                    <div class="product-image-wrapper">
+                        <button class="gallery-nav gallery-prev" onclick="previousImage()" id="prev-btn" style="display: ${images.length > 1 ? 'flex' : 'none'};">‹</button>
+                        <img src="${mainImage}" alt="${product.name}" class="product-main-image" id="main-image">
+                        <button class="gallery-nav gallery-next" onclick="nextImage()" id="next-btn" style="display: ${images.length > 1 ? 'flex' : 'none'};">›</button>
+                    </div>
+                    <div class="image-counter" id="image-counter" style="${images.length > 1 ? '' : 'display: none;'}">1 / ${images.length}</div>
+                    ${images.length > 1 ? `
+                        <div class="product-thumbnails">
+                            ${images.map((img, idx) => `
+                                <img src="${img}" class="product-thumbnail ${idx === 0 ? 'active' : ''}"
+                                     onclick="changeImage(${idx}, '${img}', this)">
+                            `).join('')}
+                        </div>
+                    ` : ''}
                 </div>
                 <div class="product-details">
                     <span class="badge">${product.category}</span>
@@ -420,3 +425,86 @@ window.changeImage = changeImage;
 window.selectSize = selectSize;
 window.addToCartClick = addToCartClick;
 window.buyNow = buyNow;
+
+// Image gallery navigation functions
+let currentImageIndex = 0;
+let productImages = [];
+
+window.changeImage = function(index, imageUrl, thumbnailElement) {
+    productImages = productImages || [];
+    if (productImages.length === 0) {
+        const thumbnails = document.querySelectorAll('.product-thumbnail');
+        productImages = Array.from(thumbnails).map(img => img.src);
+    }
+    
+    currentImageIndex = index;
+    const mainImage = document.getElementById('main-image');
+    const counter = document.getElementById('image-counter');
+    
+    if (mainImage) {
+        mainImage.style.opacity = '0';
+        setTimeout(() => {
+            mainImage.src = imageUrl;
+            mainImage.style.opacity = '1';
+        }, 200);
+    }
+    
+    // Update thumbnails
+    document.querySelectorAll('.product-thumbnail').forEach(thumb => {
+        thumb.classList.remove('active');
+    });
+    if (thumbnailElement) {
+        thumbnailElement.classList.add('active');
+    }
+    
+    // Update counter
+    if (counter) {
+        counter.textContent = `${currentImageIndex + 1} / ${productImages.length}`;
+    }
+    
+    // Update navigation buttons
+    updateNavButtons();
+};
+
+window.previousImage = function() {
+    if (productImages.length === 0) {
+        const thumbnails = document.querySelectorAll('.product-thumbnail');
+        productImages = Array.from(thumbnails).map(img => img.src);
+    }
+    
+    currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+    const thumbnail = document.querySelectorAll('.product-thumbnail')[currentImageIndex];
+    window.changeImage(currentImageIndex, productImages[currentImageIndex], thumbnail);
+};
+
+window.nextImage = function() {
+    if (productImages.length === 0) {
+        const thumbnails = document.querySelectorAll('.product-thumbnail');
+        productImages = Array.from(thumbnails).map(img => img.src);
+    }
+    
+    currentImageIndex = (currentImageIndex + 1) % productImages.length;
+    const thumbnail = document.querySelectorAll('.product-thumbnail')[currentImageIndex];
+    window.changeImage(currentImageIndex, productImages[currentImageIndex], thumbnail);
+};
+
+function updateNavButtons() {
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    
+    if (prevBtn && nextBtn && productImages.length > 1) {
+        prevBtn.style.display = 'flex';
+        nextBtn.style.display = 'flex';
+    }
+}
+
+// Initialize product images on page load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        const thumbnails = document.querySelectorAll('.product-thumbnail');
+        if (thumbnails.length > 0) {
+            productImages = Array.from(thumbnails).map(img => img.src);
+            updateNavButtons();
+        }
+    });
+}
