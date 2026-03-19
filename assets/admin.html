@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 60px);
+        }
+        .admin-sidebar {
+            background: linear-gradient(180deg, var(--dark-pink) 0%, var(--primary-pink) 100%);
+            padding: 20px;
+        }
+        .admin-sidebar h3 {
+            color: var(--white);
+            margin-bottom: 30px;
+        }
+        .admin-sidebar a {
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .admin-sidebar a:hover,
+        .admin-sidebar a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .admin-content {
+            padding: 40px;
+            background: var(--soft-pink);
+        }
+        .admin-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+            margin-bottom: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--light-pink) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+        .stat-label {
+            color: var(--text-light);
+            margin-top: 10px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            margin: 2px;
+        }
+        .table-responsive { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background: var(--soft-pink);
+            font-weight: 600;
+        }
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge-pending { background: #FFF3CD; color: #856404; }
+        .badge-confirmed { background: #D1ECF1; color: #0C5460; }
+        .badge-shipped { background: #CCE5FF; color: #004085; }
+        .badge-delivered { background: #D4EDDA; color: #155724; }
+        .badge-cancelled { background: #F8D7DA; color: #721C24; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--soft-pink) 0%, var(--light-pink) 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Login -->
+    <div id="admin-login-view" class="auth-container" style="display: none;">
+        <div class="auth-card" style="background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3); width: 100%; max-width: 450px;">
+            <h1 class="auth-title" style="text-align: center; color: var(--dark-pink); font-size: 2rem; margin-bottom: 30px;">🔐 Admin Login</h1>
+            
+            <div id="login-error" style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;"></div>
+            
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="admin-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="admin-password" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                <a href="index.html" style="color: var(--dark-pink);">← Back to Store</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard-view" style="display: none;">
+        <header class="header">
+            <div class="container">
+                <nav class="navbar">
+                    <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                    <ul class="nav-menu">
+                        <li><a href="admin.html">Admin</a></li>
+                        <li><a href="index.html">Back to Store</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div class="admin-layout">
+            <aside class="admin-sidebar">
+                <h3>🌸 Admin Panel</h3>
+                <a href="#" onclick="showSection('dashboard')" class="active">Dashboard</a>
+                <a href="#" onclick="showSection('products')">Products</a>
+                <a href="#" onclick="showSection('orders')">Orders</a>
+                <a href="#" onclick="showSection('categories')">Categories</a>
+                <a href="settings.html">⚙️ Site Settings</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </aside>
+
+            <main class="admin-content">
+                <!-- Dashboard -->
+                <div id="section-dashboard">
+                    <h2 style="color: var(--dark-pink); margin-bottom: 30px;">Dashboard</h2>
+                    
+                    <!-- Advertisement Banner -->
+                    <div class="admin-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <h3 style="color: white; margin-bottom: 15px;">📢 Advertise Your Store</h3>
+                        <p style="margin-bottom: 15px;">Share your store on social media to get more customers!</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn-sm" onclick="shareOnFacebook()" style="background: #1877f2; color: white;">
+                                📘 Share on Facebook
+                            </button>
+                            <button class="btn-sm" onclick="shareOnWhatsApp()" style="background: #25d366; color: white;">
+                                📱 Share on WhatsApp
+                            </button>
+                            <button class="btn-sm" onclick="shareOnInstagram()" style="background: #e4405f; color: white;">
+                                📸 Share on Instagram
+                            </button>
+                            <button class="btn-sm" onclick="copyStoreLink()" style="background: #6c757d; color: white;">
+                                🔗 Copy Store Link
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-products">0</div>
+                            <div class="stat-label">Total Products</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-orders">0</div>
+                            <div class="stat-label">Total Orders</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(135deg, #FFF3CD 0%, #FFE69C 100%);">
+                            <div class="stat-number" id="stat-pending">0</div>
+                            <div class="stat-label">Pending Orders</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(135deg, #D4EDDA 0%, #C3E6CB 100%);">
+                            <div class="stat-number">Rs. <span id="stat-revenue">0</span></div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3>Recent Orders</h3>
+                        <div class="table-responsive">
+                            <table id="recent-orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div id="section-products" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h2 style="color: var(--dark-pink);">Products Management</h2>
+                        <button class="btn-primary" onclick="openProductModal()">+ Add Product</button>
+                    </div>
+
+                    <div class="admin-card">
+                        <div class="table-responsive">
+                            <table id="products-table">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders -->
+                <div id="section-orders" style="display: none;">
+                    <h2 style="color: var(--dark-pink); margin-bottom: 30px;">Orders Management</h2>
+                    
+                    <div class="admin-card">
+                        <div class="table-responsive">
+                            <table id="orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Contact</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div id="section-categories" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h2 style="color: var(--dark-pink);">Categories Management</h2>
+                        <button class="btn-primary" onclick="addCategory()">+ Add Category</button>
+                    </div>
+
+                    <div class="admin-card">
+                        <div class="table-responsive">
+                            <table id="categories-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="product-modal-title">Add Product</h3>
+                <button class="close-modal" onclick="closeProductModal()">&times;</button>
+            </div>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Price (Rs.) *</label>
+                    <input type="number" id="product-price" required>
+                </div>
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="product-category" required>
+                        <option value="">Select Category</option>
+                    </select>
+                    <input type="text" id="product-new-category" placeholder="Or create new category" style="margin-top: 10px;">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="product-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Sizes (comma separated)</label>
+                    <input type="text" id="product-sizes" placeholder="S, M, L, XL">
+                </div>
+                
+                <!-- Image Upload Section -->
+                <div class="form-group">
+                    <label>Product Images *</label>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                        Upload multiple images - First image will be main display image
+                    </p>
+
+                    <!-- Upload Buttons -->
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                        <button type="button" class="btn-sm" onclick="document.getElementById('product-image-upload').click()" style="background: var(--primary-pink); color: white;">
+                            📁 Upload Multiple Images
+                        </button>
+                        <button type="button" class="btn-sm" onclick="openUploadGuide()" style="background: #25d366; color: white;">
+                            📤 Upload to ImgBB (Free)
+                        </button>
+                        <button type="button" class="btn-sm" onclick="window.open('https://cloudinary.com/', '_blank')" style="background: #FF6B6B; color: white;">
+                            ☁️ Cloudinary (25GB Free)
+                        </button>
+                        <button type="button" class="btn-sm" onclick="window.open('https://postimages.org/', '_blank')" style="background: #4ECDC4; color: white;">
+                            📌 PostImages (No Signup)
+                        </button>
+                    </div>
+                    <input type="file" id="product-image-upload" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(event)">
+                    <div id="upload-status" style="font-size: 0.85rem; margin-top: 10px;"></div>
+
+                    <!-- Image Preview with Remove -->
+                    <div id="image-preview-container" style="margin-top: 15px;">
+                        <h4 style="color: var(--dark-pink); margin-bottom: 10px; font-size: 1rem;">Uploaded Images:</h4>
+                        <div id="image-preview" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                        <p id="no-images-msg" style="color: #999; font-size: 0.9rem;">No images uploaded yet</p>
+                    </div>
+
+                    <!-- Manual URL Input -->
+                    <div style="margin-top: 15px;">
+                        <label style="font-size: 0.9rem;">Or Add Image URLs:</label>
+                        <input type="text" id="product-image-urls" placeholder="Paste image URL and click Add" style="margin-top: 5px;">
+                        <button type="button" class="btn-sm" onclick="addImageUrl()" style="margin-top: 5px; background: var(--dark-pink); color: white;">➕ Add URL</button>
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            💡 Tip: Upload images to ImgBB and paste direct links here
+                        </small>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%;">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module">
+        import { auth, db, storage } from './firebase-config.js';
+        import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+
+        let products = [];
+        let categories = [];
+        let orders = [];
+        let uploadedImageUrls = [];
+
+        // Handle file selection
+        window.handleFileSelect = function(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+
+            const statusDiv = document.getElementById('upload-status');
+            statusDiv.innerHTML = '<span style="color: blue;">Processing ' + files.length + ' image(s)...</span>';
+
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // For demo, show preview (actual upload needs ImgBB/Cloudinary)
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.title = 'Click to remove';
+                    img.onclick = function() { removeImageByIndex(index); };
+                    document.getElementById('image-preview').appendChild(img);
+                    
+                    // Store base64 for demo (in production, upload to ImgBB first)
+                    uploadedImageUrls.push(e.target.result);
+                    updateImagePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            statusDiv.innerHTML = '<span style="color: orange;">⚠️ For live hosting, upload to ImgBB/Cloudinary and paste URLs</span>';
+        };
+
+        // Add image URL manually
+        window.addImageUrl = function() {
+            const urlInput = document.getElementById('product-image-urls');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter an image URL');
+                return;
+            }
+
+            // Validate URL
+            if (!url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+                alert('Please enter a valid image URL (jpg, png, gif, webp)');
+                return;
+            }
+
+            uploadedImageUrls.push(url);
+            updateImagePreview();
+            urlInput.value = '';
+        };
+
+        // Remove image by index
+        window.removeImageByIndex = function(index) {
+            if (confirm('Remove this image?')) {
+                uploadedImageUrls.splice(index, 1);
+                updateImagePreview();
+            }
+        };
+
+        // Update image preview
+        function updateImagePreview() {
+            const previewDiv = document.getElementById('image-preview');
+            const noImagesMsg = document.getElementById('no-images-msg');
+            
+            previewDiv.innerHTML = '';
+            
+            if (uploadedImageUrls.length === 0) {
+                noImagesMsg.style.display = 'block';
+            } else {
+                noImagesMsg.style.display = 'none';
+                uploadedImageUrls.forEach((url, index) => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.title = 'Click to remove';
+                    img.onclick = function() { removeImageByIndex(index); };
+                    
+                    // Mark first image as main
+                    if (index === 0) {
+                        img.style.borderColor = 'var(--dark-pink)';
+                        img.style.borderWidth = '3px';
+                        img.title = 'Main Image (click to remove)';
+                    }
+                    
+                    previewDiv.appendChild(img);
+                });
+            }
+        }
+
+        // Open upload guide
+        window.openUploadGuide = function() {
+            const guide = window.open('', 'Upload Guide', 'width=600,height=500');
+            guide.document.write(`
+                <html>
+                <head>
+                    <title>Image Upload Guide</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h2 { color: #25d366; }
+                        .step { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 8px; }
+                        .btn { background: #25d366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0; }
+                    </style>
+                </head>
+                <body>
+                    <h2>📤 How to Upload Images to ImgBB</h2>
+                    
+                    <div class="step">
+                        <strong>Step 1:</strong> Go to <a href="https://imgbb.com/" target="_blank">ImgBB.com</a>
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 2:</strong> Click "Upload" button and select your images
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 3:</strong> After upload, click on the image
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 4:</strong> Copy "Direct link" (ends with .jpg or .png)
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 5:</strong> Paste in admin panel "Image URLs" field
+                    </div>
+                    
+                    <a href="https://imgbb.com/" target="_blank" class="btn">Open ImgBB Now</a>
+                    
+                    <p style="margin-top: 20px; color: #666;">
+                        <strong>Example URL:</strong><br>
+                        https://i.ibb.co/abc123/image.jpg
+                    </p>
+                </body>
+                </html>
+            `);
+        };
+
+        // Check admin auth
+        onAuthStateChanged(auth, async (user) => {
+            console.log('Auth state changed:', user ? user.email : 'No user');
+            
+            if (!user) {
+                document.getElementById('admin-login-view').style.display = 'flex';
+                document.getElementById('admin-dashboard-view').style.display = 'none';
+            } else {
+                // Check if user email exists in admins collection
+                try {
+                    console.log('Checking admin status for:', user.email);
+                    
+                    const q = query(collection(db, 'admins'), where('email', '==', user.email));
+                    const snapshot = await getDocs(q);
+                    
+                    console.log('Admin check result:', snapshot.empty ? 'NOT FOUND' : 'FOUND');
+                    console.log('Admins in collection:', snapshot.size);
+                    
+                    if (snapshot.empty) {
+                        // Show helpful error
+                        const errorMsg = `NOT AUTHORIZED AS ADMIN\n\nYour email: ${user.email}\n\nPlease add this email to Firestore:\n1. Go to Firestore Database\n2. Create collection: admins\n3. Add document with field: email = ${user.email}`;
+                        
+                        console.error(errorMsg);
+                        alert(errorMsg);
+                        
+                        // Keep user logged in for debugging
+                        document.getElementById('admin-login-view').style.display = 'flex';
+                        document.getElementById('admin-dashboard-view').style.display = 'none';
+                        return;
+                    }
+                    
+                    // Admin found!
+                    console.log('Admin authorized! Loading dashboard...');
+                    document.getElementById('admin-login-view').style.display = 'none';
+                    document.getElementById('admin-dashboard-view').style.display = 'block';
+                    loadDashboardData();
+                } catch (error) {
+                    console.error('Admin check error:', error);
+                    alert('Error: ' + error.message + '\n\nCheck console for details (F12)');
+                }
+            }
+        });
+
+        // Admin login
+        document.getElementById('admin-login-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            const errorEl = document.getElementById('login-error');
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                errorEl.textContent = error.message.replace('Firebase: ', '');
+                errorEl.style.display = 'block';
+            }
+        });
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const productsSnapshot = await getDocs(collection(db, 'products'));
+                products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const categoriesSnapshot = await getDocs(collection(db, 'categories'));
+                categories = categoriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const ordersSnapshot = await getDocs(collection(db, 'orders'));
+                orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                updateStats();
+                renderProducts();
+                renderOrders();
+                renderCategories();
+                renderRecentOrders();
+                updateCategoryDropdown();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-products').textContent = products.length;
+            document.getElementById('stat-orders').textContent = orders.length;
+            document.getElementById('stat-pending').textContent = orders.filter(o => o.status === 'pending').length;
+            document.getElementById('stat-revenue').textContent = orders
+                .filter(o => o.status === 'delivered' || o.status === 'confirmed')
+                .reduce((sum, o) => sum + (o.total || 0), 0).toLocaleString();
+        }
+
+        function renderProducts() {
+            const tbody = document.querySelector('#products-table tbody');
+            if (!tbody) return;
+            tbody.innerHTML = products.map(p => `
+                <tr>
+                    <td><img src="${p.images?.[0] || 'https://via.placeholder.com/50'}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
+                    <td>${p.name}</td>
+                    <td>${p.category}</td>
+                    <td>Rs. ${(p.price || 0).toLocaleString()}</td>
+                    <td>
+                        <button class="btn-sm" onclick="editProduct('${p.id}')">Edit</button>
+                        <button class="btn-sm btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderOrders() {
+            const tbody = document.querySelector('#orders-table tbody');
+            if (!tbody) return;
+            tbody.innerHTML = orders.map(o => `
+                <tr>
+                    <td>#${o.id.slice(0, 8).toUpperCase()}</td>
+                    <td>${o.customerName}</td>
+                    <td>${o.contact}</td>
+                    <td>Rs. ${(o.total || 0).toLocaleString()}</td>
+                    <td><span class="badge badge-${o.status}">${o.status}</span></td>
+                    <td>
+                        <button class="btn-sm" onclick="updateOrderStatus('${o.id}', 'confirmed')">Confirm</button>
+                        <button class="btn-sm" onclick="updateOrderStatus('${o.id}', 'shipped')">Ship</button>
+                        <button class="btn-sm" onclick="updateOrderStatus('${o.id}', 'delivered')">Deliver</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderCategories() {
+            const tbody = document.querySelector('#categories-table tbody');
+            if (!tbody) return;
+            tbody.innerHTML = categories.map(c => `
+                <tr>
+                    <td>${c.name}</td>
+                    <td><button class="btn-sm btn-danger" onclick="deleteCategory('${c.id}')">Delete</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderRecentOrders() {
+            const tbody = document.querySelector('#recent-orders-table tbody');
+            if (!tbody) return;
+            const recent = orders.slice(0, 5);
+            tbody.innerHTML = recent.map(o => `
+                <tr>
+                    <td>#${o.id.slice(0, 8).toUpperCase()}</td>
+                    <td>${o.customerName}</td>
+                    <td>Rs. ${(o.total || 0).toLocaleString()}</td>
+                    <td><span class="badge badge-${o.status}">${o.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function updateCategoryDropdown() {
+            const select = document.getElementById('product-category');
+            if (!select) return;
+            select.innerHTML = '<option value="">Select Category</option>' +
+                categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        }
+
+        // Show section
+        window.showSection = (section) => {
+            ['dashboard', 'products', 'orders', 'categories'].forEach(s => {
+                document.getElementById(`section-${s}`).style.display = s === section ? 'block' : 'none';
+            });
+            document.querySelectorAll('.admin-sidebar a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+
+        // Logout
+        window.logout = async () => {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        };
+
+        // Product modal
+        window.openProductModal = () => {
+            document.getElementById('product-modal').classList.add('active');
+            document.getElementById('product-form').reset();
+            document.getElementById('product-id').value = '';
+            document.getElementById('product-modal-title').textContent = 'Add Product';
+        };
+
+        window.closeProductModal = () => {
+            document.getElementById('product-modal').classList.remove('active');
+        };
+
+        window.editProduct = (id) => {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('product-id').value = id;
+            document.getElementById('product-name').value = product.name || '';
+            document.getElementById('product-price').value = product.price || '';
+            document.getElementById('product-category').value = product.category || '';
+            document.getElementById('product-description').value = product.description || '';
+            document.getElementById('product-sizes').value = product.variants?.join(', ') || '';
+            
+            // Load existing images
+            uploadedImageUrls = product.images || [];
+            updateImagePreview();
+
+            document.getElementById('product-modal-title').textContent = 'Edit Product';
+            document.getElementById('product-modal').classList.add('active');
+        };
+
+        window.deleteProduct = async (id) => {
+            if (!confirm('Delete this product?')) return;
+            await deleteDoc(doc(db, 'products', id));
+            loadDashboardData();
+        };
+
+        // Product form submit
+        document.getElementById('product-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('product-id').value;
+
+            // Use uploadedImageUrls array for images
+            const images = uploadedImageUrls;
+            
+            if (images.length === 0) {
+                alert('Please upload at least one product image');
+                return;
+            }
+
+            const productData = {
+                name: document.getElementById('product-name').value,
+                price: Number(document.getElementById('product-price').value),
+                category: document.getElementById('product-new-category').value || document.getElementById('product-category').value,
+                description: document.getElementById('product-description').value,
+                variants: document.getElementById('product-sizes').value.split(',').map(s => s.trim()).filter(s => s),
+                images: images,
+                updatedAt: new Date().toISOString()
+            };
+
+            if (id) {
+                await updateDoc(doc(db, 'products', id), productData);
+            } else {
+                productData.createdAt = new Date().toISOString();
+                await addDoc(collection(db, 'products'), productData);
+
+                const newCat = document.getElementById('product-new-category').value;
+                if (newCat && !categories.find(c => c.name === newCat)) {
+                    await addDoc(collection(db, 'categories'), {
+                        name: newCat,
+                        slug: newCat.toLowerCase().replace(/\s+/g, '-'),
+                        createdAt: new Date().toISOString()
+                    });
+                }
+            }
+
+            closeProductModal();
+            uploadedImageUrls = [];
+            loadDashboardData();
+        });
+
+        // Order status update
+        window.updateOrderStatus = async (id, status) => {
+            await updateDoc(doc(db, 'orders', id), { status, updatedAt: new Date().toISOString() });
+            loadDashboardData();
+        };
+
+        // Add category
+        window.addCategory = async () => {
+            const name = prompt('Enter category name:');
+            if (!name) return;
+
+            await addDoc(collection(db, 'categories'), {
+                name,
+                slug: name.toLowerCase().replace(/\s+/g, '-'),
+                createdAt: new Date().toISOString()
+            });
+            loadDashboardData();
+        };
+
+        window.deleteCategory = async (id) => {
+            if (!confirm('Delete this category?')) return;
+            await deleteDoc(doc(db, 'categories', id));
+            loadDashboardData();
+        };
+
+        // Share functions
+        window.shareOnFacebook = function() {
+            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
+            window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'width=600,height=400');
+        };
+
+        window.shareOnWhatsApp = function() {
+            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
+            const message = '🌸 Check out Hunny Collection PK - Premium Female Fashion Store! Shop now: ' + url;
+            window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+        };
+
+        window.shareOnInstagram = function() {
+            alert('📸 Instagram Sharing\n\n1. Take a screenshot of your store\n2. Open Instagram\n3. Create a new post/story\n4. Add the screenshot\n5. Add link in bio or story\n\nStore URL: https://umair34836-sys.github.io/Hunny-Collection-PK-v2/');
+        };
+
+        window.copyStoreLink = function() {
+            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
+            navigator.clipboard.writeText(url).then(() => {
+                alert('✅ Store link copied to clipboard!\n\n' + url);
+            }).catch(() => {
+                prompt('Copy this link:', url);
+            });
+        };
+
+        window.shareProduct = function(productId, productName) {
+            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/product.html?id=' + productId;
+            const message = '🌸 Check out this product: ' + productName + ' at Hunny Collection PK! Shop now: ' + url;
+            
+            if (confirm('Share this product on WhatsApp?\n\n' + productName + '\n\nClick OK for WhatsApp\nCancel to copy link')) {
+                window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('✅ Product link copied!\n\n' + url);
+                });
+            }
+        };
+    </script>
+</body>
+</html>
