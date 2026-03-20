@@ -41,6 +41,11 @@ function validateField(fieldName, value, pageName) {
   const errors = [];
   const warnings = [];
 
+  // If no rule defined for this field, skip validation
+  if (!rule) {
+    return { errors, warnings };
+  }
+
   if (!value || value.trim() === '') {
     if (rule.required) {
       errors.push(`${rule.name} is required for ${PAGE_NAMES[pageName] || pageName}`);
