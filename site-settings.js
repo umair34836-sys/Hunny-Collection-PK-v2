@@ -82,23 +82,11 @@ function applySettings(settings) {
             el.textContent = '© ' + new Date().getFullYear() + ' Hunny Collection PK. All rights reserved.';
         }
     });
-    
-    // Update Meta Tags
-    if (settings.metaDescription) {
-        const metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc) metaDesc.setAttribute('content', settings.metaDescription);
-    }
-    
-    if (settings.metaKeywords) {
-        const metaKeywords = document.querySelector('meta[name="keywords"]');
-        if (metaKeywords) metaKeywords.setAttribute('content', settings.metaKeywords);
-    }
-    
-    if (settings.ogImage) {
-        const ogImage = document.querySelector('meta[property="og:image"]');
-        if (ogImage) ogImage.setAttribute('content', settings.ogImage);
-    }
-    
+
+    // NOTE: SEO Meta Tags are now managed via SEO Dashboard (seo-dashboard.html)
+    // Meta tags are hardcoded in HTML files for better SEO performance
+    // No Firebase-based SEO updates
+
     // Shipping Message
     const shippingElements = document.querySelectorAll('.shipping-message');
     shippingElements.forEach(el => {
