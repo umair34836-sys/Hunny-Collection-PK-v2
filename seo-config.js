@@ -1,13 +1,14 @@
 // SEO Configuration - Static Frontend SEO
 // This file contains all SEO meta tags for every page
 // Edit this file OR use Admin Panel SEO Dashboard to update
+// Last Updated: March 20, 2026 - Basic SEO Setup Complete
 
 export const SEO_DATA = {
   // Home Page
   index: {
-    title: "Hunny Collection PK - Premium Female Fashion Store in Pakistan",
-    description: "Shop premium female fashion at Hunny Collection PK. Dresses, Kurtis, Jewelry, Bags & more. Cash on Delivery available. Fast shipping across Pakistan.",
-    keywords: "female fashion, dresses, kurtis, jewelry, bags, shoes, pakistan, online shopping, cash on delivery, hunny collection",
+    title: "Hunny Collection PK - Premium Female Fashion Store in Pakistan | Dresses, Kurtis, Jewelry",
+    description: "Shop premium female fashion at Hunny Collection PK. Discover trendy dresses, kurtis, jewelry, bags & shoes. Cash on Delivery ✓ Fast Shipping ✓ Best Prices in Pakistan.",
+    keywords: "hunny collection pk, female fashion pakistan, dresses online, kurtis pakistan, jewelry online, bags for women, shoes pakistan, cash on delivery, online shopping pakistan, fashion store",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Hunny+Collection+PK",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/index.html",
     robots: "index, follow"
@@ -15,9 +16,9 @@ export const SEO_DATA = {
 
   // Shop Page
   shop: {
-    title: "Shop All Products - Hunny Collection PK | Dresses, Kurtis, Jewelry & More",
-    description: "Browse our complete collection of premium female fashion. Dresses, Kurtis, Jewelry, Bags, Shoes with Cash on Delivery. Fast shipping across Pakistan.",
-    keywords: "shop dresses, kurtis online, jewelry pakistan, bags for women, shoes online, fashion store, cash on delivery",
+    title: "Shop All Products - Hunny Collection PK | Latest Fashion Collection 2026",
+    description: "Browse our complete collection of premium female fashion. Latest dresses, kurtis, jewelry, bags & shoes. COD available ✓ Fast delivery across Pakistan ✓ New arrivals daily.",
+    keywords: "shop dresses, kurtis online, jewelry pakistan, bags for women, shoes online, fashion store pakistan, cash on delivery, latest collection 2026, women fashion, pakistani clothing",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Shop+Now",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/shop.html",
     robots: "index, follow"
@@ -25,9 +26,9 @@ export const SEO_DATA = {
 
   // Product Detail Page
   product: {
-    title: "Product Details - Hunny Collection PK",
-    description: "View product details, prices and order online. Cash on Delivery available. Fast shipping across Pakistan.",
-    keywords: "product details, buy online, fashion products, pakistan",
+    title: "Product Details - Hunny Collection PK | Buy Fashion Online Pakistan",
+    description: "View product details, prices and order online from Hunny Collection PK. Quality guaranteed ✓ Cash on Delivery ✓ Easy returns ✓ Fast shipping across Pakistan.",
+    keywords: "product details, buy fashion online, pakistan clothing, women dresses, order online, cash on delivery pakistan, fashion products, hunny collection",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Product",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/product.html",
     robots: "index, follow"
@@ -35,9 +36,9 @@ export const SEO_DATA = {
 
   // Cart Page
   cart: {
-    title: "Shopping Cart - Hunny Collection PK",
-    description: "Review your shopping cart and proceed to checkout. Cash on Delivery available. Fast shipping across Pakistan.",
-    keywords: "shopping cart, checkout, online shopping, pakistan",
+    title: "Shopping Cart - Hunny Collection PK | Review Your Order",
+    description: "Review your shopping cart and proceed to checkout at Hunny Collection PK. Secure checkout ✓ Cash on Delivery ✓ Fast shipping across Pakistan.",
+    keywords: "shopping cart, checkout, online shopping pakistan, review order, hunny collection cart, fashion cart",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Cart",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/cart.html",
     robots: "noindex, follow"
@@ -45,9 +46,9 @@ export const SEO_DATA = {
 
   // Checkout Page
   checkout: {
-    title: "Checkout - Hunny Collection PK",
-    description: "Complete your order securely. Cash on Delivery available. Fast shipping across Pakistan.",
-    keywords: "checkout, order now, secure payment, pakistan",
+    title: "Checkout - Hunny Collection PK | Secure Order Placement",
+    description: "Complete your order securely at Hunny Collection PK. Easy checkout process ✓ Cash on Delivery available ✓ Fast delivery across Pakistan.",
+    keywords: "checkout, order now, secure payment, pakistan, cash on delivery, online order, fashion checkout",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Checkout",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/checkout.html",
     robots: "noindex, nofollow"
@@ -55,19 +56,19 @@ export const SEO_DATA = {
 
   // Contact Page
   contact: {
-    title: "Contact Us - Hunny Collection PK | WhatsApp +92 301 8858303",
-    description: "Get in touch with Hunny Collection PK. WhatsApp: +92 301 8858303. Email: MrCopper804@gmail.com. Fast response guaranteed.",
-    keywords: "contact us, whatsapp, email, customer support, pakistan, hunny collection contact",
+    title: "Contact Us - Hunny Collection PK | WhatsApp +92 301 8858303 | Customer Support",
+    description: "Get in touch with Hunny Collection PK. WhatsApp: +92 301 8858303 | Email: MrCopper804@gmail.com | Fast response ✓ Customer support ✓ Pakistan.",
+    keywords: "contact us, whatsapp +92 301 8858303, customer support pakistan, hunny collection contact, email support, fashion store contact, pakistan",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Contact+Us",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/contact.html",
     robots: "index, follow"
   },
 
-  // Account/Login Page
+  // Account Page
   account: {
-    title: "My Account - Hunny Collection PK",
-    description: "Manage your account, view orders and track deliveries. Hunny Collection PK customer portal.",
-    keywords: "my account, login, order history, track order, pakistan",
+    title: "My Account - Hunny Collection PK | Manage Orders & Profile",
+    description: "Manage your Hunny Collection PK account. View order history, track deliveries, update profile. Secure customer portal for online shopping in Pakistan.",
+    keywords: "my account, order history, track order, pakistan, customer portal, hunny collection account, manage profile",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=My+Account",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/account.html",
     robots: "noindex, follow"
@@ -75,9 +76,9 @@ export const SEO_DATA = {
 
   // Login Page
   login: {
-    title: "Login - Hunny Collection PK",
-    description: "Login to your Hunny Collection PK account. Access your orders and wishlist.",
-    keywords: "login, sign in, account access, pakistan",
+    title: "Login - Hunny Collection PK | Access Your Account",
+    description: "Login to your Hunny Collection PK account. Access your orders, wishlist, and profile. Secure login for online fashion shopping in Pakistan.",
+    keywords: "login, sign in, account access, pakistan, hunny collection login, customer login",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Login",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/login.html",
     robots: "noindex, follow"
@@ -85,9 +86,9 @@ export const SEO_DATA = {
 
   // Signup Page
   signup: {
-    title: "Sign Up - Hunny Collection PK",
-    description: "Create your Hunny Collection PK account. Get exclusive deals and offers.",
-    keywords: "sign up, register, create account, pakistan",
+    title: "Sign Up - Hunny Collection PK | Create Account & Get Exclusive Deals",
+    description: "Create your Hunny Collection PK account. Get exclusive deals, offers & early access to new collections. Join Pakistan's premium fashion store today!",
+    keywords: "sign up, register, create account, pakistan, hunny collection signup, exclusive deals, fashion offers",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Sign+Up",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/signup.html",
     robots: "noindex, follow"
@@ -95,9 +96,9 @@ export const SEO_DATA = {
 
   // Admin Page
   admin: {
-    title: "Admin Panel - Hunny Collection PK",
-    description: "Admin dashboard for managing products, orders, and settings.",
-    keywords: "admin, dashboard, manage products, orders",
+    title: "Admin Panel - Hunny Collection PK | Store Management",
+    description: "Admin dashboard for managing products, orders, categories and settings. Hunny Collection PK store management system.",
+    keywords: "admin, dashboard, manage products, orders, store management",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Admin",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/admin.html",
     robots: "noindex, nofollow"
@@ -105,9 +106,9 @@ export const SEO_DATA = {
 
   // Orders Page
   orders: {
-    title: "My Orders - Hunny Collection PK",
-    description: "View and track your orders from Hunny Collection PK.",
-    keywords: "my orders, order history, track delivery, pakistan",
+    title: "My Orders - Hunny Collection PK | Track Your Orders",
+    description: "View and track your orders from Hunny Collection PK. Order history, delivery status, tracking details. All your purchases in one place.",
+    keywords: "my orders, order history, track delivery, pakistan, hunny collection orders, order tracking",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=My+Orders",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/orders.html",
     robots: "noindex, follow"
@@ -115,9 +116,9 @@ export const SEO_DATA = {
 
   // Settings Page
   settings: {
-    title: "Site Settings - Hunny Collection PK",
-    description: "Manage site settings, SEO, contact info, and more.",
-    keywords: "settings, admin, configuration",
+    title: "Site Settings - Hunny Collection PK | Admin Configuration",
+    description: "Manage site settings, SEO, contact info, shipping and payment configuration. Hunny Collection PK admin settings panel.",
+    keywords: "settings, admin, configuration, seo settings, site management",
     ogImage: "https://via.placeholder.com/1200x630/FFB6C1/333?text=Settings",
     canonical: "https://umair34836-sys.github.io/Hunny-Collection-PK-v2/settings.html",
     robots: "noindex, nofollow"
