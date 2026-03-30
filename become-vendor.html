@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Vendor - Hunny Collection PK | Start Your Own Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .vendor-section {
+            padding: 60px 0;
+            min-height: calc(100vh - 200px);
+        }
+        .vendor-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .vendor-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--soft-pink), var(--light-pink));
+            border-radius: 20px;
+        }
+        .vendor-header h1 {
+            color: var(--dark-pink);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        .vendor-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .benefit-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+        }
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .vendor-form-container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+            margin-top: 30px;
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        .form-section h3 {
+            color: var(--dark-pink);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--dark-pink);
+        }
+        .pricing-info {
+            background: linear-gradient(135deg, #d1ecf1, #b8daf0);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .pricing-info h4 {
+            color: #0c5460;
+            margin-bottom: 15px;
+        }
+        .pricing-info ul {
+            list-style: none;
+            padding: 0;
+        }
+        .pricing-info li {
+            padding: 8px 0;
+            color: #0c5460;
+        }
+        .pricing-info li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+        .status-container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .status-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+        .error-message, .success-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+        }
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="logo-image">
+                    <span class="logo-text">🌸 Hunny Collection PK</span>
+                </a>
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="account.html">Account</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="vendor-section" style="background-image: url('assets/banner3.jpeg'); background-size: cover; background-position: center; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.95);"></div>
+        <div class="vendor-container" style="position: relative; z-index: 1;">
+            <div class="vendor-header">
+                <h1>🚀 Become a Vendor</h1>
+                <p style="font-size: 1.2rem; color: var(--text-light);">Start your own online shop and reach thousands of customers</p>
+            </div>
+
+            <div class="vendor-benefits">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🏪</div>
+                    <h4>Your Own Shop</h4>
+                    <p>Get a branded shop page</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📦</div>
+                    <h4>Sell Products</h4>
+                    <p>List unlimited products</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💰</div>
+                    <h4>Low Commission</h4>
+                    <p>Only 2-4% per sale</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <div class="benefit-icon">📈</div>
+                    <h4>Dashboard</h4>
+                    <p>Manage orders easily</p>
+                </div>
+            </div>
+
+            <div class="pricing-info">
+                <h4>💳 Pricing Plans</h4>
+                <ul>
+                    <li><strong>Annual Plan:</strong> Rs. 3,000 (Unlimited products)</li>
+                    <li><strong>Minimum Payment:</strong> Rs. 500 to start (20 products limit)</li>
+                    <li><strong>Commission:</strong> 2-4% per sale (based on payment tier)</li>
+                    <li><strong>No hidden fees!</strong></li>
+                </ul>
+            </div>
+
+            <!-- Application Form -->
+            <div id="application-form-container" class="vendor-form-container" style="display: none;">
+                <h2 style="color: var(--dark-pink); margin-bottom: 10px;">Vendor Application Form</h2>
+                <p style="color: var(--text-light); margin-bottom: 30px;">Fill in the details below to apply for a vendor account</p>
+
+                <div id="form-message"></div>
+
+                <form id="vendor-application-form">
+                    <div class="form-section">
+                        <h3>📋 Personal Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="vendor-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number *</label>
+                                <input type="tel" id="vendor-phone" required placeholder="+92 3XX XXXXXXX">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>CNIC Number *</label>
+                            <input type="text" id="vendor-cnic" required placeholder="XXXXX-XXXXXXX-X">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>🏪 Shop Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Shop Name *</label>
+                                <input type="text" id="shop-name" required placeholder="Your shop name">
+                            </div>
+                            <div class="form-group">
+                                <label>Shop Category *</label>
+                                <select id="shop-category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Dresses">Dresses</option>
+                                    <option value="Kurtis">Kurtis</option>
+                                    <option value="Jewelry">Jewelry</option>
+                                    <option value="Bags">Bags</option>
+                                    <option value="Shoes">Shoes</option>
+                                    <option value="Accessories">Accessories</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Shop Description *</label>
+                            <textarea id="shop-description" required placeholder="Tell us about your shop and products..." rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>City *</label>
+                            <input type="text" id="shop-city" required>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>💳 Payment Plan</h3>
+                        <div class="form-group">
+                            <label>Initial Payment Amount *</label>
+                            <select id="payment-amount" required>
+                                <option value="">Select Payment Amount</option>
+                                <option value="500">Rs. 500 (20 products limit)</option>
+                                <option value="1000">Rs. 1,000 (50 products limit)</option>
+                                <option value="2000">Rs. 2,000 (100 products limit)</option>
+                                <option value="3000">Rs. 3,000 (Unlimited products)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Method *</label>
+                            <select id="payment-method" required>
+                                <option value="">Select Payment Method</option>
+                                <option value="JazzCash">JazzCash</option>
+                                <option value="Easypaisa">Easypaisa</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Cash on Delivery">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Transaction ID / Reference (Optional)</label>
+                            <input type="text" id="payment-reference" placeholder="Enter transaction ID if already paid">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📝 Terms & Conditions</h3>
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="checkbox" id="terms-agree" required style="width: auto;">
+                                <span>I agree to the terms and conditions, commission structure, and policies of Hunny Collection PK</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                        Submit Application
+                    </button>
+                </form>
+            </div>
+
+            <!-- Status View (if already applied) -->
+            <div id="status-view" class="status-container" style="display: none;">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Ad Container - Top -->
+    <div id="video-ad-container-top"></div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>🌸 Hunny Collection PK</h4>
+                    <p>Your premium destination for female fashion.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="account.html">Account</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>📱 +92 301 8858303</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hunny Collection PK. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Video Ad Container - Bottom -->
+    <div id="video-ad-container-bottom"></div>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="site-settings.js"></script>
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const applicationFormContainer = document.getElementById('application-form-container');
+        const statusView = document.getElementById('status-view');
+        const form = document.getElementById('vendor-application-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formMessage = document.getElementById('form-message');
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = user;
+            await checkVendorStatus(user);
+        });
+
+        async function checkVendorStatus(user) {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+
+                if (!userDoc.exists()) {
+                    // No vendor data, show application form
+                    applicationFormContainer.style.display = 'block';
+                    return;
+                }
+
+                const userData = userDoc.data();
+                const vendorRequest = userData.vendorRequest;
+                const role = userData.role || 'customer';
+                const subscription = userData.subscription;
+                const shop = userData.shop;
+
+                // Check different states
+                if (role === 'vendor' && subscription?.paidAmount >= 500 && shop?.isActive === true) {
+                    // Active vendor - redirect to dashboard
+                    window.location.href = 'vendor/vendor-dashboard.html';
+                    return;
+                } else if (vendorRequest?.status === 'approved' && role === 'vendor') {
+                    // Approved but not paid - show payment section
+                    showPaymentRequired(shop, subscription);
+                } else if (vendorRequest?.status === 'pending') {
+                    // Pending application
+                    showPendingStatus(vendorRequest, shop);
+                } else if (vendorRequest?.status === 'rejected') {
+                    // Rejected application
+                    showRejectedStatus(vendorRequest);
+                } else {
+                    // No application yet
+                    applicationFormContainer.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error checking vendor status:', error);
+                applicationFormContainer.style.display = 'block';
+            }
+        }
+
+        function showPendingStatus(vendorRequest, shop) {
+            applicationFormContainer.style.display = 'none';
+            statusView.style.display = 'block';
+            statusView.innerHTML = `
+                <div class="status-icon">⏳</div>
+                <h2 style="color: #856404; margin-bottom: 15px;">Application Under Review</h2>
+                <p style="color: var(--text-light); margin-bottom: 20px;">
+                    Your vendor application is being reviewed by our team. We'll get back to you within 24 hours.
+                </p>
+                <div style="background: var(--soft-pink); padding: 20px; border-radius: 10px; text-align: left; margin: 20px 0;">
+                    <p><strong>Shop Name:</strong> ${shop?.shopName || 'N/A'}</p>
+                    <p><strong>Submitted:</strong> ${vendorRequest.requestedAt ? new Date(vendorRequest.requestedAt.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
+                    <p><strong>Reference ID:</strong> ${vendorRequest.referenceId || 'N/A'}</p>
+                </div>
+                <p style="color: var(--text-light);">
+                    Need help? Contact us on WhatsApp: <a href="https://wa.me/923018858303" style="color: var(--dark-pink);">+92 301 8858303</a>
+                </p>
+                <a href="account.html" class="btn-secondary" style="display: inline-block; margin-top: 20px;">Back to Account</a>
+            `;
+        }
+
+        function showPaymentRequired(shop, subscription) {
+            applicationFormContainer.style.display = 'none';
+            statusView.style.display = 'block';
+            const remaining = (subscription?.totalRequired || 3000) - (subscription?.paidAmount || 0);
+            
+            statusView.innerHTML = `
+                <div class="status-icon">✅</div>
+                <h2 style="color: #155724; margin-bottom: 15px;">Application Approved!</h2>
+                <p style="color: var(--text-light); margin-bottom: 20px;">
+                    Congratulations! Your vendor application has been approved. Complete your payment to activate your shop.
+                </p>
+                <div style="background: var(--soft-pink); padding: 20px; border-radius: 10px; text-align: left; margin: 20px 0;">
+                    <p><strong>Shop Name:</strong> ${shop?.shopName || 'N/A'}</p>
+                    <p><strong>Total Required:</strong> Rs. ${(subscription?.totalRequired || 3000).toLocaleString()}</p>
+                    <p><strong>Paid Amount:</strong> Rs. ${(subscription?.paidAmount || 0).toLocaleString()}</p>
+                    <p><strong>Remaining:</strong> Rs. ${remaining.toLocaleString()}</p>
+                </div>
+                <div style="background: #d1ecf1; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h4 style="color: #0c5460; margin-bottom: 10px;">Payment Details:</h4>
+                    <p style="color: #0c5460;"><strong>JazzCash:</strong> 0301-8858303</p>
+                    <p style="color: #0c5460;"><strong>Easypaisa:</strong> 0301-8858303</p>
+                    <p style="color: #0c5460;"><strong>Account Title:</strong> Hunny Collection PK</p>
+                </div>
+                <a href="vendor/vendor-dashboard.html" class="btn-primary" style="display: inline-block; margin-top: 20px;">Go to Vendor Dashboard</a>
+                <br>
+                <a href="account.html" class="btn-secondary" style="display: inline-block; margin-top: 10px;">Back to Account</a>
+            `;
+        }
+
+        function showRejectedStatus(vendorRequest) {
+            applicationFormContainer.style.display = 'block';
+            statusView.style.display = 'block';
+            statusView.style.background = '#f8d7da';
+            statusView.innerHTML = `
+                <div class="status-icon">❌</div>
+                <h2 style="color: #721c24; margin-bottom: 15px;">Application Not Approved</h2>
+                <p style="color: #721c24; margin-bottom: 20px;">
+                    ${vendorRequest.rejectionReason || 'Unfortunately, your application could not be approved at this time.'}
+                </p>
+                <p style="color: var(--text-light);">
+                    You can submit a new application below or contact us for more information.
+                </p>
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
+            `;
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            formMessage.innerHTML = '';
+
+            const applicationData = {
+                name: document.getElementById('vendor-name').value.trim(),
+                phone: document.getElementById('vendor-phone').value.trim(),
+                cnic: document.getElementById('vendor-cnic').value.trim(),
+                shopName: document.getElementById('shop-name').value.trim(),
+                shopCategory: document.getElementById('shop-category').value,
+                shopDescription: document.getElementById('shop-description').value.trim(),
+                shopCity: document.getElementById('shop-city').value.trim(),
+                paymentAmount: Number(document.getElementById('payment-amount').value),
+                paymentMethod: document.getElementById('payment-method').value,
+                paymentReference: document.getElementById('payment-reference').value.trim(),
+                agreedToTerms: document.getElementById('terms-agree').checked
+            };
+
+            try {
+                const userDocRef = doc(db, 'users', currentUser.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                const updateData = {
+                    vendorRequest: {
+                        status: 'pending',
+                        requestedAt: new Date(),
+                        referenceId: 'VR-' + Date.now(),
+                        ...applicationData
+                    },
+                    shop: {
+                        shopName: applicationData.shopName,
+                        shopCategory: applicationData.shopCategory,
+                        shopDescription: applicationData.shopDescription,
+                        shopCity: applicationData.shopCity,
+                        isActive: false
+                    },
+                    subscription: {
+                        totalRequired: applicationData.paymentAmount >= 3000 ? 3000 : 3000,
+                        paidAmount: 0,
+                        paymentPlan: applicationData.paymentAmount
+                    }
+                };
+
+                if (userDoc.exists()) {
+                    await updateDoc(userDocRef, updateData);
+                } else {
+                    await setDoc(userDocRef, {
+                        userId: currentUser.uid,
+                        email: currentUser.email,
+                        ...updateData,
+                        createdAt: new Date().toISOString()
+                    });
+                }
+
+                formMessage.innerHTML = `
+                    <div class="success-message">
+                        <strong>✅ Application Submitted Successfully!</strong><br>
+                        Your application reference ID: ${updateData.vendorRequest.referenceId}<br><br>
+                        We will review your application within 24 hours. You'll be notified via email once it's approved.
+                    </div>
+                `;
+
+                setTimeout(() => {
+                    window.location.href = 'account.html';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error submitting application:', error);
+                formMessage.innerHTML = `
+                    <div class="error-message">
+                        <strong>❌ Submission Failed</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Application';
+            }
+        });
+    </script>
+
+    <script type="module" src="video-ad.js"></script>
+
+    <script>
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            const hamburger = document.querySelector('.hamburger');
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-menu').classList.remove('active');
+                document.querySelector('.hamburger').classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
