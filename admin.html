@@ -207,6 +207,7 @@
                 <a href="#" onclick="showSection('categories')">Categories</a>
                 <a href="#" onclick="showSection('vendors')">🏪 Vendors</a>
                 <a href="#" onclick="showSection('digital-products')">💻 Digital Products</a>
+                <a href="#" onclick="showSection('digital-categories')">📂 Digital Categories</a>
                 <a href="#" onclick="showSection('digital-orders')">📥 Digital Orders</a>
                 <a href="#" onclick="showSection('video-ads')">📺 Video Ads</a>
                 <a href="settings.html">⚙️ Site Settings</a>
@@ -373,7 +374,10 @@
                 <div id="section-digital-products" style="display: none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                         <h2 style="color: var(--dark-pink);">💻 Digital Products Management</h2>
-                        <button class="btn-primary" onclick="openDigitalProductModal()">+ Add Digital Product</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-primary" onclick="openDigitalCategoryModal()">+ Add Category</button>
+                            <button class="btn-primary" onclick="openDigitalProductModal()">+ Add Digital Product</button>
+                        </div>
                     </div>
 
                     <div class="admin-card">
@@ -386,6 +390,25 @@
                                         <th>Category</th>
                                         <th>Price</th>
                                         <th>Delivery</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Categories Management -->
+                <div id="section-digital-categories" style="display: none;">
+                    <h2 style="color: var(--dark-pink); margin-bottom: 30px;">📂 Digital Categories Management</h2>
+
+                    <div class="admin-card">
+                        <div class="table-responsive">
+                            <table id="digital-categories-table">
+                                <thead>
+                                    <tr>
+                                        <th>Category Name</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -568,13 +591,11 @@
                         <label>Category *</label>
                         <select id="digital-product-category" required>
                             <option value="">Select Category</option>
-                            <option value="Online Courses">Online Courses</option>
-                            <option value="Paid Accounts">Paid Accounts</option>
-                            <option value="Paid Services">Paid Services</option>
-                            <option value="Software & Tools">Software & Tools</option>
-                            <option value="Digital Assets">Digital Assets</option>
-                            <option value="Gaming">Gaming</option>
                         </select>
+                        <input type="text" id="digital-product-new-category" placeholder="Or create new category" style="margin-top: 10px;">
+                        <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                            💡 Select from existing categories or create a new one
+                        </small>
                     </div>
                 </div>
                 <div class="form-group">
@@ -601,13 +622,44 @@
                 </div>
                 <div class="form-group">
                     <label>Product Images *</label>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                        Upload multiple images - First image will be main display image
+                    </p>
+
+                    <!-- Upload Buttons -->
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
                         <button type="button" class="btn-sm" onclick="document.getElementById('digital-product-images-input').click()" style="background: var(--primary-pink); color: white;">
-                            📁 Upload Images
+                            📁 Upload Multiple Images
+                        </button>
+                        <button type="button" class="btn-sm" onclick="openDigitalUploadGuide()" style="background: #25d366; color: white;">
+                            📤 Upload to ImgBB (Free)
+                        </button>
+                        <button type="button" class="btn-sm" onclick="window.open('https://cloudinary.com/', '_blank')" style="background: #FF6B6B; color: white;">
+                            ☁️ Cloudinary (25GB Free)
+                        </button>
+                        <button type="button" class="btn-sm" onclick="window.open('https://postimages.org/', '_blank')" style="background: #4ECDC4; color: white;">
+                            📌 PostImages (No Signup)
                         </button>
                     </div>
                     <input type="file" id="digital-product-images-input" accept="image/*" multiple style="display: none;" onchange="handleDigitalImageUpload(event)">
-                    <div id="digital-image-preview" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;"></div>
+                    <div id="digital-upload-status" style="font-size: 0.85rem; margin-top: 10px;"></div>
+
+                    <!-- Image Preview with Remove -->
+                    <div id="digital-image-preview-container" style="margin-top: 15px;">
+                        <h4 style="color: var(--dark-pink); margin-bottom: 10px; font-size: 1rem;">Uploaded Images:</h4>
+                        <div id="digital-image-preview" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                        <p id="digital-no-images-msg" style="color: #999; font-size: 0.9rem;">No images uploaded yet</p>
+                    </div>
+
+                    <!-- Manual URL Input -->
+                    <div style="margin-top: 15px;">
+                        <label style="font-size: 0.9rem;">Or Add Image URLs:</label>
+                        <input type="text" id="digital-image-urls" placeholder="Paste image URL and click Add" style="margin-top: 5px;">
+                        <button type="button" class="btn-sm" onclick="addDigitalImageUrl()" style="margin-top: 5px; background: var(--dark-pink); color: white;">➕ Add URL</button>
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            💡 Tip: Upload images to ImgBB and paste direct links here
+                        </small>
+                    </div>
                 </div>
                 <button type="submit" class="btn-primary" style="width: 100%;">Save Digital Product</button>
             </form>
@@ -1071,7 +1123,7 @@
 
         // Show section
         window.showSection = (section) => {
-            ['dashboard', 'products', 'orders', 'categories', 'vendors', 'digital-products', 'digital-orders', 'video-ads'].forEach(s => {
+            ['dashboard', 'products', 'orders', 'categories', 'vendors', 'digital-products', 'digital-categories', 'digital-orders', 'video-ads'].forEach(s => {
                 document.getElementById(`section-${s}`).style.display = s === section ? 'block' : 'none';
             });
             document.querySelectorAll('.admin-sidebar a').forEach(a => a.classList.remove('active'));
@@ -1080,6 +1132,8 @@
             // Load data based on section
             if (section === 'digital-products') {
                 loadDigitalProducts();
+            } else if (section === 'digital-categories') {
+                loadDigitalCategoriesTable();
             } else if (section === 'digital-orders') {
                 loadDigitalOrders();
             } else if (section === 'video-ads') {
@@ -1260,7 +1314,28 @@
         // ========== DIGITAL PRODUCTS FUNCTIONS ==========
         let digitalProducts = [];
         let digitalOrders = [];
+        let digitalCategories = [];
         let uploadedDigitalImages = [];
+
+        // Load digital categories
+        async function loadDigitalCategories() {
+            try {
+                const snapshot = await getDocs(collection(db, 'digital-categories'));
+                digitalCategories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateDigitalCategoryDropdown();
+            } catch (error) {
+                console.error('Error loading digital categories:', error);
+            }
+        }
+
+        // Update digital category dropdown
+        function updateDigitalCategoryDropdown() {
+            const select = document.getElementById('digital-product-category');
+            if (!select) return;
+            
+            select.innerHTML = '<option value="">Select Category</option>' +
+                digitalCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        }
 
         window.openDigitalProductModal = function() {
             document.getElementById('digital-product-modal').classList.add('active');
@@ -1269,6 +1344,7 @@
             document.getElementById('digital-product-modal-title').textContent = 'Add Digital Product';
             uploadedDigitalImages = [];
             updateDigitalImagePreview();
+            loadDigitalCategories(); // Load categories when modal opens
         };
 
         window.closeDigitalProductModal = function() {
@@ -1313,6 +1389,9 @@
             const product = digitalProducts.find(p => p.id === id);
             if (!product) return;
 
+            // Load categories first
+            await loadDigitalCategories();
+
             document.getElementById('digital-product-id').value = id;
             document.getElementById('digital-product-name').value = product.name || '';
             document.getElementById('digital-product-price').value = product.price || '';
@@ -1338,32 +1417,135 @@
             const files = event.target.files;
             if (files.length === 0) return;
 
+            const statusDiv = document.getElementById('digital-upload-status');
+            statusDiv.innerHTML = '<span style="color: blue;">Processing ' + files.length + ' image(s)...</span>';
+
             Array.from(files).forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    // For demo, show preview (actual upload needs ImgBB/Cloudinary)
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.title = 'Click to remove';
+                    img.onclick = function() { removeDigitalImageByIndex(index); };
+                    document.getElementById('digital-image-preview').appendChild(img);
+
+                    // Store base64 for demo (in production, upload to ImgBB first)
                     uploadedDigitalImages.push(e.target.result);
                     updateDigitalImagePreview();
                 };
                 reader.readAsDataURL(file);
             });
+
+            statusDiv.innerHTML = '<span style="color: orange;">⚠️ For live hosting, upload to ImgBB/Cloudinary and paste URLs</span>';
         };
 
+        // Add digital image URL manually
+        window.addDigitalImageUrl = function() {
+            const urlInput = document.getElementById('digital-image-urls');
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                alert('Please enter an image URL');
+                return;
+            }
+
+            // Validate URL
+            if (!url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+                alert('Please enter a valid image URL (jpg, png, gif, webp)');
+                return;
+            }
+
+            uploadedDigitalImages.push(url);
+            updateDigitalImagePreview();
+            urlInput.value = '';
+        };
+
+        // Remove digital image by index
+        window.removeDigitalImageByIndex = function(index) {
+            if (confirm('Remove this image?')) {
+                uploadedDigitalImages.splice(index, 1);
+                updateDigitalImagePreview();
+            }
+        };
+
+        // Update digital image preview
         function updateDigitalImagePreview() {
-            const preview = document.getElementById('digital-image-preview');
-            if (!preview) return;
+            const previewDiv = document.getElementById('digital-image-preview');
+            const noImagesMsg = document.getElementById('digital-no-images-msg');
+
+            previewDiv.innerHTML = '';
 
             if (uploadedDigitalImages.length === 0) {
-                preview.innerHTML = '<p style="color: #999;">No images uploaded yet</p>';
+                noImagesMsg.style.display = 'block';
             } else {
-                preview.innerHTML = uploadedDigitalImages.map((url, index) => `
-                    <img src="${url}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin: 5px; cursor: pointer;" onclick="removeDigitalImage(${index})">
-                `).join('');
+                noImagesMsg.style.display = 'none';
+                uploadedDigitalImages.forEach((url, index) => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.title = 'Click to remove';
+                    img.onclick = function() { removeDigitalImageByIndex(index); };
+
+                    // Mark first image as main
+                    if (index === 0) {
+                        img.style.borderColor = 'var(--dark-pink)';
+                        img.style.borderWidth = '3px';
+                        img.title = 'Main Image (click to remove)';
+                    }
+
+                    previewDiv.appendChild(img);
+                });
             }
         }
 
-        window.removeDigitalImage = function(index) {
-            uploadedDigitalImages.splice(index, 1);
-            updateDigitalImagePreview();
+        // Open digital upload guide
+        window.openDigitalUploadGuide = function() {
+            const guide = window.open('', 'Upload Guide', 'width=600,height=500');
+            guide.document.write(`
+                <html>
+                <head>
+                    <title>Image Upload Guide</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h2 { color: #25d366; }
+                        .step { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 8px; }
+                        .btn { background: #25d366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0; }
+                    </style>
+                </head>
+                <body>
+                    <h2>📤 How to Upload Images to ImgBB</h2>
+
+                    <div class="step">
+                        <strong>Step 1:</strong> Go to <a href="https://imgbb.com/" target="_blank">ImgBB.com</a>
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 2:</strong> Click "Upload" button and select your images
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 3:</strong> After upload, click on the image
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 4:</strong> Copy "Direct link" (ends with .jpg or .png)
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 5:</strong> Paste in admin panel "Image URLs" field
+                    </div>
+
+                    <a href="https://imgbb.com/" target="_blank" class="btn">Open ImgBB Now</a>
+
+                    <p style="margin-top: 20px; color: #666;">
+                        <strong>Example URL:</strong><br>
+                        https://i.ibb.co/abc123/image.jpg
+                    </p>
+                </body>
+                </html>
+            `);
         };
 
         // Digital product form submit
@@ -1377,10 +1559,32 @@
                 return;
             }
 
+            const newCategory = document.getElementById('digital-product-new-category').value.trim();
+            let category = document.getElementById('digital-product-category').value;
+
+            // If new category is entered, use it and create in Firestore
+            if (newCategory) {
+                category = newCategory;
+                // Check if category exists
+                const existingCat = digitalCategories.find(c => c.name === newCategory);
+                if (!existingCat) {
+                    // Create new category
+                    await addDoc(collection(db, 'digital-categories'), {
+                        name: newCategory,
+                        slug: newCategory.toLowerCase().replace(/\s+/g, '-'),
+                        createdAt: new Date().toISOString()
+                    });
+                    // Reload categories
+                    await loadDigitalCategories();
+                }
+                // Clear the new category input
+                document.getElementById('digital-product-new-category').value = '';
+            }
+
             const productData = {
                 name: document.getElementById('digital-product-name').value,
                 price: Number(document.getElementById('digital-product-price').value),
-                category: document.getElementById('digital-product-category').value,
+                category: category,
                 description: document.getElementById('digital-product-description').value,
                 deliveryMethod: document.getElementById('digital-product-delivery').value,
                 downloadLimit: Number(document.getElementById('digital-product-download-limit').value),
@@ -1490,6 +1694,57 @@
 
             const itemsList = order.items.map(item => `• ${item.name}`).join('\n');
             alert(`Order #${orderId.slice(0, 8).toUpperCase()}\n\nCustomer: ${order.customerName}\nEmail: ${order.customerEmail}\nTotal: Rs. ${order.total}\nPayment: ${order.paymentStatus}\nDelivery: ${order.deliveryStatus}\n\nItems:\n${itemsList}`);
+        };
+
+        // ========== DIGITAL CATEGORIES FUNCTIONS ==========
+        window.openDigitalCategoryModal = function() {
+            const categoryName = prompt('Enter digital category name:');
+            if (!categoryName) return;
+
+            addDoc(collection(db, 'digital-categories'), {
+                name: categoryName,
+                slug: categoryName.toLowerCase().replace(/\s+/g, '-'),
+                createdAt: new Date().toISOString()
+            }).then(() => {
+                alert('Digital category added successfully!');
+                loadDigitalCategories();
+            }).catch(error => {
+                console.error('Error adding category:', error);
+                alert('Error: ' + error.message);
+            });
+        };
+
+        async function loadDigitalCategoriesTable() {
+            try {
+                const snapshot = await getDocs(collection(db, 'digital-categories'));
+                digitalCategories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const tbody = document.querySelector('#digital-categories-table tbody');
+                if (!tbody) return;
+
+                if (digitalCategories.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 40px;">No digital categories yet. Click "Add Category" to create one.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = digitalCategories.map(cat => `
+                    <tr>
+                        <td>${cat.name}</td>
+                        <td>
+                            <button class="btn-sm btn-danger" onclick="deleteDigitalCategory('${cat.id}', '${cat.name}')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading digital categories:', error);
+            }
+        }
+
+        window.deleteDigitalCategory = async function(id, name) {
+            if (!confirm(`Delete digital category "${name}"? This will not delete products in this category.`)) return;
+            
+            await deleteDoc(doc(db, 'digital-categories', id));
+            loadDigitalCategoriesTable();
         };
 
         window.shareOnInstagram = function() {
