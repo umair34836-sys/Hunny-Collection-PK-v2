@@ -483,11 +483,44 @@
                 </div>
                 <div class="form-group">
                     <label>Product Images *</label>
-                    <div class="image-upload-area" onclick="document.getElementById('product-images-input').click()">
-                        📁 Click to upload images
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                        Upload multiple images - First image will be main display image
+                    </p>
+
+                    <!-- Upload Buttons -->
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                        <button type="button" class="btn-sm" onclick="document.getElementById('product-images-input').click()" style="background: var(--primary-pink); color: white;">
+                            📁 Upload Multiple Images
+                        </button>
+                        <button type="button" class="btn-sm" onclick="openUploadGuide()" style="background: #25d366; color: white;">
+                            📤 Upload to ImgBB (Free)
+                        </button>
+                        <button type="button" class="btn-sm" onclick="window.open('https://cloudinary.com/', '_blank')" style="background: #FF6B6B; color: white;">
+                            ☁️ Cloudinary (25GB Free)
+                        </button>
+                        <button type="button" class="btn-sm" onclick="window.open('https://postimages.org/', '_blank')" style="background: #4ECDC4; color: white;">
+                            📌 PostImages (No Signup)
+                        </button>
                     </div>
                     <input type="file" id="product-images-input" accept="image/*" multiple style="display: none;" onchange="handleImageUpload(event)">
-                    <div class="image-preview" id="image-preview"></div>
+                    <div id="upload-status" style="font-size: 0.85rem; margin-top: 10px;"></div>
+
+                    <!-- Image Preview with Remove -->
+                    <div id="image-preview-container" style="margin-top: 15px;">
+                        <h4 style="color: var(--dark-pink); margin-bottom: 10px; font-size: 1rem;">Uploaded Images:</h4>
+                        <div id="image-preview" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                        <p id="no-images-msg" style="color: #999; font-size: 0.9rem;">No images uploaded yet</p>
+                    </div>
+
+                    <!-- Manual URL Input -->
+                    <div style="margin-top: 15px;">
+                        <label style="font-size: 0.9rem;">Or Add Image URLs:</label>
+                        <input type="text" id="product-image-urls" placeholder="Paste image URL and click Add" style="margin-top: 5px;">
+                        <button type="button" class="btn-sm" onclick="addImageUrl()" style="margin-top: 5px; background: var(--dark-pink); color: white;">➕ Add URL</button>
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            💡 Tip: Upload images to ImgBB and paste direct links here
+                        </small>
+                    </div>
                 </div>
                 <button type="submit" class="btn-primary" style="width: 100%;">Save Product</button>
             </form>
@@ -496,14 +529,147 @@
 
     <script type="module" src="../firebase-config.js"></script>
     <script type="module">
-        import { auth, db, storage } from '../firebase-config.js';
+        import { auth, db } from '../firebase-config.js';
         import { collection, addDoc, updateDoc, deleteDoc, doc, getDoc, getDocs, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         let currentUser = null;
         let vendorData = null;
         let uploadedImageUrls = [];
+
+        // Handle file selection
+        window.handleImageUpload = function(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+
+            const statusDiv = document.getElementById('upload-status');
+            statusDiv.innerHTML = '<span style="color: blue;">Processing ' + files.length + ' image(s)...</span>';
+
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // For demo, show preview (actual upload needs ImgBB/Cloudinary)
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.title = 'Click to remove';
+                    img.onclick = function() { window.removeImageByIndex(index); };
+                    document.getElementById('image-preview').appendChild(img);
+
+                    // Store base64 for demo (in production, upload to ImgBB first)
+                    uploadedImageUrls.push(e.target.result);
+                    updateImagePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            statusDiv.innerHTML = '<span style="color: orange;">⚠️ For live hosting, upload to ImgBB/Cloudinary and paste URLs</span>';
+        };
+
+        // Add image URL manually
+        window.addImageUrl = function() {
+            const urlInput = document.getElementById('product-image-urls');
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                alert('Please enter an image URL');
+                return;
+            }
+
+            // Validate URL
+            if (!url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+                alert('Please enter a valid image URL (jpg, png, gif, webp)');
+                return;
+            }
+
+            uploadedImageUrls.push(url);
+            updateImagePreview();
+            urlInput.value = '';
+        };
+
+        // Remove image by index
+        window.removeImageByIndex = function(index) {
+            if (confirm('Remove this image?')) {
+                uploadedImageUrls.splice(index, 1);
+                updateImagePreview();
+            }
+        };
+        function updateImagePreview() {
+            const previewDiv = document.getElementById('image-preview');
+            const noImagesMsg = document.getElementById('no-images-msg');
+
+            previewDiv.innerHTML = '';
+
+            if (uploadedImageUrls.length === 0) {
+                noImagesMsg.style.display = 'block';
+            } else {
+                noImagesMsg.style.display = 'none';
+                uploadedImageUrls.forEach((url, index) => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.title = 'Click to remove';
+                    img.onclick = function() { window.removeImageByIndex(index); };
+
+                    // Mark first image as main
+                    if (index === 0) {
+                        img.style.borderColor = 'var(--dark-pink)';
+                        img.style.borderWidth = '3px';
+                        img.title = 'Main Image (click to remove)';
+                    }
+
+                    previewDiv.appendChild(img);
+                });
+            }
+        }
+
+        // Open upload guide
+        window.openUploadGuide = function() {
+            const guide = window.open('', 'Upload Guide', 'width=600,height=500');
+            guide.document.write(`
+                <html>
+                <head>
+                    <title>Image Upload Guide</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h2 { color: #25d366; }
+                        .step { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 8px; }
+                        .btn { background: #25d366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0; }
+                    </style>
+                </head>
+                <body>
+                    <h2>📤 How to Upload Images to ImgBB</h2>
+
+                    <div class="step">
+                        <strong>Step 1:</strong> Go to <a href="https://imgbb.com/" target="_blank">ImgBB.com</a>
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 2:</strong> Click "Upload" button and select your images
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 3:</strong> After upload, click on the image
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 4:</strong> Copy "Direct link" (ends with .jpg or .png)
+                    </div>
+
+                    <div class="step">
+                        <strong>Step 5:</strong> Paste in admin panel "Image URLs" field
+                    </div>
+
+                    <a href="https://imgbb.com/" target="_blank" class="btn">Open ImgBB Now</a>
+
+                    <p style="margin-top: 20px; color: #666;">
+                        <strong>Example URL:</strong><br>
+                        https://i.ibb.co/abc123/image.jpg
+                    </p>
+                </body>
+                </html>
+            `);
+        };
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -768,51 +934,6 @@
                 console.error('Error deleting product:', error);
                 alert('Error deleting product: ' + error.message);
             }
-        };
-
-        window.handleImageUpload = async function(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-
-            const preview = document.getElementById('image-preview');
-            preview.innerHTML = '<p>Uploading images...</p>';
-
-            uploadedImageUrls = [];
-
-            for (let i = 0; i < files.length; i++) {
-                try {
-                    const file = files[i];
-                    const storageRef = ref(storage, `products/${currentUser.uid}/${Date.now()}_${file.name}`);
-                    const snapshot = await uploadBytes(storageRef, file);
-                    const downloadURL = await getDownloadURL(snapshot.ref);
-                    uploadedImageUrls.push(downloadURL);
-                } catch (error) {
-                    console.error('Error uploading image:', error);
-                    alert('Error uploading image: ' + error.message);
-                }
-            }
-
-            updateImagePreview();
-        };
-
-        function updateImagePreview() {
-            const preview = document.getElementById('image-preview');
-            if (uploadedImageUrls.length === 0) {
-                preview.innerHTML = '';
-                return;
-            }
-
-            preview.innerHTML = uploadedImageUrls.map((url, index) => `
-                <div style="position: relative;">
-                    <img src="${url}" alt="Preview ${index + 1}">
-                    <button onclick="removeImage(${index})" style="position: absolute; top: -5px; right: -5px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;">✕</button>
-                </div>
-            `).join('');
-        }
-
-        window.removeImage = function(index) {
-            uploadedImageUrls.splice(index, 1);
-            updateImagePreview();
         };
 
         // Product form submit
