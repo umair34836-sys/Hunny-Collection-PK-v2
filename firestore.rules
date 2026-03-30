@@ -1,124 +1,88 @@
 rules_version = '2';
-match /databases/{database}/documents {
-  
-  // ========== HELPER FUNCTIONS ==========
-  
-  // Check if user is admin
-  function isAdmin() {
-    return request.auth != null && 
-           exists(/databases/$(database)/documents/admins/$(request.auth.uid));
-  }
-  
-  // Check if user is vendor
-  function isVendor() {
-    return request.auth != null &&
-           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'vendor';
-  }
-  
-  // Check if user is authenticated
-  function isAuthenticated() {
-    return request.auth != null;
-  }
-  
-  // Validate product data
-  function isValidProduct() {
-    let data = request.resource.data;
-    return data.name is string && data.name.size() > 0 && data.name.size() < 200 &&
-           data.price is number && data.price >= 0 &&
-           data.category is string &&
-           data.images is list && data.images.size() > 0;
-  }
-  
-  // ========== COLLECTIONS ==========
-  
-  // ----- PRODUCTS -----
-  // Anyone can read
-  // Admin can do anything
-  // Vendors can manage their own products (based on vendorId)
-  match /products/{productId} {
-    allow read: if true;
+service cloud.firestore {
+  match /databases/{database}/documents {
     
-    allow create: if isAuthenticated() && 
-                     isValidProduct() &&
-                     (isAdmin() || 
-                      (isVendor() && request.resource.data.vendorId == request.auth.uid));
+    // Check if user is admin
+    function isAdmin() {
+      return request.auth != null && 
+             exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
     
-    allow update: if isAuthenticated() && 
-                     isValidProduct() &&
-                     (isAdmin() || 
-                      (isVendor() && resource.data.vendorId == request.auth.uid));
+    // Check if authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
     
-    allow delete: if isAdmin() || 
-                     (isVendor() && resource.data.vendorId == request.auth.uid);
-  }
-  
-  // ----- CATEGORIES -----
-  // Anyone can read
-  // Only admin can write
-  match /categories/{categoryId} {
-    allow read: if true;
-    allow create: if isAdmin();
-    allow update: if isAdmin();
-    allow delete: if isAdmin();
-  }
-  
-  // ----- ORDERS -----
-  // Customers can create and read their own orders
-  // Admin can read/update all orders
-  // Vendors can read orders containing their products
-  match /orders/{orderId} {
-    allow read: if isAuthenticated() && 
-                   (resource.data.userId == request.auth.uid || 
-                    isAdmin() ||
-                    (isVendor() && resource.data.items.exists(item, item.vendorId == request.auth.uid)));
+    // ========== MAIN COLLECTIONS ==========
     
-    allow create: if isAuthenticated() && 
-                     request.resource.data.userId == request.auth.uid &&
-                     request.resource.data.items is list &&
-                     request.resource.data.items.size() > 0 &&
-                     request.resource.data.total is number &&
-                     request.resource.data.total >= 0;
+    // PRODUCTS (Physical) - Anyone can read, authenticated can write
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if isAuthenticated();
+    }
     
-    allow update: if isAuthenticated() && 
-                     (isAdmin() || 
-                      (resource.data.userId == request.auth.uid && 
-                       request.resource.data.keys().only(['status', 'updatedAt', 'notes']).size() > 0));
+    // CATEGORIES (Physical) - Anyone can read, admin can write
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
     
-    allow delete: if isAdmin();
-  }
-  
-  // ----- USERS -----
-  // Users can read/write their own data
-  // Admin can read all users
-  match /users/{userId} {
-    allow read: if isAuthenticated() && 
-                   (request.auth.uid == userId || isAdmin());
+    // ORDERS (Physical) - Authenticated users
+    match /orders/{orderId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated();
+    }
     
-    allow create: if isAuthenticated() && request.auth.uid == userId;
+    // USERS - Own data
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAuthenticated();
+      allow delete: if false;
+    }
     
-    allow update: if isAuthenticated() && 
-                     (request.auth.uid == userId || isAdmin());
+    // ADMINS - Read only
+    match /admins/{adminId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
     
-    allow delete: if false;
-  }
-  
-  // ----- ADMINS -----
-  // Only readable by authenticated users
-  // Cannot be modified from client
-  match /admins/{adminId} {
-    allow read: if isAuthenticated();
-    allow create: if false;
-    allow update: if false;
-    allow delete: if false;
-  }
-  
-  // ----- SETTINGS -----
-  // Anyone can read
-  // Only admin can write
-  match /settings/{settingId} {
-    allow read: if true;
-    allow create: if isAdmin();
-    allow update: if isAdmin();
-    allow delete: if isAdmin();
+    // SETTINGS - Authenticated users
+    match /settings/{settingId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated();
+    }
+    
+    // ========== DIGITAL SHOP COLLECTIONS ==========
+    
+    // DIGITAL PRODUCTS - Anyone can read, authenticated can write
+    match /digital-products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if isAuthenticated();
+    }
+    
+    // DIGITAL CATEGORIES - Anyone can read, admin can write
+    match /digital-categories/{categoryId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // DIGITAL ORDERS - Own orders or admin
+    match /digital-orders/{orderId} {
+      allow read: if isAuthenticated() && 
+                     (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && 
+                       (resource.data.userId == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // DIGITAL SETTINGS - Admin only
+    match /digital-settings/{settingId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isAdmin();
+    }
   }
 }

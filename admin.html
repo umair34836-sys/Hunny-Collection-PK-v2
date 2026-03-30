@@ -206,6 +206,8 @@
                 <a href="#" onclick="showSection('orders')">Orders</a>
                 <a href="#" onclick="showSection('categories')">Categories</a>
                 <a href="#" onclick="showSection('vendors')">🏪 Vendors</a>
+                <a href="#" onclick="showSection('digital-products')">💻 Digital Products</a>
+                <a href="#" onclick="showSection('digital-orders')">📥 Digital Orders</a>
                 <a href="#" onclick="showSection('video-ads')">📺 Video Ads</a>
                 <a href="settings.html">⚙️ Site Settings</a>
                 <a href="#" onclick="logout()">Logout</a>
@@ -367,6 +369,56 @@
                     </div>
                 </div>
 
+                <!-- Digital Products Management -->
+                <div id="section-digital-products" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h2 style="color: var(--dark-pink);">💻 Digital Products Management</h2>
+                        <button class="btn-primary" onclick="openDigitalProductModal()">+ Add Digital Product</button>
+                    </div>
+
+                    <div class="admin-card">
+                        <div class="table-responsive">
+                            <table id="digital-products-table">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Delivery</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Orders Management -->
+                <div id="section-digital-orders" style="display: none;">
+                    <h2 style="color: var(--dark-pink); margin-bottom: 30px;">📥 Digital Orders Management</h2>
+
+                    <div class="admin-card">
+                        <div class="table-responsive">
+                            <table id="digital-orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Email</th>
+                                        <th>Total</th>
+                                        <th>Payment</th>
+                                        <th>Delivery</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Video Ads Management -->
                 <div id="section-video-ads" style="display: none;">
                     <h2 style="color: var(--dark-pink); margin-bottom: 30px;">📺 Video Ads Management</h2>
@@ -445,7 +497,7 @@
                     <label>Sizes (comma separated)</label>
                     <input type="text" id="product-sizes" placeholder="S, M, L, XL">
                 </div>
-                
+
                 <!-- Image Upload Section -->
                 <div class="form-group">
                     <label>Product Images *</label>
@@ -488,8 +540,76 @@
                         </small>
                     </div>
                 </div>
-                
+
                 <button type="submit" class="btn-primary" style="width: 100%;">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Digital Product Modal -->
+    <div id="digital-product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="digital-product-modal-title">Add Digital Product</h3>
+                <button class="close-modal" onclick="closeDigitalProductModal()">&times;</button>
+            </div>
+            <form id="digital-product-form">
+                <input type="hidden" id="digital-product-id">
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input type="text" id="digital-product-name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price (Rs.) *</label>
+                        <input type="number" id="digital-product-price" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="digital-product-category" required>
+                            <option value="">Select Category</option>
+                            <option value="Online Courses">Online Courses</option>
+                            <option value="Paid Accounts">Paid Accounts</option>
+                            <option value="Paid Services">Paid Services</option>
+                            <option value="Software & Tools">Software & Tools</option>
+                            <option value="Digital Assets">Digital Assets</option>
+                            <option value="Gaming">Gaming</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea id="digital-product-description" required rows="4"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Delivery Method *</label>
+                        <select id="digital-product-delivery" required>
+                            <option value="Email">Email Delivery</option>
+                            <option value="Download">Instant Download</option>
+                            <option value="Access Code">Access Code</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Download Limit</label>
+                        <input type="number" id="digital-product-download-limit" value="5" min="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Key Features (one per line)</label>
+                    <textarea id="digital-product-features" rows="4" placeholder="✓ Feature 1&#10;✓ Feature 2&#10;✓ Feature 3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Product Images *</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                        <button type="button" class="btn-sm" onclick="document.getElementById('digital-product-images-input').click()" style="background: var(--primary-pink); color: white;">
+                            📁 Upload Images
+                        </button>
+                    </div>
+                    <input type="file" id="digital-product-images-input" accept="image/*" multiple style="display: none;" onchange="handleDigitalImageUpload(event)">
+                    <div id="digital-image-preview" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;"></div>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Save Digital Product</button>
             </form>
         </div>
     </div>
@@ -951,14 +1071,18 @@
 
         // Show section
         window.showSection = (section) => {
-            ['dashboard', 'products', 'orders', 'categories', 'vendors', 'video-ads'].forEach(s => {
+            ['dashboard', 'products', 'orders', 'categories', 'vendors', 'digital-products', 'digital-orders', 'video-ads'].forEach(s => {
                 document.getElementById(`section-${s}`).style.display = s === section ? 'block' : 'none';
             });
             document.querySelectorAll('.admin-sidebar a').forEach(a => a.classList.remove('active'));
             event.target.classList.add('active');
 
-            // Load video ads table when section is shown
-            if (section === 'video-ads') {
+            // Load data based on section
+            if (section === 'digital-products') {
+                loadDigitalProducts();
+            } else if (section === 'digital-orders') {
+                loadDigitalOrders();
+            } else if (section === 'video-ads') {
                 loadVideoAdsTable();
             }
         };
@@ -1131,6 +1255,241 @@
             const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
             const message = '🌸 Check out Hunny Collection PK - Premium Female Fashion Store! Shop now: ' + url;
             window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+        };
+
+        // ========== DIGITAL PRODUCTS FUNCTIONS ==========
+        let digitalProducts = [];
+        let digitalOrders = [];
+        let uploadedDigitalImages = [];
+
+        window.openDigitalProductModal = function() {
+            document.getElementById('digital-product-modal').classList.add('active');
+            document.getElementById('digital-product-form').reset();
+            document.getElementById('digital-product-id').value = '';
+            document.getElementById('digital-product-modal-title').textContent = 'Add Digital Product';
+            uploadedDigitalImages = [];
+            updateDigitalImagePreview();
+        };
+
+        window.closeDigitalProductModal = function() {
+            document.getElementById('digital-product-modal').classList.remove('active');
+        };
+
+        async function loadDigitalProducts() {
+            try {
+                const snapshot = await getDocs(collection(db, 'digital-products'));
+                digitalProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderDigitalProducts();
+            } catch (error) {
+                console.error('Error loading digital products:', error);
+            }
+        }
+
+        function renderDigitalProducts() {
+            const tbody = document.querySelector('#digital-products-table tbody');
+            if (!tbody) return;
+
+            if (digitalProducts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No digital products yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = digitalProducts.map(p => `
+                <tr>
+                    <td><img src="${p.images?.[0] || 'https://via.placeholder.com/50'}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
+                    <td>${p.name}</td>
+                    <td>${p.category}</td>
+                    <td>Rs. ${(p.price || 0).toLocaleString()}</td>
+                    <td>${p.deliveryMethod || 'Email'}</td>
+                    <td>
+                        <button class="btn-sm" onclick="editDigitalProduct('${p.id}')" style="background: var(--primary-pink); color: white;">Edit</button>
+                        <button class="btn-sm btn-danger" onclick="deleteDigitalProduct('${p.id}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.editDigitalProduct = async function(id) {
+            const product = digitalProducts.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('digital-product-id').value = id;
+            document.getElementById('digital-product-name').value = product.name || '';
+            document.getElementById('digital-product-price').value = product.price || '';
+            document.getElementById('digital-product-category').value = product.category || '';
+            document.getElementById('digital-product-description').value = product.description || '';
+            document.getElementById('digital-product-delivery').value = product.deliveryMethod || 'Email';
+            document.getElementById('digital-product-download-limit').value = product.downloadLimit || 5;
+
+            uploadedDigitalImages = product.images || [];
+            updateDigitalImagePreview();
+
+            document.getElementById('digital-product-modal-title').textContent = 'Edit Digital Product';
+            document.getElementById('digital-product-modal').classList.add('active');
+        };
+
+        window.deleteDigitalProduct = async function(id) {
+            if (!confirm('Delete this digital product?')) return;
+            await deleteDoc(doc(db, 'digital-products', id));
+            loadDigitalProducts();
+        };
+
+        window.handleDigitalImageUpload = function(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedDigitalImages.push(e.target.result);
+                    updateDigitalImagePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
+        function updateDigitalImagePreview() {
+            const preview = document.getElementById('digital-image-preview');
+            if (!preview) return;
+
+            if (uploadedDigitalImages.length === 0) {
+                preview.innerHTML = '<p style="color: #999;">No images uploaded yet</p>';
+            } else {
+                preview.innerHTML = uploadedDigitalImages.map((url, index) => `
+                    <img src="${url}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin: 5px; cursor: pointer;" onclick="removeDigitalImage(${index})">
+                `).join('');
+            }
+        }
+
+        window.removeDigitalImage = function(index) {
+            uploadedDigitalImages.splice(index, 1);
+            updateDigitalImagePreview();
+        };
+
+        // Digital product form submit
+        document.getElementById('digital-product-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('digital-product-id').value;
+
+            if (uploadedDigitalImages.length === 0) {
+                alert('Please upload at least one product image');
+                return;
+            }
+
+            const productData = {
+                name: document.getElementById('digital-product-name').value,
+                price: Number(document.getElementById('digital-product-price').value),
+                category: document.getElementById('digital-product-category').value,
+                description: document.getElementById('digital-product-description').value,
+                deliveryMethod: document.getElementById('digital-product-delivery').value,
+                downloadLimit: Number(document.getElementById('digital-product-download-limit').value),
+                images: uploadedDigitalImages,
+                features: document.getElementById('digital-product-features').value.split('\n').filter(f => f.trim()),
+                updatedAt: new Date().toISOString()
+            };
+
+            if (id) {
+                await updateDoc(doc(db, 'digital-products', id), productData);
+            } else {
+                productData.createdAt = new Date().toISOString();
+                await addDoc(collection(db, 'digital-products'), productData);
+            }
+
+            closeDigitalProductModal();
+            uploadedDigitalImages = [];
+            loadDigitalProducts();
+        });
+
+        // ========== DIGITAL ORDERS FUNCTIONS ==========
+        async function loadDigitalOrders() {
+            try {
+                const snapshot = await getDocs(collection(db, 'digital-orders'));
+                digitalOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderDigitalOrders();
+            } catch (error) {
+                console.error('Error loading digital orders:', error);
+            }
+        }
+
+        function renderDigitalOrders() {
+            const tbody = document.querySelector('#digital-orders-table tbody');
+            if (!tbody) return;
+
+            if (digitalOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No digital orders yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = digitalOrders.map(o => {
+                const paymentClass = `badge-${o.paymentStatus || 'pending'}`;
+                const deliveryClass = `badge-${o.deliveryStatus || 'pending'}`;
+
+                return `
+                    <tr>
+                        <td>#${o.id.slice(0, 8).toUpperCase()}</td>
+                        <td>${o.customerName}</td>
+                        <td>${o.customerEmail}</td>
+                        <td>Rs. ${(o.total || 0).toLocaleString()}</td>
+                        <td><span class="badge ${paymentClass}">${o.paymentStatus}</span></td>
+                        <td><span class="badge ${deliveryClass}">${o.deliveryStatus}</span></td>
+                        <td>
+                            ${o.paymentStatus === 'pending' ? `
+                                <button class="btn-sm" onclick="verifyDigitalPayment('${o.id}')" style="background: #28a745; color: white;">✓ Verify</button>
+                            ` : ''}
+                            ${o.deliveryStatus === 'pending' && o.paymentStatus === 'verified' ? `
+                                <button class="btn-sm" onclick="deliverDigitalOrder('${o.id}')" style="background: #007bff; color: white;">📧 Deliver</button>
+                            ` : ''}
+                            <button class="btn-sm" onclick="viewDigitalOrder('${o.id}')" style="background: var(--primary-pink); color: white;">View</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        window.verifyDigitalPayment = async function(orderId) {
+            const transactionId = prompt('Enter Transaction ID to verify:');
+            if (!transactionId) return;
+
+            await updateDoc(doc(db, 'digital-orders', orderId), {
+                paymentStatus: 'verified',
+                verifiedAt: new Date().toISOString()
+            });
+            alert('Payment verified! Now deliver the products.');
+            loadDigitalOrders();
+        };
+
+        window.deliverDigitalOrder = async function(orderId) {
+            const order = digitalOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            // Get download links and access codes for each product
+            const itemsWithAccess = order.items.map((item, index) => {
+                const downloadLink = prompt(`Enter download link for: ${item.name}`, item.downloadLink || '');
+                const accessCode = prompt(`Enter access code/license key for: ${item.name} (optional)`, item.accessCode || '');
+                return {
+                    ...item,
+                    downloadLink: downloadLink || '',
+                    accessCode: accessCode || ''
+                };
+            });
+
+            await updateDoc(doc(db, 'digital-orders', orderId), {
+                items: itemsWithAccess,
+                deliveryStatus: 'delivered',
+                deliveredAt: new Date().toISOString()
+            });
+
+            alert('Order marked as delivered! Customer can now access their products.');
+            loadDigitalOrders();
+        };
+
+        window.viewDigitalOrder = function(orderId) {
+            const order = digitalOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const itemsList = order.items.map(item => `• ${item.name}`).join('\n');
+            alert(`Order #${orderId.slice(0, 8).toUpperCase()}\n\nCustomer: ${order.customerName}\nEmail: ${order.customerEmail}\nTotal: Rs. ${order.total}\nPayment: ${order.paymentStatus}\nDelivery: ${order.deliveryStatus}\n\nItems:\n${itemsList}`);
         };
 
         window.shareOnInstagram = function() {
