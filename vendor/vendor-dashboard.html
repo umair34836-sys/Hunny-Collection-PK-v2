@@ -354,6 +354,13 @@
                         <h2 style="color: var(--dark-pink);">📦 My Products</h2>
                         <button onclick="openProductModal()" class="btn-primary">+ Add Product</button>
                     </div>
+                    <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #0c5460;">
+                        <h4 style="color: #0c5460; margin-bottom: 10px; font-size: 1rem;">💡 Categories Info</h4>
+                        <p style="color: #0c5460; font-size: 0.9rem; margin: 0;">
+                            Categories are managed by admin. If you need a new category for your products, please contact admin to add it.
+                            <br><strong>Current Categories:</strong> <span id="vendor-categories-list">Loading...</span>
+                        </p>
+                    </div>
                     <div id="products-list" class="product-grid">
                         <div class="loading">Loading products...</div>
                     </div>
@@ -471,6 +478,9 @@
                             <option value="Accessories">Accessories</option>
                             <option value="Other">Other</option>
                         </select>
+                        <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                            💡 Categories are managed by admin. Contact admin to add new category.
+                        </small>
                     </div>
                 </div>
                 <div class="form-group">
@@ -536,6 +546,48 @@
         let currentUser = null;
         let vendorData = null;
         let uploadedImageUrls = [];
+        let categories = [];
+
+        // Load categories from Firestore
+        async function loadCategories() {
+            try {
+                const categoriesSnapshot = await getDocs(collection(db, 'categories'));
+                categories = categoriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateCategoryDropdown();
+                updateCategoriesList();
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // Update categories list display
+        function updateCategoriesList() {
+            const listEl = document.getElementById('vendor-categories-list');
+            if (!listEl) return;
+
+            if (categories.length === 0) {
+                listEl.textContent = 'No categories available';
+            } else {
+                const categoryNames = categories.map(c => c.name).join(', ');
+                listEl.textContent = categoryNames;
+            }
+        }
+
+        // Update category dropdown
+        function updateCategoryDropdown() {
+            const select = document.getElementById('product-category');
+            if (!select) return;
+
+            // Keep default option
+            let html = '<option value="">Select Category</option>';
+
+            // Add categories from Firestore
+            categories.forEach(cat => {
+                html += `<option value="${cat.name}">${cat.name}</option>`;
+            });
+
+            select.innerHTML = html;
+        }
 
         // Handle file selection
         window.handleImageUpload = function(event) {
@@ -701,6 +753,7 @@
                 }
 
                 // Load dashboard data
+                loadCategories();  // Load categories first
                 loadOverview();
                 loadProducts();
                 loadOrders();
