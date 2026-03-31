@@ -387,18 +387,32 @@ function updateProductOGTags(product) {
     const productUrl = window.location.href.split('?')[0] + '?id=' + product.id;
     const price = (product.price || 0).toLocaleString();
     
-    // Update Open Graph / Facebook meta tags
+    // Update Open Graph / Facebook meta tags using element IDs
+    const ogImageEl = document.getElementById('og-image');
+    if (ogImageEl) {
+        ogImageEl.setAttribute('content', productImage);
+        console.log('Updated og:image to:', productImage);
+    }
+    
+    const ogPriceEl = document.getElementById('og-price');
+    if (ogPriceEl) {
+        ogPriceEl.setAttribute('content', product.price || 0);
+    }
+    
+    // Update other OG tags
     updateMetaTag('property', 'og:title', `${product.name} - Hunny Collection PK`);
     updateMetaTag('property', 'og:description', `Buy ${product.name} for Rs. ${price} at Hunny Collection PK. ${product.description ? product.description.substring(0, 150) : ''}`);
-    updateMetaTag('property', 'og:image', productImage);
     updateMetaTag('property', 'og:url', productUrl);
-    updateMetaTag('property', 'og:price:amount', `${product.price || 0}`);
-    updateMetaTag('property', 'og:price:currency', 'PKR');
     
-    // Update Twitter meta tags
+    // Update Twitter meta tags using element IDs
+    const twitterImageEl = document.getElementById('twitter-image');
+    if (twitterImageEl) {
+        twitterImageEl.setAttribute('content', productImage);
+        console.log('Updated twitter:image to:', productImage);
+    }
+    
     updateMetaTag('name', 'twitter:title', `${product.name} - Hunny Collection PK`);
     updateMetaTag('name', 'twitter:description', `Buy ${product.name} for Rs. ${price} at Hunny Collection PK. ${product.description ? product.description.substring(0, 150) : ''}`);
-    updateMetaTag('name', 'twitter:image', productImage);
     updateMetaTag('name', 'twitter:url', productUrl);
     
     // Update canonical URL
@@ -407,7 +421,28 @@ function updateProductOGTags(product) {
         canonicalLink.href = productUrl;
     }
     
-    console.log('✅ OG tags updated for product:', product.name, '| Image:', productImage);
+    console.log('✅ OG tags updated for product:', product.name);
+    console.log('   Image:', productImage);
+    console.log('   Price:', price);
+    console.log('   URL:', productUrl);
+}
+
+// Generate shareable link with product image for WhatsApp
+function generateWhatsAppShareLink(product) {
+    const productImage = product.images?.[0] || product.image || '';
+    const productUrl = window.location.href.split('?')[0] + '?id=' + product.id;
+    const price = (product.price || 0).toLocaleString();
+    const description = product.description ? product.description.substring(0, 200) : '';
+    
+    // Create a rich message with product details
+    const message = `🌸 *${product.name}*\n\n` +
+                   `💰 *Price:* Rs. ${price}\n\n` +
+                   `${description ? '📝 *Description:*\n' + description + '\n\n' : ''}` +
+                   `🛍️ *Hunny Collection PK*\n` +
+                   `🔗 Shop now: ${productUrl}\n\n` +
+                   `${productImage ? `\n📸 Product Image: ${productImage}` : ''}`;
+    
+    return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
 // Helper function to update meta tags
@@ -460,43 +495,84 @@ window.shareProductWhatsApp = async function(productId, productName) {
     const description = product.description || '';
     const mainImage = product.images?.[0] || product.image || '';
     
-    // Create formatted message
-    const message = `🌸 *${product.name}*\n\n💰 Price: Rs. ${price}\n\n${description ? '📝 Description:\n' + description + '\n\n' : ''}🛍️ Shop now at Hunny Collection PK!\n\n🔗 ${url}`;
+    // Create formatted message with product image URL
+    const message = `🌸 *${product.name}*\n\n` +
+                   `💰 Price: Rs. ${price}\n\n` +
+                   `${description ? '📝 Description:\n' + description + '\n\n' : ''}` +
+                   `🛍️ Shop now at Hunny Collection PK!\n\n` +
+                   `🔗 ${url}\n\n` +
+                   `${mainImage ? `📸 Product Image:\n${mainImage}` : ''}`;
 
     // Check if Web Share API is supported (mobile devices)
     if (navigator.share) {
         try {
-            // Prepare share data
+            // Prepare share data WITHOUT image first (more compatible)
             const shareData = {
                 title: product.name,
                 text: message,
                 url: url
             };
 
-            // If image is available and Web Share API Level 2 is supported
+            // Try to share with image if supported
             if (mainImage && navigator.canShare) {
                 try {
-                    // Fetch the image as a blob
-                    const response = await fetch(mainImage);
+                    console.log('Attempting to fetch image for sharing...');
+                    
+                    // Use CORS proxy to fetch image
+                    const corsProxy = 'https://corsproxy.io/?';
+                    const imageUrl = corsProxy + encodeURIComponent(mainImage);
+                    
+                    const response = await fetch(imageUrl, {
+                        method: 'GET',
+                        mode: 'cors',
+                        credentials: 'omit'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Image fetch failed with status: ' + response.status);
+                    }
+                    
                     const blob = await response.blob();
+                    console.log('Image fetched successfully, size:', blob.size, 'bytes');
                     
                     // Create a file object
-                    const file = new File([blob], 'product.jpg', { type: 'image/jpeg' });
+                    const file = new File([blob], 'product.jpg', { 
+                        type: 'image/jpeg'
+                    });
                     
                     // Check if we can share files
                     if (navigator.canShare({ files: [file] })) {
                         shareData.files = [file];
+                        console.log('✅ Image sharing enabled!');
+                    } else {
+                        console.log('⚠️ File sharing not supported on this device');
                     }
                 } catch (imgError) {
-                    console.warn('Could not load image for sharing:', imgError);
+                    console.warn('⚠️ Could not load image for sharing:', imgError.message);
+                    console.log('Will share with text and link only');
+                    
+                    // Show user a helpful message
+                    const useTextOnly = confirm(
+                        '📸 Image could not be loaded for sharing.\n\n' +
+                        'This happens when image hosting doesn\'t allow sharing.\n\n' +
+                        'Click OK to share with text + link (image URL included in message)\n' +
+                        'Or Cancel to abort.'
+                    );
+                    
+                    if (!useTextOnly) {
+                        return;
+                    }
                 }
             }
 
             // Share using native Web Share API
+            console.log('Sharing with Web Share API...');
             await navigator.share(shareData);
-            console.log('Shared successfully!');
+            console.log('✅ Shared successfully!');
         } catch (error) {
-            if (error.name !== 'AbortError') {
+            if (error.name === 'AbortError') {
+                console.log('Share cancelled by user');
+            } else {
                 console.error('Share error:', error);
                 // Fallback to WhatsApp web link
                 fallbackWhatsAppShare(message);

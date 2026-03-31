@@ -17,8 +17,8 @@
     <meta property="og:url" content="https://umair34836-sys.github.io/Hunny-Collection-PK-v2/product.html">
     <meta property="og:title" content="Product Details - Hunny Collection PK | Buy Fashion Online Pakistan">
     <meta property="og:description" content="View product details, prices and order online from Hunny Collection PK. Quality guaranteed ✓ Cash on Delivery ✓ Easy returns ✓ Fast shipping across Pakistan.">
-    <meta property="og:image" content="https://i.ibb.co/ymfRN5Lm/product.jpg">
-    <meta property="og:price:amount" content="0">
+    <meta property="og:image" content="https://i.ibb.co/ymfRN5Lm/product.jpg" id="og-image">
+    <meta property="og:price:amount" content="0" id="og-price">
     <meta property="og:price:currency" content="PKR">
     <meta property="product:brand" content="Hunny Collection PK">
     <meta property="product:availability" content="instock">
@@ -29,7 +29,20 @@
     <meta property="twitter:url" content="https://umair34836-sys.github.io/Hunny-Collection-PK-v2/product.html">
     <meta property="twitter:title" content="Product Details - Hunny Collection PK | Buy Fashion Online Pakistan">
     <meta property="twitter:description" content="View product details, prices and order online from Hunny Collection PK. Quality guaranteed ✓ Cash on Delivery ✓ Easy returns ✓ Fast shipping across Pakistan.">
-    <meta property="twitter:image" content="https://i.ibb.co/ymfRN5Lm/product.jpg">
+    <meta property="twitter:image" content="https://i.ibb.co/ymfRN5Lm/product.jpg" id="twitter-image">
+
+    <script>
+        // Check if product ID is in URL and load product data BEFORE page renders
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (productId) {
+                console.log('Product ID found in URL:', productId);
+                // Product will be loaded by app.js which will update OG tags
+            }
+        })();
+    </script>
     
     <link rel="stylesheet" href="style.css">
     <style>
