@@ -1096,11 +1096,9 @@
                         ${codeDisplay}
                         ${p.markazCode ? `
                             <a href="https://www.markaz.app/shop/search?q=${p.markazCode}" target="_blank" 
-                               style="display: inline-block; margin-left: 5px; font-size: 0.75rem; color: var(--dark-pink); text-decoration: none;" 
-                               title="Search on Markaz">🔍</a>
-                            <a href="https://www.markaz.app/shop/product/${p.markazCode}" target="_blank" 
-                               style="display: inline-block; margin-left: 3px; font-size: 0.75rem; color: #25d366; text-decoration: none;" 
-                               title="Direct product link">🔗</a>
+                               class="badge ${p.markazAvailability === 'available' ? 'badge-success' : p.markazAvailability === 'unavailable' ? 'badge-danger' : 'badge-secondary'}"
+                               style="display: inline-block; margin-left: 5px; font-size: 0.75rem; text-decoration: none; cursor: pointer;" 
+                               title="Search on Markaz">🔍 ${p.markazAvailability === 'available' ? '✅ Available' : p.markazAvailability === 'unavailable' ? '❌ Unavailable' : '🔍 Search'}</a>
                         ` : ''}
                     </td>
                     <td>
