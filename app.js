@@ -349,6 +349,7 @@ export async function loadProduct(productId) {
                     <!-- Share Buttons -->
                     <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color);">
                         <h4 style="margin-bottom: 10px; color: var(--text-dark);">Share This Product</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 10px;">📸 Share product images, price & description</p>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             <button onclick="shareProductWhatsApp('${product.id}', '${product.name}')" class="btn-sm" style="background: #25d366; color: white; border: none; cursor: pointer;">
                                 📱 WhatsApp
@@ -400,12 +401,91 @@ window.buyNow = () => {
     }, 500);
 };
 
-// Share functions
-window.shareProductWhatsApp = function(productId, productName) {
+// Share functions - Web Share API with images
+window.shareProductWhatsApp = async function(productId, productName) {
+    const product = window.currentProduct;
+    
+    if (!product) {
+        alert('Product not loaded yet. Please wait a moment.');
+        return;
+    }
+
     const url = window.location.href.split('?')[0] + '?id=' + productId;
-    const message = '🌸 Check out this product: ' + productName + ' at Hunny Collection PK! Shop now: ' + url;
-    window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
+    const price = (product.price || 0).toLocaleString();
+    const description = product.description || '';
+    const mainImage = product.images?.[0] || product.image || '';
+    
+    // Create formatted message
+    const message = `🌸 *${product.name}*\n\n💰 Price: Rs. ${price}\n\n${description ? '📝 Description:\n' + description + '\n\n' : ''}🛍️ Shop now at Hunny Collection PK!\n\n🔗 ${url}`;
+
+    // Check if Web Share API is supported (mobile devices)
+    if (navigator.share) {
+        try {
+            // Prepare share data
+            const shareData = {
+                title: product.name,
+                text: message,
+                url: url
+            };
+
+            // If image is available and Web Share API Level 2 is supported
+            if (mainImage && navigator.canShare) {
+                try {
+                    // Fetch the image as a blob
+                    const response = await fetch(mainImage);
+                    const blob = await response.blob();
+                    
+                    // Create a file object
+                    const file = new File([blob], 'product.jpg', { type: 'image/jpeg' });
+                    
+                    // Check if we can share files
+                    if (navigator.canShare({ files: [file] })) {
+                        shareData.files = [file];
+                    }
+                } catch (imgError) {
+                    console.warn('Could not load image for sharing:', imgError);
+                }
+            }
+
+            // Share using native Web Share API
+            await navigator.share(shareData);
+            console.log('Shared successfully!');
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('Share error:', error);
+                // Fallback to WhatsApp web link
+                fallbackWhatsAppShare(message);
+            }
+        }
+    } else {
+        // Fallback for desktop or unsupported browsers
+        fallbackWhatsAppShare(message);
+    }
 };
+
+// Fallback function for desktop/unsupported browsers
+function fallbackWhatsAppShare(message) {
+    const whatsappUrl = 'https://wa.me/?text=' + encodeURIComponent(message);
+    
+    // Show a helpful dialog
+    const userChoice = confirm(
+        '📱 Web Share API is not supported on this device.\n\n' +
+        'Would you like to open WhatsApp Web with your product details?\n\n' +
+        '✅ Click OK to open WhatsApp\n' +
+        '❌ Click Cancel to copy the message'
+    );
+    
+    if (userChoice) {
+        window.open(whatsappUrl, '_blank');
+    } else {
+        // Copy message to clipboard
+        navigator.clipboard.writeText(message).then(() => {
+            alert('✅ Message copied to clipboard!\n\nYou can now paste it in WhatsApp manually.');
+        }).catch(() => {
+            prompt('Copy this message:', message);
+        });
+    }
+}
 
 window.shareProductFacebook = function(productId) {
     const url = window.location.href.split('?')[0] + '?id=' + productId;
