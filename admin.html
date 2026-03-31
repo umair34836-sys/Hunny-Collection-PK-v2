@@ -280,7 +280,12 @@
                 <div id="section-products" style="display: none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                         <h2 style="color: var(--dark-pink);">Products Management</h2>
-                        <button class="btn-primary" onclick="openProductModal()">+ Add Product</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-sm" onclick="checkAllProductsAvailability()" style="background: #25d366; color: white;">
+                                🔄 Check Availability
+                            </button>
+                            <button class="btn-primary" onclick="openProductModal()">+ Add Product</button>
+                        </div>
                     </div>
 
                     <div class="admin-card">
@@ -292,6 +297,7 @@
                                         <th>Name</th>
                                         <th>Category</th>
                                         <th>Price</th>
+                                        <th>Markaz Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -519,6 +525,15 @@
                 <div class="form-group">
                     <label>Sizes (comma separated)</label>
                     <input type="text" id="product-sizes" placeholder="S, M, L, XL">
+                </div>
+
+                <!-- Markaz Product Link -->
+                <div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B6B;">
+                    <label>🏪 Markaz Product URL (Optional)</label>
+                    <input type="url" id="product-markaz-url" placeholder="https://markaz.app/product/...">
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        💡 Add Markaz product link to track availability automatically
+                    </small>
                 </div>
 
                 <!-- Image Upload Section -->
@@ -1056,18 +1071,31 @@
         function renderProducts() {
             const tbody = document.querySelector('#products-table tbody');
             if (!tbody) return;
-            tbody.innerHTML = products.map(p => `
+            tbody.innerHTML = products.map(p => {
+                const hasMarkazUrl = p.markazUrl ? 'yes' : 'no';
+                const statusClass = p.markazAvailability === 'available' ? 'badge-success' : 
+                                   p.markazAvailability === 'unavailable' ? 'badge-danger' : 'badge-secondary';
+                const statusIcon = p.markazAvailability === 'available' ? '✅' : 
+                                   p.markazAvailability === 'unavailable' ? '❌' : '⏳';
+                const statusText = p.markazUrl ? (p.markazAvailability || 'Not Checked') : 'No URL';
+                
+                return `
                 <tr>
                     <td><img src="${p.images?.[0] || 'https://via.placeholder.com/50'}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
                     <td>${p.name}</td>
                     <td>${p.category}</td>
                     <td>Rs. ${(p.price || 0).toLocaleString()}</td>
                     <td>
+                        <span class="badge ${statusClass}" style="cursor: pointer;" onclick="checkSingleProductAvailability('${p.id}')" title="Click to check">
+                            ${statusIcon} ${statusText}
+                        </span>
+                    </td>
+                    <td>
                         <button class="btn-sm" onclick="editProduct('${p.id}')">Edit</button>
                         <button class="btn-sm btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
 
         function renderOrders() {
@@ -1214,7 +1242,8 @@
             document.getElementById('product-category').value = product.category || '';
             document.getElementById('product-description').value = product.description || '';
             document.getElementById('product-sizes').value = product.variants?.join(', ') || '';
-            
+            document.getElementById('product-markaz-url').value = product.markazUrl || '';
+
             // Load existing images
             uploadedImageUrls = product.images || [];
             updateImagePreview();
@@ -1222,6 +1251,128 @@
             document.getElementById('product-modal-title').textContent = 'Edit Product';
             document.getElementById('product-modal').classList.add('active');
         };
+
+        // Markaz Availability Checker Functions
+        window.checkSingleProductAvailability = async (productId) => {
+            const product = products.find(p => p.id === productId);
+            if (!product || !product.markazUrl) {
+                alert('❌ This product has no Markaz URL!\n\nPlease add a Markaz product URL first.');
+                return;
+            }
+
+            try {
+                // Show loading state
+                const statusBadge = event.target;
+                const originalText = statusBadge.innerHTML;
+                statusBadge.innerHTML = '🔄 Checking...';
+                
+                const isAvailable = await checkMarkazProduct(product.markazUrl);
+                
+                // Update Firestore
+                await updateDoc(doc(db, 'products', productId), {
+                    markazAvailability: isAvailable ? 'available' : 'unavailable',
+                    markazLastChecked: new Date().toISOString()
+                });
+
+                // Reload products
+                await loadDashboardData();
+                
+                if (!isAvailable) {
+                    alert('⚠️ This product is NOT AVAILABLE on Markaz!\n\nProduct: ' + product.name);
+                }
+            } catch (error) {
+                console.error('Error checking availability:', error);
+                alert('❌ Error checking availability. Please try again.');
+            }
+        };
+
+        window.checkAllProductsAvailability = async () => {
+            const productsWithMarkaz = products.filter(p => p.markazUrl);
+            
+            if (productsWithMarkaz.length === 0) {
+                alert('ℹ️ No products with Markaz URLs found!\n\nPlease add Markaz URLs to your products first.');
+                return;
+            }
+
+            const confirmCheck = confirm(`🔍 Check availability for ${productsWithMarkaz.length} products?\n\nThis will check each product on Markaz and update their status.`);
+            if (!confirmCheck) return;
+
+            let checked = 0;
+            let available = 0;
+            let unavailable = 0;
+            let errors = 0;
+
+            for (const product of productsWithMarkaz) {
+                try {
+                    const isAvailable = await checkMarkazProduct(product.markazUrl);
+                    
+                    await updateDoc(doc(db, 'products', product.id), {
+                        markazAvailability: isAvailable ? 'available' : 'unavailable',
+                        markazLastChecked: new Date().toISOString()
+                    });
+
+                    checked++;
+                    if (isAvailable) {
+                        available++;
+                    } else {
+                        unavailable++;
+                    }
+                } catch (error) {
+                    console.error('Error checking product:', product.name, error);
+                    errors++;
+                }
+
+                // Update UI after each check
+                await loadDashboardData();
+            }
+
+            alert(`✅ Availability Check Complete!\n\n` +
+                  `📊 Total Checked: ${checked}\n` +
+                  `✅ Available: ${available}\n` +
+                  `❌ Unavailable: ${unavailable}\n` +
+                  `${errors > 0 ? `⚠️ Errors: ${errors}` : ''}`);
+        };
+
+        // Function to check Markaz product availability
+        async function checkMarkazProduct(markazUrl) {
+            try {
+                // Use a CORS proxy to fetch the page
+                const corsProxy = 'https://api.allorigins.win/raw?url=';
+                const response = await fetch(corsProxy + encodeURIComponent(markazUrl));
+                
+                if (!response.ok) {
+                    return false;
+                }
+
+                const html = await response.text();
+                
+                // Check for common "out of stock" or "unavailable" indicators
+                const unavailableIndicators = [
+                    'out of stock',
+                    'unavailable',
+                    'not available',
+                    'product not found',
+                    'sold out',
+                    'discontinued',
+                    'no longer available'
+                ];
+
+                const htmlLower = html.toLowerCase();
+                
+                // If any unavailable indicator is found, product is not available
+                for (const indicator of unavailableIndicators) {
+                    if (htmlLower.includes(indicator)) {
+                        return false;
+                    }
+                }
+
+                // If page exists and no unavailable indicators, assume available
+                return true;
+            } catch (error) {
+                console.error('Error checking Markaz product:', error);
+                return false;
+            }
+        }
 
         window.deleteProduct = async (id) => {
             if (!confirm('Delete this product?')) return;
@@ -1237,12 +1388,14 @@
 
             // Use uploadedImageUrls array for images
             const images = uploadedImageUrls;
-            
+
             if (images.length === 0) {
                 alert('Please upload at least one product image');
                 return;
             }
 
+            const markazUrl = document.getElementById('product-markaz-url').value.trim();
+            
             const productData = {
                 name: document.getElementById('product-name').value,
                 price: Number(document.getElementById('product-price').value),
@@ -1250,6 +1403,8 @@
                 description: document.getElementById('product-description').value,
                 variants: document.getElementById('product-sizes').value.split(',').map(s => s.trim()).filter(s => s),
                 images: images,
+                markazUrl: markazUrl || null,
+                markazAvailability: markazUrl ? 'not-checked' : null,
                 updatedAt: new Date().toISOString()
             };
 
