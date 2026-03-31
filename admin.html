@@ -527,12 +527,15 @@
                     <input type="text" id="product-sizes" placeholder="S, M, L, XL">
                 </div>
 
-                <!-- Markaz Product Link -->
+                <!-- Markaz Product Code -->
                 <div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B6B;">
-                    <label>🏪 Markaz Product URL (Optional)</label>
-                    <input type="url" id="product-markaz-url" placeholder="https://markaz.app/product/...">
+                    <label>🏪 Markaz Product Code *</label>
+                    <input type="text" id="product-markaz-code" placeholder="MZ1459200006TEBGMR" 
+                           pattern="MZ[0-9]+" required
+                           title="Enter Markaz product code (e.g., MZ1459200006TEBGMR)"
+                           style="text-transform: uppercase; font-family: monospace; letter-spacing: 1px;">
                     <small style="color: #666; display: block; margin-top: 5px;">
-                        💡 Add Markaz product link to track availability automatically
+                        ⚠️ Required field - Enter Markaz product code to track availability
                     </small>
                 </div>
 
@@ -1072,12 +1075,13 @@
             const tbody = document.querySelector('#products-table tbody');
             if (!tbody) return;
             tbody.innerHTML = products.map(p => {
-                const hasMarkazUrl = p.markazUrl ? 'yes' : 'no';
+                const hasMarkazCode = p.markazCode ? 'yes' : 'no';
                 const statusClass = p.markazAvailability === 'available' ? 'badge-success' : 
                                    p.markazAvailability === 'unavailable' ? 'badge-danger' : 'badge-secondary';
                 const statusIcon = p.markazAvailability === 'available' ? '✅' : 
                                    p.markazAvailability === 'unavailable' ? '❌' : '⏳';
-                const statusText = p.markazUrl ? (p.markazAvailability || 'Not Checked') : 'No URL';
+                const statusText = p.markazCode ? (p.markazAvailability || 'Not Checked') : 'No Code';
+                const codeDisplay = p.markazCode ? `<br><small style="font-family: monospace; font-size: 0.75rem; color: #666;">${p.markazCode}</small>` : '';
                 
                 return `
                 <tr>
@@ -1089,6 +1093,8 @@
                         <span class="badge ${statusClass}" style="cursor: pointer;" onclick="checkSingleProductAvailability('${p.id}')" title="Click to check">
                             ${statusIcon} ${statusText}
                         </span>
+                        ${codeDisplay}
+                        ${p.markazCode ? `<a href="https://markaz.app/product/${p.markazCode}" target="_blank" style="display: inline-block; margin-left: 5px; font-size: 0.75rem; color: var(--dark-pink); text-decoration: none;" title="Open on Markaz">🔗</a>` : ''}
                     </td>
                     <td>
                         <button class="btn-sm" onclick="editProduct('${p.id}')">Edit</button>
@@ -1242,7 +1248,7 @@
             document.getElementById('product-category').value = product.category || '';
             document.getElementById('product-description').value = product.description || '';
             document.getElementById('product-sizes').value = product.variants?.join(', ') || '';
-            document.getElementById('product-markaz-url').value = product.markazUrl || '';
+            document.getElementById('product-markaz-code').value = product.markazCode || '';
 
             // Load existing images
             uploadedImageUrls = product.images || [];
@@ -1255,8 +1261,8 @@
         // Markaz Availability Checker Functions
         window.checkSingleProductAvailability = async (productId) => {
             const product = products.find(p => p.id === productId);
-            if (!product || !product.markazUrl) {
-                alert('❌ This product has no Markaz URL!\n\nPlease add a Markaz product URL first.');
+            if (!product || !product.markazCode) {
+                alert('❌ This product has no Markaz code!\n\nPlease add a Markaz product code first.');
                 return;
             }
 
@@ -1266,7 +1272,7 @@
                 const originalText = statusBadge.innerHTML;
                 statusBadge.innerHTML = '🔄 Checking...';
                 
-                const isAvailable = await checkMarkazProduct(product.markazUrl);
+                const isAvailable = await checkMarkazProduct(product.markazCode);
                 
                 // Update Firestore
                 await updateDoc(doc(db, 'products', productId), {
@@ -1278,7 +1284,7 @@
                 await loadDashboardData();
                 
                 if (!isAvailable) {
-                    alert('⚠️ This product is NOT AVAILABLE on Markaz!\n\nProduct: ' + product.name);
+                    alert('⚠️ This product is NOT AVAILABLE on Markaz!\n\nProduct: ' + product.name + '\nCode: ' + product.markazCode);
                 }
             } catch (error) {
                 console.error('Error checking availability:', error);
@@ -1287,10 +1293,10 @@
         };
 
         window.checkAllProductsAvailability = async () => {
-            const productsWithMarkaz = products.filter(p => p.markazUrl);
+            const productsWithMarkaz = products.filter(p => p.markazCode);
             
             if (productsWithMarkaz.length === 0) {
-                alert('ℹ️ No products with Markaz URLs found!\n\nPlease add Markaz URLs to your products first.');
+                alert('ℹ️ No products with Markaz codes found!\n\nPlease add Markaz product codes to your products first.');
                 return;
             }
 
@@ -1304,7 +1310,7 @@
 
             for (const product of productsWithMarkaz) {
                 try {
-                    const isAvailable = await checkMarkazProduct(product.markazUrl);
+                    const isAvailable = await checkMarkazProduct(product.markazCode);
                     
                     await updateDoc(doc(db, 'products', product.id), {
                         markazAvailability: isAvailable ? 'available' : 'unavailable',
@@ -1333,9 +1339,13 @@
                   `${errors > 0 ? `⚠️ Errors: ${errors}` : ''}`);
         };
 
-        // Function to check Markaz product availability
-        async function checkMarkazProduct(markazUrl) {
+        // Function to check Markaz product availability using product code
+        async function checkMarkazProduct(productCode) {
             try {
+                // Construct Markaz product URL from code
+                // Markaz URL format: https://markaz.app/product/{productCode}
+                const markazUrl = `https://markaz.app/product/${productCode}`;
+                
                 // Use a CORS proxy to fetch the page
                 const corsProxy = 'https://api.allorigins.win/raw?url=';
                 const response = await fetch(corsProxy + encodeURIComponent(markazUrl));
@@ -1354,7 +1364,9 @@
                     'product not found',
                     'sold out',
                     'discontinued',
-                    'no longer available'
+                    'no longer available',
+                    'product does not exist',
+                    'invalid product'
                 ];
 
                 const htmlLower = html.toLowerCase();
@@ -1394,7 +1406,18 @@
                 return;
             }
 
-            const markazUrl = document.getElementById('product-markaz-url').value.trim();
+            const markazCode = document.getElementById('product-markaz-code').value.trim().toUpperCase();
+            
+            if (!markazCode) {
+                alert('⚠️ Markaz Product Code is required!\n\nPlease enter the Markaz product code (e.g., MZ1459200006TEBGMR)');
+                return;
+            }
+
+            // Validate Markaz code format
+            if (!markazCode.startsWith('MZ')) {
+                alert('⚠️ Invalid Markaz Code!\n\nMarkaz codes must start with "MZ" (e.g., MZ1459200006TEBGMR)');
+                return;
+            }
             
             const productData = {
                 name: document.getElementById('product-name').value,
@@ -1403,8 +1426,8 @@
                 description: document.getElementById('product-description').value,
                 variants: document.getElementById('product-sizes').value.split(',').map(s => s.trim()).filter(s => s),
                 images: images,
-                markazUrl: markazUrl || null,
-                markazAvailability: markazUrl ? 'not-checked' : null,
+                markazCode: markazCode,
+                markazAvailability: 'not-checked',
                 updatedAt: new Date().toISOString()
             };
 
