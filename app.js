@@ -295,6 +295,9 @@ export async function loadProduct(productId) {
             pageTitle.textContent = `${product.name} - Hunny Collection PK`;
         }
 
+        // Update Open Graph meta tags for product sharing
+        updateProductOGTags(product);
+
         window.currentProduct = product;
         let selectedSize = null;
         let currentImageIndex = 0;
@@ -377,6 +380,48 @@ window.changeImage = (imageUrl, thumbnail) => {
     document.querySelectorAll('.product-thumbnail').forEach(t => t.classList.remove('active'));
     thumbnail.classList.add('active');
 };
+
+// Update Open Graph meta tags for product sharing
+function updateProductOGTags(product) {
+    const productImage = product.images?.[0] || product.image || 'https://i.ibb.co/ymfRN5Lm/product.jpg';
+    const productUrl = window.location.href.split('?')[0] + '?id=' + product.id;
+    const price = (product.price || 0).toLocaleString();
+    
+    // Update Open Graph / Facebook meta tags
+    updateMetaTag('property', 'og:title', `${product.name} - Hunny Collection PK`);
+    updateMetaTag('property', 'og:description', `Buy ${product.name} for Rs. ${price} at Hunny Collection PK. ${product.description ? product.description.substring(0, 150) : ''}`);
+    updateMetaTag('property', 'og:image', productImage);
+    updateMetaTag('property', 'og:url', productUrl);
+    updateMetaTag('property', 'og:price:amount', `${product.price || 0}`);
+    updateMetaTag('property', 'og:price:currency', 'PKR');
+    
+    // Update Twitter meta tags
+    updateMetaTag('name', 'twitter:title', `${product.name} - Hunny Collection PK`);
+    updateMetaTag('name', 'twitter:description', `Buy ${product.name} for Rs. ${price} at Hunny Collection PK. ${product.description ? product.description.substring(0, 150) : ''}`);
+    updateMetaTag('name', 'twitter:image', productImage);
+    updateMetaTag('name', 'twitter:url', productUrl);
+    
+    // Update canonical URL
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+        canonicalLink.href = productUrl;
+    }
+    
+    console.log('✅ OG tags updated for product:', product.name, '| Image:', productImage);
+}
+
+// Helper function to update meta tags
+function updateMetaTag(attrName, attrValue, content) {
+    let metaTag = document.querySelector(`meta[${attrName}="${attrValue}"]`);
+    
+    if (!metaTag) {
+        metaTag = document.createElement('meta');
+        metaTag.setAttribute(attrName, attrValue);
+        document.head.appendChild(metaTag);
+    }
+    
+    metaTag.setAttribute('content', content);
+}
 
 // Global functions for product page
 window.selectSize = (size, btn) => {
