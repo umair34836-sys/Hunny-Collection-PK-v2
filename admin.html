@@ -1359,6 +1359,8 @@
 
         // Function to check Markaz product availability using product code
         async function checkMarkazProduct(productCode) {
+            console.log('=== Checking Markaz Product:', productCode, '===');
+            
             try {
                 // Try multiple Markaz URL patterns
                 const possibleUrls = [
@@ -1372,10 +1374,14 @@
                     `https://app.markaz.com/product/${productCode}`
                 ];
 
+                console.log('Trying', possibleUrls.length, 'URL patterns...');
+
                 // Try each URL pattern
                 for (const url of possibleUrls) {
+                    console.log('Trying URL:', url);
                     const result = await tryMarkazUrl(url, productCode);
                     if (result !== null) {
+                        console.log('✅ Found result for', productCode, ':', result ? 'AVAILABLE' : 'UNAVAILABLE');
                         return result;
                     }
                 }
@@ -1385,13 +1391,16 @@
                 const numericMatch = productCode.match(/\d+/);
                 if (numericMatch) {
                     const numericId = numericMatch[0];
+                    console.log('Trying numeric ID:', numericId);
                     const numericUrl = `https://www.markaz.app/shop/product/${numericId}`;
                     const result = await tryMarkazUrl(numericUrl, productCode);
                     if (result !== null) {
+                        console.log('✅ Found result for numeric ID:', result ? 'AVAILABLE' : 'UNAVAILABLE');
                         return result;
                     }
                 }
 
+                console.log('❌ All checks failed, assuming UNAVAILABLE');
                 // If nothing works, assume unavailable
                 return false;
             } catch (error) {
@@ -1411,66 +1420,123 @@
                     }
                 });
                 
+                console.log('Checking URL:', url, 'Status:', response.status);
+                
                 if (!response.ok) {
                     return null; // Try next URL
                 }
 
                 const html = await response.text();
+                const htmlLower = html.toLowerCase();
                 
-                // Check if this is a valid product page (not 404)
+                console.log('Page length:', html.length);
+                
+                // === NOT FOUND Indicators (product doesn't exist) ===
                 const notFoundIndicators = [
                     'page not found',
                     'product not found',
-                    '404',
+                    'product doesn\'t exist',
                     'product does not exist',
                     'invalid product',
-                    'no products found'
+                    'no products found',
+                    'couldn\'t find what you\'re looking for',
+                    'search returned no results'
                 ];
 
-                const unavailableIndicators = [
-                    'out of stock',
-                    'unavailable',
-                    'sold out',
-                    'discontinued',
-                    'no longer available'
-                ];
-
-                const htmlLower = html.toLowerCase();
-                
-                // Check for 404/not found
+                // Check for 404/not found - these mean product doesn't exist
                 for (const indicator of notFoundIndicators) {
                     if (htmlLower.includes(indicator)) {
+                        console.log('Not found indicator:', indicator);
                         return false; // Product doesn't exist
                     }
                 }
 
-                // Check for availability indicators
-                for (const indicator of unavailableIndicators) {
+                // === OUT OF STOCK Indicators (product exists but unavailable) ===
+                const outOfStockIndicators = [
+                    'out of stock',
+                    'sold out',
+                    'discontinued',
+                    'no longer available',
+                    'currently unavailable',
+                    'temporarily out of stock',
+                    'this product is out of stock'
+                ];
+
+                // Check for out of stock - product exists but not available
+                for (const indicator of outOfStockIndicators) {
                     if (htmlLower.includes(indicator)) {
+                        console.log('Out of stock indicator:', indicator);
                         return false; // Product exists but unavailable
                     }
                 }
 
-                // Check for positive product indicators
-                const productIndicators = [
+                // === AVAILABLE Indicators (product exists and available) ===
+                const availableIndicators = [
                     'add to cart',
+                    'add to bag',
                     'buy now',
+                    'in stock',
+                    'available',
+                    'add to wishlist',
+                    'product details',
                     'price',
-                    'product',
-                    'in stock'
+                    'original price',
+                    'sale price',
+                    'discount',
+                    'markaz',
+                    'share product',
+                    'resell',
+                    'earn profit'
                 ];
 
-                for (const indicator of productIndicators) {
+                // Count how many positive indicators we find
+                let positiveCount = 0;
+                for (const indicator of availableIndicators) {
                     if (htmlLower.includes(indicator)) {
-                        return true; // Product exists and available
+                        positiveCount++;
+                        console.log('Found positive indicator:', indicator);
                     }
                 }
 
-                // If page exists and has content, assume available
-                if (html.length > 1000) {
+                // If we found 2 or more positive indicators, product is available
+                if (positiveCount >= 2) {
+                    console.log('Product AVAILABLE - found', positiveCount, 'indicators');
                     return true;
                 }
 
+                // === Additional checks for Markaz-specific content ===
+                
+                // Check if it's a valid product page by looking for product structure
+                const productPageIndicators = [
+                    'product',
+                    'shop',
+                    'markaz',
+                    'price',
+                    'rs.',
+                    'pkr',
+                    'rupees'
+                ];
+                
+                let productPageCount = 0;
+                for (const indicator of productPageIndicators) {
+                    if (htmlLower.includes(indicator)) {
+                        productPageCount++;
+                    }
+                }
+                
+                // If page has product structure and is reasonably long, it's likely available
+                if (productPageCount >= 3 && html.length > 2000) {
+                    console.log('Product AVAILABLE - valid product page detected');
+                    return true;
+                }
+
+                // If page exists and has substantial content, assume available
+                if (html.length > 5000) {
+                    console.log('Product AVAILABLE - long page content');
+                    return true;
+                }
+
+                console.log('Uncertain - trying next URL');
                 return null; // Uncertain, try next URL
             } catch (error) {
                 console.error('Error trying URL:', url, error);
