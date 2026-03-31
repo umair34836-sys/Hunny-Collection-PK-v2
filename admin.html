@@ -1095,7 +1095,7 @@
                         </span>
                         ${codeDisplay}
                         ${p.markazCode ? `
-                            <a href="https://www.markaz.app/shop/search?q=${p.markazCode}" target="_blank" 
+                            <a href="javascript:void(0)" onclick="openMarkazAppOrWeb('${p.markazCode}')" 
                                class="badge ${p.markazAvailability === 'available' ? 'badge-success' : p.markazAvailability === 'unavailable' ? 'badge-danger' : 'badge-secondary'}"
                                style="display: inline-block; margin-left: 5px; font-size: 0.75rem; text-decoration: none; cursor: pointer;" 
                                title="Search on Markaz">🔍 ${p.markazAvailability === 'available' ? '✅ Available' : p.markazAvailability === 'unavailable' ? '❌ Unavailable' : '🔍 Search'}</a>
@@ -1355,6 +1355,45 @@
                   `${errors > 0 ? `⚠️ Errors: ${errors}` : ''}`);
         };
 
+        // Function to open Markaz app or web based on device
+        window.openMarkazAppOrWeb = function(productCode) {
+            // Check if user is on mobile
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Try to open Markaz app using deep link
+                // Markaz app URL scheme
+                const appUrl = `markaz://product/${productCode}`;
+                const webUrl = `https://www.markaz.app/shop/search?q=${productCode}`;
+                
+                // Try to open app first, fallback to web
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+                
+                // If app doesn't open within 2 seconds, open web version
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    // Check if page is still visible (app didn't open)
+                    if (document.visibilityState === 'visible') {
+                        window.open(webUrl, '_blank');
+                    }
+                }, 2000);
+                
+                // Also try direct window.location for some devices
+                try {
+                    window.location.href = appUrl;
+                } catch (e) {
+                    window.open(webUrl, '_blank');
+                }
+            } else {
+                // Desktop - open web version
+                const webUrl = `https://www.markaz.app/shop/search?q=${productCode}`;
+                window.open(webUrl, '_blank');
+            }
+        };
+
         // Function to check Markaz product availability using product code
         async function checkMarkazProduct(productCode) {
             console.log('=== Checking Markaz Product:', productCode, '===');
@@ -1409,137 +1448,152 @@
 
         // Helper function to try a single Markaz URL
         async function tryMarkazUrl(url, productCode) {
-            try {
-                const corsProxy = 'https://api.allorigins.win/raw?url=';
-                const response = await fetch(corsProxy + encodeURIComponent(url), {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'text/html,application/xhtml+xml'
+            // Multiple CORS proxies to try
+            const corsProxies = [
+                'https://api.allorigins.win/raw?url=',
+                'https://corsproxy.io/?',
+                'https://api.codetabs.com/v1/proxy?quest='
+            ];
+            
+            // Try each proxy
+            for (const proxy of corsProxies) {
+                try {
+                    const fullUrl = proxy + encodeURIComponent(url);
+                    const response = await fetch(fullUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'text/html,application/xhtml+xml'
+                        },
+                        timeout: 10000
+                    });
+                    
+                    console.log('Trying proxy:', proxy.substring(0, 30), 'Status:', response.status);
+                    
+                    if (!response.ok) {
+                        continue; // Try next proxy
                     }
-                });
-                
-                console.log('Checking URL:', url, 'Status:', response.status);
-                
-                if (!response.ok) {
-                    return null; // Try next URL
-                }
 
-                const html = await response.text();
-                const htmlLower = html.toLowerCase();
-                
-                console.log('Page length:', html.length);
-                
-                // === NOT FOUND Indicators (product doesn't exist) ===
-                const notFoundIndicators = [
-                    'page not found',
-                    'product not found',
-                    'product doesn\'t exist',
-                    'product does not exist',
-                    'invalid product',
-                    'no products found',
-                    'couldn\'t find what you\'re looking for',
-                    'search returned no results'
-                ];
+                    const html = await response.text();
+                    const htmlLower = html.toLowerCase();
+                    
+                    console.log('Page length:', html.length);
+                    
+                    // === NOT FOUND Indicators (product doesn't exist) ===
+                    const notFoundIndicators = [
+                        'page not found',
+                        'product not found',
+                        'product doesn\'t exist',
+                        'product does not exist',
+                        'invalid product',
+                        'no products found',
+                        'couldn\'t find what you\'re looking for',
+                        'search returned no results'
+                    ];
 
-                // Check for 404/not found - these mean product doesn't exist
-                for (const indicator of notFoundIndicators) {
-                    if (htmlLower.includes(indicator)) {
-                        console.log('Not found indicator:', indicator);
-                        return false; // Product doesn't exist
+                    // Check for 404/not found - these mean product doesn't exist
+                    for (const indicator of notFoundIndicators) {
+                        if (htmlLower.includes(indicator)) {
+                            console.log('Not found indicator:', indicator);
+                            return false; // Product doesn't exist
+                        }
                     }
-                }
 
-                // === OUT OF STOCK Indicators (product exists but unavailable) ===
-                const outOfStockIndicators = [
-                    'out of stock',
-                    'sold out',
-                    'discontinued',
-                    'no longer available',
-                    'currently unavailable',
-                    'temporarily out of stock',
-                    'this product is out of stock'
-                ];
+                    // === OUT OF STOCK Indicators (product exists but unavailable) ===
+                    const outOfStockIndicators = [
+                        'out of stock',
+                        'sold out',
+                        'discontinued',
+                        'no longer available',
+                        'currently unavailable',
+                        'temporarily out of stock',
+                        'this product is out of stock'
+                    ];
 
-                // Check for out of stock - product exists but not available
-                for (const indicator of outOfStockIndicators) {
-                    if (htmlLower.includes(indicator)) {
-                        console.log('Out of stock indicator:', indicator);
-                        return false; // Product exists but unavailable
+                    // Check for out of stock - product exists but not available
+                    for (const indicator of outOfStockIndicators) {
+                        if (htmlLower.includes(indicator)) {
+                            console.log('Out of stock indicator:', indicator);
+                            return false; // Product exists but unavailable
+                        }
                     }
-                }
 
-                // === AVAILABLE Indicators (product exists and available) ===
-                const availableIndicators = [
-                    'add to cart',
-                    'add to bag',
-                    'buy now',
-                    'in stock',
-                    'available',
-                    'add to wishlist',
-                    'product details',
-                    'price',
-                    'original price',
-                    'sale price',
-                    'discount',
-                    'markaz',
-                    'share product',
-                    'resell',
-                    'earn profit'
-                ];
+                    // === AVAILABLE Indicators (product exists and available) ===
+                    const availableIndicators = [
+                        'add to cart',
+                        'add to bag',
+                        'buy now',
+                        'in stock',
+                        'available',
+                        'add to wishlist',
+                        'product details',
+                        'price',
+                        'original price',
+                        'sale price',
+                        'discount',
+                        'markaz',
+                        'share product',
+                        'resell',
+                        'earn profit'
+                    ];
 
-                // Count how many positive indicators we find
-                let positiveCount = 0;
-                for (const indicator of availableIndicators) {
-                    if (htmlLower.includes(indicator)) {
-                        positiveCount++;
-                        console.log('Found positive indicator:', indicator);
+                    // Count how many positive indicators we find
+                    let positiveCount = 0;
+                    for (const indicator of availableIndicators) {
+                        if (htmlLower.includes(indicator)) {
+                            positiveCount++;
+                            console.log('Found positive indicator:', indicator);
+                        }
                     }
-                }
 
-                // If we found 2 or more positive indicators, product is available
-                if (positiveCount >= 2) {
-                    console.log('Product AVAILABLE - found', positiveCount, 'indicators');
-                    return true;
-                }
-
-                // === Additional checks for Markaz-specific content ===
-                
-                // Check if it's a valid product page by looking for product structure
-                const productPageIndicators = [
-                    'product',
-                    'shop',
-                    'markaz',
-                    'price',
-                    'rs.',
-                    'pkr',
-                    'rupees'
-                ];
-                
-                let productPageCount = 0;
-                for (const indicator of productPageIndicators) {
-                    if (htmlLower.includes(indicator)) {
-                        productPageCount++;
+                    // If we found 2 or more positive indicators, product is available
+                    if (positiveCount >= 2) {
+                        console.log('Product AVAILABLE - found', positiveCount, 'indicators');
+                        return true;
                     }
-                }
-                
-                // If page has product structure and is reasonably long, it's likely available
-                if (productPageCount >= 3 && html.length > 2000) {
-                    console.log('Product AVAILABLE - valid product page detected');
-                    return true;
-                }
 
-                // If page exists and has substantial content, assume available
-                if (html.length > 5000) {
-                    console.log('Product AVAILABLE - long page content');
-                    return true;
-                }
+                    // === Additional checks for Markaz-specific content ===
+                    
+                    // Check if it's a valid product page by looking for product structure
+                    const productPageIndicators = [
+                        'product',
+                        'shop',
+                        'markaz',
+                        'price',
+                        'rs.',
+                        'pkr',
+                        'rupees'
+                    ];
+                    
+                    let productPageCount = 0;
+                    for (const indicator of productPageIndicators) {
+                        if (htmlLower.includes(indicator)) {
+                            productPageCount++;
+                        }
+                    }
+                    
+                    // If page has product structure and is reasonably long, it's likely available
+                    if (productPageCount >= 3 && html.length > 2000) {
+                        console.log('Product AVAILABLE - valid product page detected');
+                        return true;
+                    }
 
-                console.log('Uncertain - trying next URL');
-                return null; // Uncertain, try next URL
-            } catch (error) {
-                console.error('Error trying URL:', url, error);
-                return null; // Try next URL
+                    // If page exists and has substantial content, assume available
+                    if (html.length > 5000) {
+                        console.log('Product AVAILABLE - long page content');
+                        return true;
+                    }
+
+                    console.log('Uncertain - trying next proxy');
+                    // Continue to next proxy
+                } catch (error) {
+                    console.warn('Proxy failed:', proxy.substring(0, 30), error.message);
+                    // Continue to next proxy
+                }
             }
+            
+            // All proxies failed
+            console.error('All proxies failed for URL:', url);
+            return null; // Try next URL
         }
 
         window.deleteProduct = async (id) => {
