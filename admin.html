@@ -530,12 +530,12 @@
                 <!-- Markaz Product Code -->
                 <div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B6B;">
                     <label>🏪 Markaz Product Code *</label>
-                    <input type="text" id="product-markaz-code" placeholder="MZ1459200006TEBGMR" 
-                           pattern="MZ[0-9]+" required
-                           title="Enter Markaz product code (e.g., MZ1459200006TEBGMR)"
+                    <input type="text" id="product-markaz-code" placeholder="e.g., MZ1459200006TEBGMR or MZ123456" 
+                           pattern="[A-Za-z0-9]+" required
+                           title="Enter Markaz product code (any alphanumeric code)"
                            style="text-transform: uppercase; font-family: monospace; letter-spacing: 1px;">
                     <small style="color: #666; display: block; margin-top: 5px;">
-                        ⚠️ Required field - Enter Markaz product code to track availability
+                        ⚠️ Required field - Enter Markaz product code (any format/length)
                     </small>
                 </div>
 
@@ -1413,9 +1413,9 @@
                 return;
             }
 
-            // Validate Markaz code format
-            if (!markazCode.startsWith('MZ')) {
-                alert('⚠️ Invalid Markaz Code!\n\nMarkaz codes must start with "MZ" (e.g., MZ1459200006TEBGMR)');
+            // Validate Markaz code format (alphanumeric only)
+            if (!/^[A-Z0-9]+$/.test(markazCode)) {
+                alert('⚠️ Invalid Markaz Code!\n\nMarkaz code can only contain letters and numbers (e.g., MZ1459200006TEBGMR)');
                 return;
             }
             
