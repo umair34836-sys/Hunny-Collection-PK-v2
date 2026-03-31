@@ -495,18 +495,17 @@ window.shareProductWhatsApp = async function(productId, productName) {
     const description = product.description || '';
     const mainImage = product.images?.[0] || product.image || '';
     
-    // Create formatted message with product image URL
+    // Create formatted message WITHOUT image URL (cleaner)
     const message = `🌸 *${product.name}*\n\n` +
                    `💰 Price: Rs. ${price}\n\n` +
                    `${description ? '📝 Description:\n' + description + '\n\n' : ''}` +
                    `🛍️ Shop now at Hunny Collection PK!\n\n` +
-                   `🔗 ${url}\n\n` +
-                   `${mainImage ? `📸 Product Image:\n${mainImage}` : ''}`;
+                   `🔗 ${url}`;
 
     // Check if Web Share API is supported (mobile devices)
     if (navigator.share) {
         try {
-            // Prepare share data WITHOUT image first (more compatible)
+            // Prepare share data
             const shareData = {
                 title: product.name,
                 text: message,
@@ -515,53 +514,80 @@ window.shareProductWhatsApp = async function(productId, productName) {
 
             // Try to share with image if supported
             if (mainImage && navigator.canShare) {
+                // Show loading indicator
+                console.log('🔄 Fetching product image for sharing...');
+                
                 try {
-                    console.log('Attempting to fetch image for sharing...');
+                    // Try multiple methods to fetch image
                     
-                    // Use CORS proxy to fetch image
-                    const corsProxy = 'https://corsproxy.io/?';
-                    const imageUrl = corsProxy + encodeURIComponent(mainImage);
-                    
-                    const response = await fetch(imageUrl, {
-                        method: 'GET',
-                        mode: 'cors',
-                        credentials: 'omit'
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error('Image fetch failed with status: ' + response.status);
+                    // Method 1: Direct fetch (works for CORS-enabled hosts)
+                    let blob = null;
+                    try {
+                        const response = await fetch(mainImage, {
+                            method: 'GET',
+                            mode: 'cors',
+                            credentials: 'omit'
+                        });
+                        if (response.ok) {
+                            blob = await response.blob();
+                        }
+                    } catch (e) {
+                        console.log('Direct fetch failed, trying proxy...');
                     }
                     
-                    const blob = await response.blob();
-                    console.log('Image fetched successfully, size:', blob.size, 'bytes');
+                    // Method 2: Try CORS proxy if direct fails
+                    if (!blob) {
+                        const proxies = [
+                            'https://corsproxy.io/?',
+                            'https://api.allorigins.win/raw?url=',
+                            'https://thingproxy.freeboard.io/fetch/'
+                        ];
+                        
+                        for (const proxy of proxies) {
+                            try {
+                                const imageUrl = proxy + encodeURIComponent(mainImage);
+                                const response = await fetch(imageUrl, {
+                                    method: 'GET',
+                                    mode: 'cors'
+                                });
+                                if (response.ok) {
+                                    blob = await response.blob();
+                                    console.log('✅ Image fetched via proxy:', proxy);
+                                    break;
+                                }
+                            } catch (e) {
+                                console.log('Proxy failed:', proxy);
+                                continue;
+                            }
+                        }
+                    }
                     
-                    // Create a file object
-                    const file = new File([blob], 'product.jpg', { 
-                        type: 'image/jpeg'
-                    });
+                    // Method 3: Convert to blob using canvas (last resort)
+                    if (!blob) {
+                        blob = await fetchImageAsBlob(mainImage);
+                    }
                     
-                    // Check if we can share files
-                    if (navigator.canShare({ files: [file] })) {
-                        shareData.files = [file];
-                        console.log('✅ Image sharing enabled!');
+                    if (blob && blob.size > 0) {
+                        console.log('✅ Image fetched successfully, size:', blob.size, 'bytes');
+                        
+                        // Create a file object
+                        const file = new File([blob], 'product.jpg', { 
+                            type: 'image/jpeg'
+                        });
+                        
+                        // Check if we can share files
+                        if (navigator.canShare({ files: [file] })) {
+                            shareData.files = [file];
+                            console.log('✅ Image sharing enabled!');
+                        } else {
+                            console.log('⚠️ File sharing not supported on this device');
+                        }
                     } else {
-                        console.log('⚠️ File sharing not supported on this device');
+                        throw new Error('Could not fetch image');
                     }
                 } catch (imgError) {
                     console.warn('⚠️ Could not load image for sharing:', imgError.message);
                     console.log('Will share with text and link only');
-                    
-                    // Show user a helpful message
-                    const useTextOnly = confirm(
-                        '📸 Image could not be loaded for sharing.\n\n' +
-                        'This happens when image hosting doesn\'t allow sharing.\n\n' +
-                        'Click OK to share with text + link (image URL included in message)\n' +
-                        'Or Cancel to abort.'
-                    );
-                    
-                    if (!useTextOnly) {
-                        return;
-                    }
                 }
             }
 
@@ -583,6 +609,34 @@ window.shareProductWhatsApp = async function(productId, productName) {
         fallbackWhatsAppShare(message);
     }
 };
+
+// Helper function to fetch image as blob using canvas
+async function fetchImageAsBlob(imageUrl) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Canvas to blob failed'));
+                    }
+                }, 'image/jpeg', 0.9);
+            } catch (e) {
+                reject(e);
+            }
+        };
+        img.onerror = () => reject(new Error('Image load failed'));
+        img.src = imageUrl;
+    });
+}
 
 // Fallback function for desktop/unsupported browsers
 function fallbackWhatsAppShare(message) {
