@@ -1359,36 +1359,48 @@
         window.openMarkazAppOrWeb = function(productCode) {
             // Check if user is on mobile
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
             
             if (isMobile) {
-                // Try to open Markaz app using deep link
-                // Markaz app URL scheme
-                const appUrl = `markaz://product/${productCode}`;
+                // Markaz app URL schemes
+                const androidAppUrl = `intent://product/${productCode}#Intent;scheme=markaz;package=com.markaz.app;end`;
+                const iosAppUrl = `markaz://product/${productCode}`;
                 const webUrl = `https://www.markaz.app/shop/search?q=${productCode}`;
                 
-                // Try to open app first, fallback to web
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = appUrl;
-                document.body.appendChild(iframe);
-                
-                // If app doesn't open within 2 seconds, open web version
-                setTimeout(() => {
-                    document.body.removeChild(iframe);
-                    // Check if page is still visible (app didn't open)
-                    if (document.visibilityState === 'visible') {
-                        window.open(webUrl, '_blank');
+                if (isAndroid) {
+                    // For Android - Use Intent URL to force app opening
+                    try {
+                        // First try direct app URL
+                        window.location.href = androidAppUrl;
+                        
+                        // Fallback to web after delay if app didn't open
+                        setTimeout(() => {
+                            window.location.href = webUrl;
+                        }, 2500);
+                    } catch (e) {
+                        // If intent fails, open web
+                        window.location.href = webUrl;
                     }
-                }, 2000);
-                
-                // Also try direct window.location for some devices
-                try {
-                    window.location.href = appUrl;
-                } catch (e) {
-                    window.open(webUrl, '_blank');
+                } else if (isIOS) {
+                    // For iOS - Use custom URL scheme
+                    try {
+                        // Try to open app
+                        window.location.href = iosAppUrl;
+                        
+                        // Fallback to web after delay
+                        setTimeout(() => {
+                            window.location.href = webUrl;
+                        }, 2500);
+                    } catch (e) {
+                        window.location.href = webUrl;
+                    }
+                } else {
+                    // Other mobile - open web
+                    window.location.href = webUrl;
                 }
             } else {
-                // Desktop - open web version
+                // Desktop - open web version in new tab
                 const webUrl = `https://www.markaz.app/shop/search?q=${productCode}`;
                 window.open(webUrl, '_blank');
             }
