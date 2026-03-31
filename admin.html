@@ -1094,7 +1094,14 @@
                             ${statusIcon} ${statusText}
                         </span>
                         ${codeDisplay}
-                        ${p.markazCode ? `<a href="https://markaz.app/product/${p.markazCode}" target="_blank" style="display: inline-block; margin-left: 5px; font-size: 0.75rem; color: var(--dark-pink); text-decoration: none;" title="Open on Markaz">🔗</a>` : ''}
+                        ${p.markazCode ? `
+                            <a href="https://www.markaz.app/shop/search?q=${p.markazCode}" target="_blank" 
+                               style="display: inline-block; margin-left: 5px; font-size: 0.75rem; color: var(--dark-pink); text-decoration: none;" 
+                               title="Search on Markaz">🔍</a>
+                            <a href="https://www.markaz.app/shop/product/${p.markazCode}" target="_blank" 
+                               style="display: inline-block; margin-left: 3px; font-size: 0.75rem; color: #25d366; text-decoration: none;" 
+                               title="Direct product link">🔗</a>
+                        ` : ''}
                     </td>
                     <td>
                         <button class="btn-sm" onclick="editProduct('${p.id}')">Edit</button>
@@ -1284,11 +1291,22 @@
                 await loadDashboardData();
                 
                 if (!isAvailable) {
-                    alert('⚠️ This product is NOT AVAILABLE on Markaz!\n\nProduct: ' + product.name + '\nCode: ' + product.markazCode);
+                    const userChoice = confirm(
+                        '⚠️ This product is NOT AVAILABLE on Markaz!\n\n' +
+                        'Product: ' + product.name + '\n' +
+                        'Code: ' + product.markazCode + '\n\n' +
+                        'Would you like to open Markaz to verify manually?'
+                    );
+                    if (userChoice) {
+                        // Open Markaz search with the product code
+                        window.open(`https://www.markaz.app/shop/search?q=${product.markazCode}`, '_blank');
+                    }
                 }
             } catch (error) {
                 console.error('Error checking availability:', error);
-                alert('❌ Error checking availability. Please try again.');
+                alert('❌ Error checking availability. Please try again.\n\nYou can manually verify on Markaz.');
+                // Open Markaz search for manual verification
+                window.open(`https://www.markaz.app/shop/search?q=${product.markazCode}`, '_blank');
             }
         };
 
@@ -1342,47 +1360,121 @@
         // Function to check Markaz product availability using product code
         async function checkMarkazProduct(productCode) {
             try {
-                // Construct Markaz product URL from code
-                // Markaz URL format: https://markaz.app/product/{productCode}
-                const markazUrl = `https://markaz.app/product/${productCode}`;
-                
-                // Use a CORS proxy to fetch the page
+                // Try multiple Markaz URL patterns
+                const possibleUrls = [
+                    // Pattern 1: markaz.app/shop/product/{code}
+                    `https://www.markaz.app/shop/product/${productCode}`,
+                    // Pattern 2: Direct search with code (correct format)
+                    `https://www.markaz.app/shop/search?q=${productCode}`,
+                    // Pattern 3: markaz.app/product/{code}
+                    `https://markaz.app/product/${productCode}`,
+                    // Pattern 4: app.markaz.com format
+                    `https://app.markaz.com/product/${productCode}`
+                ];
+
+                // Try each URL pattern
+                for (const url of possibleUrls) {
+                    const result = await tryMarkazUrl(url, productCode);
+                    if (result !== null) {
+                        return result;
+                    }
+                }
+
+                // If all patterns fail, try to extract numeric ID from code
+                // MZ1459200006TEBGMR -> extract numbers: 1459200006
+                const numericMatch = productCode.match(/\d+/);
+                if (numericMatch) {
+                    const numericId = numericMatch[0];
+                    const numericUrl = `https://www.markaz.app/shop/product/${numericId}`;
+                    const result = await tryMarkazUrl(numericUrl, productCode);
+                    if (result !== null) {
+                        return result;
+                    }
+                }
+
+                // If nothing works, assume unavailable
+                return false;
+            } catch (error) {
+                console.error('Error checking Markaz product:', error);
+                return false;
+            }
+        }
+
+        // Helper function to try a single Markaz URL
+        async function tryMarkazUrl(url, productCode) {
+            try {
                 const corsProxy = 'https://api.allorigins.win/raw?url=';
-                const response = await fetch(corsProxy + encodeURIComponent(markazUrl));
+                const response = await fetch(corsProxy + encodeURIComponent(url), {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/html,application/xhtml+xml'
+                    }
+                });
                 
                 if (!response.ok) {
-                    return false;
+                    return null; // Try next URL
                 }
 
                 const html = await response.text();
                 
-                // Check for common "out of stock" or "unavailable" indicators
+                // Check if this is a valid product page (not 404)
+                const notFoundIndicators = [
+                    'page not found',
+                    'product not found',
+                    '404',
+                    'product does not exist',
+                    'invalid product',
+                    'no products found'
+                ];
+
                 const unavailableIndicators = [
                     'out of stock',
                     'unavailable',
-                    'not available',
-                    'product not found',
                     'sold out',
                     'discontinued',
-                    'no longer available',
-                    'product does not exist',
-                    'invalid product'
+                    'no longer available'
                 ];
 
                 const htmlLower = html.toLowerCase();
                 
-                // If any unavailable indicator is found, product is not available
-                for (const indicator of unavailableIndicators) {
+                // Check for 404/not found
+                for (const indicator of notFoundIndicators) {
                     if (htmlLower.includes(indicator)) {
-                        return false;
+                        return false; // Product doesn't exist
                     }
                 }
 
-                // If page exists and no unavailable indicators, assume available
-                return true;
+                // Check for availability indicators
+                for (const indicator of unavailableIndicators) {
+                    if (htmlLower.includes(indicator)) {
+                        return false; // Product exists but unavailable
+                    }
+                }
+
+                // Check for positive product indicators
+                const productIndicators = [
+                    'add to cart',
+                    'buy now',
+                    'price',
+                    'product',
+                    'in stock'
+                ];
+
+                for (const indicator of productIndicators) {
+                    if (htmlLower.includes(indicator)) {
+                        return true; // Product exists and available
+                    }
+                }
+
+                // If page exists and has content, assume available
+                if (html.length > 1000) {
+                    return true;
+                }
+
+                return null; // Uncertain, try next URL
             } catch (error) {
-                console.error('Error checking Markaz product:', error);
-                return false;
+                console.error('Error trying URL:', url, error);
+                return null; // Try next URL
             }
         }
 
