@@ -243,21 +243,24 @@
         // Load order summary
         const cart = getCartItems();
         const itemsContainer = document.getElementById('order-items');
-        
+
         if (cart.length === 0) {
             window.location.href = 'cart.html';
         } else {
-            itemsContainer.innerHTML = cart.map(item => `
-                <div class="order-item">
-                    <div>
-                        <strong>${item.name}</strong><br>
-                        <small>Qty: ${item.quantity}</small>
+            itemsContainer.innerHTML = cart.map(item => {
+                const sellingPrice = item.sellingPrice || item.price || 0;
+                return `
+                    <div class="order-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <small>Qty: ${item.quantity}</small>
+                        </div>
+                        <div>Rs. ${(sellingPrice * item.quantity).toLocaleString()}</div>
                     </div>
-                    <div>Rs. ${(item.price * item.quantity).toLocaleString()}</div>
-                </div>
-            `).join('');
-            
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                `;
+            }).join('');
+
+            const total = cart.reduce((sum, item) => sum + (((item.sellingPrice || item.price) || 0) * item.quantity), 0);
             document.getElementById('order-total').textContent = total.toLocaleString();
         }
 
@@ -268,11 +271,11 @@
 
         checkoutForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             placeOrderBtn.textContent = 'Placing Order...';
             placeOrderBtn.disabled = true;
             messageContainer.innerHTML = '';
-            
+
             const orderData = {
                 userId: auth.currentUser.uid,
                 customerName: document.getElementById('name').value,
@@ -283,7 +286,7 @@
                     city: document.getElementById('city').value
                 },
                 items: cart,
-                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                total: cart.reduce((sum, item) => sum + (((item.sellingPrice || item.price) || 0) * item.quantity), 0),
                 status: 'pending',
                 notes: document.getElementById('notes').value,
                 paymentMethod: 'COD',

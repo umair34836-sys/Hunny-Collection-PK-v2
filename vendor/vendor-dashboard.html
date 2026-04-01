@@ -862,9 +862,9 @@
                 container.innerHTML = vendorOrders.map(order => {
                     const statusClass = 'badge-' + (order.status || 'pending').toLowerCase();
                     const orderDate = order.createdAt ? new Date(order.createdAt.seconds * 1000).toLocaleDateString() : 'Recent';
-                    
+
                     const vendorItems = order.items.filter(item => item.vendorId === currentUser.uid);
-                    const itemTotal = vendorItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const itemTotal = vendorItems.reduce((sum, item) => sum + (((item.sellingPrice || item.price) || 0) * item.quantity), 0);
                     const commission = calculateCommission(itemTotal, vendorData.subscription?.paidAmount || 0);
                     const earning = itemTotal - commission;
 
@@ -882,9 +882,10 @@
                             <p><strong>Address:</strong> ${order.address?.fullAddress || 'N/A'}, ${order.address?.city || 'N/A'}</p>
                             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
                                 <p><strong>Your Items:</strong></p>
-                                ${vendorItems.map(item => `
-                                    <p style="font-size: 0.9rem; margin: 5px 0;">• ${item.name} x ${item.quantity} = Rs. ${(item.price * item.quantity).toLocaleString()}</p>
-                                `).join('')}
+                                ${vendorItems.map(item => {
+                                    const sellingPrice = item.sellingPrice || item.price || 0;
+                                    return `<p style="font-size: 0.9rem; margin: 5px 0;">• ${item.name} x ${item.quantity} = Rs. ${(sellingPrice * item.quantity).toLocaleString()}</p>`;
+                                }).join('')}
                                 <p style="margin-top: 10px;"><strong>Subtotal:</strong> Rs. ${itemTotal.toLocaleString()}</p>
                                 <p style="color: var(--text-light); font-size: 0.9rem;"><strong>Commission (${getCommissionRate(vendorData.subscription?.paidAmount || 0)}%):</strong> Rs. ${commission.toLocaleString()}</p>
                                 <p style="color: #28a745; font-weight: bold;"><strong>Your Earning:</strong> Rs. ${earning.toLocaleString()}</p>

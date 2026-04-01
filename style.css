@@ -859,3 +859,123 @@ body {
 .video-ad-hidden {
     display: none;
 }
+
+/* ========== DISCOUNT & PRICING STYLES ========== */
+
+/* Discount Badge on Product Cards */
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+    z-index: 10;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Product Detail Discount Badge */
+.product-detail-discount-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5);
+    z-index: 10;
+    animation: pulse 2s infinite;
+}
+
+/* Price Group - Product Cards */
+.product-price-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.product-selling-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--dark-pink);
+}
+
+.product-original-price {
+    font-size: 0.95rem;
+    color: #999;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+/* Price Group - Product Detail Page */
+.product-detail-price-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.product-detail-selling-price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--dark-pink);
+}
+
+.product-detail-original-price {
+    font-size: 1.3rem;
+    color: #999;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+/* Discount Savings Message */
+.discount-savings {
+    background: linear-gradient(135deg, #fff3f3 0%, #ffe4e1 100%);
+    color: #FF6B6B;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 15px 0;
+    border: 2px dashed #FFB6C1;
+    display: inline-block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .product-detail-selling-price {
+        font-size: 1.6rem;
+    }
+    
+    .product-detail-original-price {
+        font-size: 1.1rem;
+    }
+    
+    .discount-badge {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+    }
+    
+    .product-detail-discount-badge {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+}

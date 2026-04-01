@@ -415,28 +415,31 @@
         // Load cart
         function loadCart() {
             cart = JSON.parse(localStorage.getItem('digitalCart') || '[]');
-            
+
             if (cart.length === 0) {
                 window.location.href = 'digital-shop.html';
                 return;
             }
 
-            total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            total = cart.reduce((sum, item) => sum + (((item.sellingPrice || item.price) || 0) * item.quantity), 0);
 
             // Display items
             const container = document.getElementById('order-items');
-            container.innerHTML = cart.map(item => `
-                <div class="order-item">
-                    <div>
-                        <strong>${item.name}</strong><br>
-                        <small>Qty: ${item.quantity}</small>
+            container.innerHTML = cart.map(item => {
+                const sellingPrice = item.sellingPrice || item.price || 0;
+                return `
+                    <div class="order-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <small>Qty: ${item.quantity}</small>
+                        </div>
+                        <div>Rs. ${(sellingPrice * item.quantity).toLocaleString()}</div>
                     </div>
-                    <div>Rs. ${(item.price * item.quantity).toLocaleString()}</div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             document.getElementById('order-total').textContent = total.toLocaleString();
-            
+
             // Update all payment amounts
             document.getElementById('easypaisa-amount').textContent = total.toLocaleString();
             document.getElementById('jazzcash-amount').textContent = total.toLocaleString();

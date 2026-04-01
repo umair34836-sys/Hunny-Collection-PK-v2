@@ -38,6 +38,30 @@ async function performLogout() {
     }
 }
 
+// ========== BACKWARD COMPATIBILITY ==========
+// Migrate old products (with only 'price' field) to new pricing structure
+function migrateProductPricing(product) {
+    // If product already has sellingPrice, it's already migrated
+    if (product.sellingPrice !== undefined) {
+        return {
+            ...product,
+            sellingPrice: product.sellingPrice,
+            originalPrice: product.originalPrice || 0,
+            costPrice: product.costPrice || 0
+        };
+    }
+    
+    // Migrate old product structure
+    const price = product.price || 0;
+    return {
+        ...product,
+        sellingPrice: price,
+        originalPrice: Math.round(price * 1.3), // 30% higher as fake original price
+        costPrice: 0, // Unknown cost price for old products
+        price: price // Keep original for compatibility
+    };
+}
+
 // Update cart count
 export function updateCartCount() {
     const cartCountEl = document.getElementById('cart-count');
@@ -87,7 +111,7 @@ export async function loadFeaturedProducts() {
         const querySnapshot = await getDocs(q);
         const products = [];
         querySnapshot.forEach((doc) => {
-            products.push({ id: doc.id, ...doc.data() });
+            products.push(migrateProductPricing({ id: doc.id, ...doc.data() }));
         });
 
         if (products.length === 0) {
@@ -95,17 +119,29 @@ export async function loadFeaturedProducts() {
             return;
         }
 
-        container.innerHTML = products.map(product => `
-            <a href="product.html?id=${product.id}" class="product-card">
-                <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}" 
-                     alt="${product.name}" class="product-image">
-                <div class="product-info">
-                    <div class="product-category">${product.category}</div>
-                    <div class="product-title">${product.name}</div>
-                    <div class="product-price">Rs. ${(product.price || 0).toLocaleString()}</div>
-                </div>
-            </a>
-        `).join('');
+        container.innerHTML = products.map(product => {
+            const sellingPrice = product.sellingPrice || product.price || 0;
+            const originalPrice = product.originalPrice || 0;
+            const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+            
+            return `
+                <a href="product.html?id=${product.id}" class="product-card">
+                    <div style="position: relative;">
+                        <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}"
+                             alt="${product.name}" class="product-image">
+                        ${discountPercent > 0 ? `<span class="discount-badge">🔥 ${discountPercent}% OFF</span>` : ''}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-price-group">
+                            <span class="product-selling-price">Rs. ${sellingPrice.toLocaleString()}</span>
+                            ${originalPrice > sellingPrice ? `<span class="product-original-price">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
+                        </div>
+                    </div>
+                </a>
+            `;
+        }).join('');
     } catch (error) {
         console.error('Error loading products:', error);
         container.innerHTML = '<p class="loading">Error loading products</p>';
@@ -122,7 +158,7 @@ export async function loadAllProducts() {
         const querySnapshot = await getDocs(q);
         const products = [];
         querySnapshot.forEach((doc) => {
-            products.push({ id: doc.id, ...doc.data() });
+            products.push(migrateProductPricing({ id: doc.id, ...doc.data() }));
         });
 
         if (products.length === 0) {
@@ -143,17 +179,29 @@ function renderProducts(products) {
     const container = document.getElementById('products-container');
     if (!container) return;
 
-    container.innerHTML = products.map(product => `
-        <a href="product.html?id=${product.id}" class="product-card">
-            <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}" 
-                 alt="${product.name}" class="product-image">
-            <div class="product-info">
-                <div class="product-category">${product.category}</div>
-                <div class="product-title">${product.name}</div>
-                <div class="product-price">Rs. ${(product.price || 0).toLocaleString()}</div>
-            </div>
-        </a>
-    `).join('');
+    container.innerHTML = products.map(product => {
+        const sellingPrice = product.sellingPrice || product.price || 0;
+        const originalPrice = product.originalPrice || 0;
+        const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+        
+        return `
+            <a href="product.html?id=${product.id}" class="product-card">
+                <div style="position: relative;">
+                    <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}"
+                         alt="${product.name}" class="product-image">
+                    ${discountPercent > 0 ? `<span class="discount-badge">🔥 ${discountPercent}% OFF</span>` : ''}
+                </div>
+                <div class="product-info">
+                    <div class="product-category">${product.category}</div>
+                    <div class="product-title">${product.name}</div>
+                    <div class="product-price-group">
+                        <span class="product-selling-price">Rs. ${sellingPrice.toLocaleString()}</span>
+                        ${originalPrice > sellingPrice ? `<span class="product-original-price">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
+                    </div>
+                </div>
+            </a>
+        `;
+    }).join('');
 }
 
 // Add to cart
@@ -223,27 +271,30 @@ export function renderCartPage() {
         return;
     }
 
-    container.innerHTML = cart.map((item, index) => `
-        <div class="cart-item">
-            <img src="${item.images?.[0] || 'https://via.placeholder.com/100x100'}" 
-                 alt="${item.name}" class="cart-item-image">
-            <div class="cart-item-details">
-                <h4>${item.name}</h4>
-                <p class="cart-item-category">${item.category}</p>
-                ${item.variant?.size ? `<p>Size: ${item.variant.size}</p>` : ''}
-                ${item.variant?.color ? `<p>Color: ${item.variant.color}</p>` : ''}
-                <p>Rs. ${(item.price || 0).toLocaleString()} × ${item.quantity}</p>
+    container.innerHTML = cart.map((item, index) => {
+        const sellingPrice = item.sellingPrice || item.price || 0;
+        return `
+            <div class="cart-item">
+                <img src="${item.images?.[0] || 'https://via.placeholder.com/100x100'}"
+                     alt="${item.name}" class="cart-item-image">
+                <div class="cart-item-details">
+                    <h4>${item.name}</h4>
+                    <p class="cart-item-category">${item.category}</p>
+                    ${item.variant?.size ? `<p>Size: ${item.variant.size}</p>` : ''}
+                    ${item.variant?.color ? `<p>Color: ${item.variant.color}</p>` : ''}
+                    <p>Rs. ${sellingPrice.toLocaleString()} × ${item.quantity}</p>
+                </div>
+                <div class="cart-item-actions">
+                    <button onclick="window.updateQuantity(${index}, ${item.quantity - 1})" class="btn-sm">-</button>
+                    <span>${item.quantity}</span>
+                    <button onclick="window.updateQuantity(${index}, ${item.quantity + 1})" class="btn-sm">+</button>
+                    <button onclick="window.removeFromCart(${index})" class="btn-sm btn-danger">Remove</button>
+                </div>
             </div>
-            <div class="cart-item-actions">
-                <button onclick="window.updateQuantity(${index}, ${item.quantity - 1})" class="btn-sm">-</button>
-                <span>${item.quantity}</span>
-                <button onclick="window.updateQuantity(${index}, ${item.quantity + 1})" class="btn-sm">+</button>
-                <button onclick="window.removeFromCart(${index})" class="btn-sm btn-danger">Remove</button>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 
-    const total = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
+    const total = cart.reduce((sum, item) => sum + (((item.sellingPrice || item.price) || 0) * (item.quantity || 1)), 0);
     if (totalEl) totalEl.textContent = total.toLocaleString();
     if (totalFinalEl) totalFinalEl.textContent = total.toLocaleString();
 }
@@ -274,7 +325,7 @@ export async function loadProduct(productId) {
         querySnapshot.forEach((doc) => {
             console.log('Checking product:', doc.id);
             if (doc.id === productId) {
-                product = { id: doc.id, ...doc.data() };
+                product = migrateProductPricing({ id: doc.id, ...doc.data() });
                 console.log('Found product:', product.name);
             }
         });
@@ -306,6 +357,13 @@ export async function loadProduct(productId) {
         const images = product.images || [product.image || 'https://via.placeholder.com/500x500'];
         const mainImage = images[0] || 'https://via.placeholder.com/500x500';
 
+        // Calculate prices with discount
+        const sellingPrice = product.sellingPrice || product.price || 0;
+        const originalPrice = product.originalPrice || 0;
+        const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+        const costPrice = product.costPrice || 0;
+        const profit = sellingPrice - costPrice;
+
         container.innerHTML = `
             <div class="product-detail-grid">
                 <div class="product-images">
@@ -315,6 +373,7 @@ export async function loadProduct(productId) {
                         <button class="gallery-nav gallery-next" onclick="nextImage()" id="next-btn" style="display: ${images.length > 1 ? 'flex' : 'none'};">›</button>
                     </div>
                     <div class="image-counter" id="image-counter" style="${images.length > 1 ? '' : 'display: none;'}">1 / ${images.length}</div>
+                    ${discountPercent > 0 ? `<span class="product-detail-discount-badge">🔥 ${discountPercent}% OFF</span>` : ''}
                     ${images.length > 1 ? `
                         <div class="product-thumbnails">
                             ${images.map((img, idx) => `
@@ -327,7 +386,11 @@ export async function loadProduct(productId) {
                 <div class="product-details">
                     <span class="badge">${product.category}</span>
                     <h1>${product.name}</h1>
-                    <p class="price">Rs. ${(product.price || 0).toLocaleString()}</p>
+                    <div class="product-detail-price-group">
+                        <span class="product-detail-selling-price">Rs. ${sellingPrice.toLocaleString()}</span>
+                        ${originalPrice > sellingPrice ? `<span class="product-detail-original-price">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
+                    </div>
+                    ${discountPercent > 0 ? `<p class="discount-savings">You save Rs. ${(originalPrice - sellingPrice).toLocaleString()}!</p>` : ''}
                     ${product.description ? `<p class="description">${product.description}</p>` : ''}
                     
                     ${product.variants?.length ? `
@@ -385,36 +448,37 @@ window.changeImage = (imageUrl, thumbnail) => {
 function updateProductOGTags(product) {
     const productImage = product.images?.[0] || product.image || 'https://i.ibb.co/ymfRN5Lm/product.jpg';
     const productUrl = window.location.href.split('?')[0] + '?id=' + product.id;
-    const price = (product.price || 0).toLocaleString();
-    
+    const sellingPrice = product.sellingPrice || product.price || 0;
+    const price = sellingPrice.toLocaleString();
+
     // Update Open Graph / Facebook meta tags using element IDs
     const ogImageEl = document.getElementById('og-image');
     if (ogImageEl) {
         ogImageEl.setAttribute('content', productImage);
         console.log('Updated og:image to:', productImage);
     }
-    
+
     const ogPriceEl = document.getElementById('og-price');
     if (ogPriceEl) {
-        ogPriceEl.setAttribute('content', product.price || 0);
+        ogPriceEl.setAttribute('content', sellingPrice);
     }
-    
+
     // Update other OG tags
     updateMetaTag('property', 'og:title', `${product.name} - Hunny Collection PK`);
     updateMetaTag('property', 'og:description', `Buy ${product.name} for Rs. ${price} at Hunny Collection PK. ${product.description ? product.description.substring(0, 150) : ''}`);
     updateMetaTag('property', 'og:url', productUrl);
-    
+
     // Update Twitter meta tags using element IDs
     const twitterImageEl = document.getElementById('twitter-image');
     if (twitterImageEl) {
         twitterImageEl.setAttribute('content', productImage);
         console.log('Updated twitter:image to:', productImage);
     }
-    
+
     updateMetaTag('name', 'twitter:title', `${product.name} - Hunny Collection PK`);
     updateMetaTag('name', 'twitter:description', `Buy ${product.name} for Rs. ${price} at Hunny Collection PK. ${product.description ? product.description.substring(0, 150) : ''}`);
     updateMetaTag('name', 'twitter:url', productUrl);
-    
+
     // Update canonical URL
     const canonicalLink = document.querySelector('link[rel="canonical"]');
     if (canonicalLink) {

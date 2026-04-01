@@ -507,10 +507,48 @@
                     <label>Product Name *</label>
                     <input type="text" id="product-name" required>
                 </div>
-                <div class="form-group">
-                    <label>Price (Rs.) *</label>
-                    <input type="number" id="product-price" required>
+                
+                <!-- Pricing Section with Discount -->
+                <div class="form-group" style="background: linear-gradient(135deg, #fff3f3 0%, #fff 100%); padding: 20px; border-radius: 12px; border: 2px solid #FFB6C1;">
+                    <label style="color: var(--dark-pink); font-size: 1.1rem; margin-bottom: 15px; display: block;">💰 Pricing & Discount Settings</label>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label style="font-size: 0.9rem; color: #666;">
+                                🔒 Cost Price (Rs.)
+                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Your cost from Markaz (Hidden from customers)</span>
+                            </label>
+                            <input type="number" id="product-cost-price" placeholder="1800" min="0" style="border-color: #FF6B6B;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.9rem; color: var(--dark-pink);">
+                                💵 Selling Price (Rs.) *
+                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Your selling price (Shown to customers)</span>
+                            </label>
+                            <input type="number" id="product-selling-price" placeholder="2499" min="0" required style="border-color: var(--dark-pink);">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.9rem; color: #666;">
+                            🏷️ Original/Compare Price (Rs.)
+                            <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Higher fake price to show discount (Shown crossed to customers)</span>
+                        </label>
+                        <input type="number" id="product-original-price" placeholder="3500" min="0" style="border-color: #FFB6C1;">
+                    </div>
+                    
+                    <!-- Auto-calculated Info -->
+                    <div id="pricing-info" style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <div style="display: flex; gap: 15px; align-items: center;">
+                                <span id="discount-badge" style="background: #FF6B6B; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; display: none;">🔥 0% OFF</span>
+                                <span id="profit-info" style="color: #28a745; font-weight: 600; display: none;">💰 Profit: Rs. 0</span>
+                            </div>
+                            <span id="pricing-hint" style="color: #999; font-size: 0.85rem;">Enter prices to see discount & profit</span>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="form-group">
                     <label>Category *</label>
                     <select id="product-category" required>
@@ -1076,28 +1114,43 @@
             if (!tbody) return;
             tbody.innerHTML = products.map(p => {
                 const hasMarkazCode = p.markazCode ? 'yes' : 'no';
-                const statusClass = p.markazAvailability === 'available' ? 'badge-success' : 
+                const statusClass = p.markazAvailability === 'available' ? 'badge-success' :
                                    p.markazAvailability === 'unavailable' ? 'badge-danger' : 'badge-secondary';
-                const statusIcon = p.markazAvailability === 'available' ? '✅' : 
+                const statusIcon = p.markazAvailability === 'available' ? '✅' :
                                    p.markazAvailability === 'unavailable' ? '❌' : '⏳';
                 const statusText = p.markazCode ? (p.markazAvailability || 'Not Checked') : 'No Code';
                 const codeDisplay = p.markazCode ? `<br><small style="font-family: monospace; font-size: 0.75rem; color: #666;">${p.markazCode}</small>` : '';
                 
+                // Pricing info
+                const costPrice = p.costPrice || 0;
+                const sellingPrice = p.sellingPrice || p.price || 0;
+                const originalPrice = p.originalPrice || 0;
+                const profit = sellingPrice - costPrice;
+                const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+
                 return `
                 <tr>
                     <td><img src="${p.images?.[0] || 'https://via.placeholder.com/50'}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
                     <td>${p.name}</td>
                     <td>${p.category}</td>
-                    <td>Rs. ${(p.price || 0).toLocaleString()}</td>
+                    <td>
+                        <div style="font-size: 0.85rem;">
+                            <div style="color: var(--dark-pink); font-weight: bold;">Sell: Rs. ${sellingPrice.toLocaleString()}</div>
+                            <div style="color: #999; text-decoration: line-through; font-size: 0.75rem;">${originalPrice > 0 ? 'Rs. ' + originalPrice.toLocaleString() : ''}</div>
+                            <div style="color: #666; font-size: 0.75rem;">Cost: Rs. ${costPrice.toLocaleString()}</div>
+                            ${profit > 0 ? `<div style="color: #28a745; font-size: 0.75rem;">💰 Profit: Rs. ${profit.toLocaleString()}</div>` : ''}
+                            ${discountPercent > 0 ? `<div style="color: #FF6B6B; font-size: 0.75rem;">🔥 ${discountPercent}% OFF</div>` : ''}
+                        </div>
+                    </td>
                     <td>
                         <span class="badge ${statusClass}" style="cursor: pointer;" onclick="checkSingleProductAvailability('${p.id}')" title="Click to check">
                             ${statusIcon} ${statusText}
                         </span>
                         ${codeDisplay}
                         ${p.markazCode ? `
-                            <a href="javascript:void(0)" onclick="openMarkazAppOrWeb('${p.markazCode}')" 
+                            <a href="javascript:void(0)" onclick="openMarkazAppOrWeb('${p.markazCode}')"
                                class="badge ${p.markazAvailability === 'available' ? 'badge-success' : p.markazAvailability === 'unavailable' ? 'badge-danger' : 'badge-secondary'}"
-                               style="display: inline-block; margin-left: 5px; font-size: 0.75rem; text-decoration: none; cursor: pointer;" 
+                               style="display: inline-block; margin-left: 5px; font-size: 0.75rem; text-decoration: none; cursor: pointer;"
                                title="Search on Markaz">🔍 ${p.markazAvailability === 'available' ? '✅ Available' : p.markazAvailability === 'unavailable' ? '❌ Unavailable' : '🔍 Search'}</a>
                         ` : ''}
                     </td>
@@ -1237,10 +1290,13 @@
             document.getElementById('product-form').reset();
             document.getElementById('product-id').value = '';
             document.getElementById('product-modal-title').textContent = 'Add Product';
+            resetPricingInfo();
         };
 
         window.closeProductModal = () => {
             document.getElementById('product-modal').classList.remove('active');
+            uploadedImageUrls = [];
+            updateImagePreview();
         };
 
         window.editProduct = (id) => {
@@ -1249,7 +1305,9 @@
 
             document.getElementById('product-id').value = id;
             document.getElementById('product-name').value = product.name || '';
-            document.getElementById('product-price').value = product.price || '';
+            document.getElementById('product-cost-price').value = product.costPrice || '';
+            document.getElementById('product-selling-price').value = product.sellingPrice || product.price || '';
+            document.getElementById('product-original-price').value = product.originalPrice || '';
             document.getElementById('product-category').value = product.category || '';
             document.getElementById('product-description').value = product.description || '';
             document.getElementById('product-sizes').value = product.variants?.join(', ') || '';
@@ -1259,9 +1317,70 @@
             uploadedImageUrls = product.images || [];
             updateImagePreview();
 
+            // Update pricing info display
+            updatePricingInfo();
+
             document.getElementById('product-modal-title').textContent = 'Edit Product';
             document.getElementById('product-modal').classList.add('active');
         };
+
+        // Live pricing calculation
+        function updatePricingInfo() {
+            const costPrice = Number(document.getElementById('product-cost-price').value) || 0;
+            const sellingPrice = Number(document.getElementById('product-selling-price').value) || 0;
+            const originalPrice = Number(document.getElementById('product-original-price').value) || 0;
+
+            const discountBadge = document.getElementById('discount-badge');
+            const profitInfo = document.getElementById('profit-info');
+            const pricingHint = document.getElementById('pricing-hint');
+
+            // Calculate discount percentage
+            if (originalPrice > sellingPrice && sellingPrice > 0) {
+                const discountPercent = Math.round(((originalPrice - sellingPrice) / originalPrice) * 100);
+                discountBadge.textContent = `🔥 ${discountPercent}% OFF`;
+                discountBadge.style.display = 'inline-block';
+            } else {
+                discountBadge.style.display = 'none';
+            }
+
+            // Calculate profit
+            if (sellingPrice > 0 && costPrice > 0) {
+                const profit = sellingPrice - costPrice;
+                if (profit > 0) {
+                    profitInfo.textContent = `💰 Profit: Rs. ${profit.toLocaleString()}`;
+                    profitInfo.style.display = 'inline-block';
+                } else {
+                    profitInfo.textContent = `⚠️ Loss: Rs. ${Math.abs(profit).toLocaleString()}`;
+                    profitInfo.style.color = '#dc3545';
+                    profitInfo.style.display = 'inline-block';
+                }
+            } else {
+                profitInfo.style.display = 'none';
+            }
+
+            // Update hint
+            if (sellingPrice > 0 || originalPrice > 0 || costPrice > 0) {
+                pricingHint.style.display = 'none';
+            } else {
+                pricingHint.style.display = 'inline-block';
+            }
+        }
+
+        function resetPricingInfo() {
+            document.getElementById('discount-badge').style.display = 'none';
+            document.getElementById('profit-info').style.display = 'none';
+            document.getElementById('pricing-hint').style.display = 'inline-block';
+        }
+
+        // Add event listeners for live pricing calculation
+        document.addEventListener('DOMContentLoaded', () => {
+            ['product-cost-price', 'product-selling-price', 'product-original-price'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', updatePricingInfo);
+                }
+            });
+        });
 
         // Markaz Availability Checker Functions
         window.checkSingleProductAvailability = async (productId) => {
@@ -1641,9 +1760,16 @@
                 return;
             }
             
+            const costPrice = Number(document.getElementById('product-cost-price').value) || 0;
+            const sellingPrice = Number(document.getElementById('product-selling-price').value);
+            const originalPrice = Number(document.getElementById('product-original-price').value) || 0;
+
             const productData = {
                 name: document.getElementById('product-name').value,
-                price: Number(document.getElementById('product-price').value),
+                costPrice: costPrice,
+                sellingPrice: sellingPrice,
+                originalPrice: originalPrice,
+                price: sellingPrice, // Keep 'price' for backward compatibility
                 category: document.getElementById('product-new-category').value || document.getElementById('product-category').value,
                 description: document.getElementById('product-description').value,
                 variants: document.getElementById('product-sizes').value.split(',').map(s => s.trim()).filter(s => s),
