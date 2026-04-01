@@ -204,6 +204,7 @@
                 <a href="#" onclick="showSection('dashboard')" class="active">Dashboard</a>
                 <a href="#" onclick="showSection('products')">Products</a>
                 <a href="#" onclick="showSection('orders')">Orders</a>
+                <a href="#" onclick="showSection('reviews')">⭐ Reviews</a>
                 <a href="#" onclick="showSection('categories')">Categories</a>
                 <a href="#" onclick="showSection('vendors')">🏪 Vendors</a>
                 <a href="#" onclick="showSection('digital-products')">💻 Digital Products</a>
@@ -320,6 +321,55 @@
                                         <th>Customer</th>
                                         <th>Contact</th>
                                         <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Management -->
+                <div id="section-reviews" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h2 style="color: var(--dark-pink);">⭐ Product Reviews Management</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-sm" onclick="loadReviews('approved')" style="background: #28a745; color: white;">✅ Approved</button>
+                            <button class="btn-sm" onclick="loadReviews('pending')" style="background: #ffc107; color: #333;">⏳ Pending</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 150px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); padding: 20px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: white;" id="total-reviews-count">0</div>
+                                <div style="color: white; font-size: 0.9rem;">Total Reviews</div>
+                            </div>
+                            <div style="flex: 1; min-width: 150px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 20px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: white;" id="approved-reviews-count">0</div>
+                                <div style="color: white; font-size: 0.9rem;">Approved</div>
+                            </div>
+                            <div style="flex: 1; min-width: 150px; background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); padding: 20px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: #333;" id="pending-reviews-count">0</div>
+                                <div style="color: #333; font-size: 0.9rem;">Pending</div>
+                            </div>
+                            <div style="flex: 1; min-width: 150px; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); padding: 20px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: white;" id="avg-rating-count">0</div>
+                                <div style="color: white; font-size: 0.9rem;">Avg Rating</div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table id="reviews-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Customer</th>
+                                        <th>Rating</th>
+                                        <th>Review</th>
+                                        <th>Verified</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -960,7 +1010,7 @@
             try {
                 const vendorsSnapshot = await getDocs(collection(db, 'users'));
                 const vendors = [];
-                
+
                 vendorsSnapshot.forEach(doc => {
                     const data = doc.data();
                     if (data.vendorRequest || data.role === 'vendor') {
@@ -973,6 +1023,133 @@
                 console.error('Error loading vendors:', error);
             }
         }
+
+        // Load and render reviews
+        window.loadReviews = async function(filter = 'all') {
+            try {
+                const reviewsSnapshot = await getDocs(collection(db, 'reviews'));
+                const reviews = [];
+                
+                reviewsSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (filter === 'all' || data.status === filter) {
+                        reviews.push({ id: doc.id, ...data });
+                    }
+                });
+
+                // Sort by date (newest first)
+                reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                renderReviews(reviews);
+                updateReviewStats(reviews);
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+            }
+        };
+
+        function renderReviews(reviews) {
+            const tbody = document.querySelector('#reviews-table tbody');
+            if (!tbody) return;
+
+            if (reviews.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-light);">No reviews found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = reviews.map(review => {
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                const statusClass = review.status === 'approved' ? 'badge-delivered' : review.status === 'rejected' ? 'badge-cancelled' : 'badge-pending';
+                const statusIcon = review.status === 'approved' ? '✅' : review.status === 'rejected' ? '❌' : '⏳';
+                
+                return `
+                    <tr>
+                        <td>
+                            <strong>${review.productId?.substring(0, 8) || 'N/A'}...</strong><br>
+                            <small style="color: #666;">${review.title || 'No title'}</small>
+                        </td>
+                        <td>${review.reviewerName || 'Anonymous'}</td>
+                        <td><span style="color: #FFD700; font-size: 1.2rem;">${stars}</span></td>
+                        <td>
+                            <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                ${review.text?.substring(0, 50) || ''}...
+                            </div>
+                        </td>
+                        <td>${review.verified ? '<span style="color: #28a745;">✓ Verified</span>' : '<span style="color: #666;">Not Verified</span>'}</td>
+                        <td><span class="badge ${statusClass}">${statusIcon} ${review.status}</span></td>
+                        <td>
+                            ${review.status === 'pending' ? `
+                                <button class="btn-sm" onclick="updateReviewStatus('${review.id}', 'approved')" style="background: #28a745; color: white;">✓ Approve</button>
+                                <button class="btn-sm" onclick="updateReviewStatus('${review.id}', 'rejected')" style="background: #dc3545; color: white;">✕ Reject</button>
+                            ` : ''}
+                            <button class="btn-sm" onclick="replyToReview('${review.id}')" style="background: #007bff; color: white;">💬 Reply</button>
+                            <button class="btn-sm" onclick="deleteReview('${review.id}')" style="background: #dc3545; color: white;">🗑️ Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateReviewStats(reviews) {
+            const total = reviews.length;
+            const approved = reviews.filter(r => r.status === 'approved').length;
+            const pending = reviews.filter(r => r.status === 'pending').length;
+            const sum = reviews.reduce((acc, r) => acc + (r.rating || 0), 0);
+            const avg = total > 0 ? (sum / total).toFixed(1) : 0;
+
+            document.getElementById('total-reviews-count').textContent = total;
+            document.getElementById('approved-reviews-count').textContent = approved;
+            document.getElementById('pending-reviews-count').textContent = pending;
+            document.getElementById('avg-rating-count').textContent = avg + ' ★';
+        }
+
+        window.updateReviewStatus = async function(reviewId, status) {
+            if (!confirm(`Are you sure you want to ${status} this review?`)) return;
+
+            try {
+                const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                await updateDoc(doc(db, 'reviews', reviewId), {
+                    status: status,
+                    updatedAt: new Date().toISOString()
+                });
+                loadReviews('all');
+                alert(`Review ${status} successfully!`);
+            } catch (error) {
+                console.error('Error updating review:', error);
+                alert('Error updating review status');
+            }
+        };
+
+        window.replyToReview = async function(reviewId) {
+            const reply = prompt('Enter your reply to this review:');
+            if (!reply) return;
+
+            try {
+                const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                await updateDoc(doc(db, 'reviews', reviewId), {
+                    adminReply: reply,
+                    replyAt: new Date().toISOString()
+                });
+                loadReviews('all');
+                alert('Reply added successfully!');
+            } catch (error) {
+                console.error('Error adding reply:', error);
+                alert('Error adding reply');
+            }
+        };
+
+        window.deleteReview = async function(reviewId) {
+            if (!confirm('Are you sure you want to delete this review? This action cannot be undone.')) return;
+
+            try {
+                const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                await deleteDoc(doc(db, 'reviews', reviewId));
+                loadReviews('all');
+                alert('Review deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting review:', error);
+                alert('Error deleting review');
+            }
+        };
 
         function renderVendors(vendors) {
             const tbody = document.querySelector('#vendors-table tbody');
@@ -1215,14 +1392,16 @@
 
         // Show section
         window.showSection = (section) => {
-            ['dashboard', 'products', 'orders', 'categories', 'vendors', 'digital-products', 'digital-categories', 'digital-orders', 'video-ads'].forEach(s => {
+            ['dashboard', 'products', 'orders', 'reviews', 'categories', 'vendors', 'digital-products', 'digital-categories', 'digital-orders', 'video-ads'].forEach(s => {
                 document.getElementById(`section-${s}`).style.display = s === section ? 'block' : 'none';
             });
             document.querySelectorAll('.admin-sidebar a').forEach(a => a.classList.remove('active'));
             event.target.classList.add('active');
 
             // Load data based on section
-            if (section === 'digital-products') {
+            if (section === 'reviews') {
+                loadReviews('all');
+            } else if (section === 'digital-products') {
                 loadDigitalProducts();
             } else if (section === 'digital-categories') {
                 loadDigitalCategoriesTable();

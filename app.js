@@ -448,8 +448,19 @@ window.changeImage = (imageUrl, thumbnail) => {
 function updateProductOGTags(product) {
     const productImage = product.images?.[0] || product.image || 'https://i.ibb.co/ymfRN5Lm/product.jpg';
     const productUrl = window.location.href.split('?')[0] + '?id=' + product.id;
+    
+    // Get prices with discount
     const sellingPrice = product.sellingPrice || product.price || 0;
-    const price = sellingPrice.toLocaleString();
+    const originalPrice = product.originalPrice || 0;
+    const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+    
+    // Create price description with discount
+    let priceDescription = '';
+    if (discountPercent > 0) {
+        priceDescription = `🔥 ${discountPercent}% OFF! Now Rs. ${sellingPrice.toLocaleString()} (Was Rs. ${originalPrice.toLocaleString()}). Save Rs. ${(originalPrice - sellingPrice).toLocaleString()}!`;
+    } else {
+        priceDescription = `Rs. ${sellingPrice.toLocaleString()}`;
+    }
 
     // Update Open Graph / Facebook meta tags using element IDs
     const ogImageEl = document.getElementById('og-image');
@@ -463,10 +474,20 @@ function updateProductOGTags(product) {
         ogPriceEl.setAttribute('content', sellingPrice);
     }
 
-    // Update other OG tags
-    updateMetaTag('property', 'og:title', `${product.name} - Hunny Collection PK`);
-    updateMetaTag('property', 'og:description', `Buy ${product.name} for Rs. ${price} at Hunny Collection PK. ${product.description ? product.description.substring(0, 150) : ''}`);
+    // Update other OG tags with discount info
+    updateMetaTag('property', 'og:title', `${product.name} - ${discountPercent > 0 ? discountPercent + '% OFF!' : 'Rs. ' + sellingPrice.toLocaleString()}`);
+    updateMetaTag('property', 'og:description', `Buy ${product.name} for ${priceDescription} at Hunny Collection PK. ${product.description ? product.description.substring(0, 100) : ''} Cash on Delivery available!`);
     updateMetaTag('property', 'og:url', productUrl);
+    
+    // Add price currency and amount
+    updateMetaTag('property', 'product:price:amount', sellingPrice.toString());
+    updateMetaTag('property', 'product:price:currency', 'PKR');
+    
+    // Add original price for discount
+    if (originalPrice > sellingPrice) {
+        updateMetaTag('property', 'product:sale_price', sellingPrice.toString());
+        updateMetaTag('property', 'product:original_price', originalPrice.toString());
+    }
 
     // Update Twitter meta tags using element IDs
     const twitterImageEl = document.getElementById('twitter-image');
@@ -475,8 +496,8 @@ function updateProductOGTags(product) {
         console.log('Updated twitter:image to:', productImage);
     }
 
-    updateMetaTag('name', 'twitter:title', `${product.name} - Hunny Collection PK`);
-    updateMetaTag('name', 'twitter:description', `Buy ${product.name} for Rs. ${price} at Hunny Collection PK. ${product.description ? product.description.substring(0, 150) : ''}`);
+    updateMetaTag('name', 'twitter:title', `${product.name} - ${discountPercent > 0 ? discountPercent + '% OFF!' : 'Rs. ' + sellingPrice.toLocaleString()}`);
+    updateMetaTag('name', 'twitter:description', `Buy ${product.name} for ${priceDescription} at Hunny Collection PK. COD available!`);
     updateMetaTag('name', 'twitter:url', productUrl);
 
     // Update canonical URL
@@ -484,10 +505,11 @@ function updateProductOGTags(product) {
     if (canonicalLink) {
         canonicalLink.href = productUrl;
     }
-    
+
     console.log('✅ OG tags updated for product:', product.name);
     console.log('   Image:', productImage);
-    console.log('   Price:', price);
+    console.log('   Price:', sellingPrice);
+    console.log('   Discount:', discountPercent > 0 ? discountPercent + '%' : 'None');
     console.log('   URL:', productUrl);
 }
 
@@ -548,30 +570,48 @@ window.buyNow = () => {
 // Share functions - Web Share API with images
 window.shareProductWhatsApp = async function(productId, productName) {
     const product = window.currentProduct;
-    
+
     if (!product) {
         alert('Product not loaded yet. Please wait a moment.');
         return;
     }
 
     const url = window.location.href.split('?')[0] + '?id=' + productId;
-    const price = (product.price || 0).toLocaleString();
+    
+    // Get prices with discount
+    const sellingPrice = product.sellingPrice || product.price || 0;
+    const originalPrice = product.originalPrice || 0;
+    const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+    const savings = originalPrice - sellingPrice;
+    
     const description = product.description || '';
     const mainImage = product.images?.[0] || product.image || '';
+
+    // Create formatted message with discount highlight
+    let message = `🌸 *${product.name}*\n\n`;
     
-    // Create formatted message WITHOUT image URL (cleaner)
-    const message = `🌸 *${product.name}*\n\n` +
-                   `💰 Price: Rs. ${price}\n\n` +
-                   `${description ? '📝 Description:\n' + description + '\n\n' : ''}` +
-                   `🛍️ Shop now at Hunny Collection PK!\n\n` +
-                   `🔗 ${url}`;
+    // Price display with discount highlight
+    if (discountPercent > 0) {
+        message += `🔥 *SPECIAL OFFER! ${discountPercent}% OFF* 🔥\n\n`;
+        message += `💰 *Offer Price: Rs. ${sellingPrice.toLocaleString()}*\n`;
+        message += `~~Rs. ${originalPrice.toLocaleString()}~~ (Original Price)\n`;
+        message += `🎁 *You Save Rs. ${savings.toLocaleString()}!*\n\n`;
+    } else {
+        message += `💰 Price: Rs. ${sellingPrice.toLocaleString()}\n\n`;
+    }
+    
+    message += `${description ? '📝 Description:\n' + description + '\n\n' : ''}`;
+    message += `🛍️ *Hunny Collection PK*\n`;
+    message += `✅ Cash on Delivery Available\n`;
+    message += `🚚 Fast Shipping Across Pakistan\n\n`;
+    message += `🔗 ${url}`;
 
     // Check if Web Share API is supported (mobile devices)
     if (navigator.share) {
         try {
             // Prepare share data
             const shareData = {
-                title: product.name,
+                title: `${product.name} - ${discountPercent > 0 ? discountPercent + '% OFF!' : 'Rs. ' + sellingPrice.toLocaleString()}`,
                 text: message,
                 url: url
             };
@@ -580,10 +620,10 @@ window.shareProductWhatsApp = async function(productId, productName) {
             if (mainImage && navigator.canShare) {
                 // Show loading indicator
                 console.log('🔄 Fetching product image for sharing...');
-                
+
                 try {
                     // Try multiple methods to fetch image
-                    
+
                     // Method 1: Direct fetch (works for CORS-enabled hosts)
                     let blob = null;
                     try {
@@ -598,7 +638,7 @@ window.shareProductWhatsApp = async function(productId, productName) {
                     } catch (e) {
                         console.log('Direct fetch failed, trying proxy...');
                     }
-                    
+
                     // Method 2: Try CORS proxy if direct fails
                     if (!blob) {
                         const proxies = [
@@ -606,7 +646,7 @@ window.shareProductWhatsApp = async function(productId, productName) {
                             'https://api.allorigins.win/raw?url=',
                             'https://thingproxy.freeboard.io/fetch/'
                         ];
-                        
+
                         for (const proxy of proxies) {
                             try {
                                 const imageUrl = proxy + encodeURIComponent(mainImage);
@@ -625,20 +665,20 @@ window.shareProductWhatsApp = async function(productId, productName) {
                             }
                         }
                     }
-                    
+
                     // Method 3: Convert to blob using canvas (last resort)
                     if (!blob) {
                         blob = await fetchImageAsBlob(mainImage);
                     }
-                    
+
                     if (blob && blob.size > 0) {
                         console.log('✅ Image fetched successfully, size:', blob.size, 'bytes');
-                        
+
                         // Create a file object
-                        const file = new File([blob], 'product.jpg', { 
+                        const file = new File([blob], 'product.jpg', {
                             type: 'image/jpeg'
                         });
-                        
+
                         // Check if we can share files
                         if (navigator.canShare({ files: [file] })) {
                             shareData.files = [file];
@@ -727,16 +767,60 @@ function fallbackWhatsAppShare(message) {
 }
 
 window.shareProductFacebook = function(productId) {
+    const product = window.currentProduct;
     const url = window.location.href.split('?')[0] + '?id=' + productId;
-    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'width=600,height=400');
+    
+    // Get prices with discount
+    const sellingPrice = product.sellingPrice || product.price || 0;
+    const originalPrice = product.originalPrice || 0;
+    const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+    
+    // Create share text with discount
+    let shareText = '';
+    if (discountPercent > 0) {
+        shareText = `🔥 ${discountPercent}% OFF! ${product.name} - Now only Rs. ${sellingPrice.toLocaleString()} (Was Rs. ${originalPrice.toLocaleString()}). Save Rs. ${(originalPrice - sellingPrice).toLocaleString()}! `;
+    } else {
+        shareText = `${product.name} - Rs. ${sellingPrice.toLocaleString()} at Hunny Collection PK. `;
+    }
+    
+    // Open Facebook share with custom text
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
+    window.open(facebookUrl, '_blank', 'width=600,height=400');
 };
 
 window.copyProductLink = function(productId) {
+    const product = window.currentProduct;
     const url = window.location.href.split('?')[0] + '?id=' + productId;
-    navigator.clipboard.writeText(url).then(() => {
-        alert('✅ Product link copied to clipboard!\n\n' + url);
+    
+    // Get prices with discount
+    const sellingPrice = product.sellingPrice || product.price || 0;
+    const originalPrice = product.originalPrice || 0;
+    const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+    const savings = originalPrice - sellingPrice;
+    
+    // Create formatted text with discount
+    let copyText = '';
+    if (discountPercent > 0) {
+        copyText = `🔥 SPECIAL OFFER! ${discountPercent}% OFF 🔥\n\n`;
+        copyText += `${product.name}\n`;
+        copyText += `💰 Offer Price: Rs. ${sellingPrice.toLocaleString()}\n`;
+        copyText += `~~Rs. ${originalPrice.toLocaleString()}~~ (Original Price)\n`;
+        copyText += `🎁 You Save Rs. ${savings.toLocaleString()}!\n\n`;
+    } else {
+        copyText = `${product.name}\n`;
+        copyText += `💰 Price: Rs. ${sellingPrice.toLocaleString()}\n\n`;
+    }
+    
+    copyText += `🛍️ Hunny Collection PK\n`;
+    copyText += `✅ Cash on Delivery Available\n`;
+    copyText += `🚚 Fast Shipping Across Pakistan\n\n`;
+    copyText += `🔗 ${url}`;
+    
+    navigator.clipboard.writeText(copyText).then(() => {
+        alert('✅ Product details with price copied to clipboard!\n\n' + copyText);
     }).catch(() => {
-        prompt('Copy this link:', url);
+        // Fallback for older browsers
+        prompt('Copy this product details:', copyText);
     });
 };
 
