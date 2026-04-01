@@ -100,9 +100,78 @@
         }
         .error-message { background: #f8d7da; color: #721c24; }
         .success-message { background: #d4edda; color: #155724; }
+        
+        /* Enhanced Mobile Optimization */
         @media (max-width: 768px) {
-            .checkout-grid { grid-template-columns: 1fr; }
-            .form-row { grid-template-columns: 1fr; }
+            .checkout-section {
+                padding: 30px 0;
+            }
+            
+            .checkout-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .checkout-form {
+                padding: 20px 15px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            .form-group label {
+                font-size: 0.9rem;
+            }
+            
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .order-summary {
+                padding: 20px;
+                order: -1;
+            }
+            
+            .order-item {
+                font-size: 0.9rem;
+            }
+            
+            .summary-total {
+                font-size: 1.3rem;
+            }
+            
+            .payment-info {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Extra Small Devices */
+        @media (max-width: 480px) {
+            .checkout-form {
+                padding: 15px 12px;
+            }
+            
+            .order-summary {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>

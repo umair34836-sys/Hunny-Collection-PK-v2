@@ -58,6 +58,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
             cursor: pointer;
+            position: relative;
         }
         .digital-product-card:hover {
             transform: translateY(-5px);
@@ -134,6 +135,36 @@
             }
             .filters-grid {
                 grid-template-columns: 1fr;
+            }
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+            .product-image {
+                height: 150px;
+            }
+            .product-info {
+                padding: 12px;
+            }
+            .product-title {
+                font-size: 0.9rem;
+            }
+            .digital-product-discount-badge {
+                font-size: 0.65rem;
+                padding: 3px 8px;
+                top: 6px;
+                right: 6px;
+            }
+            .digital-price-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .digital-selling-price {
+                font-size: 1rem;
+            }
+            .digital-original-price {
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -333,16 +364,16 @@
                 const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
 
                 return `
-                    <div class="digital-product-card" onclick="window.location.href='digital-product.html?id=${product.id}'" style="position: relative;">
+                    <div class="digital-product-card" onclick="window.location.href='digital-product.html?id=${product.id}'">
                         <img src="${imageUrl}" alt="${product.name}" class="product-image">
-                        ${discountPercent > 0 ? `<span class="discount-badge" style="position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%); color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4); z-index: 10;">🔥 ${discountPercent}% OFF</span>` : ''}
+                        ${discountPercent > 0 ? `<span class="discount-badge digital-product-discount-badge" style="position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%); color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4); z-index: 10;">🔥 ${discountPercent}% OFF</span>` : ''}
                         <div class="product-info">
                             <span class="digital-badge">💻 DIGITAL</span>
                             <div class="product-title">${product.name}</div>
                             <div class="product-category">${product.category || 'Digital Product'}</div>
-                            <div class="product-price-group" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
-                                <span class="product-selling-price" style="font-size: 1.2rem; font-weight: bold; color: #FF69B4;">Rs. ${sellingPrice.toLocaleString()}</span>
-                                ${originalPrice > sellingPrice ? `<span class="product-original-price" style="font-size: 0.95rem; color: #999; text-decoration: line-through; font-weight: 500;">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
+                            <div class="digital-price-group" style="display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap;">
+                                <span class="digital-selling-price" style="font-size: 1.2rem; font-weight: bold; color: #FF69B4;">Rs. ${sellingPrice.toLocaleString()}</span>
+                                ${originalPrice > sellingPrice ? `<span class="digital-original-price" style="font-size: 0.95rem; color: #999; text-decoration: line-through; font-weight: 500;">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
                             </div>
                             ${product.deliveryMethod ? `
                                 <div class="instant-delivery">
