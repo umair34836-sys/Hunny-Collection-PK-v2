@@ -250,16 +250,38 @@
             var html = '';
             for (var i = 0; i < products.length; i++) {
                 var product = products[i];
-                var imageUrl = product.images && product.images.length > 0 
-                    ? product.images[0] 
+                var imageUrl = product.images && product.images.length > 0
+                    ? product.images[0]
                     : 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image';
+                
+                // Calculate prices with discount
+                var sellingPrice = product.sellingPrice || product.price || 0;
+                var originalPrice = product.originalPrice || 0;
+                var discountPercent = 0;
+                if (originalPrice > sellingPrice && sellingPrice > 0) {
+                    discountPercent = Math.round(((originalPrice - sellingPrice) / originalPrice) * 100);
+                }
 
-                html += '<a href="product.html?id=' + product.id + '" class="product-card">';
+                html += '<a href="product.html?id=' + product.id + '" class="product-card" style="position: relative;">';
+                
+                // Discount badge
+                if (discountPercent > 0) {
+                    html += '<span class="discount-badge" style="position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%); color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4); z-index: 10;">🔥 ' + discountPercent + '% OFF</span>';
+                }
+                
                 html += '<img src="' + imageUrl + '" alt="' + product.name + '" class="product-image">';
                 html += '<div class="product-info">';
                 html += '<div class="product-category">' + product.category + '</div>';
                 html += '<div class="product-title">' + product.name + '</div>';
-                html += '<div class="product-price">Rs. ' + (product.price || 0).toLocaleString() + '</div>';
+                
+                // Price display with discount
+                html += '<div class="product-price-group" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">';
+                html += '<span class="product-selling-price" style="font-size: 1.2rem; font-weight: bold; color: #FF69B4;">Rs. ' + sellingPrice.toLocaleString() + '</span>';
+                if (originalPrice > sellingPrice) {
+                    html += '<span class="product-original-price" style="font-size: 0.95rem; color: #999; text-decoration: line-through; font-weight: 500;">Rs. ' + originalPrice.toLocaleString() + '</span>';
+                }
+                html += '</div>';
+                
                 html += '</div></a>';
             }
 
@@ -284,20 +306,21 @@
                 filtered = newFiltered;
             }
 
-            // Price filter
+            // Price filter (using sellingPrice)
             if (price !== 'all') {
                 var parts = price.split('-');
                 var min = Number(parts[0]);
                 var max = parts[1] ? Number(parts[1]) : null;
-                
+
                 var newFiltered = [];
                 for (var i = 0; i < filtered.length; i++) {
+                    var sellingPrice = filtered[i].sellingPrice || filtered[i].price || 0;
                     if (max) {
-                        if (filtered[i].price >= min && filtered[i].price <= max) {
+                        if (sellingPrice >= min && sellingPrice <= max) {
                             newFiltered.push(filtered[i]);
                         }
                     } else {
-                        if (filtered[i].price >= min) {
+                        if (sellingPrice >= min) {
                             newFiltered.push(filtered[i]);
                         }
                     }
@@ -305,11 +328,11 @@
                 filtered = newFiltered;
             }
 
-            // Sort
+            // Sort (using sellingPrice)
             if (sort === 'price-low') {
-                filtered.sort(function(a, b) { return (a.price || 0) - (b.price || 0); });
+                filtered.sort(function(a, b) { return (a.sellingPrice || a.price || 0) - (b.sellingPrice || b.price || 0); });
             } else if (sort === 'price-high') {
-                filtered.sort(function(a, b) { return (b.price || 0) - (a.price || 0); });
+                filtered.sort(function(a, b) { return (b.sellingPrice || b.price || 0) - (a.sellingPrice || a.price || 0); });
             } else {
                 filtered.sort(function(a, b) { 
                     var dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;

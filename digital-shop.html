@@ -316,7 +316,7 @@
         // Render products
         function renderProducts(products) {
             const container = document.getElementById('products-container');
-            
+
             if (products.length === 0) {
                 container.innerHTML = '<p style="text-align: center; padding: 60px 20px; color: var(--text-light);">No digital products available yet.</p>';
                 return;
@@ -326,15 +326,24 @@
                 const imageUrl = product.images && product.images.length > 0
                     ? product.images[0]
                     : 'https://via.placeholder.com/300x200/667eea/ffffff?text=Digital+Product';
+                
+                // Calculate prices with discount
+                const sellingPrice = product.sellingPrice || product.price || 0;
+                const originalPrice = product.originalPrice || 0;
+                const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
 
                 return `
-                    <div class="digital-product-card" onclick="window.location.href='digital-product.html?id=${product.id}'">
+                    <div class="digital-product-card" onclick="window.location.href='digital-product.html?id=${product.id}'" style="position: relative;">
                         <img src="${imageUrl}" alt="${product.name}" class="product-image">
+                        ${discountPercent > 0 ? `<span class="discount-badge" style="position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%); color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4); z-index: 10;">🔥 ${discountPercent}% OFF</span>` : ''}
                         <div class="product-info">
                             <span class="digital-badge">💻 DIGITAL</span>
                             <div class="product-title">${product.name}</div>
                             <div class="product-category">${product.category || 'Digital Product'}</div>
-                            <div class="product-price">Rs. ${(product.price || 0).toLocaleString()}</div>
+                            <div class="product-price-group" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                                <span class="product-selling-price" style="font-size: 1.2rem; font-weight: bold; color: #FF69B4;">Rs. ${sellingPrice.toLocaleString()}</span>
+                                ${originalPrice > sellingPrice ? `<span class="product-original-price" style="font-size: 0.95rem; color: #999; text-decoration: line-through; font-weight: 500;">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
+                            </div>
                             ${product.deliveryMethod ? `
                                 <div class="instant-delivery">
                                     <span>⚡</span>
@@ -360,26 +369,27 @@
                 filtered = filtered.filter(p => p.category === category);
             }
 
-            // Price filter
+            // Price filter (using sellingPrice)
             if (price !== 'all') {
                 const parts = price.split('-');
                 const min = Number(parts[0]);
                 const max = parts[1] ? Number(parts[1]) : null;
 
                 filtered = filtered.filter(p => {
+                    const sellingPrice = p.sellingPrice || p.price || 0;
                     if (max) {
-                        return p.price >= min && p.price <= max;
+                        return sellingPrice >= min && sellingPrice <= max;
                     } else {
-                        return p.price >= min;
+                        return sellingPrice >= min;
                     }
                 });
             }
 
-            // Sort
+            // Sort (using sellingPrice)
             if (sort === 'price-low') {
-                filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+                filtered.sort((a, b) => (a.sellingPrice || a.price || 0) - (b.sellingPrice || b.price || 0));
             } else if (sort === 'price-high') {
-                filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+                filtered.sort((a, b) => (b.sellingPrice || b.price || 0) - (a.sellingPrice || a.price || 0));
             } else {
                 filtered.sort((a, b) => {
                     const dateA = a.createdAt ? (a.createdAt.seconds || 0) : 0;

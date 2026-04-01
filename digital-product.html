@@ -244,18 +244,28 @@
             const deliveryInfo = product.deliveryMethod || 'Email';
             const downloadLimit = product.downloadLimit || 'Unlimited';
             const expiryDays = product.expiryDays || 'Lifetime';
+            
+            // Calculate prices with discount
+            const sellingPrice = product.sellingPrice || product.price || 0;
+            const originalPrice = product.originalPrice || 0;
+            const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
 
             document.getElementById('product-detail').innerHTML = `
                 <div class="product-detail-grid">
                     <div class="product-images">
                         <img src="${imageUrl}" alt="${product.name}" class="product-main-image">
+                        ${discountPercent > 0 ? `<span class="product-detail-discount-badge" style="position: absolute; top: 20px; left: 20px; background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%); color: white; padding: 10px 20px; border-radius: 25px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5); z-index: 10;">🔥 ${discountPercent}% OFF</span>` : ''}
                     </div>
-                    
+
                     <div class="product-details">
                         <span class="digital-badge">💻 DIGITAL PRODUCT</span>
                         <h1 class="product-title">${product.name}</h1>
-                        <div class="product-price">Rs. ${(product.price || 0).toLocaleString()}</div>
-                        
+                        <div class="product-detail-price-group" style="display: flex; align-items: center; gap: 15px; margin: 15px 0; flex-wrap: wrap;">
+                            <span class="product-detail-selling-price" style="font-size: 2rem; font-weight: bold; color: #FF69B4;">Rs. ${sellingPrice.toLocaleString()}</span>
+                            ${originalPrice > sellingPrice ? `<span class="product-detail-original-price" style="font-size: 1.3rem; color: #999; text-decoration: line-through; font-weight: 500;">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
+                        </div>
+                        ${discountPercent > 0 ? `<p class="discount-savings" style="background: linear-gradient(135deg, #fff3f3 0%, #ffe4e1 100%); color: #FF6B6B; padding: 12px 18px; border-radius: 10px; font-weight: 600; font-size: 0.95rem; margin: 15px 0; border: 2px dashed #FFB6C1; display: inline-block;">You save Rs. ${(originalPrice - sellingPrice).toLocaleString()}!</p>` : ''}
+
                         <div class="delivery-info">
                             <h4>📦 Delivery Information</h4>
                             <p><strong>Delivery Method:</strong> ${deliveryInfo}</p>
@@ -291,7 +301,7 @@
 
                         <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color);">
                             <p style="color: var(--text-light); font-size: 0.9rem;">
-                                <strong>💡 Note:</strong> This is a digital product. No physical item will be shipped. 
+                                <strong>💡 Note:</strong> This is a digital product. No physical item will be shipped.
                                 You will receive download link/access code via email after payment verification.
                             </p>
                         </div>
@@ -327,6 +337,9 @@
                 id: currentProduct.id,
                 name: currentProduct.name,
                 price: currentProduct.price,
+                sellingPrice: currentProduct.sellingPrice || currentProduct.price,
+                originalPrice: currentProduct.originalPrice || 0,
+                costPrice: currentProduct.costPrice || 0,
                 category: currentProduct.category,
                 type: 'digital',
                 quantity: 1
