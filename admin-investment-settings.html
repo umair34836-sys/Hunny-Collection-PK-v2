@@ -236,13 +236,13 @@
                 <div class="admin-card">
                     <h3>📈 Quick Stats</h3>
                     <div class="info-box success">
-                        <strong>✅ Current Model:</strong> <span id="current-model">Net Profit Share</span>
+                        <strong>✅ Current Model:</strong> <span id="current-model">Revenue Share (7% on Order Total)</span>
                     </div>
                     <div class="info-box">
-                        <strong>📊 Default Profit Share:</strong> <span id="default-percentage">0</span>%
+                        <strong>📊 Default Profit Share:</strong> <span id="default-percentage">7</span>%
                     </div>
-                    <div class="info-box warning">
-                        <strong>⚠️ Cap Amount:</strong> Rs. <span id="cap-amount-display">6,000</span> per investor (2x investment)
+                    <div class="info-box success">
+                        <strong>⏱️ Duration:</strong> 1 Year (Unlimited Earnings - No Cap)
                     </div>
                 </div>
 
@@ -285,7 +285,7 @@
                                     <th>Investment</th>
                                     <th>Profit %</th>
                                     <th>Total Earned</th>
-                                    <th>Cap Reached</th>
+                                    <th>Contract</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -311,22 +311,16 @@
                         <div class="form-group">
                             <label>Profit Calculation Type</label>
                             <select id="profit-type" required>
-                                <option value="net-profit">Net Profit Share (Recommended)</option>
-                                <option value="revenue">Revenue Share (Not Recommended)</option>
+                                <option value="revenue" selected>✅ Revenue Share (7% on Order Total) - Active Deal</option>
+                                <option value="net-profit">Net Profit Share</option>
                             </select>
-                            <small>Net Profit = Order Total - (Product Cost + Shipping + Packaging + Direct Expenses)</small>
+                            <small>💰 Revenue Share = 7% direct percentage on order total (simple & transparent)</small>
                         </div>
 
                         <div class="form-group">
-                            <label>Default Profit Share Percentage (%)</label>
-                            <input type="number" id="default-percentage" value="12" min="1" max="50" required>
-                            <small>This will be applied to new investors by default</small>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Cap Multiplier</label>
-                            <input type="number" id="cap-multiplier" value="2" min="1" max="5" step="0.5" required>
-                            <small>Investor receives profit until they earn (Investment × Multiplier). E.g., 2x means Rs. 6,000 cap on Rs. 3,000 investment</small>
+                            <label>Default Revenue Share Percentage (%)</label>
+                            <input type="number" id="default-percentage" value="7" min="1" max="50" required readonly style="background: #f0f0f0;">
+                            <small>✅ Fixed at 7% for Revenue Share model - Valid for 1 Year</small>
                         </div>
 
                         <div class="form-group">
@@ -514,17 +508,14 @@
 
                 <div class="form-group">
                     <label>Profit Share Percentage (%)</label>
-                    <input type="number" id="investor-percentage" required value="12" min="1" max="50">
-                    <small>Recommended: 10-12% for net profit share</small>
+                    <input type="number" id="investor-percentage" required value="7" min="1" max="50" readonly style="background: #f0f0f0;">
+                    <small>💰 Fixed at 7% of order revenue (Revenue Share Model - 1 Year)</small>
                 </div>
 
                 <div class="form-group">
-                    <label>Cap Multiplier</label>
-                    <select id="investor-cap" required>
-                        <option value="2">2x (Rs. 6,000 on Rs. 3,000)</option>
-                        <option value="2.5">2.5x (Rs. 7,500 on Rs. 3,000)</option>
-                        <option value="3">3x (Rs. 9,000 on Rs. 3,000)</option>
-                    </select>
+                    <label>Contract Duration</label>
+                    <input type="text" value="1 Year (No Cap - Unlimited Earnings)" readonly style="background: #e8f5e9; color: #2e7d32; font-weight: 600;">
+                    <small>✅ Investor earns 7% on every order for 1 full year</small>
                 </div>
 
                 <div class="form-group">
@@ -624,9 +615,8 @@
                 if (!settingsSnapshot.empty) {
                     const settings = settingsSnapshot.docs[0].data();
                     currentSettings = settings;
-                    document.getElementById('current-model').textContent = settings.profitType === 'net-profit' ? 'Net Profit Share' : 'Revenue Share';
-                    document.getElementById('default-percentage').textContent = settings.defaultPercentage || 0;
-                    document.getElementById('cap-amount-display').textContent = (3000 * (settings.capMultiplier || 2)).toLocaleString();
+                    document.getElementById('current-model').textContent = settings.profitType === 'revenue' ? '✅ Revenue Share (7% on Order Total)' : 'Net Profit Share';
+                    document.getElementById('default-percentage').textContent = settings.defaultPercentage || 7;
                 }
 
                 // Load recent activity
@@ -673,9 +663,6 @@
                 snapshot.forEach(doc => investors.push({ id: doc.id, ...doc.data() }));
 
                 tbody.innerHTML = investors.map(inv => {
-                    const capAmount = (inv.investment || 0) * (inv.capMultiplier || 2);
-                    const capReached = (inv.totalEarned || 0) >= capAmount;
-
                     return `<tr>
                         <td><strong>${inv.code}</strong></td>
                         <td>${inv.name}</td>
@@ -683,7 +670,7 @@
                         <td>Rs. ${(inv.investment || 0).toLocaleString()}</td>
                         <td>${inv.profitPercentage || 0}%</td>
                         <td>Rs. ${(inv.totalEarned || 0).toLocaleString()}</td>
-                        <td>${capReached ? '<span class="badge badge-active">✅ Yes</span>' : '<span class="badge badge-pending">❌ No</span>'}</td>
+                        <td><span class="badge badge-active">♾️ Unlimited</span></td>
                         <td><span class="badge badge-${inv.status === 'active' ? 'active' : 'inactive'}">${inv.status || 'active'}</span></td>
                         <td>
                             <button class="btn-sm btn-warning" onclick="editInvestor('${inv.id}')">✏️ Edit</button>
@@ -719,15 +706,15 @@
                 cnic: document.getElementById('investor-cnic').value,
                 investment: parseFloat(document.getElementById('investor-amount').value),
                 profitPercentage: parseFloat(document.getElementById('investor-percentage').value),
-                capMultiplier: parseFloat(document.getElementById('investor-cap').value),
-                capAmount: parseFloat(document.getElementById('investor-amount').value) * parseFloat(document.getElementById('investor-cap').value),
                 password: document.getElementById('investor-password').value,
                 witness: document.getElementById('investor-witness').value,
                 status: 'active',
                 totalEarned: 0,
                 totalPaid: 0,
                 pendingWithdrawal: 0,
-                joinedDate: new Date().toISOString()
+                joinedDate: new Date().toISOString(),
+                contractDuration: '1 Year',
+                hasCap: false // No cap limit
             };
 
             try {
@@ -749,9 +736,10 @@
             const settingsData = {
                 profitType: document.getElementById('profit-type').value,
                 defaultPercentage: parseFloat(document.getElementById('default-percentage').value),
-                capMultiplier: parseFloat(document.getElementById('cap-multiplier').value),
                 minWithdrawal: parseFloat(document.getElementById('min-withdrawal').value),
                 withdrawalProcessing: document.getElementById('withdrawal-processing').value,
+                contractDuration: '1 Year',
+                hasCap: false,
                 updatedAt: new Date().toISOString()
             };
 
@@ -884,8 +872,10 @@
             const expenses = product.otherExpenses || 0;
 
             const netProfit = sellingPrice - costPrice - shipping - packaging - expenses;
-            const investorPercentage = currentSettings.defaultPercentage || 12;
-            const investorShare = Math.max(0, netProfit * (investorPercentage / 100));
+            
+            // Revenue share calculation (7% on order total)
+            const investorPercentage = currentSettings.defaultPercentage || 7;
+            const investorShare = sellingPrice * (investorPercentage / 100); // Revenue share, not profit share
             const ownerProfit = netProfit - investorShare;
 
             document.getElementById('calc-selling-price').textContent = 'Rs. ' + sellingPrice.toLocaleString();
@@ -910,7 +900,7 @@
             const tbody = document.querySelector('#products-profit-table tbody');
             if (!tbody) return;
 
-            const investorPercentage = currentSettings.defaultPercentage || 12;
+            const investorPercentage = currentSettings.defaultPercentage || 7;
 
             tbody.innerHTML = allProducts.map(p => {
                 const sellingPrice = p.sellingPrice || 0;
@@ -920,7 +910,8 @@
                 const expenses = p.otherExpenses || 0;
 
                 const netProfit = sellingPrice - costPrice - shipping - packaging - expenses;
-                const investorShare = Math.max(0, netProfit * (investorPercentage / 100));
+                // Revenue share: 7% of selling price
+                const investorShare = sellingPrice * (investorPercentage / 100);
                 const ownerProfit = netProfit - investorShare;
                 const marginPercent = sellingPrice > 0 ? ((netProfit / sellingPrice) * 100).toFixed(1) : 0;
 

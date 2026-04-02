@@ -36,15 +36,15 @@ Open Firebase Console → Firestore Database → Create collection `investors` w
   "name": "Admin Investor",
   "phone": "03000000000",
   "investment": 3000,
-  "profitPercentage": 12,
-  "capMultiplier": 2,
-  "capAmount": 6000,
+  "profitPercentage": 7,
   "password": "admin123",
   "status": "active",
   "totalEarned": 0,
   "totalPaid": 0,
   "pendingWithdrawal": 0,
-  "joinedDate": "2025-01-01T00:00:00.000Z"
+  "joinedDate": "2025-01-01T00:00:00.000Z",
+  "contractDuration": "1 Year",
+  "hasCap": false
 }
 ```
 
@@ -54,11 +54,12 @@ Collection: `investment_settings`
 
 ```json
 {
-  "profitType": "net-profit",
-  "defaultPercentage": 12,
-  "capMultiplier": 2,
+  "profitType": "revenue",
+  "defaultPercentage": 7,
   "minWithdrawal": 100,
   "withdrawalProcessing": "manual",
+  "contractDuration": "1 Year",
+  "hasCap": false,
   "updatedAt": "2025-01-01T00:00:00.000Z"
 }
 ```
@@ -84,8 +85,8 @@ Collection: `investment_settings`
 
 3. **Configure Settings:**
    - Go to "🔧 Configuration" tab
-   - Set profit type: **Net Profit Share** (recommended)
-   - Set default percentage: **12%**
+   - Set profit type: **Revenue Share (7%)** ✅
+   - Set default percentage: **7%** (fixed for revenue share)
    - Set cap multiplier: **2** (investor gets 2x investment total)
    - Set minimum withdrawal: **Rs. 100**
 
@@ -129,7 +130,26 @@ Collection: `investment_settings`
 
 ## 💰 Profit Calculation Formula
 
-### Net Profit Share (Recommended)
+### Revenue Share (Active Model) ✅
+
+```
+Investor Share = Order Total × (Percentage / 100)
+
+Your Profit = Order Total - Investor Share - Product Cost - Shipping - Packaging - Other Expenses
+```
+
+### Example (7% Revenue Share):
+
+| Item | Amount |
+|------|--------|
+| Order Total | Rs. 1,000 |
+| Investor Share (7%) | Rs. 70 |
+| Product Cost | Rs. 600 |
+| Shipping | Rs. 100 |
+| Packaging | Rs. 50 |
+| **Your Profit** | **Rs. 180** |
+
+### Net Profit Share (Legacy Model)
 
 ```
 Net Profit = Order Total - Product Cost - Shipping - Packaging - Other Expenses
@@ -161,15 +181,15 @@ Your Profit = Net Profit - Investor Share
 - name: string
 - phone: string
 - investment: number
-- profitPercentage: number
-- capMultiplier: number
-- capAmount: number (investment × multiplier)
+- profitPercentage: number (7% for revenue share)
 - password: string
 - status: string (active/inactive)
 - totalEarned: number
 - totalPaid: number
 - pendingWithdrawal: number
 - joinedDate: timestamp
+- contractDuration: string (e.g., "1 Year")
+- hasCap: boolean (false = no cap limit)
 ```
 
 ### investor_earnings
@@ -184,9 +204,9 @@ Your Profit = Net Profit - Investor Share
 - amount: number
 - status: string (pending/paid)
 - date: timestamp
-- capAmount: number
 - totalEarnedAfter: number
-- capReached: boolean
+- hasCap: boolean (false = no cap limit)
+- contractType: string (e.g., "revenue-share-1year")
 ```
 
 ### withdrawal_requests
@@ -206,11 +226,12 @@ Your Profit = Net Profit - Investor Share
 
 ### investment_settings
 ```
-- profitType: string (net-profit/revenue)
-- defaultPercentage: number
-- capMultiplier: number
+- profitType: string (revenue/net-profit)
+- defaultPercentage: number (7% for revenue share)
 - minWithdrawal: number
 - withdrawalProcessing: string (manual/auto)
+- contractDuration: string (e.g., "1 Year")
+- hasCap: boolean (false = no cap limit)
 - updatedAt: timestamp
 ```
 
@@ -227,25 +248,44 @@ The updated `firestore.rules` include:
 
 ---
 
-## 🎯 Investment Deal Structure (Recommended)
+## 🎯 Investment Deal Structure (7% Revenue Share - No Cap)
 
 ```
 Investment: Rs. 3,000
-Profit Share: 12% of Net Profit per order
-Cap: Rs. 6,000 (2x investment)
-Duration: Until cap is reached (~1 year)
-Principal Return: NOT returned (covered by cap)
+Profit Share: 7% of REVENUE per order (order total)
+Cap: ❌ NO CAP - Unlimited Earnings!
+Duration: 1 Year Contract
+Principal Return: NOT returned (investor keeps earning 7% for 1 year)
 ```
 
-### Why This Structure?
+### Why This Model?
 
 | Benefit | You (Owner) | Investor |
 |---------|-------------|----------|
-| Principal | ✅ Keep Rs. 3,000 | ❌ Not returned |
-| Profit | ✅ Pay only from profits | ✅ Earn up to Rs. 6,000 |
-| Risk | ✅ Low (profit-based) | ✅ Medium |
-| Return | ✅ 100% on investment | ✅ 200% return |
-| Timeline | ✅ ~1 year | ✅ ~1 year |
+| **Simplicity** | ✅ Easy calculation | ✅ Transparent tracking |
+| **No disputes** | ✅ Fixed % on order total | ✅ Clear earnings |
+| **Unlimited** | ✅ Motivated investor | ✅ Earn on EVERY order |
+| **Duration** | ✅ 1 year contract | ✅ Guaranteed 7% for 1 year |
+
+---
+
+## 💰 Revenue Share Calculation Example:
+
+### Order: Rs. 1,000
+
+| Item | Amount |
+|------|--------|
+| Order Total (Revenue) | Rs. 1,000 |
+| Investor Share (7%) | Rs. 70 |
+| **Your Share** | **Rs. 930** |
+
+### From Your Rs. 930:
+- Product Cost: Rs. 600
+- Shipping: Rs. 100
+- Packaging: Rs. 50
+- **Your Net Profit: Rs. 180**
+
+**Total:** Investor gets Rs. 70, You get Rs. 180 = Rs. 250 total profit split!
 
 ---
 

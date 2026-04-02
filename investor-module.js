@@ -11,7 +11,7 @@ import { collection, addDoc, getDocs, query, where, doc, updateDoc, increment } 
  * @param {number} shipping - Shipping cost
  * @param {number} packaging - Packaging cost
  * @param {number} otherExpenses - Other direct expenses
- * @param {string} profitType - 'net-profit' or 'revenue'
+ * @param {string} profitType - 'revenue' or 'net-profit'
  * @param {number} percentage - Investor's profit share percentage
  * @returns {object} - Calculation result
  */
@@ -21,11 +21,11 @@ export function calculateInvestorShare(orderTotal, costPrice, shipping, packagin
     let shareBase, shareAmount;
     
     if (profitType === 'revenue') {
-        // Revenue share (not recommended)
+        // Revenue share (7% on order total)
         shareBase = orderTotal;
         shareAmount = orderTotal * (percentage / 100);
     } else {
-        // Net profit share (recommended)
+        // Net profit share
         shareBase = Math.max(0, netProfit);
         shareAmount = netProfit > 0 ? netProfit * (percentage / 100) : 0;
     }
@@ -47,25 +47,21 @@ export function calculateInvestorShare(orderTotal, costPrice, shipping, packagin
 }
 
 /**
- * Get active investors who haven't reached their cap
+ * Get active investors (no cap limit - 1 year contract)
  * @returns {Promise<Array>} - Array of active investors
  */
 export async function getActiveInvestors() {
     try {
         const investorsQuery = query(collection(db, 'investors'), where('status', '==', 'active'));
         const snapshot = await getDocs(investorsQuery);
-        
+
         const activeInvestors = [];
         snapshot.forEach(doc => {
             const investor = { id: doc.id, ...doc.data() };
-            
-            // Check if cap is reached
-            const capAmount = investor.capAmount || (investor.investment || 0) * 2;
-            if ((investor.totalEarned || 0) < capAmount) {
-                activeInvestors.push(investor);
-            }
+            // All active investors are included (no cap check)
+            activeInvestors.push(investor);
         });
-        
+
         return activeInvestors;
     } catch (error) {
         console.error('Error getting active investors:', error);
@@ -85,27 +81,19 @@ export async function recordInvestorEarning(orderId, investorId, calculation, pr
     try {
         const investorRef = doc(db, 'investors', investorId);
         const investorDoc = await getDocs(query(collection(db, 'investors'), where('code', '==', calculation.investorCode)));
-        
+
         let investorData = null;
         investorDoc.forEach(doc => {
             investorData = { id: doc.id, ...doc.data() };
         });
-        
+
         if (!investorData) {
             throw new Error('Investor not found');
         }
-        
-        // Check if cap is reached
-        const capAmount = investorData.capAmount || (investorData.investment || 0) * 2;
-        const remainingCap = capAmount - (investorData.totalEarned || 0);
-        
-        // Adjust earning if it exceeds remaining cap
-        let finalAmount = calculation.shareAmount;
-        if (finalAmount > remainingCap) {
-            finalAmount = remainingCap;
-            console.log(`Earning capped at ${remainingCap} (cap limit reached)`);
-        }
-        
+
+        // No cap limit - full amount is paid
+        const finalAmount = calculation.shareAmount;
+
         // Create earning record
         const earningData = {
             orderId,
@@ -118,13 +106,13 @@ export async function recordInvestorEarning(orderId, investorId, calculation, pr
             amount: finalAmount,
             status: 'pending', // pending -> paid
             date: new Date().toISOString(),
-            capAmount,
             totalEarnedAfter: (investorData.totalEarned || 0) + finalAmount,
-            capReached: (investorData.totalEarned || 0) + finalAmount >= capAmount
+            hasCap: false, // No cap limit
+            contractType: 'revenue-share-1year'
         };
-        
+
         const earningRef = await addDoc(collection(db, 'investor_earnings'), earningData);
-        
+
         // Update investor total earned
         await updateDoc(investorRef, {
             totalEarned: increment(finalAmount)
@@ -170,10 +158,10 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
         // Get settings
         const settingsQuery = query(collection(db, 'investment_settings'), limit(1));
         const settingsSnapshot = await getDocs(settingsQuery);
-        
+
         let settings = {
-            profitType: 'net-profit',
-            defaultPercentage: 12
+            profitType: 'revenue', // Default to Revenue Share
+            defaultPercentage: 7 // 7% revenue share
         };
         
         if (!settingsSnapshot.empty) {

@@ -263,6 +263,11 @@
                 <div id="section-dashboard">
                     <h2 style="color: #2D3748; margin-bottom: 30px;">Welcome, <span id="investor-name">Investor</span>! 👋</h2>
 
+                    <div class="investor-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; margin-bottom: 20px;">
+                        <h3 style="color: white;">💰 Your Profit Share Model: Revenue Share (7%)</h3>
+                        <p style="margin-top: 10px; opacity: 0.95;">You earn <strong>7% of every order's total revenue</strong> until your earnings reach your cap amount. This is a simple and transparent model!</p>
+                    </div>
+
                     <div class="stats-grid">
                         <div class="stat-card investment">
                             <div class="stat-number">Rs. <span id="stat-investment">0</span></div>
@@ -282,16 +287,11 @@
                         </div>
                     </div>
 
-                    <!-- Progress to Cap -->
-                    <div class="investor-card">
-                        <h3>📈 Progress to Return Cap</h3>
-                        <p style="color: #666; margin-bottom: 10px;">You'll receive profit until total earnings reach Rs. <span id="cap-amount">6,000</span></p>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill" style="width: 0%;">0%</div>
-                        </div>
-                        <p style="font-size: 0.9rem; color: #666;">
-                            Remaining: Rs. <span id="remaining-amount">6,000</span>
-                        </p>
+                    <!-- Contract Info -->
+                    <div class="investor-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
+                        <h3 style="color: white;">📋 Your Contract: 1 Year Unlimited Earnings</h3>
+                        <p style="margin-top: 10px; opacity: 0.95;">You will receive <strong>7% of every order's total revenue</strong> for 1 full year. There is <strong>NO CAP</strong> - earn unlimited profits on all orders!</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">📅 Contract Type: Revenue Share (7%) | Duration: 1 Year | Cap: None ♾️</p>
                     </div>
 
                     <!-- Recent Activity -->
@@ -333,7 +333,6 @@
                                         <th>Customer</th>
                                         <th>Product</th>
                                         <th>Order Total</th>
-                                        <th>Net Profit</th>
                                         <th>Your Share (%)</th>
                                         <th>Your Earning</th>
                                         <th>Status</th>
@@ -831,22 +830,21 @@
 
                 tbody.innerHTML = orders.map(order => {
                     const share = order.investorShare || {};
-                    const netProfit = share.netProfit || 0;
-                    const sharePercent = share.percentage || investorData.profitPercentage || 0;
-                    const earning = share.amount || 0;
+                    const orderTotal = order.total || 0;
+                    const sharePercent = share.percentage || investorData.profitPercentage || 7;
+                    const earning = share.amount || (orderTotal * (sharePercent / 100));
 
                     return `<tr>
                         <td>#${order.id.slice(0, 8)}</td>
                         <td>${order.customerName || 'N/A'}</td>
                         <td>${order.items?.[0]?.name || 'Product'}</td>
-                        <td>Rs. ${(order.total || 0).toLocaleString()}</td>
-                        <td>Rs. ${netProfit.toLocaleString()}</td>
+                        <td>Rs. ${(orderTotal).toLocaleString()}</td>
                         <td>${sharePercent}%</td>
                         <td style="color:#11998e;font-weight:600;">Rs. ${earning.toLocaleString()}</td>
                         <td><span class="badge badge-${order.status}">${order.status}</span></td>
                         <td>${new Date(order.date).toLocaleDateString()}</td>
                     </tr>`;
-                }).join('') || '<tr><td colspan="9" style="text-align:center;color:#666;padding:30px;">No orders found</td></tr>';
+                }).join('') || '<tr><td colspan="8" style="text-align:center;color:#666;padding:30px;">No orders found</td></tr>';
             } catch (error) {
                 console.error('Error loading orders:', error);
             }
@@ -882,7 +880,7 @@
                     <td>${new Date(e.date).toLocaleDateString()}</td>
                     <td>${e.orderId || 'N/A'}</td>
                     <td>${e.productName || 'Product'}</td>
-                    <td>Rs. ${(e.netProfit || 0).toLocaleString()}</td>
+                    <td>Rs. ${(e.orderTotal || 0).toLocaleString()}</td>
                     <td>${e.percentage || 0}%</td>
                     <td style="color:#11998e;font-weight:600;">Rs. ${(e.amount || 0).toLocaleString()}</td>
                     <td><span class="badge badge-${e.status === 'paid' ? 'paid' : 'pending'}">${e.status || 'pending'}</span></td>
