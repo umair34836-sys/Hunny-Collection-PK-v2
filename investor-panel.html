@@ -759,24 +759,41 @@
         }
 
         async function loadDashboardData() {
-            if (!currentInvestor) return;
+            if (!currentInvestor) {
+                console.log('loadDashboardData: No current investor');
+                return;
+            }
+
+            console.log('loadDashboardData: Starting for investor:', currentInvestor.id);
 
             try {
                 const investorQuery = query(collection(db, 'investors'), where('code', '==', currentInvestor.code));
+                console.log('loadDashboardData: Executing investor query...');
+                
                 const snapshot = await getDocs(investorQuery);
+                console.log('loadDashboardData: Found', snapshot.size, 'investor documents');
 
                 snapshot.forEach(doc => {
                     investorData = { id: doc.id, ...doc.data() };
+                    console.log('loadDashboardData: Investor data loaded:', investorData);
+                    
                     localStorage.setItem('investorSession', JSON.stringify({
                         investor: currentInvestor,
                         data: investorData
                     }));
                 });
 
+                if (!investorData) {
+                    console.error('loadDashboardData: No investor data found!');
+                    return;
+                }
+
                 const totalEarned = investorData.totalEarned || 0;
                 const totalPaid = investorData.totalPaid || 0;
                 const pendingWithdrawal = investorData.pendingWithdrawal || 0;
                 const withdrawable = totalEarned - totalPaid - pendingWithdrawal;
+
+                console.log('loadDashboardData: Stats:', { totalEarned, totalPaid, pendingWithdrawal, withdrawable });
 
                 // Update stats with null checks
                 const investmentEl = document.getElementById('stat-investment');
@@ -795,6 +812,8 @@
                 if (maxWithdrawEl) maxWithdrawEl.textContent = Math.max(0, withdrawable).toLocaleString();
                 if (withdrawBalanceEl) withdrawBalanceEl.textContent = Math.max(0, withdrawable).toLocaleString();
 
+                console.log('loadDashboardData: UI updated successfully');
+
                 loadRecentActivity();
             } catch (error) {
                 console.error('Error loading dashboard:', error);
@@ -803,14 +822,22 @@
 
         // Live Earnings Tracker
         async function loadLiveEarnings() {
-            if (!currentInvestor) return;
+            if (!currentInvestor) {
+                console.log('loadLiveEarnings: No current investor');
+                return;
+            }
+
+            console.log('loadLiveEarnings: Starting for investor:', currentInvestor.id);
 
             try {
                 const earningsQuery = query(
                     collection(db, 'investor_earnings'),
                     where('investorId', '==', currentInvestor.id)
                 );
+                console.log('loadLiveEarnings: Executing query...');
+                
                 const snapshot = await getDocs(earningsQuery);
+                console.log('loadLiveEarnings: Found', snapshot.size, 'earnings records');
                 
                 const now = new Date();
                 const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
@@ -824,12 +851,21 @@
                     const amount = earning.amount || 0;
                     const earningDate = earning.date ? new Date(earning.date).getTime() : 0;
                     
+                    console.log('loadLiveEarnings: Processing earning:', {
+                        id: doc.id,
+                        amount: amount,
+                        date: earning.date,
+                        earningDate: earningDate
+                    });
+                    
                     total += amount;
                     
                     if (earningDate >= todayStart) today += amount;
                     if (earningDate >= weekStart) week += amount;
                     if (earningDate >= monthStart) month += amount;
                 });
+
+                console.log('loadLiveEarnings: Calculated:', { today, week, month, total });
 
                 // Update live counters with animation
                 animateValue('live-today', today);
@@ -847,6 +883,7 @@
                 }
             } catch (error) {
                 console.error('Error loading live earnings:', error);
+                console.log('Check your internet connection and Firebase access');
             }
         }
 
@@ -919,25 +956,45 @@
 
         window.loadInvestorOrders = async (filter) => {
             const tbody = document.querySelector('#orders-table tbody');
-            if (!tbody || !investorData) return;
+            if (!tbody || !investorData) {
+                console.log('loadInvestorOrders: Missing tbody or investorData', {
+                    hasTbody: !!tbody,
+                    investorData: investorData
+                });
+                return;
+            }
+
+            console.log('loadInvestorOrders: Starting with filter:', filter);
+            console.log('loadInvestorOrders: Investor ID:', currentInvestor?.id);
+            console.log('loadInvestorOrders: Investor Code:', investorData?.code);
 
             try {
                 const ordersQuery = query(collection(db, 'orders'), orderBy('date', 'desc'));
+                console.log('loadInvestorOrders: Executing query...');
+                
                 const snapshot = await getDocs(ordersQuery);
+                console.log('loadInvestorOrders: Query returned', snapshot.size, 'orders');
+                
                 const orders = [];
 
                 snapshot.forEach(doc => {
                     const order = { id: doc.id, ...doc.data() };
+                    console.log('loadInvestorOrders: Processing order:', order.id, 'Status:', order.status);
                     
                     // Show ALL orders to investor (they earn on every order)
                     if (filter === 'all') {
                         orders.push(order);
+                        console.log('loadInvestorOrders: Added order (all):', order.id);
                     } else if (filter === 'delivered' && order.status === 'delivered') {
                         orders.push(order);
+                        console.log('loadInvestorOrders: Added order (delivered):', order.id);
                     } else if (filter === 'pending' && order.status !== 'delivered') {
                         orders.push(order);
+                        console.log('loadInvestorOrders: Added order (pending):', order.id);
                     }
                 });
+
+                console.log('loadInvestorOrders: Total orders to display:', orders.length);
 
                 tbody.innerHTML = orders.map(order => {
                     const share = order.investorShare || {};
@@ -968,8 +1025,11 @@
                         <td style="font-size: 0.85rem; color: #666;">${dateTime}</td>
                     </tr>`;
                 }).join('') || '<tr><td colspan="9" style="text-align:center;color:#666;padding:30px;">No orders found</td></tr>';
+                
+                console.log('loadInvestorOrders: Table updated successfully');
             } catch (error) {
                 console.error('Error loading orders:', error);
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:red;padding:30px;">Error loading orders. Check console for details.</td></tr>';
             }
         };
 
