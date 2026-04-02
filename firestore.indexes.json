@@ -27,6 +27,52 @@
           "order": "DESCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "investor_earnings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "investorId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "withdrawal_requests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "investorId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "investor_earnings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "investorId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
+          "order": "DESCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": []

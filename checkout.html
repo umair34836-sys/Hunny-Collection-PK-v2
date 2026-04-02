@@ -356,10 +356,14 @@
                 },
                 items: cart,
                 total: cart.reduce((sum, item) => sum + (((item.sellingPrice || item.price) || 0) * item.quantity), 0),
+                shippingCost: 0, // Can be updated by admin
+                packagingCost: 10, // Default packaging
+                deliveryCost: 250, // Fixed delivery cost
                 status: 'pending',
                 notes: document.getElementById('notes').value,
                 paymentMethod: 'COD',
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
             };
 
             try {

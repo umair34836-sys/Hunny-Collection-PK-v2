@@ -319,10 +319,15 @@
                     <h2 style="color: #2D3748; margin-bottom: 30px;">📦 Orders & Your Earnings</h2>
 
                     <div class="investor-card">
-                        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
                             <button class="btn-sm btn-success" onclick="loadInvestorOrders('all')">All Orders</button>
                             <button class="btn-sm" style="background: #28a745; color: white;" onclick="loadInvestorOrders('delivered')">Delivered</button>
                             <button class="btn-sm" style="background: #ffc107; color: #333;" onclick="loadInvestorOrders('pending')">Pending</button>
+                            <button class="btn-sm" style="background: #667eea; color: white;" onclick="refreshEarnings()">🔄 Refresh Earnings</button>
+                        </div>
+
+                        <div class="info-box" style="background: #E3F2FD; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <strong>ℹ️ Note:</strong> You earn 7% on every delivered order. Earnings are automatically calculated when order status changes to "Delivered".
                         </div>
 
                         <div class="table-responsive">
@@ -571,29 +576,26 @@
             const totalPaid = investorData.totalPaid || 0;
             const pendingWithdrawal = investorData.pendingWithdrawal || 0;
             const withdrawable = totalEarned - totalPaid - pendingWithdrawal;
-            const capAmount = investorData.capAmount || 6000;
-            const remaining = Math.max(0, capAmount - totalEarned);
 
             // Update stats
-            document.getElementById('stat-investment').textContent = (investorData.investment || 0).toLocaleString();
-            document.getElementById('stat-earned').textContent = totalEarned.toLocaleString();
-            document.getElementById('stat-pending').textContent = pendingWithdrawal.toLocaleString();
-            document.getElementById('stat-withdrawable').textContent = Math.max(0, withdrawable).toLocaleString();
-            document.getElementById('cap-amount').textContent = capAmount.toLocaleString();
-            document.getElementById('remaining-amount').textContent = remaining.toLocaleString();
+            const investmentEl = document.getElementById('stat-investment');
+            const earnedEl = document.getElementById('stat-earned');
+            const pendingEl = document.getElementById('stat-pending');
+            const withdrawableEl = document.getElementById('stat-withdrawable');
 
-            // Update progress bar
-            const progress = Math.min(100, (totalEarned / capAmount) * 100);
-            const progressFill = document.getElementById('progress-fill');
-            progressFill.style.width = progress + '%';
-            progressFill.textContent = Math.round(progress) + '%';
+            if (investmentEl) investmentEl.textContent = (investorData.investment || 0).toLocaleString();
+            if (earnedEl) earnedEl.textContent = totalEarned.toLocaleString();
+            if (pendingEl) pendingEl.textContent = pendingWithdrawal.toLocaleString();
+            if (withdrawableEl) withdrawableEl.textContent = Math.max(0, withdrawable).toLocaleString();
 
             // Load recent activity
             loadRecentActivity();
 
             // Update withdraw max
-            document.getElementById('max-withdraw').textContent = Math.max(0, withdrawable).toLocaleString();
-            document.getElementById('withdraw-balance').textContent = Math.max(0, withdrawable).toLocaleString();
+            const maxWithdrawEl = document.getElementById('max-withdraw');
+            const withdrawBalanceEl = document.getElementById('withdraw-balance');
+            if (maxWithdrawEl) maxWithdrawEl.textContent = Math.max(0, withdrawable).toLocaleString();
+            if (withdrawBalanceEl) withdrawBalanceEl.textContent = Math.max(0, withdrawable).toLocaleString();
         }
 
         async function loadRecentActivity() {
@@ -821,10 +823,22 @@
 
                 snapshot.forEach(doc => {
                     const order = { id: doc.id, ...doc.data() };
-                    if (order.investorShare && order.investorShare.investorId === currentInvestor.id) {
-                        if (filter === 'all' || order.status === filter) {
+                    // Show orders that match investor code OR all delivered orders (for earnings calculation)
+                    const matchesInvestor = order.investorShare && 
+                        (order.investorShare.investorId === currentInvestor.id || 
+                         order.investorShare.investorCode === investorData.code);
+                    
+                    // Also show delivered orders (potential earnings)
+                    const isDelivered = order.status === 'delivered';
+                    
+                    if (filter === 'all') {
+                        if (matchesInvestor || isDelivered) {
                             orders.push(order);
                         }
+                    } else if (filter === 'delivered' && isDelivered) {
+                        orders.push(order);
+                    } else if (filter === 'pending' && order.status !== 'delivered') {
+                        orders.push(order);
                     }
                 });
 
@@ -833,6 +847,7 @@
                     const orderTotal = order.total || 0;
                     const sharePercent = share.percentage || investorData.profitPercentage || 7;
                     const earning = share.amount || (orderTotal * (sharePercent / 100));
+                    const hasEarning = share.amount > 0 || order.investorShare;
 
                     return `<tr>
                         <td>#${order.id.slice(0, 8)}</td>
@@ -840,7 +855,7 @@
                         <td>${order.items?.[0]?.name || 'Product'}</td>
                         <td>Rs. ${(orderTotal).toLocaleString()}</td>
                         <td>${sharePercent}%</td>
-                        <td style="color:#11998e;font-weight:600;">Rs. ${earning.toLocaleString()}</td>
+                        <td style="color:${hasEarning ? '#11998e' : '#FFA500'};font-weight:600;">Rs. ${earning.toLocaleString()}</td>
                         <td><span class="badge badge-${order.status}">${order.status}</span></td>
                         <td>${new Date(order.date).toLocaleDateString()}</td>
                     </tr>`;
@@ -848,6 +863,13 @@
             } catch (error) {
                 console.error('Error loading orders:', error);
             }
+        };
+
+        window.refreshEarnings = async () => {
+            // Reload dashboard data and orders
+            loadDashboardData();
+            loadInvestorOrders('all');
+            alert('Earnings refreshed!');
         };
 
         window.loadEarnings = async () => {
