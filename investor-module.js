@@ -171,12 +171,13 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
         // Calculate costs
         const orderTotal = orderData.total || 0;
         const items = orderData.items || [];
-        
+
         // Get product costs
         let totalCostPrice = 0;
         let totalShipping = orderData.shippingCost || 0;
         let totalPackaging = orderData.packagingCost || 10; // Default packaging
-        
+        let totalDelivery = orderData.deliveryCost || 250; // Fixed delivery cost
+
         for (const item of items) {
             const productRef = doc(db, 'products', item.id);
             // Note: You may need to fetch product details separately

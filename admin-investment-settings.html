@@ -434,6 +434,10 @@
                                     <td style="text-align: right;">- Rs. <span id="detail-packaging">0</span></td>
                                 </tr>
                                 <tr>
+                                    <td><strong>Delivery (Rs. 250):</strong></td>
+                                    <td style="text-align: right;">- Rs. <span id="detail-delivery">250</span></td>
+                                </tr>
+                                <tr>
                                     <td><strong>Other Expenses:</strong></td>
                                     <td style="text-align: right;">- Rs. <span id="detail-expenses">0</span></td>
                                 </tr>
@@ -463,8 +467,9 @@
                                     <th>Product</th>
                                     <th>Selling Price</th>
                                     <th>Cost Price</th>
+                                    <th>Delivery</th>
                                     <th>Net Profit</th>
-                                    <th>Investor Share (12%)</th>
+                                    <th>Investor Share (7%)</th>
                                     <th>Your Profit</th>
                                     <th>Margin %</th>
                                 </tr>
@@ -869,10 +874,11 @@
             const costPrice = product.costPrice || 0;
             const shipping = product.shippingCost || 0;
             const packaging = product.packagingCost || 0;
+            const delivery = 250; // Fixed delivery cost
             const expenses = product.otherExpenses || 0;
 
-            const netProfit = sellingPrice - costPrice - shipping - packaging - expenses;
-            
+            const netProfit = sellingPrice - costPrice - shipping - packaging - delivery - expenses;
+
             // Revenue share calculation (7% on order total)
             const investorPercentage = currentSettings.defaultPercentage || 7;
             const investorShare = sellingPrice * (investorPercentage / 100); // Revenue share, not profit share
@@ -887,6 +893,7 @@
             document.getElementById('detail-cost').textContent = costPrice.toLocaleString();
             document.getElementById('detail-shipping').textContent = shipping.toLocaleString();
             document.getElementById('detail-packaging').textContent = packaging.toLocaleString();
+            document.getElementById('detail-delivery').textContent = delivery.toLocaleString();
             document.getElementById('detail-expenses').textContent = expenses.toLocaleString();
             document.getElementById('detail-profit').textContent = netProfit.toLocaleString();
             document.getElementById('detail-percentage').textContent = investorPercentage;
@@ -907,9 +914,10 @@
                 const costPrice = p.costPrice || 0;
                 const shipping = p.shippingCost || 0;
                 const packaging = p.packagingCost || 0;
+                const delivery = 250; // Fixed delivery cost
                 const expenses = p.otherExpenses || 0;
 
-                const netProfit = sellingPrice - costPrice - shipping - packaging - expenses;
+                const netProfit = sellingPrice - costPrice - shipping - packaging - delivery - expenses;
                 // Revenue share: 7% of selling price
                 const investorShare = sellingPrice * (investorPercentage / 100);
                 const ownerProfit = netProfit - investorShare;
@@ -919,6 +927,7 @@
                     <td>${p.name}</td>
                     <td>Rs. ${sellingPrice.toLocaleString()}</td>
                     <td>Rs. ${costPrice.toLocaleString()}</td>
+                    <td>Rs. ${delivery.toLocaleString()}</td>
                     <td style="color:#11998e;font-weight:600;">Rs. ${netProfit.toLocaleString()}</td>
                     <td style="color:#FFA500;">- Rs. ${investorShare.toLocaleString()}</td>
                     <td style="color:#667eea;font-weight:600;">Rs. ${ownerProfit.toLocaleString()}</td>
