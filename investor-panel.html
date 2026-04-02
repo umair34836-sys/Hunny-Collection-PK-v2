@@ -741,22 +741,23 @@
                 const totalPaid = investorData.totalPaid || 0;
                 const pendingWithdrawal = investorData.pendingWithdrawal || 0;
                 const withdrawable = totalEarned - totalPaid - pendingWithdrawal;
-                const capAmount = investorData.capAmount || 6000;
-                const remaining = Math.max(0, capAmount - totalEarned);
 
-                document.getElementById('stat-investment').textContent = (investorData.investment || 0).toLocaleString();
-                document.getElementById('stat-earned').textContent = totalEarned.toLocaleString();
-                document.getElementById('stat-pending').textContent = pendingWithdrawal.toLocaleString();
-                document.getElementById('stat-withdrawable').textContent = Math.max(0, withdrawable).toLocaleString();
-                document.getElementById('cap-amount').textContent = capAmount.toLocaleString();
-                document.getElementById('remaining-amount').textContent = remaining.toLocaleString();
+                // Update stats with null checks
+                const investmentEl = document.getElementById('stat-investment');
+                const earnedEl = document.getElementById('stat-earned');
+                const pendingEl = document.getElementById('stat-pending');
+                const withdrawableEl = document.getElementById('stat-withdrawable');
 
-                const progress = Math.min(100, (totalEarned / capAmount) * 100);
-                document.getElementById('progress-fill').style.width = progress + '%';
-                document.getElementById('progress-fill').textContent = Math.round(progress) + '%';
+                if (investmentEl) investmentEl.textContent = (investorData.investment || 0).toLocaleString();
+                if (earnedEl) earnedEl.textContent = totalEarned.toLocaleString();
+                if (pendingEl) pendingEl.textContent = pendingWithdrawal.toLocaleString();
+                if (withdrawableEl) withdrawableEl.textContent = Math.max(0, withdrawable).toLocaleString();
 
-                document.getElementById('max-withdraw').textContent = Math.max(0, withdrawable).toLocaleString();
-                document.getElementById('withdraw-balance').textContent = Math.max(0, withdrawable).toLocaleString();
+                // Update withdraw max
+                const maxWithdrawEl = document.getElementById('max-withdraw');
+                const withdrawBalanceEl = document.getElementById('withdraw-balance');
+                if (maxWithdrawEl) maxWithdrawEl.textContent = Math.max(0, withdrawable).toLocaleString();
+                if (withdrawBalanceEl) withdrawBalanceEl.textContent = Math.max(0, withdrawable).toLocaleString();
 
                 loadRecentActivity();
             } catch (error) {
