@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Settings - Admin - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assets/logo.jpeg">
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 60px);
+        }
+        .admin-sidebar {
+            background: linear-gradient(180deg, var(--dark-pink) 0%, var(--primary-pink) 100%);
+            padding: 20px;
+        }
+        .admin-sidebar h3 {
+            color: var(--white);
+            margin-bottom: 30px;
+        }
+        .admin-sidebar a {
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .admin-sidebar a:hover,
+        .admin-sidebar a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .admin-content {
+            padding: 40px;
+            background: var(--soft-pink);
+        }
+        .admin-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+            margin-bottom: 20px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2D3748;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E2E8F0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .form-group small {
+            color: #666;
+            font-size: 0.85rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--dark-pink) 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-warning { background: #ffc107; color: #333; }
+        
+        .table-responsive { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        th {
+            background: #F7FAFC;
+            font-weight: 600;
+            color: #2D3748;
+        }
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge-active { background: #D4EDDA; color: #155724; }
+        .badge-inactive { background: #F8D7DA; color: #721C24; }
+        .badge-pending { background: #FFF3CD; color: #856404; }
+        .badge-approved { background: #D4EDDA; color: #155724; }
+        .badge-rejected { background: #F8D7DA; color: #721C24; }
+        .badge-paid { background: #CCE5FF; color: #004085; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+        }
+        .stat-card.investment { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-card.earning { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .stat-card.pending { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .stat-card.withdraw { background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+        
+        .stat-number { font-size: 2.5rem; font-weight: bold; }
+        .stat-label { margin-top: 10px; opacity: 0.9; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .info-box {
+            background: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .info-box.warning {
+            background: #FFF3E0;
+            border-left-color: #FF9800;
+        }
+        .info-box.success {
+            background: #E8F5E9;
+            border-left-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <ul class="nav-menu">
+                    <li><a href="admin.html">Back to Admin</a></li>
+                    <li><a href="index.html">Store</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <h3>⚙️ Investment Settings</h3>
+            <a href="#" onclick="showSection('overview')" class="active">📊 Overview</a>
+            <a href="#" onclick="showSection('investors')">👥 Investors</a>
+            <a href="#" onclick="showSection('settings')">🔧 Configuration</a>
+            <a href="#" onclick="showSection('withdrawals')">💸 Withdrawals</a>
+            <a href="#" onclick="showSection('calculations')">🧮 Profit Calculator</a>
+            <a href="admin.html">← Back to Admin</a>
+        </aside>
+
+        <main class="admin-content">
+            <!-- Overview -->
+            <div id="section-overview">
+                <h2 style="color: var(--dark-pink); margin-bottom: 30px;">📊 Investment Overview</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card investment">
+                        <div class="stat-number">Rs. <span id="total-investment">0</span></div>
+                        <div class="stat-label">Total Investment</div>
+                    </div>
+                    <div class="stat-card earning">
+                        <div class="stat-number">Rs. <span id="total-distributed">0</span></div>
+                        <div class="stat-label">Total Distributed</div>
+                    </div>
+                    <div class="stat-card pending">
+                        <div class="stat-number">Rs. <span id="pending-withdrawals">0</span></div>
+                        <div class="stat-label">Pending Withdrawals</div>
+                    </div>
+                    <div class="stat-card withdraw">
+                        <div class="stat-number"><span id="total-investors">0</span></div>
+                        <div class="stat-label">Active Investors</div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>📈 Quick Stats</h3>
+                    <div class="info-box success">
+                        <strong>✅ Current Model:</strong> <span id="current-model">Net Profit Share</span>
+                    </div>
+                    <div class="info-box">
+                        <strong>📊 Default Profit Share:</strong> <span id="default-percentage">0</span>%
+                    </div>
+                    <div class="info-box warning">
+                        <strong>⚠️ Cap Amount:</strong> Rs. <span id="cap-amount-display">6,000</span> per investor (2x investment)
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>📋 Recent Investor Activity</h3>
+                    <div class="table-responsive">
+                        <table id="recent-activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Investor</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investors Management -->
+            <div id="section-investors" style="display: none;">
+                <h2 style="color: var(--dark-pink); margin-bottom: 30px;">👥 Investors Management</h2>
+
+                <div class="admin-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3>All Investors</h3>
+                        <button class="btn-primary" onclick="openAddInvestorModal()">+ Add New Investor</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="investors-table">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Investment</th>
+                                    <th>Profit %</th>
+                                    <th>Total Earned</th>
+                                    <th>Cap Reached</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration -->
+            <div id="section-settings" style="display: none;">
+                <h2 style="color: var(--dark-pink); margin-bottom: 30px;">🔧 Investment Configuration</h2>
+
+                <div class="admin-card">
+                    <h3>💰 Profit Share Settings</h3>
+
+                    <div class="info-box">
+                        <strong>💡 Tip:</strong> These settings apply to new investors. Existing investors keep their original terms.
+                    </div>
+
+                    <form id="settings-form">
+                        <div class="form-group">
+                            <label>Profit Calculation Type</label>
+                            <select id="profit-type" required>
+                                <option value="net-profit">Net Profit Share (Recommended)</option>
+                                <option value="revenue">Revenue Share (Not Recommended)</option>
+                            </select>
+                            <small>Net Profit = Order Total - (Product Cost + Shipping + Packaging + Direct Expenses)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Default Profit Share Percentage (%)</label>
+                            <input type="number" id="default-percentage" value="12" min="1" max="50" required>
+                            <small>This will be applied to new investors by default</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cap Multiplier</label>
+                            <input type="number" id="cap-multiplier" value="2" min="1" max="5" step="0.5" required>
+                            <small>Investor receives profit until they earn (Investment × Multiplier). E.g., 2x means Rs. 6,000 cap on Rs. 3,000 investment</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Minimum Withdrawal Amount (Rs.)</label>
+                            <input type="number" id="min-withdrawal" value="100" min="50" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Withdrawal Processing</label>
+                            <select id="withdrawal-processing" required>
+                                <option value="manual">Manual Approval (Recommended)</option>
+                                <option value="auto">Auto Approve</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Save Settings</button>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <h3>📊 Current Settings</h3>
+                    <div id="current-settings-display">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdrawals Management -->
+            <div id="section-withdrawals" style="display: none;">
+                <h2 style="color: var(--dark-pink); margin-bottom: 30px;">💸 Withdrawal Requests</h2>
+
+                <div class="admin-card">
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn-sm btn-warning" onclick="loadWithdrawals('pending')">⏳ Pending</button>
+                        <button class="btn-sm btn-success" onclick="loadWithdrawals('approved')">✅ Approved</button>
+                        <button class="btn-sm" style="background: #6c757d; color: white;" onclick="loadWithdrawals('all')">All</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="withdrawals-table">
+                            <thead>
+                                <tr>
+                                    <th>Investor</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Account</th>
+                                    <th>Request Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profit Calculator -->
+            <div id="section-calculations" style="display: none;">
+                <h2 style="color: var(--dark-pink); margin-bottom: 30px;">🧮 Product Pricing & Profit Calculator</h2>
+
+                <div class="admin-card">
+                    <div class="info-box">
+                        <strong>💡 How to use:</strong> Select a product to view detailed profit breakdown including investor share calculation.
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Product</label>
+                        <select id="product-select" onchange="calculateProductProfit()">
+                            <option value="">-- Select a Product --</option>
+                        </select>
+                    </div>
+
+                    <div id="product-calculation" style="display: none;">
+                        <div class="stats-grid">
+                            <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <div class="stat-number" id="calc-selling-price">Rs. 0</div>
+                                <div class="stat-label">Selling Price</div>
+                            </div>
+                            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <div class="stat-number" id="calc-cost-price">Rs. 0</div>
+                                <div class="stat-label">Cost Price</div>
+                            </div>
+                            <div class="stat-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                                <div class="stat-number" id="calc-net-profit">Rs. 0</div>
+                                <div class="stat-label">Net Profit</div>
+                            </div>
+                            <div class="stat-card" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);">
+                                <div class="stat-number" id="calc-investor-share">Rs. 0</div>
+                                <div class="stat-label">Investor Share</div>
+                            </div>
+                        </div>
+
+                        <div class="admin-card" style="margin-top: 20px;">
+                            <h4>📊 Detailed Breakdown</h4>
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td><strong>Selling Price:</strong></td>
+                                    <td style="text-align: right;">Rs. <span id="detail-selling">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Product Cost:</strong></td>
+                                    <td style="text-align: right;">- Rs. <span id="detail-cost">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Shipping:</strong></td>
+                                    <td style="text-align: right;">- Rs. <span id="detail-shipping">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Packaging:</strong></td>
+                                    <td style="text-align: right;">- Rs. <span id="detail-packaging">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Other Expenses:</strong></td>
+                                    <td style="text-align: right;">- Rs. <span id="detail-expenses">0</span></td>
+                                </tr>
+                                <tr style="background: #E8F5E9; font-weight: bold;">
+                                    <td><strong>Net Profit:</strong></td>
+                                    <td style="text-align: right;">Rs. <span id="detail-profit">0</span></td>
+                                </tr>
+                                <tr style="background: #FFF3E0; font-weight: bold;">
+                                    <td><strong>Investor Share (<span id="detail-percentage">0</span>%):</strong></td>
+                                    <td style="text-align: right;">- Rs. <span id="detail-investor">0</span></td>
+                                </tr>
+                                <tr style="background: #E3F2FD; font-weight: bold; font-size: 1.1rem;">
+                                    <td><strong>Your Profit:</strong></td>
+                                    <td style="text-align: right;">Rs. <span id="detail-owner-profit">0</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>📦 All Products Profit Summary</h3>
+                    <div class="table-responsive">
+                        <table id="products-profit-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Selling Price</th>
+                                    <th>Cost Price</th>
+                                    <th>Net Profit</th>
+                                    <th>Investor Share (12%)</th>
+                                    <th>Your Profit</th>
+                                    <th>Margin %</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Investor Modal -->
+    <div id="add-investor-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: #2D3748;">👥 Add New Investor</h3>
+                <button class="close-modal" onclick="closeAddInvestorModal()">&times;</button>
+            </div>
+
+            <form id="add-investor-form">
+                <div class="form-group">
+                    <label>Investor Name</label>
+                    <input type="text" id="investor-name" required placeholder="Enter full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="investor-phone" required placeholder="03XXXXXXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label>CNIC (Optional)</label>
+                    <input type="text" id="investor-cnic" placeholder="XXXXX-XXXXXXX-X">
+                </div>
+
+                <div class="form-group">
+                    <label>Investment Amount (Rs.)</label>
+                    <input type="number" id="investor-amount" required value="3000" min="1000">
+                </div>
+
+                <div class="form-group">
+                    <label>Profit Share Percentage (%)</label>
+                    <input type="number" id="investor-percentage" required value="12" min="1" max="50">
+                    <small>Recommended: 10-12% for net profit share</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Cap Multiplier</label>
+                    <select id="investor-cap" required>
+                        <option value="2">2x (Rs. 6,000 on Rs. 3,000)</option>
+                        <option value="2.5">2.5x (Rs. 7,500 on Rs. 3,000)</option>
+                        <option value="3">3x (Rs. 9,000 on Rs. 3,000)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Investor Code (Auto-generated)</label>
+                    <input type="text" id="investor-code" readonly placeholder="Will be auto-generated">
+                    <small>Unique code for investor login</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="text" id="investor-password" required placeholder="Set login password">
+                    <small>Give this password to the investor for panel access</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Witness Name (Optional)</label>
+                    <input type="text" id="investor-witness" placeholder="Witness name">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%;">Create Investor</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Withdrawal Action Modal -->
+    <div id="withdrawal-action-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: #2D3748;">💸 Process Withdrawal Request</h3>
+                <button class="close-modal" onclick="document.getElementById('withdrawal-action-modal').classList.remove('active')">&times;</button>
+            </div>
+
+            <div id="withdrawal-details">
+                <!-- Filled dynamically -->
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-success" onclick="processWithdrawal('approved')" style="flex: 1; padding: 12px; border: none; border-radius: 8px; color: white; cursor: pointer;">✅ Approve</button>
+                <button class="btn-danger" onclick="processWithdrawal('rejected')" style="flex: 1; padding: 12px; border: none; border-radius: 8px; color: white; cursor: pointer;">❌ Reject</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, getDocs, addDoc, doc, updateDoc, query, where, orderBy, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        let currentSettings = {};
+        let currentWithdrawalId = null;
+        let allProducts = [];
+
+        // Section Navigation
+        window.showSection = (section) => {
+            document.querySelectorAll('.admin-sidebar a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.admin-content > div').forEach(div => div.style.display = 'none');
+            document.getElementById('section-' + section).style.display = 'block';
+
+            if (section === 'investors') loadInvestors();
+            if (section === 'withdrawals') loadWithdrawals('pending');
+            if (section === 'calculations') loadProductsForCalculator();
+            if (section === 'overview') loadOverview();
+        };
+
+        // Load Overview
+        async function loadOverview() {
+            try {
+                // Load investors
+                const investorsSnapshot = await getDocs(collection(db, 'investors'));
+                let totalInvestment = 0, totalDistributed = 0, activeInvestors = 0;
+
+                investorsSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    totalInvestment += data.investment || 0;
+                    totalDistributed += data.totalEarned || 0;
+                    if (data.status === 'active') activeInvestors++;
+                });
+
+                // Load pending withdrawals
+                const withdrawQuery = query(collection(db, 'withdrawal_requests'), where('status', '==', 'pending'));
+                const withdrawSnapshot = await getDocs(withdrawQuery);
+                let pendingAmount = 0;
+                withdrawSnapshot.forEach(doc => {
+                    pendingAmount += doc.data().amount || 0;
+                });
+
+                document.getElementById('total-investment').textContent = totalInvestment.toLocaleString();
+                document.getElementById('total-distributed').textContent = totalDistributed.toLocaleString();
+                document.getElementById('pending-withdrawals').textContent = pendingAmount.toLocaleString();
+                document.getElementById('total-investors').textContent = activeInvestors;
+
+                // Load settings
+                const settingsQuery = query(collection(db, 'investment_settings'), limit(1));
+                const settingsSnapshot = await getDocs(settingsQuery);
+
+                if (!settingsSnapshot.empty) {
+                    const settings = settingsSnapshot.docs[0].data();
+                    currentSettings = settings;
+                    document.getElementById('current-model').textContent = settings.profitType === 'net-profit' ? 'Net Profit Share' : 'Revenue Share';
+                    document.getElementById('default-percentage').textContent = settings.defaultPercentage || 0;
+                    document.getElementById('cap-amount-display').textContent = (3000 * (settings.capMultiplier || 2)).toLocaleString();
+                }
+
+                // Load recent activity
+                loadRecentActivity();
+            } catch (error) {
+                console.error('Error loading overview:', error);
+            }
+        }
+
+        async function loadRecentActivity() {
+            const tbody = document.querySelector('#recent-activity-table tbody');
+            if (!tbody) return;
+
+            try {
+                const earningsQuery = query(collection(db, 'investor_earnings'), orderBy('date', 'desc'), limit(10));
+                const snapshot = await getDocs(earningsQuery);
+                const activities = [];
+
+                snapshot.forEach(doc => activities.push({ ...doc.data(), type: 'earning' }));
+
+                tbody.innerHTML = activities.map(a => `
+                    <tr>
+                        <td>${a.investorName || 'Investor'}</td>
+                        <td><span class="badge badge-approved">💰 Earning</span></td>
+                        <td>Rs. ${(a.amount || 0).toLocaleString()}</td>
+                        <td>${new Date(a.date).toLocaleDateString()}</td>
+                        <td><span class="badge badge-${a.status === 'paid' ? 'paid' : 'pending'}">${a.status}</span></td>
+                    </tr>
+                `).join('') || '<tr><td colspan="5" style="text-align:center;color:#666;padding:30px;">No recent activity</td></tr>';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Load Investors
+        window.loadInvestors = async () => {
+            const tbody = document.querySelector('#investors-table tbody');
+            if (!tbody) return;
+
+            try {
+                const snapshot = await getDocs(collection(db, 'investors'));
+                const investors = [];
+
+                snapshot.forEach(doc => investors.push({ id: doc.id, ...doc.data() }));
+
+                tbody.innerHTML = investors.map(inv => {
+                    const capAmount = (inv.investment || 0) * (inv.capMultiplier || 2);
+                    const capReached = (inv.totalEarned || 0) >= capAmount;
+
+                    return `<tr>
+                        <td><strong>${inv.code}</strong></td>
+                        <td>${inv.name}</td>
+                        <td>${inv.phone}</td>
+                        <td>Rs. ${(inv.investment || 0).toLocaleString()}</td>
+                        <td>${inv.profitPercentage || 0}%</td>
+                        <td>Rs. ${(inv.totalEarned || 0).toLocaleString()}</td>
+                        <td>${capReached ? '<span class="badge badge-active">✅ Yes</span>' : '<span class="badge badge-pending">❌ No</span>'}</td>
+                        <td><span class="badge badge-${inv.status === 'active' ? 'active' : 'inactive'}">${inv.status || 'active'}</span></td>
+                        <td>
+                            <button class="btn-sm btn-warning" onclick="editInvestor('${inv.id}')">✏️ Edit</button>
+                            <button class="btn-sm btn-danger" onclick="deactivateInvestor('${inv.id}')">🚫 Deactivate</button>
+                        </td>
+                    </tr>`;
+                }).join('') || '<tr><td colspan="9" style="text-align:center;color:#666;padding:30px;">No investors found</td></tr>';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        // Add Investor Modal
+        window.openAddInvestorModal = () => {
+            document.getElementById('add-investor-modal').classList.add('active');
+            // Generate code
+            const code = 'INV-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            document.getElementById('investor-code').value = code;
+        };
+
+        window.closeAddInvestorModal = () => {
+            document.getElementById('add-investor-modal').classList.remove('active');
+        };
+
+        // Add Investor Form
+        document.getElementById('add-investor-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const investorData = {
+                code: document.getElementById('investor-code').value,
+                name: document.getElementById('investor-name').value,
+                phone: document.getElementById('investor-phone').value,
+                cnic: document.getElementById('investor-cnic').value,
+                investment: parseFloat(document.getElementById('investor-amount').value),
+                profitPercentage: parseFloat(document.getElementById('investor-percentage').value),
+                capMultiplier: parseFloat(document.getElementById('investor-cap').value),
+                capAmount: parseFloat(document.getElementById('investor-amount').value) * parseFloat(document.getElementById('investor-cap').value),
+                password: document.getElementById('investor-password').value,
+                witness: document.getElementById('investor-witness').value,
+                status: 'active',
+                totalEarned: 0,
+                totalPaid: 0,
+                pendingWithdrawal: 0,
+                joinedDate: new Date().toISOString()
+            };
+
+            try {
+                await addDoc(collection(db, 'investors'), investorData);
+                alert('Investor added successfully!');
+                closeAddInvestorModal();
+                loadInvestors();
+                document.getElementById('add-investor-form').reset();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to add investor');
+            }
+        });
+
+        // Settings Form
+        document.getElementById('settings-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const settingsData = {
+                profitType: document.getElementById('profit-type').value,
+                defaultPercentage: parseFloat(document.getElementById('default-percentage').value),
+                capMultiplier: parseFloat(document.getElementById('cap-multiplier').value),
+                minWithdrawal: parseFloat(document.getElementById('min-withdrawal').value),
+                withdrawalProcessing: document.getElementById('withdrawal-processing').value,
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                const settingsQuery = query(collection(db, 'investment_settings'), limit(1));
+                const snapshot = await getDocs(settingsQuery);
+
+                if (snapshot.empty) {
+                    await addDoc(collection(db, 'investment_settings'), settingsData);
+                } else {
+                    await updateDoc(doc(db, 'investment_settings', snapshot.docs[0].id), settingsData);
+                }
+
+                alert('Settings saved successfully!');
+                currentSettings = settingsData;
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to save settings');
+            }
+        });
+
+        // Load Withdrawals
+        window.loadWithdrawals = async (filter) => {
+            const tbody = document.querySelector('#withdrawals-table tbody');
+            if (!tbody) return;
+
+            try {
+                let q;
+                if (filter === 'all') {
+                    q = query(collection(db, 'withdrawal_requests'), orderBy('date', 'desc'));
+                } else {
+                    q = query(collection(db, 'withdrawal_requests'), where('status', '==', filter), orderBy('date', 'desc'));
+                }
+
+                const snapshot = await getDocs(q);
+                const withdrawals = [];
+
+                snapshot.forEach(doc => withdrawals.push({ id: doc.id, ...doc.data() }));
+
+                tbody.innerHTML = withdrawals.map(w => `
+                    <tr>
+                        <td>${w.investorName}<br><small style="color:#666;">${w.investorCode}</small></td>
+                        <td style="font-weight:600;color:#11998e;">Rs. ${(w.amount || 0).toLocaleString()}</td>
+                        <td>${w.method}</td>
+                        <td>${w.account}</td>
+                        <td>${new Date(w.date).toLocaleDateString()}</td>
+                        <td><span class="badge badge-${w.status === 'approved' ? 'approved' : w.status === 'rejected' ? 'rejected' : 'pending'}">${w.status}</span></td>
+                        <td>
+                            ${w.status === 'pending' ? `
+                                <button class="btn-sm btn-success" onclick="openWithdrawalAction('${w.id}', '${w.investorId}', ${w.amount})">✅ Process</button>
+                            ` : '-'}
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="7" style="text-align:center;color:#666;padding:30px;">No withdrawal requests</td></tr>';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        window.openWithdrawalAction = (id, investorId, amount) => {
+            currentWithdrawalId = id;
+            document.getElementById('withdrawal-details').innerHTML = `
+                <p><strong>Amount:</strong> Rs. ${amount.toLocaleString()}</p>
+                <p><strong>Investor ID:</strong> ${investorId}</p>
+                <p><strong>Withdrawal ID:</strong> ${id}</p>
+            `;
+            document.getElementById('withdrawal-action-modal').classList.add('active');
+        };
+
+        window.processWithdrawal = async (status) => {
+            if (!currentWithdrawalId) return;
+
+            try {
+                await updateDoc(doc(db, 'withdrawal_requests', currentWithdrawalId), {
+                    status,
+                    processedDate: new Date().toISOString(),
+                    processedBy: 'admin'
+                });
+
+                alert(`Withdrawal ${status}!`);
+                document.getElementById('withdrawal-action-modal').classList.remove('active');
+                loadWithdrawals('pending');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to process withdrawal');
+            }
+        };
+
+        // Load Products for Calculator
+        async function loadProductsForCalculator() {
+            try {
+                const snapshot = await getDocs(collection(db, 'products'));
+                allProducts = [];
+
+                snapshot.forEach(doc => {
+                    const product = { id: doc.id, ...doc.data() };
+                    // Migrate pricing if needed
+                    if (product.sellingPrice === undefined) {
+                        product.sellingPrice = product.price || 0;
+                        product.originalPrice = Math.round(product.price * 1.3);
+                        product.costPrice = product.costPrice || 0;
+                    }
+                    allProducts.push(product);
+                });
+
+                const select = document.getElementById('product-select');
+                select.innerHTML = '<option value="">-- Select a Product --</option>' +
+                    allProducts.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+                loadProductsProfitTable();
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        window.calculateProductProfit = () => {
+            const productId = document.getElementById('product-select').value;
+            if (!productId) {
+                document.getElementById('product-calculation').style.display = 'none';
+                return;
+            }
+
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            const sellingPrice = product.sellingPrice || 0;
+            const costPrice = product.costPrice || 0;
+            const shipping = product.shippingCost || 0;
+            const packaging = product.packagingCost || 0;
+            const expenses = product.otherExpenses || 0;
+
+            const netProfit = sellingPrice - costPrice - shipping - packaging - expenses;
+            const investorPercentage = currentSettings.defaultPercentage || 12;
+            const investorShare = Math.max(0, netProfit * (investorPercentage / 100));
+            const ownerProfit = netProfit - investorShare;
+
+            document.getElementById('calc-selling-price').textContent = 'Rs. ' + sellingPrice.toLocaleString();
+            document.getElementById('calc-cost-price').textContent = 'Rs. ' + costPrice.toLocaleString();
+            document.getElementById('calc-net-profit').textContent = 'Rs. ' + netProfit.toLocaleString();
+            document.getElementById('calc-investor-share').textContent = 'Rs. ' + investorShare.toLocaleString();
+
+            document.getElementById('detail-selling').textContent = sellingPrice.toLocaleString();
+            document.getElementById('detail-cost').textContent = costPrice.toLocaleString();
+            document.getElementById('detail-shipping').textContent = shipping.toLocaleString();
+            document.getElementById('detail-packaging').textContent = packaging.toLocaleString();
+            document.getElementById('detail-expenses').textContent = expenses.toLocaleString();
+            document.getElementById('detail-profit').textContent = netProfit.toLocaleString();
+            document.getElementById('detail-percentage').textContent = investorPercentage;
+            document.getElementById('detail-investor').textContent = investorShare.toLocaleString();
+            document.getElementById('detail-owner-profit').textContent = ownerProfit.toLocaleString();
+
+            document.getElementById('product-calculation').style.display = 'block';
+        };
+
+        function loadProductsProfitTable() {
+            const tbody = document.querySelector('#products-profit-table tbody');
+            if (!tbody) return;
+
+            const investorPercentage = currentSettings.defaultPercentage || 12;
+
+            tbody.innerHTML = allProducts.map(p => {
+                const sellingPrice = p.sellingPrice || 0;
+                const costPrice = p.costPrice || 0;
+                const shipping = p.shippingCost || 0;
+                const packaging = p.packagingCost || 0;
+                const expenses = p.otherExpenses || 0;
+
+                const netProfit = sellingPrice - costPrice - shipping - packaging - expenses;
+                const investorShare = Math.max(0, netProfit * (investorPercentage / 100));
+                const ownerProfit = netProfit - investorShare;
+                const marginPercent = sellingPrice > 0 ? ((netProfit / sellingPrice) * 100).toFixed(1) : 0;
+
+                return `<tr>
+                    <td>${p.name}</td>
+                    <td>Rs. ${sellingPrice.toLocaleString()}</td>
+                    <td>Rs. ${costPrice.toLocaleString()}</td>
+                    <td style="color:#11998e;font-weight:600;">Rs. ${netProfit.toLocaleString()}</td>
+                    <td style="color:#FFA500;">- Rs. ${investorShare.toLocaleString()}</td>
+                    <td style="color:#667eea;font-weight:600;">Rs. ${ownerProfit.toLocaleString()}</td>
+                    <td>${marginPercent}%</td>
+                </tr>`;
+            }).join('') || '<tr><td colspan="7" style="text-align:center;color:#666;padding:30px;">No products found</td></tr>';
+        }
+
+        // Helper functions
+        window.editInvestor = (id) => {
+            alert('Edit functionality - Implement as needed');
+        };
+
+        window.deactivateInvestor = async (id) => {
+            if (!confirm('Are you sure you want to deactivate this investor?')) return;
+
+            try {
+                await updateDoc(doc(db, 'investors', id), { status: 'inactive' });
+                alert('Investor deactivated!');
+                loadInvestors();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to deactivate investor');
+            }
+        };
+
+        // Load overview on page load
+        loadOverview();
+    </script>
+</body>
+</html>
