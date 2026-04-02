@@ -263,9 +263,36 @@
                 <div id="section-dashboard">
                     <h2 style="color: #2D3748; margin-bottom: 30px;">Welcome, <span id="investor-name">Investor</span>! 👋</h2>
 
+                    <!-- Live Earnings Banner -->
+                    <div class="investor-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 20px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -50px; right: -50px; font-size: 10rem; opacity: 0.1;">💰</div>
+                        <h3 style="color: white; margin-bottom: 15px;">📊 Live Earnings Tracker</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 15px;">
+                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; backdrop-filter: blur(10px);">
+                                <div style="font-size: 0.85rem; opacity: 0.9;">Today's Earnings</div>
+                                <div style="font-size: 2rem; font-weight: bold;" id="live-today">Rs. 0</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; backdrop-filter: blur(10px);">
+                                <div style="font-size: 0.85rem; opacity: 0.9;">This Week</div>
+                                <div style="font-size: 2rem; font-weight: bold;" id="live-week">Rs. 0</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; backdrop-filter: blur(10px);">
+                                <div style="font-size: 0.85rem; opacity: 0.9;">This Month</div>
+                                <div style="font-size: 2rem; font-weight: bold;" id="live-month">Rs. 0</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; backdrop-filter: blur(10px);">
+                                <div style="font-size: 0.85rem; opacity: 0.9;">Total Lifetime</div>
+                                <div style="font-size: 2rem; font-weight: bold; color: #FFD700;" id="live-total">Rs. 0</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
+                            🔄 Auto-refreshes every 30 seconds | Last updated: <span id="last-update">--:--</span>
+                        </div>
+                    </div>
+
                     <div class="investor-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; margin-bottom: 20px;">
                         <h3 style="color: white;">💰 Your Profit Share Model: Revenue Share (7%)</h3>
-                        <p style="margin-top: 10px; opacity: 0.95;">You earn <strong>7% of every order's total revenue</strong> until your earnings reach your cap amount. This is a simple and transparent model!</p>
+                        <p style="margin-top: 10px; opacity: 0.95;">You earn <strong>7% of every order's total revenue</strong> for 1 year. This is a simple and transparent model!</p>
                     </div>
 
                     <div class="stats-grid">
@@ -327,7 +354,10 @@
                         </div>
 
                         <div class="info-box" style="background: #E3F2FD; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                            <strong>ℹ️ Note:</strong> You earn 7% on every delivered order. Earnings are automatically calculated when order status changes to "Delivered".
+                            <strong>ℹ️ Note:</strong> You earn 7% on EVERY order's total revenue. 
+                            <strong style="color: #11998e;">Green = Earnings Processed</strong> | 
+                            <strong style="color: #FF9800;">Orange = Pending Processing</strong>
+                            <br><small>Earnings are automatically calculated when order status changes to "Delivered".</small>
                         </div>
 
                         <div class="table-responsive">
@@ -341,7 +371,7 @@
                                         <th>Your Share (%)</th>
                                         <th>Your Earning</th>
                                         <th>Status</th>
-                                        <th>Date</th>
+                                        <th>Date & Time</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -558,6 +588,12 @@
 
             // Load dashboard data
             loadDashboardData();
+            
+            // Load live earnings
+            loadLiveEarnings();
+            
+            // Auto-refresh live earnings every 30 seconds
+            setInterval(loadLiveEarnings, 30000);
         }
 
         async function loadDashboardData() {
@@ -765,6 +801,74 @@
             }
         }
 
+        // Live Earnings Tracker
+        async function loadLiveEarnings() {
+            if (!currentInvestor) return;
+
+            try {
+                const earningsQuery = query(
+                    collection(db, 'investor_earnings'),
+                    where('investorId', '==', currentInvestor.id)
+                );
+                const snapshot = await getDocs(earningsQuery);
+                
+                const now = new Date();
+                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                const weekStart = new Date(now.setDate(now.getDate() - 7)).getTime();
+                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+                
+                let today = 0, week = 0, month = 0, total = 0;
+
+                snapshot.forEach(doc => {
+                    const earning = doc.data();
+                    const amount = earning.amount || 0;
+                    const earningDate = earning.date ? new Date(earning.date).getTime() : 0;
+                    
+                    total += amount;
+                    
+                    if (earningDate >= todayStart) today += amount;
+                    if (earningDate >= weekStart) week += amount;
+                    if (earningDate >= monthStart) month += amount;
+                });
+
+                // Update live counters with animation
+                animateValue('live-today', today);
+                animateValue('live-week', week);
+                animateValue('live-month', month);
+                animateValue('live-total', total);
+
+                // Update last refresh time
+                const timeEl = document.getElementById('last-update');
+                if (timeEl) {
+                    timeEl.textContent = new Date().toLocaleTimeString('en-PK', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading live earnings:', error);
+            }
+        }
+
+        // Animate value change
+        function animateValue(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            const currentValue = parseInt(element.textContent.replace(/[^0-9]/g, '')) || 0;
+            
+            if (currentValue !== newValue) {
+                element.style.transform = 'scale(1.1)';
+                element.style.transition = 'transform 0.3s ease';
+                setTimeout(() => {
+                    element.textContent = 'Rs. ' + newValue.toLocaleString();
+                    element.style.transform = 'scale(1)';
+                }, 150);
+            } else {
+                element.textContent = 'Rs. ' + newValue.toLocaleString();
+            }
+        }
+
         async function loadRecentActivity() {
             const tbody = document.querySelector('#recent-activity-table tbody');
             if (!tbody) return;
@@ -824,19 +928,11 @@
 
                 snapshot.forEach(doc => {
                     const order = { id: doc.id, ...doc.data() };
-                    // Show orders that match investor code OR all delivered orders (for earnings calculation)
-                    const matchesInvestor = order.investorShare && 
-                        (order.investorShare.investorId === currentInvestor.id || 
-                         order.investorShare.investorCode === investorData.code);
                     
-                    // Also show delivered orders (potential earnings)
-                    const isDelivered = order.status === 'delivered';
-                    
+                    // Show ALL orders to investor (they earn on every order)
                     if (filter === 'all') {
-                        if (matchesInvestor || isDelivered) {
-                            orders.push(order);
-                        }
-                    } else if (filter === 'delivered' && isDelivered) {
+                        orders.push(order);
+                    } else if (filter === 'delivered' && order.status === 'delivered') {
                         orders.push(order);
                     } else if (filter === 'pending' && order.status !== 'delivered') {
                         orders.push(order);
@@ -848,7 +944,16 @@
                     const orderTotal = order.total || 0;
                     const sharePercent = share.percentage || investorData.profitPercentage || 7;
                     const earning = share.amount || (orderTotal * (sharePercent / 100));
-                    const hasEarning = share.amount > 0 || order.investorShare;
+                    const isProcessed = order.investorShare && order.investorShare.processed;
+                    
+                    // Get order date and time
+                    const orderDate = order.date || order.createdAt;
+                    const dateTime = orderDate ? 
+                        new Date(orderDate).toLocaleString('en-PK', { 
+                            dateStyle: 'medium', 
+                            timeStyle: 'short' 
+                        }) : 
+                        'Recent';
 
                     return `<tr>
                         <td>#${order.id.slice(0, 8)}</td>
@@ -856,11 +961,13 @@
                         <td>${order.items?.[0]?.name || 'Product'}</td>
                         <td>Rs. ${(orderTotal).toLocaleString()}</td>
                         <td>${sharePercent}%</td>
-                        <td style="color:${hasEarning ? '#11998e' : '#FFA500'};font-weight:600;">Rs. ${earning.toLocaleString()}</td>
+                        <td style="color:${isProcessed ? '#11998e' : '#FF9800'};font-weight:600;">
+                            ${isProcessed ? 'Rs. ' + earning.toLocaleString() : '⏳ Pending'}
+                        </td>
                         <td><span class="badge badge-${order.status}">${order.status}</span></td>
-                        <td>${new Date(order.date).toLocaleDateString()}</td>
+                        <td style="font-size: 0.85rem; color: #666;">${dateTime}</td>
                     </tr>`;
-                }).join('') || '<tr><td colspan="8" style="text-align:center;color:#666;padding:30px;">No orders found</td></tr>';
+                }).join('') || '<tr><td colspan="9" style="text-align:center;color:#666;padding:30px;">No orders found</td></tr>';
             } catch (error) {
                 console.error('Error loading orders:', error);
             }
@@ -870,6 +977,7 @@
             // Reload dashboard data and orders
             loadDashboardData();
             loadInvestorOrders('all');
+            loadLiveEarnings();
             alert('Earnings refreshed!');
         };
 
