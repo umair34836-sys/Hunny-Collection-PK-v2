@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit Calculator - Admin Panel | Hunny Collection PK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .calculator {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .result-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .result-item label {
+            display: block;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .result-item .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .result-item .subtext {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .info-box {
+            background: #E3F2FD;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .info-box h4 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .calculator {
+                padding: 20px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Profit Calculator</h1>
+            <p style="color: #666; margin-top: 10px;">Calculate profit sharing and investor returns</p>
+            <a href="admin.html" class="back-btn">← Back to Admin Panel</a>
+        </div>
+
+        <div class="calculator">
+            <div class="form-group">
+                <label for="orderAmount">Order Amount (Rs.)</label>
+                <input type="number" id="orderAmount" placeholder="Enter order amount" step="0.01" min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="investorPercentage">Investor Share Percentage (%)</label>
+                <input type="number" id="investorPercentage" placeholder="Enter percentage (e.g., 7)" step="0.01" min="0" max="100" value="7">
+            </div>
+
+            <div class="form-group">
+                <label for="numInvestors">Number of Investors</label>
+                <input type="number" id="numInvestors" placeholder="Enter number of investors" min="1" value="1">
+            </div>
+
+            <button class="calculate-btn" onclick="calculateProfit()">Calculate Profit Distribution</button>
+
+            <div id="results" class="results">
+                <h3>📊 Calculation Results</h3>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <label>Total Order Amount</label>
+                        <div class="value" id="result-total">Rs. 0</div>
+                    </div>
+                    <div class="result-item">
+                        <label>Total Investor Share</label>
+                        <div class="value" id="result-investor-total">Rs. 0</div>
+                        <div class="subtext" id="result-investor-percent">0% of total</div>
+                    </div>
+                    <div class="result-item">
+                        <label>Per Investor Share</label>
+                        <div class="value" id="result-per-investor">Rs. 0</div>
+                        <div class="subtext" id="result-num-investors">Split between 0 investors</div>
+                    </div>
+                    <div class="result-item">
+                        <label>Your Net Profit</label>
+                        <div class="value" id="result-net">Rs. 0</div>
+                        <div class="subtext" id="result-net-percent">0% of total</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 How is this calculated?</h4>
+                    <p>
+                        The investor share is calculated as a percentage of the total order amount. 
+                        This total investor share is then divided equally among all active investors.
+                        Your net profit is the remaining amount after deducting the investor share from the total order.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateProfit() {
+            const orderAmount = parseFloat(document.getElementById('orderAmount').value) || 0;
+            const investorPercentage = parseFloat(document.getElementById('investorPercentage').value) || 0;
+            const numInvestors = parseInt(document.getElementById('numInvestors').value) || 1;
+
+            if (orderAmount <= 0) {
+                alert('Please enter a valid order amount');
+                return;
+            }
+
+            if (investorPercentage < 0 || investorPercentage > 100) {
+                alert('Please enter a valid percentage (0-100)');
+                return;
+            }
+
+            if (numInvestors < 1) {
+                alert('Please enter at least 1 investor');
+                return;
+            }
+
+            const totalInvestorShare = (orderAmount * investorPercentage) / 100;
+            const perInvestorShare = totalInvestorShare / numInvestors;
+            const netProfit = orderAmount - totalInvestorShare;
+            const netPercentage = 100 - investorPercentage;
+
+            document.getElementById('result-total').textContent = 'Rs. ' + orderAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('result-investor-total').textContent = 'Rs. ' + totalInvestorShare.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('result-investor-percent').textContent = investorPercentage + '% of total';
+            document.getElementById('result-per-investor').textContent = 'Rs. ' + perInvestorShare.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('result-num-investors').textContent = 'Split between ' + numInvestors + ' investor(s)';
+            document.getElementById('result-net').textContent = 'Rs. ' + netProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('result-net-percent').textContent = netPercentage.toFixed(2) + '% of total';
+
+            document.getElementById('results').classList.add('active');
+        }
+
+        // Allow Enter key to trigger calculation
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateProfit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

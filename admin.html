@@ -212,6 +212,7 @@
                 <a href="#" onclick="showSection('dashboard')" class="active">Dashboard</a>
                 <a href="#" onclick="showSection('products')">Products</a>
                 <a href="#" onclick="showSection('orders')">Orders</a>
+                <a href="admin-orders-history.html">📊 Orders History</a>
                 <a href="#" onclick="showSection('reviews')">⭐ Reviews</a>
                 <a href="#" onclick="showSection('categories')">Categories</a>
                 <a href="#" onclick="showSection('vendors')">🏪 Vendors</a>
@@ -219,8 +220,7 @@
                 <a href="#" onclick="showSection('digital-categories')">📂 Digital Categories</a>
                 <a href="#" onclick="showSection('digital-orders')">📥 Digital Orders</a>
                 <a href="#" onclick="showSection('video-ads')">📺 Video Ads</a>
-                <a href="admin-investment-settings.html">💰 Investment Settings</a>
-                <a href="investor-panel.html" target="_blank" style="background: rgba(17, 153, 142, 0.2); border-left: 3px solid #11998e;">👤 Investor Panel</a>
+                <a href="profit-calculator.html">💰 Profit Calculator</a>
                 <a href="settings.html">⚙️ Site Settings</a>
                 <a href="#" onclick="logout()">Logout</a>
             </aside>
@@ -2258,41 +2258,6 @@
                     updatedAt: new Date().toISOString()
                 });
 
-                // If status is delivered, process investor distribution
-                if (status === 'delivered') {
-                    const orderDoc = await getDoc(doc(db, 'orders', id));
-                    const orderData = orderDoc.data();
-
-                    console.log('Admin: Processing investor distribution for order', id);
-                    console.log('Admin: Order data:', orderData);
-
-                    // Check if already processed
-                    if (!orderData.investorShare || !orderData.investorShare.processed) {
-                        try {
-                            // Import investor module function
-                            const { processOrderInvestorDistribution } = await import('./investor-module.js');
-
-                            console.log('Admin: Calling processOrderInvestorDistribution...');
-                            await processOrderInvestorDistribution(id, orderData);
-                            console.log('Admin: processOrderInvestorDistribution completed');
-
-                            // Mark as processed
-                            await updateDoc(doc(db, 'orders', id), {
-                                'investorShare.processed': true,
-                                'investorShare.processedAt': new Date().toISOString()
-                            });
-
-                            console.log(`✅ Investor distribution processed for order ${id}`);
-                        } catch (investorError) {
-                            console.error('❌ Investor distribution FAILED:', investorError);
-                            console.error('Error details:', investorError.stack);
-                            // Don't fail the whole order update, just log the error
-                        }
-                    } else {
-                        console.log('Admin: Order already processed for investor distribution');
-                    }
-                }
-
                 loadDashboardData();
                 alert(`Order ${status} successfully!`);
             } catch (error) {
@@ -2322,16 +2287,6 @@
                     </div>
                 </div>
             `).join('');
-
-            const investorInfo = order.investorShare ? `
-                <div style="background: #E8F5E9; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                    <strong>💰 Investor Distribution:</strong><br>
-                    Investor Code: ${order.investorShare.investorCode || 'N/A'}<br>
-                    Share Percentage: ${order.investorShare.percentage || 7}%<br>
-                    Investor Amount: Rs. ${(order.investorShare.amount || 0).toLocaleString()}<br>
-                    Processed: ${order.investorShare.processed ? '✅ Yes' : '❌ No'}
-                </div>
-            ` : '<div style="color: #FF9800; padding: 15px;">⚠️ No investor distribution yet</div>';
 
             const modalContent = `
                 <div style="max-height: 70vh; overflow-y: auto;">
@@ -2373,8 +2328,6 @@
                             <div style="font-weight: 600;">${order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Recent'}</div>
                         </div>
                     </div>
-
-                    ${investorInfo}
 
                     ${order.notes ? `<div style="background: #FFFDE7; padding: 15px; border-radius: 8px; margin-top: 15px;"><strong>📝 Notes:</strong><br>${order.notes}</div>` : ''}
                 </div>

@@ -13,12 +13,6 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Check if user is investor (by code)
-    function isInvestor(investorCode) {
-      return request.auth != null &&
-             exists(/databases/$(database)/documents/investors/$(request.auth.uid));
-    }
-    
     // ========== MAIN COLLECTIONS ==========
     
     // PRODUCTS (Physical) - Anyone can read, authenticated can write
@@ -91,38 +85,7 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
-    // ========== INVESTOR MANAGEMENT COLLECTIONS ==========
-
-    // INVESTORS - Admin can write, investor can read own data
-    match /investors/{investorId} {
-      allow read: if isAdmin() || 
-                     (request.auth != null && resource.data.code == request.auth.token.investorCode);
-      allow create, update, delete: if isAdmin();
-    }
-
-    // INVESTOR EARNINGS - Admin can write, investor can read own earnings
-    match /investor_earnings/{earningId} {
-      allow read: if isAdmin() || 
-                     (request.auth != null && resource.data.investorCode == request.auth.token.investorCode);
-      allow create, update, delete: if isAdmin();
-    }
-
-    // WITHDRAWAL REQUESTS - Investor can create own, admin can process
-    match /withdrawal_requests/{requestId} {
-      allow read: if isAdmin() || 
-                     (request.auth != null && resource.data.investorCode == request.auth.token.investorCode);
-      allow create: if request.auth != null && 
-                       request.resource.data.investorCode == request.auth.token.investorCode;
-      allow update, delete: if isAdmin();
-    }
-
-    // INVESTMENT SETTINGS - Admin only
-    match /investment_settings/{settingId} {
-      allow read: if isAdmin();
-      allow create, update, delete: if isAdmin();
-    }
-
-    // ORDERS - Updated to include investor share data
+    // ORDERS - Authenticated users
     match /orders/{orderId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
