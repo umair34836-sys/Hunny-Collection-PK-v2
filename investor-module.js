@@ -148,13 +148,16 @@ export async function recordInvestorEarning(orderId, investorId, calculation, pr
  */
 export async function processOrderInvestorDistribution(orderId, orderData) {
     try {
-        const activeInvestors = await getActiveInvestors();
+        console.log('[InvestorModule] Processing distribution for order:', orderId);
         
+        const activeInvestors = await getActiveInvestors();
+        console.log('[InvestorModule] Found', activeInvestors.length, 'active investors:', activeInvestors.map(i => i.code));
+
         if (activeInvestors.length === 0) {
-            console.log('No active investors found');
+            console.log('[InvestorModule] No active investors found - skipping distribution');
             return;
         }
-        
+
         // Get settings
         const settingsQuery = query(collection(db, 'investment_settings'), limit(1));
         const settingsSnapshot = await getDocs(settingsQuery);
@@ -163,14 +166,16 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
             profitType: 'revenue', // Default to Revenue Share
             defaultPercentage: 7 // 7% revenue share
         };
-        
+
         if (!settingsSnapshot.empty) {
             settings = settingsSnapshot.docs[0].data();
         }
-        
+        console.log('[InvestorModule] Settings:', settings);
+
         // Calculate costs
         const orderTotal = orderData.total || 0;
         const items = orderData.items || [];
+        console.log('[InvestorModule] Order total:', orderTotal, 'Items:', items.length);
 
         // Get product costs
         let totalCostPrice = 0;
@@ -183,11 +188,13 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
             // Note: You may need to fetch product details separately
             totalCostPrice += item.costPrice || 0;
         }
-        
+        console.log('[InvestorModule] Costs - CostPrice:', totalCostPrice, 'Shipping:', totalShipping, 'Packaging:', totalPackaging, 'Delivery:', totalDelivery);
+
         // For each active investor, calculate and record share
         for (const investor of activeInvestors) {
             const percentage = investor.profitPercentage || settings.defaultPercentage;
-            
+            console.log('[InvestorModule] Processing investor:', investor.code, 'Percentage:', percentage);
+
             const calculation = calculateInvestorShare(
                 orderTotal,
                 totalCostPrice,
@@ -197,7 +204,8 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
                 settings.profitType,
                 percentage
             );
-            
+            console.log('[InvestorModule] Calculation result:', calculation);
+
             // Record earning for this investor
             await recordInvestorEarning(
                 orderId,
@@ -205,11 +213,12 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
                 calculation,
                 items[0]?.name || 'Order Items'
             );
+            console.log('[InvestorModule] Earning recorded for investor:', investor.code);
         }
-        
-        console.log(`Investor distribution processed for order: ${orderId}`);
+
+        console.log(`[InvestorModule] Investor distribution completed for order: ${orderId}`);
     } catch (error) {
-        console.error('Error processing investor distribution:', error);
+        console.error('[InvestorModule] Error processing investor distribution:', error);
     }
 }
 

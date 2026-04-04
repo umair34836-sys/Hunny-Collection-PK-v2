@@ -969,9 +969,9 @@
             console.log('loadInvestorOrders: Investor Code:', investorData?.code);
 
             try {
-                const ordersQuery = query(collection(db, 'orders'), orderBy('date', 'desc'));
+                const ordersQuery = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
                 console.log('loadInvestorOrders: Executing query...');
-                
+
                 const snapshot = await getDocs(ordersQuery);
                 console.log('loadInvestorOrders: Query returned', snapshot.size, 'orders');
                 
@@ -1002,15 +1002,38 @@
                     const sharePercent = share.percentage || investorData.profitPercentage || 7;
                     const earning = share.amount || (orderTotal * (sharePercent / 100));
                     const isProcessed = order.investorShare && order.investorShare.processed;
-                    
+                    const isDelivered = order.status === 'delivered';
+
                     // Get order date and time
-                    const orderDate = order.date || order.createdAt;
-                    const dateTime = orderDate ? 
-                        new Date(orderDate).toLocaleString('en-PK', { 
-                            dateStyle: 'medium', 
-                            timeStyle: 'short' 
-                        }) : 
+                    const orderDate = order.createdAt || order.date;
+                    const dateTime = orderDate ?
+                        new Date(orderDate).toLocaleString('en-PK', {
+                            dateStyle: 'medium',
+                            timeStyle: 'short'
+                        }) :
                         'Recent';
+
+                    // Determine display status
+                    let earningDisplay = '';
+                    let earningColor = '';
+                    
+                    if (!isDelivered) {
+                        // Order not delivered yet
+                        earningDisplay = '⏳ Waiting Delivery';
+                        earningColor = '#999';
+                    } else if (isProcessed) {
+                        // Processed and paid
+                        earningDisplay = 'Rs. ' + earning.toLocaleString();
+                        earningColor = '#11998e';
+                    } else if (order.investorShare && !isProcessed) {
+                        // Has investor share but not processed
+                        earningDisplay = 'Rs. ' + earning.toLocaleString();
+                        earningColor = '#FF9800';
+                    } else {
+                        // No investor share data yet - will be calculated on delivery
+                        earningDisplay = '📋 Will be calculated';
+                        earningColor = '#2196F3';
+                    }
 
                     return `<tr>
                         <td>#${order.id.slice(0, 8)}</td>
@@ -1018,8 +1041,8 @@
                         <td>${order.items?.[0]?.name || 'Product'}</td>
                         <td>Rs. ${(orderTotal).toLocaleString()}</td>
                         <td>${sharePercent}%</td>
-                        <td style="color:${isProcessed ? '#11998e' : '#FF9800'};font-weight:600;">
-                            ${isProcessed ? 'Rs. ' + earning.toLocaleString() : '⏳ Pending'}
+                        <td style="color:${earningColor};font-weight:600;">
+                            ${earningDisplay}
                         </td>
                         <td><span class="badge badge-${order.status}">${order.status}</span></td>
                         <td style="font-size: 0.85rem; color: #666;">${dateTime}</td>

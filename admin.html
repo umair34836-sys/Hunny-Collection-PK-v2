@@ -2015,11 +2015,17 @@
                     const orderDoc = await getDoc(doc(db, 'orders', id));
                     const orderData = orderDoc.data();
 
+                    console.log('Admin: Processing investor distribution for order', id);
+                    console.log('Admin: Order data:', orderData);
+
                     // Check if already processed
                     if (!orderData.investorShare || !orderData.investorShare.processed) {
                         // Import investor module function
                         const { processOrderInvestorDistribution } = await import('./investor-module.js');
+                        
+                        console.log('Admin: Calling processOrderInvestorDistribution...');
                         await processOrderInvestorDistribution(id, orderData);
+                        console.log('Admin: processOrderInvestorDistribution completed');
 
                         // Mark as processed
                         await updateDoc(doc(db, 'orders', id), {
@@ -2028,6 +2034,8 @@
                         });
 
                         console.log(`Investor distribution processed for order ${id}`);
+                    } else {
+                        console.log('Admin: Order already processed for investor distribution');
                     }
                 }
 
