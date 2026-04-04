@@ -2,7 +2,7 @@
 // This module handles automatic profit calculation and distribution for investors
 
 import { db } from './firebase-config.js';
-import { collection, addDoc, getDocs, query, where, doc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, addDoc, getDocs, query, where, doc, updateDoc, increment, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 /**
  * Calculate investor share for an order
@@ -101,6 +101,7 @@ export async function recordInvestorEarning(orderId, investorId, calculation, pr
             investorCode: investorData.code,
             investorName: investorData.name,
             productName,
+            orderTotal: calculation.orderTotal, // Order total save karein
             netProfit: calculation.netProfit,
             percentage: calculation.percentage,
             amount: finalAmount,
