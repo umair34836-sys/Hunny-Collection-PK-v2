@@ -228,6 +228,13 @@
         import { collection, query, where, getDocs, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { updateCartCount } from './app.js';
+        import { initGlobalSearch, addSearchIconToNavbar } from './global-search.js';
+
+        // Initialize search
+        document.addEventListener('DOMContentLoaded', () => {
+            initGlobalSearch();
+            addSearchIconToNavbar();
+        });
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {

@@ -159,12 +159,19 @@
     <script type="module">
         import { loadCategories, loadFeaturedProducts, updateCartCount } from './app.js';
         import { loadSiteSettings } from './site-settings.js';
-        
+        import { initGlobalSearch, addSearchIconToNavbar } from './global-search.js';
+
         // Load settings first, then load page content
         loadSiteSettings().then(() => {
             loadCategories();
             loadFeaturedProducts();
             updateCartCount();
+        });
+
+        // Initialize global search
+        document.addEventListener('DOMContentLoaded', () => {
+            initGlobalSearch();
+            addSearchIconToNavbar();
         });
     </script>
     

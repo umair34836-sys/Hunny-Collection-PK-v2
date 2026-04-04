@@ -261,6 +261,13 @@
     <script type="module" src="site-settings.js"></script>
     <script type="module">
         import { updateCartCount, renderCartPage, getCartItems } from './app.js';
+        import { initGlobalSearch, addSearchIconToNavbar } from './global-search.js';
+
+        // Initialize search
+        document.addEventListener('DOMContentLoaded', () => {
+            initGlobalSearch();
+            addSearchIconToNavbar();
+        });
 
         renderCartPage();
         updateCartCount();
