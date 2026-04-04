@@ -694,13 +694,6 @@
     <script type="module" src="site-settings.js"></script>
     <script type="module">
         import { updateCartCount } from './app.js';
-        import { initGlobalSearch, addSearchIconToNavbar } from './global-search.js';
-
-        // Initialize search
-        document.addEventListener('DOMContentLoaded', () => {
-            initGlobalSearch();
-            addSearchIconToNavbar();
-        });
 
         const params = new URLSearchParams(window.location.search);
         const productId = params.get('id');

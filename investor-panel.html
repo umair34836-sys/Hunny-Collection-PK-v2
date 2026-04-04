@@ -6,6 +6,15 @@
     <title>Investor Panel - Hunny Collection PK</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="assets/logo.jpeg">
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/jpeg" href="assets/logo.jpeg" sizes="32x32">
+    <link rel="icon" type="image/jpeg" href="assets/logo.jpeg" sizes="16x16">
+    <link rel="shortcut icon" type="image/jpeg" href="assets/logo.jpeg">
+    <link rel="apple-touch-icon" href="assets/logo.jpeg">
+    <link rel="apple-touch-icon-precomposed" href="assets/logo.jpeg">
+    <meta name="msapplication-TileImage" content="assets/logo.jpeg">
+    <meta name="msapplication-TileColor" content="#FF69B4">
+    <meta name="theme-color" content="#FF69B4">
     <style>
         .investor-layout {
             display: grid;
@@ -521,7 +530,6 @@
     <script type="module">
         import { db } from './firebase-config.js';
         import { collection, getDocs, query, where, addDoc, doc, updateDoc, arrayUnion, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { initGlobalSearch, addSearchIconToNavbar } from './global-search.js';
 
         let currentInvestor = null;
         let investorData = null;
@@ -589,12 +597,6 @@
 
             // Load dashboard data
             loadDashboardData();
-
-            // Initialize global search
-            setTimeout(() => {
-                initGlobalSearch();
-                addSearchIconToNavbar();
-            }, 500);
 
             // Load live earnings
             loadLiveEarnings();

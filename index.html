@@ -26,9 +26,16 @@
     <meta property="twitter:description" content="Shop premium female fashion at Hunny Collection PK. Discover trendy dresses, kurtis, jewelry, bags & shoes. Cash on Delivery ✓ Fast Shipping ✓ Best Prices in Pakistan.">
     <meta property="twitter:image" content="https://i.ibb.co/wrcXdHfM/home.jpg">
     
-    <!-- Favicon -->
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/jpeg" href="assets/logo.jpeg" sizes="32x32">
+    <link rel="icon" type="image/jpeg" href="assets/logo.jpeg" sizes="16x16">
     <link rel="icon" type="image/png" href="assets/logo.jpeg">
-    <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌸%3C/text%3E%3C/svg%3E">
+    <link rel="shortcut icon" type="image/jpeg" href="assets/logo.jpeg">
+    <link rel="apple-touch-icon" href="assets/logo.jpeg">
+    <link rel="apple-touch-icon-precomposed" href="assets/logo.jpeg">
+    <meta name="msapplication-TileImage" content="assets/logo.jpeg">
+    <meta name="msapplication-TileColor" content="#FF69B4">
+    <meta name="theme-color" content="#FF69B4">
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -159,19 +166,12 @@
     <script type="module">
         import { loadCategories, loadFeaturedProducts, updateCartCount } from './app.js';
         import { loadSiteSettings } from './site-settings.js';
-        import { initGlobalSearch, addSearchIconToNavbar } from './global-search.js';
 
         // Load settings first, then load page content
         loadSiteSettings().then(() => {
             loadCategories();
             loadFeaturedProducts();
             updateCartCount();
-        });
-
-        // Initialize global search
-        document.addEventListener('DOMContentLoaded', () => {
-            initGlobalSearch();
-            addSearchIconToNavbar();
         });
     </script>
     
