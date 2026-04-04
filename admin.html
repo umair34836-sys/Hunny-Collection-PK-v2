@@ -1551,7 +1551,7 @@
                     </td>
                     <td>
                         <button class="btn-sm" onclick="editProduct('${p.id}')">Edit</button>
-                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${p.name}')" style="background: #25d366; color: white;">📱 Share</button>
+                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}')" style="background: #25d366; color: white;">📱 Share</button>
                         <button class="btn-sm btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
                     </td>
                 </tr>

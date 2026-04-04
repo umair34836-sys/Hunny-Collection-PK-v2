@@ -1,7 +1,7 @@
 // Firebase Configuration
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, enableIndexedDbPersistence } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
 const firebaseConfig = {
@@ -20,3 +20,18 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+// Enable IndexedDB Persistence for offline caching and faster loads
+enableIndexedDbPersistence(db)
+  .then(() => {
+    console.log('✅ Firestore persistence enabled successfully');
+  })
+  .catch((err) => {
+    if (err.code === 'failed-precondition') {
+      console.warn('⚠️ Persistence failed: Multiple tabs open');
+    } else if (err.code === 'unimplemented') {
+      console.warn('⚠️ Persistence not available: Browser not supported');
+    } else {
+      console.error('❌ Persistence error:', err);
+    }
+  });
