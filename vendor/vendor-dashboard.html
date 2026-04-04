@@ -505,13 +505,53 @@
                 <!-- Markaz Product Code -->
                 <div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B6B;">
                     <label>🏪 Markaz Product Code *</label>
-                    <input type="text" id="product-markaz-code" placeholder="e.g., MZ1459200006TEBGMR or MZ123456" 
+                    <input type="text" id="product-markaz-code" placeholder="e.g., MZ1459200006TEBGMR or MZ123456"
                            pattern="[A-Za-z0-9]+" required
                            title="Enter Markaz product code (any alphanumeric code)"
                            style="text-transform: uppercase; font-family: monospace; letter-spacing: 1px;">
                     <small style="color: #666; display: block; margin-top: 5px;">
                         ⚠️ Required field - Enter Markaz product code (any format/length)
                     </small>
+                </div>
+
+                <!-- Optional Main Image Section -->
+                <div class="form-group" style="background: #f0f8ff; padding: 15px; border-radius: 8px; border-left: 4px solid #4ECDC4;">
+                    <label>🖼️ Main Product Image (Optional)</label>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
+                        Upload or paste a URL for the main display image (overrides the first image from gallery)
+                    </p>
+
+                    <!-- Main Image Preview -->
+                    <div id="main-image-preview-container" style="margin-bottom: 15px;">
+                        <div id="main-image-preview" style="display: none; position: relative; width: 200px; height: 200px; border-radius: 8px; overflow: hidden; border: 2px solid #4ECDC4;">
+                            <img id="main-image-preview-img" src="" alt="Main Image Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                            <button type="button" onclick="removeMainImage()" style="position: absolute; top: 5px; right: 5px; background: rgba(255, 0, 0, 0.7); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 1rem;">✕</button>
+                        </div>
+                        <p id="no-main-image-msg" style="color: #999; font-size: 0.9rem;">No main image set (will use first image from gallery)</p>
+                    </div>
+
+                    <!-- Upload Button -->
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+                        <button type="button" class="btn-sm" onclick="document.getElementById('main-image-upload').click()" style="background: #4ECDC4; color: white;">
+                            📁 Upload Main Image
+                        </button>
+                        <button type="button" class="btn-sm" onclick="openUploadGuide()" style="background: #25d366; color: white;">
+                            📤 Upload to ImgBB (Free)
+                        </button>
+                    </div>
+                    <input type="file" id="main-image-upload" accept="image/*" style="display: none;" onchange="handleMainImageUpload(event)">
+
+                    <!-- Manual URL Input -->
+                    <div style="margin-top: 10px;">
+                        <label style="font-size: 0.9rem;">Or Add Main Image URL:</label>
+                        <div style="display: flex; gap: 10px; margin-top: 5px;">
+                            <input type="text" id="main-image-url" placeholder="Paste main image URL here" style="flex: 1;">
+                            <button type="button" class="btn-sm" onclick="addMainImageUrl()" style="background: #4ECDC4; color: white;">➕ Add URL</button>
+                        </div>
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            💡 Tip: This image will be shown as the primary product image
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -569,7 +609,70 @@
         let currentUser = null;
         let vendorData = null;
         let uploadedImageUrls = [];
+        let mainImageFile = null; // Store main image file or URL
         let categories = [];
+
+        // Handle main image upload
+        window.handleMainImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                mainImageFile = e.target.result;
+                const previewDiv = document.getElementById('main-image-preview');
+                const previewImg = document.getElementById('main-image-preview-img');
+                const noMsg = document.getElementById('no-main-image-msg');
+
+                previewImg.src = e.target.result;
+                previewDiv.style.display = 'block';
+                noMsg.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // Add main image URL manually
+        window.addMainImageUrl = function() {
+            const urlInput = document.getElementById('main-image-url');
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                alert('Please enter an image URL');
+                return;
+            }
+
+            // Validate URL
+            if (!url.match(/\.(jpeg|jpg|gif|png|webp)$/i) && !url.match(/^https?:\/\//i)) {
+                alert('Please enter a valid image URL');
+                return;
+            }
+
+            mainImageFile = url;
+            const previewDiv = document.getElementById('main-image-preview');
+            const previewImg = document.getElementById('main-image-preview-img');
+            const noMsg = document.getElementById('no-main-image-msg');
+
+            previewImg.src = url;
+            previewDiv.style.display = 'block';
+            noMsg.style.display = 'none';
+            urlInput.value = '';
+        };
+
+        // Remove main image
+        window.removeMainImage = function() {
+            if (confirm('Remove this main image?')) {
+                mainImageFile = null;
+                const previewDiv = document.getElementById('main-image-preview');
+                const noMsg = document.getElementById('no-main-image-msg');
+                const previewImg = document.getElementById('main-image-preview-img');
+
+                previewImg.src = '';
+                previewDiv.style.display = 'none';
+                noMsg.style.display = 'block';
+                document.getElementById('main-image-upload').value = '';
+                document.getElementById('main-image-url').value = '';
+            }
+        };
 
         // Load categories from Firestore
         async function loadCategories() {
@@ -967,12 +1070,27 @@
             document.getElementById('product-id').value = '';
             document.getElementById('product-modal-title').textContent = 'Add Product';
             uploadedImageUrls = [];
+            mainImageFile = null;
             document.getElementById('image-preview').innerHTML = '';
             document.getElementById('product-modal').classList.add('active');
+            
+            // Clear main image
+            const previewDiv = document.getElementById('main-image-preview');
+            const noMsg = document.getElementById('no-main-image-msg');
+            if (previewDiv) previewDiv.style.display = 'none';
+            if (noMsg) noMsg.style.display = 'block';
         };
 
         window.closeProductModal = function() {
             document.getElementById('product-modal').classList.remove('active');
+            uploadedImageUrls = [];
+            mainImageFile = null;
+            
+            // Clear main image
+            const previewDiv = document.getElementById('main-image-preview');
+            const noMsg = document.getElementById('no-main-image-msg');
+            if (previewDiv) previewDiv.style.display = 'none';
+            if (noMsg) noMsg.style.display = 'block';
         };
 
         window.editProduct = async function(productId) {
@@ -990,8 +1108,21 @@
                 document.getElementById('product-sizes').value = (product.variants || []).join(', ');
                 document.getElementById('product-markaz-code').value = product.markazCode || '';
 
+                // Load existing images (skip first if it's the main image)
                 uploadedImageUrls = product.images || [];
                 updateImagePreview();
+                
+                // Set main image if exists (first image in array)
+                if (uploadedImageUrls.length > 0) {
+                    mainImageFile = uploadedImageUrls[0];
+                    const previewDiv = document.getElementById('main-image-preview');
+                    const previewImg = document.getElementById('main-image-preview-img');
+                    const noMsg = document.getElementById('no-main-image-msg');
+                    
+                    previewImg.src = mainImageFile;
+                    previewDiv.style.display = 'block';
+                    noMsg.style.display = 'none';
+                }
 
                 document.getElementById('product-modal-title').textContent = 'Edit Product';
                 document.getElementById('product-modal').classList.add('active');
@@ -1018,7 +1149,17 @@
         document.getElementById('product-form').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            if (uploadedImageUrls.length === 0) {
+            // Use main image if set, otherwise use uploadedImageUrls array
+            let images = [...uploadedImageUrls];
+            
+            // If main image is set, add it at the beginning
+            if (mainImageFile) {
+                images.unshift(mainImageFile);
+                // Remove duplicates if main image is also in gallery
+                images = images.filter((url, index) => images.indexOf(url) === index);
+            }
+
+            if (images.length === 0) {
                 alert('Please upload at least one product image!');
                 return;
             }
@@ -1045,7 +1186,7 @@
                 category: document.getElementById('product-category').value,
                 description: document.getElementById('product-description').value,
                 variants: sizes,
-                images: uploadedImageUrls,
+                images: images,
                 markazCode: markazCode,
                 markazAvailability: 'not-checked',
                 vendorId: currentUser.uid,
@@ -1073,6 +1214,8 @@
                 }
 
                 closeProductModal();
+                uploadedImageUrls = [];
+                mainImageFile = null;
                 loadProducts();
             } catch (error) {
                 console.error('Error saving product:', error);

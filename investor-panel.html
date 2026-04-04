@@ -1089,18 +1089,25 @@
             const tbody = document.querySelector('#earnings-table tbody');
             if (!tbody) return;
 
+            console.log('loadEarnings: Starting for investor:', currentInvestor?.id, 'Code:', currentInvestor?.code);
+
             try {
                 const earningsQuery = query(
                     collection(db, 'investor_earnings'),
                     where('investorId', '==', currentInvestor.id),
                     orderBy('date', 'desc')
                 );
+                console.log('loadEarnings: Executing query...');
+                
                 const snapshot = await getDocs(earningsQuery);
+                console.log('loadEarnings: Found', snapshot.size, 'earnings records');
+                
                 const earnings = [];
                 let total = 0, paid = 0, unpaid = 0;
 
                 snapshot.forEach(doc => {
                     const e = { id: doc.id, ...doc.data() };
+                    console.log('loadEarnings: Processing earning:', e);
                     earnings.push(e);
                     total += e.amount || 0;
                     if (e.status === 'paid') paid += e.amount || 0;
@@ -1111,6 +1118,8 @@
                 document.getElementById('paid-earnings').textContent = 'Rs. ' + paid.toLocaleString();
                 document.getElementById('unpaid-earnings').textContent = 'Rs. ' + unpaid.toLocaleString();
 
+                console.log('loadEarnings: UI updated - Total:', total, 'Paid:', paid, 'Unpaid:', unpaid);
+
                 tbody.innerHTML = earnings.map(e => `<tr>
                     <td>${new Date(e.date).toLocaleDateString()}</td>
                     <td>${e.orderId || 'N/A'}</td>
@@ -1119,9 +1128,48 @@
                     <td>${e.percentage || 0}%</td>
                     <td style="color:#11998e;font-weight:600;">Rs. ${(e.amount || 0).toLocaleString()}</td>
                     <td><span class="badge badge-${e.status === 'paid' ? 'paid' : 'pending'}">${e.status || 'pending'}</span></td>
-                </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:#666;padding:30px;">No earnings yet</td></tr>';
+                </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:#666;padding:30px;">No earnings yet. Earnings will appear when orders are delivered.</td></tr>';
             } catch (error) {
-                console.error('Error:', error);
+                console.error('loadEarnings: Error:', error);
+                console.log('loadEarnings: Trying fallback query without orderBy...');
+                
+                // Fallback: Query without orderBy
+                try {
+                    const fallbackQuery = query(
+                        collection(db, 'investor_earnings'),
+                        where('investorId', '==', currentInvestor.id)
+                    );
+                    const fallbackSnapshot = await getDocs(fallbackQuery);
+                    console.log('loadEarnings: Fallback query found', fallbackSnapshot.size, 'earnings');
+                    
+                    const earnings = [];
+                    let total = 0, paid = 0, unpaid = 0;
+
+                    fallbackSnapshot.forEach(doc => {
+                        const e = { id: doc.id, ...doc.data() };
+                        earnings.push(e);
+                        total += e.amount || 0;
+                        if (e.status === 'paid') paid += e.amount || 0;
+                        else unpaid += e.amount || 0;
+                    });
+
+                    document.getElementById('total-earnings').textContent = 'Rs. ' + total.toLocaleString();
+                    document.getElementById('paid-earnings').textContent = 'Rs. ' + paid.toLocaleString();
+                    document.getElementById('unpaid-earnings').textContent = 'Rs. ' + unpaid.toLocaleString();
+
+                    tbody.innerHTML = earnings.map(e => `<tr>
+                        <td>${new Date(e.date).toLocaleDateString()}</td>
+                        <td>${e.orderId || 'N/A'}</td>
+                        <td>${e.productName || 'Product'}</td>
+                        <td>Rs. ${(e.orderTotal || 0).toLocaleString()}</td>
+                        <td>${e.percentage || 0}%</td>
+                        <td style="color:#11998e;font-weight:600;">Rs. ${(e.amount || 0).toLocaleString()}</td>
+                        <td><span class="badge badge-${e.status === 'paid' ? 'paid' : 'pending'}">${e.status || 'pending'}</span></td>
+                    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:#666;padding:30px;">No earnings yet. Earnings will appear when orders are delivered.</td></tr>';
+                } catch (fallbackError) {
+                    console.error('loadEarnings: Fallback also failed:', fallbackError);
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:red;padding:30px;">Error loading earnings. Check console for details.<br><small>' + error.message + '</small></td></tr>';
+                }
             }
         };
 
@@ -1258,6 +1306,41 @@
 
         // Helper for db query
         window.dbQuery = (ref, ...args) => query(ref, ...args);
+        
+        // Debug function to check earnings
+        window.debugEarnings = async () => {
+            console.log('=== DEBUGGING EARNINGS ===');
+            console.log('Current Investor ID:', currentInvestor?.id);
+            console.log('Current Investor Code:', currentInvestor?.code);
+            
+            try {
+                // Check all earnings
+                const allEarnings = await getDocs(collection(db, 'investor_earnings'));
+                console.log('Total earnings in database:', allEarnings.size);
+                
+                allEarnings.forEach(doc => {
+                    const earning = { id: doc.id, ...doc.data() };
+                    console.log('Earning:', earning);
+                    if (earning.investorId === currentInvestor?.id) {
+                        console.log('✅ MATCHES current investor!');
+                    }
+                });
+                
+                // Check orders with investorShare
+                const ordersSnapshot = await getDocs(collection(db, 'orders'));
+                console.log('\nTotal orders:', ordersSnapshot.size);
+                
+                ordersSnapshot.forEach(doc => {
+                    const order = { id: doc.id, ...doc.data() };
+                    if (order.investorShare) {
+                        console.log('Order with investorShare:', order.id, order.investorShare);
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Debug error:', error);
+            }
+        };
     </script>
 </body>
 </html>
