@@ -2268,20 +2268,26 @@
 
                     // Check if already processed
                     if (!orderData.investorShare || !orderData.investorShare.processed) {
-                        // Import investor module function
-                        const { processOrderInvestorDistribution } = await import('./investor-module.js');
-                        
-                        console.log('Admin: Calling processOrderInvestorDistribution...');
-                        await processOrderInvestorDistribution(id, orderData);
-                        console.log('Admin: processOrderInvestorDistribution completed');
+                        try {
+                            // Import investor module function
+                            const { processOrderInvestorDistribution } = await import('./investor-module.js');
 
-                        // Mark as processed
-                        await updateDoc(doc(db, 'orders', id), {
-                            'investorShare.processed': true,
-                            'investorShare.processedAt': new Date().toISOString()
-                        });
+                            console.log('Admin: Calling processOrderInvestorDistribution...');
+                            await processOrderInvestorDistribution(id, orderData);
+                            console.log('Admin: processOrderInvestorDistribution completed');
 
-                        console.log(`Investor distribution processed for order ${id}`);
+                            // Mark as processed
+                            await updateDoc(doc(db, 'orders', id), {
+                                'investorShare.processed': true,
+                                'investorShare.processedAt': new Date().toISOString()
+                            });
+
+                            console.log(`✅ Investor distribution processed for order ${id}`);
+                        } catch (investorError) {
+                            console.error('❌ Investor distribution FAILED:', investorError);
+                            console.error('Error details:', investorError.stack);
+                            // Don't fail the whole order update, just log the error
+                        }
                     } else {
                         console.log('Admin: Order already processed for investor distribution');
                     }

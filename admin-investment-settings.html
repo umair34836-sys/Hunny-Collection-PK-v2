@@ -792,6 +792,8 @@
             const tbody = document.querySelector('#withdrawals-table tbody');
             if (!tbody) return;
 
+            console.log('loadWithdrawals: Loading with filter:', filter);
+
             try {
                 let q;
                 if (filter === 'all') {
@@ -800,18 +802,25 @@
                     q = query(collection(db, 'withdrawal_requests'), where('status', '==', filter), orderBy('date', 'desc'));
                 }
 
+                console.log('loadWithdrawals: Executing query...');
                 const snapshot = await getDocs(q);
+                console.log('loadWithdrawals: Found', snapshot.size, 'withdrawals');
+                
                 const withdrawals = [];
 
-                snapshot.forEach(doc => withdrawals.push({ id: doc.id, ...doc.data() }));
+                snapshot.forEach(doc => {
+                    const w = { id: doc.id, ...doc.data() };
+                    console.log('loadWithdrawals: Processing withdrawal:', w);
+                    withdrawals.push(w);
+                });
 
                 tbody.innerHTML = withdrawals.map(w => `
                     <tr>
-                        <td>${w.investorName}<br><small style="color:#666;">${w.investorCode}</small></td>
+                        <td>${w.investorName || 'N/A'}<br><small style="color:#666;">${w.investorCode || ''}</small></td>
                         <td style="font-weight:600;color:#11998e;">Rs. ${(w.amount || 0).toLocaleString()}</td>
-                        <td>${w.method}</td>
-                        <td>${w.account}</td>
-                        <td>${new Date(w.date).toLocaleDateString()}</td>
+                        <td>${w.method || 'N/A'}</td>
+                        <td>${w.account || 'N/A'}</td>
+                        <td>${w.date ? new Date(w.date).toLocaleDateString() : 'N/A'}</td>
                         <td><span class="badge badge-${w.status === 'approved' ? 'approved' : w.status === 'rejected' ? 'rejected' : 'pending'}">${w.status}</span></td>
                         <td>
                             ${w.status === 'pending' ? `
@@ -821,7 +830,46 @@
                     </tr>
                 `).join('') || '<tr><td colspan="7" style="text-align:center;color:#666;padding:30px;">No withdrawal requests</td></tr>';
             } catch (error) {
-                console.error('Error:', error);
+                console.error('loadWithdrawals: Error:', error);
+                console.log('loadWithdrawals: Trying fallback without orderBy...');
+                
+                // Fallback: Query without orderBy
+                try {
+                    let fallbackQ;
+                    if (filter === 'all') {
+                        fallbackQ = query(collection(db, 'withdrawal_requests'));
+                    } else {
+                        fallbackQ = query(collection(db, 'withdrawal_requests'), where('status', '==', filter));
+                    }
+                    
+                    const fallbackSnapshot = await getDocs(fallbackQ);
+                    console.log('loadWithdrawals: Fallback query found', fallbackSnapshot.size, 'withdrawals');
+                    
+                    const withdrawals = [];
+                    fallbackSnapshot.forEach(doc => {
+                        const w = { id: doc.id, ...doc.data() };
+                        withdrawals.push(w);
+                    });
+
+                    tbody.innerHTML = withdrawals.map(w => `
+                        <tr>
+                            <td>${w.investorName || 'N/A'}<br><small style="color:#666;">${w.investorCode || ''}</small></td>
+                            <td style="font-weight:600;color:#11998e;">Rs. ${(w.amount || 0).toLocaleString()}</td>
+                            <td>${w.method || 'N/A'}</td>
+                            <td>${w.account || 'N/A'}</td>
+                            <td>${w.date ? new Date(w.date).toLocaleDateString() : 'N/A'}</td>
+                            <td><span class="badge badge-${w.status === 'approved' ? 'approved' : w.status === 'rejected' ? 'rejected' : 'pending'}">${w.status}</span></td>
+                            <td>
+                                ${w.status === 'pending' ? `
+                                    <button class="btn-sm btn-success" onclick="openWithdrawalAction('${w.id}', '${w.investorId}', ${w.amount})">✅ Process</button>
+                                ` : '-'}
+                            </td>
+                        </tr>
+                    `).join('') || '<tr><td colspan="7" style="text-align:center;color:#666;padding:30px;">No withdrawal requests</td></tr>';
+                } catch (fallbackError) {
+                    console.error('loadWithdrawals: Fallback also failed:', fallbackError);
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:red;padding:30px;">Error loading withdrawals. Check console.<br><small>' + error.message + '</small></td></tr>';
+                }
             }
         };
 

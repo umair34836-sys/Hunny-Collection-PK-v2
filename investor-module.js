@@ -154,7 +154,7 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
         console.log('[InvestorModule] Found', activeInvestors.length, 'active investors:', activeInvestors.map(i => i.code));
 
         if (activeInvestors.length === 0) {
-            console.log('[InvestorModule] No active investors found - skipping distribution');
+            console.warn('[InvestorModule] No active investors found - skipping distribution');
             return;
         }
 
@@ -163,8 +163,8 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
         const settingsSnapshot = await getDocs(settingsQuery);
 
         let settings = {
-            profitType: 'revenue', // Default to Revenue Share
-            defaultPercentage: 7 // 7% revenue share
+            profitType: 'revenue',
+            defaultPercentage: 7
         };
 
         if (!settingsSnapshot.empty) {
@@ -177,48 +177,51 @@ export async function processOrderInvestorDistribution(orderId, orderData) {
         const items = orderData.items || [];
         console.log('[InvestorModule] Order total:', orderTotal, 'Items:', items.length);
 
-        // Get product costs
         let totalCostPrice = 0;
         let totalShipping = orderData.shippingCost || 0;
-        let totalPackaging = orderData.packagingCost || 10; // Default packaging
-        let totalDelivery = orderData.deliveryCost || 250; // Fixed delivery cost
+        let totalPackaging = orderData.packagingCost || 10;
 
         for (const item of items) {
-            const productRef = doc(db, 'products', item.id);
-            // Note: You may need to fetch product details separately
             totalCostPrice += item.costPrice || 0;
         }
-        console.log('[InvestorModule] Costs - CostPrice:', totalCostPrice, 'Shipping:', totalShipping, 'Packaging:', totalPackaging, 'Delivery:', totalDelivery);
+        console.log('[InvestorModule] Costs - CostPrice:', totalCostPrice, 'Shipping:', totalShipping, 'Packaging:', totalPackaging);
 
         // For each active investor, calculate and record share
         for (const investor of activeInvestors) {
-            const percentage = investor.profitPercentage || settings.defaultPercentage;
-            console.log('[InvestorModule] Processing investor:', investor.code, 'Percentage:', percentage);
+            try {
+                const percentage = investor.profitPercentage || settings.defaultPercentage;
+                console.log('[InvestorModule] Processing investor:', investor.code, 'Percentage:', percentage);
 
-            const calculation = calculateInvestorShare(
-                orderTotal,
-                totalCostPrice,
-                totalShipping,
-                totalPackaging,
-                0, // other expenses
-                settings.profitType,
-                percentage
-            );
-            console.log('[InvestorModule] Calculation result:', calculation);
+                const calculation = calculateInvestorShare(
+                    orderTotal,
+                    totalCostPrice,
+                    totalShipping,
+                    totalPackaging,
+                    0,
+                    settings.profitType,
+                    percentage
+                );
+                console.log('[InvestorModule] Calculation result:', calculation);
 
-            // Record earning for this investor
-            await recordInvestorEarning(
-                orderId,
-                investor.id,
-                calculation,
-                items[0]?.name || 'Order Items'
-            );
-            console.log('[InvestorModule] Earning recorded for investor:', investor.code);
+                // Record earning for this investor
+                await recordInvestorEarning(
+                    orderId,
+                    investor.id,
+                    calculation,
+                    items[0]?.name || 'Order Items'
+                );
+                console.log('[InvestorModule] ✅ Earning recorded for investor:', investor.code);
+            } catch (investorError) {
+                console.error('[InvestorModule] ❌ Failed to process investor:', investor.code, investorError);
+                // Continue with next investor instead of failing completely
+            }
         }
 
-        console.log(`[InvestorModule] Investor distribution completed for order: ${orderId}`);
+        console.log(`[InvestorModule] ✅ Investor distribution completed for order: ${orderId}`);
     } catch (error) {
-        console.error('[InvestorModule] Error processing investor distribution:', error);
+        console.error('[InvestorModule] ❌ Error processing investor distribution:', error);
+        console.error('[InvestorModule] Error stack:', error.stack);
+        throw error; // Re-throw so admin panel knows it failed
     }
 }
 
