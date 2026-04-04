@@ -350,6 +350,8 @@
                 <div>Date & Time</div>
                 <div>Items</div>
                 <div>Total Amount</div>
+                <div>Investor Share</div>
+                <div>Our Share</div>
                 <div>Status</div>
                 <div>Actions</div>
             </div>
@@ -452,6 +454,12 @@
                 const timeStr = orderDate.toLocaleTimeString();
                 const statusClass = 'status-' + (order.status || 'pending').toLowerCase();
                 const itemCount = order.items ? order.items.length : 0;
+                const totalAmount = order.total || 0;
+                
+                // Calculate investor share (7% default)
+                const investorPercent = 7;
+                const investorShare = (totalAmount * investorPercent) / 100;
+                const ourShare = totalAmount - investorShare;
 
                 html += `
                     <div class="table-row">
@@ -462,7 +470,9 @@
                             <div style="font-size: 0.75rem; color: #666;">${timeStr}</div>
                         </div>
                         <div>${itemCount} item(s)</div>
-                        <div style="font-weight: 600; color: #667eea;">Rs. ${(order.total || 0).toLocaleString()}</div>
+                        <div style="font-weight: 600; color: #667eea;">Rs. ${totalAmount.toLocaleString()}</div>
+                        <div style="font-weight: 600; color: #28a745;">Rs. ${investorShare.toLocaleString(undefined, {minimumFractionDigits: 2})}<br><small style="color: #666;">(${investorPercent}%)</small></div>
+                        <div style="font-weight: 600; color: #667eea;">Rs. ${ourShare.toLocaleString(undefined, {minimumFractionDigits: 2})}<br><small style="color: #666;">(${100 - investorPercent}%)</small></div>
                         <div><span class="status-badge ${statusClass}">${(order.status || 'Pending').toUpperCase()}</span></div>
                         <div><button class="view-btn" onclick="viewOrderDetails('${order.id}')">View</button></div>
                     </div>
@@ -538,6 +548,12 @@
                 </div>
             `).join('');
 
+            // Calculate investor share
+            const totalAmount = order.total || 0;
+            const investorPercent = 7;
+            const investorShare = (totalAmount * investorPercent) / 100;
+            const ourShare = totalAmount - investorShare;
+
             const modalHtml = `
                 <div class="detail-grid">
                     <div class="detail-item">
@@ -569,8 +585,26 @@
                     <div class="detail-item">
                         <strong>💰 Total Amount</strong>
                         <span style="font-size: 1.5rem; font-weight: bold; color: #667eea;">
-                            Rs. ${(order.total || 0).toLocaleString()}
+                            Rs. ${totalAmount.toLocaleString()}
                         </span>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3 style="margin-bottom: 15px; color: #667eea;">💵 Profit Breakdown</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div style="background: white; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 0.85rem; color: #666;">Total Order Amount</div>
+                            <div style="font-size: 1.3rem; font-weight: bold; color: #667eea;">Rs. ${totalAmount.toLocaleString()}</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                            <div style="font-size: 0.85rem; color: #666;">👤 Investor Share (${investorPercent}%)</div>
+                            <div style="font-size: 1.3rem; font-weight: bold; color: #28a745;">Rs. ${investorShare.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <div style="font-size: 0.85rem; color: #666;">🏪 Our Share (${100 - investorPercent}%)</div>
+                            <div style="font-size: 1.3rem; font-weight: bold; color: #667eea;">Rs. ${ourShare.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                        </div>
                     </div>
                 </div>
 
