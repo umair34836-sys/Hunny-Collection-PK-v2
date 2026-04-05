@@ -544,14 +544,6 @@
                     <div class="admin-card" style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
                             <div>
-                                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">👁️ View Mode</label>
-                                <select id="product-view-mode" onchange="filterProducts()" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
-                                    <option value="my">👤 My Products Only</option>
-                                    <option value="all">🌐 All Products</option>
-                                    <option value="unassigned">⚠️ Unassigned Products</option>
-                                </select>
-                            </div>
-                            <div>
                                 <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">🔍 Search Products</label>
                                 <input type="text" id="product-search" placeholder="Search by name, category..." oninput="filterProducts()" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
                             </div>
@@ -588,26 +580,10 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                             <span>📦 <strong id="selected-count">0</strong> products selected</span>
                             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <button class="btn-sm" onclick="bulkAssignToMe()" style="background: #28a745; color: white;">👤 Assign to Me</button>
                                 <button class="btn-sm" onclick="bulkDeleteSelected()" style="background: #dc3545; color: white;">🗑️ Delete Selected</button>
                                 <button class="btn-sm" onclick="bulkUpdateStatus()" style="background: #007bff; color: white;">📊 Update Stock</button>
                                 <button class="btn-sm" onclick="clearSelection()" style="background: rgba(255,255,255,0.3); color: white;">❌ Clear</button>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Legacy Products Alert -->
-                    <div id="legacy-products-alert" style="display: none; background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                            <div>
-                                <strong style="color: #856404;">⚠️ Legacy Products Detected</strong>
-                                <p style="color: #856404; margin: 5px 0 0; font-size: 0.9rem;">
-                                    <span id="legacy-count">0</span> products have no admin assigned. Select them and click "Assign to Me" to claim ownership.
-                                </p>
-                            </div>
-                            <button class="btn-sm" onclick="selectAllLegacyProducts()" style="background: #ffc107; color: #333;">
-                                ✅ Select All Legacy Products
-                            </button>
                         </div>
                     </div>
 
@@ -1825,8 +1801,6 @@
             if (!tbody) return;
             
             const displayProducts = productsToRender || products;
-            const currentAdmin = auth.currentUser;
-            const currentEmail = currentAdmin ? currentAdmin.email : '';
             
             tbody.innerHTML = displayProducts.map(p => {
                 const hasMarkazCode = p.markazCode ? 'yes' : 'no';
@@ -1847,22 +1821,11 @@
                 // Admin who added this product
                 const addedBy = p.addedBy ? p.addedBy : (p.addedByUserId ? 'Unknown Admin' : 'Legacy Product');
                 
-                // Check if current admin owns this product
-                const isOwner = p.addedBy === currentEmail || p.addedByUserId === currentAdmin?.uid || (!p.addedBy && !p.addedByUserId);
-                
                 // Stock status
                 const stockStatus = p.stockQuantity || 0;
                 const stockBadge = stockStatus > 10 ? '<span class="badge badge-success">In Stock</span>' :
                                   stockStatus > 0 ? '<span class="badge badge-warning">Low Stock</span>' :
                                   '<span class="badge badge-danger">Out of Stock</span>';
-                
-                // Action buttons - Everyone can edit, but ownership stays with original admin
-                const actionButtons = `
-                    <button class="btn-sm" onclick="editProduct('${p.id}')">✏️ Edit</button>
-                    <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${p.images && p.images[0] ? p.images[0] : ''}', ${p.sellingPrice || p.price || 0}, ${p.originalPrice || 0})" style="background: #25d366; color: white;">📱 Share</button>
-                    <button class="btn-sm btn-danger" onclick="deleteProduct('${p.id}')">🗑️ Delete</button>
-                    ${!isOwner ? `<br><small style="color: #007bff; font-size: 0.7rem; margin-top: 3px; display: block;">👤 Owner: ${addedBy}</small>` : ''}
-                `;
 
                 return `
                 <tr>
@@ -1901,7 +1864,9 @@
                     <td><small style="color: #666; font-size: 0.7rem;">👤 ${addedBy}</small>
                     ${p.lastEditedBy ? `<br><small style="color: #FF9800; font-size: 0.65rem;">✏️ ${p.lastEditedBy}</small>` : ''}</td>
                     <td>
-                        ${actionButtons}
+                        <button class="btn-sm" onclick="editProduct('${p.id}')">✏️ Edit</button>
+                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${p.images && p.images[0] ? p.images[0] : ''}', ${p.sellingPrice || p.price || 0}, ${p.originalPrice || 0})" style="background: #25d366; color: white;">📱 Share</button>
+                        <button class="btn-sm btn-danger" onclick="deleteProduct('${p.id}')">🗑️ Delete</button>
                     </td>
                 </tr>
             `}).join('');
@@ -1909,22 +1874,12 @@
 
         // Filter products based on search, category, sort, and status
         window.filterProducts = function() {
-            const viewMode = document.getElementById('product-view-mode')?.value || 'my';
             const searchTerm = document.getElementById('product-search')?.value.toLowerCase() || '';
             const categoryFilter = document.getElementById('product-category-filter')?.value || 'all';
             const sortBy = document.getElementById('product-sort')?.value || 'newest';
             const statusFilter = document.getElementById('product-status-filter')?.value || 'all';
-            const currentAdmin = auth.currentUser;
-            const currentEmail = currentAdmin ? currentAdmin.email : '';
 
             let filtered = products.slice();
-
-            // View mode filter
-            if (viewMode === 'my') {
-                filtered = filtered.filter(p => p.addedBy === currentEmail || p.addedByUserId === currentAdmin?.uid);
-            } else if (viewMode === 'unassigned') {
-                filtered = filtered.filter(p => !p.addedBy && !p.addedByUserId);
-            }
 
             // Search filter
             if (searchTerm) {
@@ -2088,99 +2043,6 @@
                 option.textContent = cat;
                 select.appendChild(option);
             });
-            
-            // Check for legacy products
-            checkLegacyProducts();
-        };
-        
-        // Check and show legacy products alert
-        function checkLegacyProducts() {
-            const legacyProducts = products.filter(p => !p.addedBy && !p.addedByUserId);
-            const alert = document.getElementById('legacy-products-alert');
-            const count = document.getElementById('legacy-count');
-            
-            if (legacyProducts.length > 0) {
-                alert.style.display = 'block';
-                count.textContent = legacyProducts.length;
-            } else {
-                alert.style.display = 'none';
-            }
-        }
-        
-        // Select all legacy products
-        window.selectAllLegacyProducts = function() {
-            const legacyProductIds = products
-                .filter(p => !p.addedBy && !p.addedByUserId)
-                .map(p => p.id);
-            
-            const checkboxes = document.querySelectorAll('.product-checkbox');
-            checkboxes.forEach(cb => {
-                cb.checked = legacyProductIds.includes(cb.dataset.id);
-            });
-            
-            updateBulkActionsBar();
-        };
-        
-        // Bulk assign selected products to current admin
-        window.bulkAssignToMe = async function() {
-            const selected = document.querySelectorAll('.product-checkbox:checked');
-            if (selected.length === 0) {
-                alert('Please select at least one product to assign.');
-                return;
-            }
-            
-            const currentAdmin = auth.currentUser;
-            if (!currentAdmin) {
-                alert('You must be logged in to assign products.');
-                return;
-            }
-            
-            if (!confirm(`Assign ${selected.length} product(s) to yourself (${currentAdmin.email})?`)) return;
-            
-            const productIds = Array.from(selected).map(cb => cb.dataset.id);
-            let assigned = 0;
-            
-            for (const id of productIds) {
-                try {
-                    await updateDoc(doc(db, 'products', id), {
-                        addedBy: currentAdmin.email,
-                        addedByUserId: currentAdmin.uid,
-                        assignedAt: new Date().toISOString()
-                    });
-                    assigned++;
-                } catch (error) {
-                    console.error('Error assigning product:', error);
-                }
-            }
-            
-            alert(`✅ Successfully assigned ${assigned}/${productIds.length} product(s) to you!`);
-            clearSelection();
-            loadDashboardData();
-        };
-        
-        // View product details (read-only for non-owners)
-        window.viewProductDetails = function(id) {
-            const product = products.find(p => p.id === id);
-            if (!product) return;
-            
-            const sellingPrice = product.sellingPrice || product.price || 0;
-            const costPrice = product.costPrice || 0;
-            const originalPrice = product.originalPrice || 0;
-            const profit = sellingPrice - costPrice;
-            const addedBy = product.addedBy || 'Legacy Product';
-            
-            alert(`📦 Product Details
-
-Name: ${product.name}
-Category: ${product.category}
-Selling Price: Rs. ${sellingPrice.toLocaleString()}
-Cost Price: Rs. ${costPrice.toLocaleString()}
-Profit: Rs. ${profit.toLocaleString()}
-Stock: ${product.stockQuantity || 0}
-Added By: ${addedBy}
-
-🔒 This product belongs to: ${addedBy}
-Contact that admin to make changes.`);
         };
 
         function renderOrders() {
