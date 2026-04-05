@@ -236,11 +236,7 @@
                         <li><a href="#" class="active" onclick="showSection('overview')">📊 Overview</a></li>
                         <li><a href="#" onclick="showSection('orders')">📦 My Orders</a></li>
                         <li><a href="#" onclick="showSection('profile')">👤 Profile</a></li>
-                        <li id="vendor-menu-item" style="display: none;"><a href="#" onclick="showSection('vendor')">🏪 My Shop</a></li>
                     </ul>
-                    <div id="become-vendor-section" style="margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--border-color);">
-                        <a href="become-vendor.html" class="btn-primary" style="display: block; text-align: center; text-decoration: none;">🚀 Become a Vendor</a>
-                    </div>
                     <button class="btn-logout" onclick="logout()">Logout</button>
                 </aside>
 
@@ -310,12 +306,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Vendor Section -->
-                    <div id="vendor" class="section-content">
-                        <h2 style="color: var(--dark-pink); margin-bottom: 20px;">🏪 My Vendor Account</h2>
-                        <div id="vendor-status-container"></div>
-                    </div>
                 </main>
             </div>
         </div>
@@ -376,7 +366,6 @@
             currentUser = user;
             await loadProfile(user);
             await loadUserStats(user.uid);
-            await loadVendorStatus(user);
             updateCartCount();
         });
 
@@ -392,7 +381,7 @@
                 
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
-                    document.getElementById('profile-phone').textContent = userData.phone || userData.vendorPhone || 'Not provided';
+                    document.getElementById('profile-phone').textContent = userData.phone || 'Not provided';
                     document.getElementById('profile-since').textContent = userData.createdAt ?
                         new Date(userData.createdAt.seconds * 1000).toLocaleDateString() : 'Recently joined';
                 } else {
@@ -429,119 +418,6 @@
                 document.getElementById('stat-spent').textContent = totalSpent.toLocaleString();
             } catch (error) {
                 console.error('Error loading stats:', error);
-            }
-        }
-
-        async function loadVendorStatus(user) {
-            const vendorMenu = document.getElementById('vendor-menu-item');
-            const becomeVendorSection = document.getElementById('become-vendor-section');
-            const vendorContainer = document.getElementById('vendor-status-container');
-
-            try {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                
-                if (!userDoc.exists()) {
-                    return;
-                }
-
-                const userData = userDoc.data();
-                const role = userData.role || 'customer';
-                const vendorRequest = userData.vendorRequest;
-                const subscription = userData.subscription;
-                const shop = userData.shop;
-
-                // Check if user is an active vendor
-                if (role === 'vendor' && subscription?.paidAmount >= 500 && shop?.isActive === true) {
-                    // Active vendor - show menu and hide become vendor button
-                    vendorMenu.style.display = 'block';
-                    becomeVendorSection.style.display = 'none';
-                    
-                    const paidAmount = subscription.paidAmount || 0;
-                    const remaining = subscription.totalRequired - paidAmount;
-                    const productLimit = getProductLimit(paidAmount);
-                    
-                    vendorContainer.innerHTML = `
-                        <div class="alert alert-success" style="background: #d4edda; border-left: 4px solid #28a745; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                            <h4 style="color: #155724; margin-bottom: 10px;">✅ Active Vendor Account</h4>
-                            <p style="color: #155724;">Your shop "${shop.shopName || 'My Shop'}" is active and selling!</p>
-                        </div>
-                        
-                        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                            <div class="stat-card" style="background: linear-gradient(135deg, var(--primary-pink), var(--light-pink)); padding: 20px; border-radius: 12px; text-align: center;">
-                                <div class="stat-number" style="font-size: 2rem; font-weight: bold; color: var(--text-dark);">Rs. ${paidAmount.toLocaleString()}</div>
-                                <div class="stat-label" style="font-size: 0.9rem; color: var(--text-light); margin-top: 5px;">Paid Amount</div>
-                            </div>
-                            <div class="stat-card" style="background: linear-gradient(135deg, #F8D7DA, #F5C6CB); padding: 20px; border-radius: 12px; text-align: center;">
-                                <div class="stat-number" style="font-size: 2rem; font-weight: bold; color: #721C24;">Rs. ${remaining.toLocaleString()}</div>
-                                <div class="stat-label" style="font-size: 0.9rem; color: #721C24; margin-top: 5px;">Remaining</div>
-                            </div>
-                            <div class="stat-card" style="background: linear-gradient(135deg, #D1ECF1, #B8DAF0); padding: 20px; border-radius: 12px; text-align: center;">
-                                <div class="stat-number" style="font-size: 2rem; font-weight: bold; color: #0C5460;">${productLimit === Infinity ? '∞' : productLimit}</div>
-                                <div class="stat-label" style="font-size: 0.9rem; color: #0C5460; margin-top: 5px;">Product Limit</div>
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                            <a href="vendor/vendor-dashboard.html" class="btn-primary">🏪 Go to Vendor Dashboard</a>
-                        </div>
-                    `;
-                } else if (vendorRequest?.status === 'approved' && role === 'vendor') {
-                    // Approved but not paid yet
-                    vendorMenu.style.display = 'none';
-                    becomeVendorSection.style.display = 'block';
-                    
-                    vendorContainer.innerHTML = `
-                        <div class="alert alert-success" style="background: #d4edda; border-left: 4px solid #28a745; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                            <h4 style="color: #155724; margin-bottom: 10px;">✅ Application Approved!</h4>
-                            <p style="color: #155724;">Your vendor application has been approved. Make your first payment to activate your shop.</p>
-                        </div>
-                        
-                        <div class="alert alert-info" style="background: #d1ecf1; border-left: 4px solid #0c5460; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                            <h4 style="color: #0C5460; margin-bottom: 10px;">💳 Payment Required</h4>
-                            <p style="color: #0C5460;"><strong>Annual Plan:</strong> Rs. 3,000</p>
-                            <p style="color: #0C5460;"><strong>Minimum Payment:</strong> Rs. 500</p>
-                            <p style="color: #0C5460; margin-top: 10px;">After payment, you can start selling immediately!</p>
-                        </div>
-                        
-                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                            <a href="vendor/vendor-dashboard.html" class="btn-primary">💳 Make Payment & Activate Shop</a>
-                        </div>
-                    `;
-                } else if (vendorRequest?.status === 'pending') {
-                    // Request pending
-                    vendorMenu.style.display = 'none';
-                    becomeVendorSection.style.display = 'block';
-                    
-                    vendorContainer.innerHTML = `
-                        <div class="alert alert-warning" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                            <h4 style="color: #856404; margin-bottom: 10px;">⏳ Vendor Request Pending</h4>
-                            <p style="color: #856404;">Your vendor application is under review. Admin will approve it within 24 hours.</p>
-                            <p style="color: #856404; margin-top: 10px;"><strong>Shop Name:</strong> ${shop?.shopName || 'N/A'}</p>
-                            <p style="color: #856404;"><strong>Requested On:</strong> ${vendorRequest.requestedAt ? new Date(vendorRequest.requestedAt.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
-                        </div>
-                        <a href="become-vendor.html" class="btn-secondary">View Application Status</a>
-                    `;
-                } else {
-                    // Not a vendor yet
-                    vendorMenu.style.display = 'none';
-                    becomeVendorSection.style.display = 'block';
-                    
-                    vendorContainer.innerHTML = `
-                        <div class="alert alert-info" style="background: #d1ecf1; border-left: 4px solid #0c5460; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                            <h4 style="color: #0C5460; margin-bottom: 10px;">🚀 Start Your Own Shop!</h4>
-                            <p style="color: #0C5460;">Become a vendor on Hunny Collection PK and sell your products to thousands of customers.</p>
-                            <ul style="margin-top: 10px; color: #0C5460;">
-                                <li>Annual plan: Rs. 3,000 (pay Rs. 500 to start)</li>
-                                <li>Low commission: 2-4% per sale</li>
-                                <li>Your own branded shop page</li>
-                                <li>Order management dashboard</li>
-                            </ul>
-                        </div>
-                        <a href="become-vendor.html" class="btn-primary">🚀 Become a Vendor</a>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading vendor status:', error);
             }
         }
 

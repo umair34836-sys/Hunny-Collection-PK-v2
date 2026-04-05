@@ -452,7 +452,6 @@
                 <a href="admin-orders-history.html">📊 Orders History</a>
                 <a href="#" onclick="showSection('reviews')">⭐ Reviews</a>
                 <a href="#" onclick="showSection('categories')">Categories</a>
-                <a href="#" onclick="showSection('vendors')">🏪 Vendors</a>
                 <a href="#" onclick="showSection('digital-products')">💻 Digital Products</a>
                 <a href="#" onclick="showSection('digital-categories')">📂 Digital Categories</a>
                 <a href="#" onclick="showSection('digital-orders')">📥 Digital Orders</a>
@@ -696,30 +695,6 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Vendors Management -->
-                <div id="section-vendors" style="display: none;">
-                    <h2 style="color: var(--dark-pink); margin-bottom: 30px;">🏪 Vendor Management</h2>
-
-                    <div class="admin-card">
-                        <div class="table-responsive">
-                            <table id="vendors-table">
-                                <thead>
-                                    <tr>
-                                        <th>Shop Name</th>
-                                        <th>Vendor Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Paid Amount</th>
-                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -1500,8 +1475,8 @@
                 const ordersSnapshot = await getDocs(collection(db, 'orders'));
                 orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-                // Load vendors
-                await loadVendors();
+                // Load reviews
+                await loadReviews('all');
 
                 updateStats();
                 renderProducts();
@@ -1512,25 +1487,6 @@
                 updateCategoryDropdown();
             } catch (error) {
                 console.error('Error loading data:', error);
-            }
-        }
-
-        // Load and render vendors
-        async function loadVendors() {
-            try {
-                const vendorsSnapshot = await getDocs(collection(db, 'users'));
-                const vendors = [];
-
-                vendorsSnapshot.forEach(doc => {
-                    const data = doc.data();
-                    if (data.vendorRequest || data.role === 'vendor') {
-                        vendors.push({ id: doc.id, ...data });
-                    }
-                });
-
-                renderVendors(vendors);
-            } catch (error) {
-                console.error('Error loading vendors:', error);
             }
         }
 
@@ -1658,132 +1614,6 @@
             } catch (error) {
                 console.error('Error deleting review:', error);
                 alert('Error deleting review');
-            }
-        };
-
-        function renderVendors(vendors) {
-            const tbody = document.querySelector('#vendors-table tbody');
-            if (!tbody) return;
-
-            if (vendors.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-light);">No vendor applications yet</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = vendors.map(v => {
-                const subscription = v.subscription || {};
-                const shop = v.shop || {};
-                const vendorRequest = v.vendorRequest || {};
-                const isApproved = v.role === 'vendor' && vendorRequest.status === 'approved';
-                const isActive = shop.isActive === true;
-                const paidAmount = subscription.paidAmount || 0;
-
-                let statusBadge = '<span class="badge badge-pending">⏳ Pending</span>';
-                if (isApproved && isActive) {
-                    statusBadge = '<span class="badge badge-delivered">✅ Active</span>';
-                } else if (isApproved) {
-                    statusBadge = '<span class="badge badge-confirmed">✓ Approved</span>';
-                } else if (vendorRequest.status === 'rejected') {
-                    statusBadge = '<span class="badge badge-cancelled">✕ Rejected</span>';
-                }
-
-                let actions = '';
-                if (vendorRequest.status === 'pending') {
-                    actions = `
-                        <button class="btn-sm" onclick="approveVendor('${v.id}', '${v.shop?.shopName || 'Shop'}')" style="background: #28a745; color: white;">✓ Approve</button>
-                        <button class="btn-sm" onclick="rejectVendor('${v.id}')" style="background: #dc3545; color: white;">✕ Reject</button>
-                    `;
-                } else if (isApproved && !isActive) {
-                    actions = `
-                        <button class="btn-sm" onclick="activateVendorShop('${v.id}')" style="background: #007bff; color: white;">🏪 Activate Shop</button>
-                    `;
-                } else if (isActive) {
-                    actions = `
-                        <button class="btn-sm" onclick="deactivateVendorShop('${v.id}')" style="background: #ffc107; color: #000;">⏸️ Deactivate</button>
-                    `;
-                } else {
-                    actions = '<span style="color: var(--text-light);">-</span>';
-                }
-
-                return `
-                    <tr>
-                        <td>${shop.shopName || 'N/A'}</td>
-                        <td>${vendorRequest.name || v.displayName || 'N/A'}</td>
-                        <td>${v.email || 'N/A'}</td>
-                        <td>${vendorRequest.phone || 'N/A'}</td>
-                        <td>Rs. ${paidAmount.toLocaleString()}</td>
-                        <td>${statusBadge}</td>
-                        <td>${actions}</td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        window.approveVendor = async function(vendorId, shopName) {
-            if (!confirm(`Approve vendor "${shopName}"? This will allow them to start selling after payment.`)) return;
-
-            try {
-                await updateDoc(doc(db, 'users', vendorId), {
-                    role: 'vendor',
-                    'vendorRequest.status': 'approved',
-                    'vendorRequest.approvedAt': new Date().toISOString(),
-                    'shop.isActive': false
-                });
-                alert('Vendor approved successfully!');
-                loadVendors();
-            } catch (error) {
-                console.error('Error approving vendor:', error);
-                alert('Error: ' + error.message);
-            }
-        };
-
-        window.rejectVendor = async function(vendorId) {
-            const reason = prompt('Enter rejection reason (optional):');
-            if (!confirm('Reject this vendor application?')) return;
-
-            try {
-                await updateDoc(doc(db, 'users', vendorId), {
-                    'vendorRequest.status': 'rejected',
-                    'vendorRequest.rejectionReason': reason || 'No reason provided',
-                    'vendorRequest.rejectedAt': new Date().toISOString(),
-                    role: 'customer'
-                });
-                alert('Vendor rejected!');
-                loadVendors();
-            } catch (error) {
-                console.error('Error rejecting vendor:', error);
-                alert('Error: ' + error.message);
-            }
-        };
-
-        window.activateVendorShop = async function(vendorId) {
-            if (!confirm('Activate this vendor\'s shop?')) return;
-
-            try {
-                await updateDoc(doc(db, 'users', vendorId), {
-                    'shop.isActive': true,
-                    'subscription.activatedAt': new Date().toISOString()
-                });
-                alert('Vendor shop activated!');
-                loadVendors();
-            } catch (error) {
-                console.error('Error activating shop:', error);
-                alert('Error: ' + error.message);
-            }
-        };
-
-        window.deactivateVendorShop = async function(vendorId) {
-            if (!confirm('Deactivate this vendor\'s shop? They won\'t be able to sell products.')) return;
-
-            try {
-                await updateDoc(doc(db, 'users', vendorId), {
-                    'shop.isActive': false
-                });
-                alert('Vendor shop deactivated!');
-                loadVendors();
-            } catch (error) {
-                console.error('Error deactivating shop:', error);
-                alert('Error: ' + error.message);
             }
         };
 
@@ -2109,7 +1939,7 @@
 
         // Show section
         window.showSection = (section) => {
-            ['dashboard', 'products', 'orders', 'reviews', 'categories', 'vendors', 'digital-products', 'digital-categories', 'digital-orders', 'video-ads'].forEach(s => {
+            ['dashboard', 'products', 'orders', 'reviews', 'categories', 'digital-products', 'digital-categories', 'digital-orders', 'video-ads'].forEach(s => {
                 document.getElementById(`section-${s}`).style.display = s === section ? 'block' : 'none';
             });
             document.querySelectorAll('.admin-sidebar a').forEach(a => a.classList.remove('active'));
