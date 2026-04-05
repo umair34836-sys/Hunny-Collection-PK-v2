@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Admin Panel - Hunny Collection PK</title>
     <link rel="stylesheet" href="style.css">
     <!-- Favicon & App Icons -->
@@ -160,7 +160,7 @@
 
         @media (max-width: 768px) {
             .admin-menu-toggle {
-                display: block;
+                display: block !important;
             }
             .admin-sidebar {
                 position: fixed;
@@ -176,12 +176,12 @@
             .admin-sidebar.active {
                 left: 0;
             }
+            .admin-overlay.active { display: block; }
             .admin-layout {
                 grid-template-columns: 1fr;
             }
             .admin-content {
-                padding: 20px 15px;
-                padding-top: 70px;
+                padding: 80px 15px 20px;
             }
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -196,12 +196,32 @@
             .quick-links-grid {
                 grid-template-columns: 1fr;
             }
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
             table {
                 min-width: 600px;
             }
             th, td {
                 padding: 8px 6px;
                 font-size: 0.85rem;
+            }
+            .modal-content {
+                width: 95% !important;
+                max-height: 85vh;
+                padding: 20px;
+            }
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 12px;
+                font-size: 16px;
+            }
+            .btn-sm {
+                padding: 10px 15px;
+                min-height: 44px;
+                margin: 3px;
             }
         }
 
@@ -211,6 +231,12 @@
             }
             .stat-number {
                 font-size: 1.5rem;
+            }
+            table {
+                min-width: 550px;
+            }
+            h2 {
+                font-size: 1.3rem;
             }
         }
     </style>
@@ -359,7 +385,7 @@
         import { auth, db } from './firebase-config.js';
         import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { doc, getDoc, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { checkAdminAuth, logout, toggleMobileSidebar, closeMobileSidebar, formatCurrency, formatDate, getStatusBadge } from './admin-common.js';
+        import { checkAdminAuth, logout, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers, formatCurrency, formatDate, getStatusBadge } from './admin-common.js';
         import { getAllProducts, getAllOrders } from './admin-api.js';
 
         // Check admin auth
@@ -374,6 +400,7 @@
             if (adminCheck) {
                 document.getElementById('admin-login-view').style.display = 'none';
                 document.getElementById('admin-dashboard-view').style.display = 'block';
+                setupSidebarCloseHandlers();
                 await loadDashboard();
             }
         });

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Orders Management - Admin Panel | Hunny Collection PK</title>
     <link rel="stylesheet" href="style.css">
     <!-- Favicon & App Icons -->
@@ -253,7 +253,7 @@
 
         @media (max-width: 768px) {
             .admin-menu-toggle {
-                display: block;
+                display: block !important;
             }
 
             .admin-sidebar {
@@ -272,13 +272,14 @@
                 left: 0;
             }
 
+            .admin-overlay.active { display: block; }
+
             .admin-layout {
                 grid-template-columns: 1fr;
             }
 
             .admin-content {
-                padding: 20px 15px;
-                padding-top: 70px;
+                padding: 80px 15px 20px;
             }
 
             .header {
@@ -311,6 +312,11 @@
                 grid-template-columns: 1fr;
             }
 
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
             table {
                 min-width: 700px;
             }
@@ -321,14 +327,22 @@
             }
 
             .btn-sm {
-                padding: 6px 10px;
-                font-size: 0.8rem;
+                padding: 10px 15px;
+                min-height: 44px;
+                margin: 3px;
             }
 
             .modal-content {
-                width: 95%;
+                width: 95% !important;
                 padding: 20px;
                 max-height: 85vh;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 12px;
+                font-size: 16px;
             }
 
             .order-detail-grid {
@@ -372,12 +386,16 @@
                 padding: 6px 4px;
                 font-size: 0.8rem;
             }
+
+            h2 {
+                font-size: 1.3rem;
+            }
         }
     </style>
 </head>
 <body>
     <script type="module">
-        import { checkAdminAuth, logout, showSection, toggleMobileSidebar, closeMobileSidebar, formatCurrency, formatDate, getStatusBadge, showLoading, showError, confirmAction } from './admin-common.js';
+        import { checkAdminAuth, logout, showSection, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers, formatCurrency, formatDate, getStatusBadge, showLoading, showError, confirmAction } from './admin-common.js';
         import { getAllOrders, getOrder, updateOrderStatus } from './admin-api.js';
 
         // ========== GLOBAL FUNCTIONS ==========
@@ -395,6 +413,7 @@
             const isAdmin = await checkAdminAuth();
             if (!isAdmin) return;
 
+            setupSidebarCloseHandlers();
             await loadOrders();
         }
 

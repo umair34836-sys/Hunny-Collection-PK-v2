@@ -220,9 +220,18 @@ export function toggleMobileSidebar() {
 export function closeMobileSidebar() {
     const sidebar = document.querySelector('.admin-sidebar, .sidebar');
     const overlay = document.querySelector('.admin-overlay, .sidebar-overlay');
-    
+
     if (sidebar) sidebar.classList.remove('active');
     if (overlay) overlay.classList.remove('active');
+}
+
+// Setup sidebar link close handlers - call once per page
+export function setupSidebarCloseHandlers() {
+    document.querySelectorAll('.admin-sidebar a, .sidebar a').forEach(link => {
+        link.addEventListener('click', () => {
+            closeMobileSidebar();
+        });
+    });
 }
 
 // ========== UTILITY FUNCTIONS ==========

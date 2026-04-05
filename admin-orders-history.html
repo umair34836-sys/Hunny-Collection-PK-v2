@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Orders History - Admin Panel | Hunny Collection PK</title>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -266,6 +266,52 @@
             color: #666;
         }
 
+        /* Mobile Menu Toggle */
+        .admin-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .admin-overlay {
+            display: none;
+        }
+
+        .admin-sidebar {
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .admin-sidebar h3 {
+            color: white;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+
+        .admin-sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-sidebar a:hover,
+        .admin-sidebar a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
         @media (max-width: 1024px) {
             .table-header,
             .table-row {
@@ -274,18 +320,163 @@
         }
 
         @media (max-width: 768px) {
+            .admin-menu-toggle {
+                display: block !important;
+            }
+
+            .admin-sidebar {
+                position: fixed;
+                top: 0;
+                left: -280px;
+                width: 280px;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                overflow-y: auto;
+                padding-top: 70px;
+            }
+
+            .admin-sidebar.active {
+                left: 0;
+            }
+
+            .admin-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+
+            .admin-overlay.active { display: block; }
+
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-content, .container {
+                padding: 80px 15px 20px;
+            }
+
+            .admin-header {
+                padding: 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .admin-header h1 {
+                font-size: 1.3rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-card .value {
+                font-size: 1.5rem;
+            }
+
+            .filters {
+                padding: 15px;
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+
             .table-header,
             .table-row {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                padding: 10px 15px;
             }
 
             .detail-grid {
                 grid-template-columns: 1fr;
             }
+
+            .modal-content {
+                width: 95% !important;
+                padding: 20px;
+                max-height: 85vh;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select,
+            .filter-item input,
+            .filter-item select {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .view-btn {
+                padding: 10px 15px;
+                min-height: 44px;
+            }
+
+            .back-btn {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card .value {
+                font-size: 1.3rem;
+            }
+
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-header h1 {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle Button -->
+    <button class="admin-menu-toggle" onclick="toggleMobileSidebar()">☰</button>
+
+    <!-- Overlay for mobile -->
+    <div class="admin-overlay" onclick="closeMobileSidebar()"></div>
+
+    <!-- Mobile Sidebar -->
+    <aside class="admin-sidebar">
+        <h3>🌸 Admin Panel</h3>
+        <a href="admin.html">Dashboard</a>
+        <a href="admin-products.html">Products</a>
+        <a href="admin-orders.html">Orders</a>
+        <a href="admin-orders-history.html" class="active">📊 Orders History</a>
+        <a href="admin-reviews.html">⭐ Reviews</a>
+        <a href="admin-categories.html">Categories</a>
+        <a href="admin-digital-products.html">💻 Digital Products</a>
+        <a href="admin-digital-orders.html">📥 Digital Orders</a>
+        <a href="admin-video-ads.html">📺 Video Ads</a>
+        <a href="settings.html">⚙️ Site Settings</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </aside>
+
     <header class="admin-header">
         <h1>📦 Orders History</h1>
         <a href="admin.html" class="back-btn">← Back to Admin Panel</a>
@@ -637,6 +828,28 @@
                 closeModal();
             }
         });
+
+        // ========== MOBILE SIDEBAR FUNCTIONS ==========
+        window.toggleMobileSidebar = function() {
+            document.querySelector('.admin-sidebar')?.classList.toggle('active');
+            document.querySelector('.admin-overlay')?.classList.toggle('active');
+        };
+
+        window.closeMobileSidebar = function() {
+            document.querySelector('.admin-sidebar')?.classList.remove('active');
+            document.querySelector('.admin-overlay')?.classList.remove('active');
+        };
+
+        // Close sidebar when clicking a link
+        document.querySelectorAll('.admin-sidebar a').forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileSidebar();
+            });
+        });
+
+        // Make logout available globally
+        import { logout } from './admin-common.js';
+        window.logout = logout;
     </script>
 </body>
 </html>
