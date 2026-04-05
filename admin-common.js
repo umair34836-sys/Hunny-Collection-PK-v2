@@ -1,15 +1,32 @@
 // Admin Common Utilities - Shared functions across all admin pages
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, query, where, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // ========== AUTHENTICATION ==========
 
-// Check if user is admin
-export async function isAdmin(userId) {
+// Check if user is admin (by email)
+export async function isAdmin(user) {
     try {
-        const adminDoc = await getDoc(doc(db, 'admins', userId));
-        return adminDoc.exists();
+        if (!user || !user.email) {
+            console.log('isAdmin: No user or email');
+            return false;
+        }
+
+        console.log('Checking admin status for:', user.email);
+
+        // Check admins collection for matching email
+        const q = query(collection(db, 'admins'), where('email', '==', user.email));
+        const snapshot = await getDocs(q);
+
+        console.log('Admin check result:', snapshot.empty ? 'NOT FOUND' : 'FOUND');
+
+        if (snapshot.empty) {
+            console.warn('User email not found in admins collection:', user.email);
+            return false;
+        }
+
+        return true;
     } catch (error) {
         console.error('Error checking admin status:', error);
         return false;
@@ -17,23 +34,29 @@ export async function isAdmin(userId) {
 }
 
 // Admin authentication checker
-export function checkAdminAuth() {
+export async function checkAdminAuth() {
     return new Promise((resolve) => {
-        onAuthStateChanged(auth, async (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            unsubscribe(); // Unsubscribe after first check
+
             if (!user) {
+                console.log('No user logged in, redirecting to login');
                 window.location.href = 'login.html';
                 resolve(false);
                 return;
             }
 
-            const adminCheck = await isAdmin(user.uid);
+            const adminCheck = await isAdmin(user);
             if (!adminCheck) {
-                alert('Access denied. Admin privileges required.');
-                window.location.href = 'index.html';
+                const errorMsg = `NOT AUTHORIZED AS ADMIN\n\nYour email: ${user.email}\n\nPlease add this email to Firestore:\n1. Go to Firestore Database\n2. Create collection: admins\n3. Add document with field: email = ${user.email}`;
+                console.error(errorMsg);
+                alert(errorMsg);
+                window.location.href = 'login.html';
                 resolve(false);
                 return;
             }
 
+            console.log('Admin authorized!');
             resolve(true);
         });
     });
