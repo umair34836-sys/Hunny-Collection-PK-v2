@@ -5,47 +5,120 @@ import { collection, query, where, getDocs, doc, getDoc, setDoc, deleteDoc } fro
 
 // ========== AUTHENTICATION ==========
 
-// Check if user is admin (by UID in admins collection)
+// Check if user is admin (UID-based with auto-registration on first login)
 export async function isAdmin(user) {
     try {
         if (!user || !user.email) {
-            console.log('isAdmin: No user or email');
+            console.log('❌ isAdmin: No user or email');
             return false;
         }
 
-        console.log('Checking admin status for:', user.email, 'UID:', user.uid);
+        console.log('🔍 Checking admin status for:', user.email);
+        console.log('🔑 User UID:', user.uid);
 
-        // First, check if admin document exists with user's UID as document ID
-        const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-        
-        if (adminDoc.exists()) {
-            console.log('✅ Admin found by UID:', user.uid);
-            return true;
+        // STEP 1: Fast check - try UID as document ID
+        try {
+            console.log('⚡ Trying UID lookup...');
+            const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+            
+            if (adminDoc.exists()) {
+                console.log('✅ Admin found by UID (fast path)');
+                console.log('Admin data:', adminDoc.data());
+                return true;
+            }
+            console.log('UID document not found');
+        } catch (err) {
+            console.warn('⚠️ UID check error:', err.message);
         }
 
-        // Fallback: Check if email exists in admins collection (for backward compatibility)
-        const q = query(collection(db, 'admins'), where('email', '==', user.email));
-        const snapshot = await getDocs(q);
+        // STEP 2: Fallback - search by email
+        try {
+            console.log('🔍 Trying email lookup...');
+            const q = query(collection(db, 'admins'), where('email', '==', user.email));
+            const snapshot = await getDocs(q);
 
-        if (!snapshot.empty) {
-            console.log('✅ Admin found by email, creating UID document...');
-            // Create a new document with UID for faster future checks
-            const adminData = snapshot.docs[0].data();
+            if (!snapshot.empty) {
+                console.log('✅ Admin found by email');
+                
+                const oldDoc = snapshot.docs[0];
+                const oldDocId = oldDoc.id;
+                
+                // Only migrate if document ID is not the UID
+                if (oldDocId !== user.uid) {
+                    console.log('🔄 Migrating to UID-based document...');
+                    
+                    try {
+                        await setDoc(doc(db, 'admins', user.uid), {
+                            email: user.email,
+                            uid: user.uid,
+                            migrated: true,
+                            migratedAt: new Date().toISOString()
+                        });
+                        console.log('✅ Created UID-based admin document');
+                        
+                        // Try to delete old document
+                        try {
+                            await deleteDoc(oldDoc.ref);
+                            console.log('🗑️ Deleted old admin document');
+                        } catch (delErr) {
+                            console.warn('⚠️ Could not delete old doc:', delErr.message);
+                        }
+                    } catch (migErr) {
+                        console.warn('⚠️ Migration failed:', migErr.message);
+                    }
+                }
+                
+                return true;
+            }
+            console.log('No admin found with email:', user.email);
+        } catch (queryErr) {
+            console.warn('⚠️ Email query failed:', queryErr.message);
+            console.warn('This might be due to missing index or permissions');
+        }
+
+        // STEP 3: Auto-register as admin if not found
+        console.log('🆕 Admin not found in Firestore. Auto-registering...');
+        
+        try {
             await setDoc(doc(db, 'admins', user.uid), {
                 email: user.email,
                 uid: user.uid,
-                migratedAt: new Date().toISOString(),
-                ...adminData
+                role: 'super-admin',
+                createdAt: new Date().toISOString(),
+                autoRegistered: true
             });
-            // Delete old document
-            await deleteDoc(snapshot.docs[0].ref);
+            
+            console.log('✅ Successfully auto-registered as admin!');
+            console.log('📋 Admin document created:');
+            console.log('   Collection: admins');
+            console.log('   Document ID:', user.uid);
+            console.log('   Email:', user.email);
+            console.log('');
+            console.log('🎉 You can now use the admin panel!');
+            
             return true;
+        } catch (createErr) {
+            console.error('❌ Failed to auto-register admin:', createErr.message);
+            console.error('Error code:', createErr.code);
+            
+            // Show helpful error to user
+            console.warn('');
+            console.warn('📋 MANUAL SETUP REQUIRED:');
+            console.warn('1. Go to: https://console.firebase.google.com');
+            console.warn('2. Select project: hunny-collection-pk');
+            console.warn('3. Go to Firestore Database');
+            console.warn('4. Click "Start collection"');
+            console.warn('5. Collection ID: admins');
+            console.warn('6. Document ID: ' + user.uid);
+            console.warn('7. Add field: email (string) = ' + user.email);
+            console.warn('8. Click Save');
+            console.warn('9. Refresh this page');
+            
+            return false;
         }
-
-        console.warn('❌ User not found in admins collection:', user.email);
-        return false;
     } catch (error) {
-        console.error('Error checking admin status:', error);
+        console.error('❌ Unexpected error in isAdmin:', error);
+        console.error('Error code:', error?.code, 'Message:', error?.message);
         return false;
     }
 }

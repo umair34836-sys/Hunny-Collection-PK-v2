@@ -17,10 +17,11 @@ service cloud.firestore {
 
     // ========== COLLECTIONS ==========
 
-    // ADMINS - Only admins can read, no writes (managed via app)
+    // ADMINS - Any authenticated user can read, first-time setup allowed, then manual only
     match /admins/{adminId} {
-      allow read: if isAdmin();
-      allow write: if false; // Manual setup only
+      allow read: if isAuthenticated(); // Required for admin status check
+      allow create: if isAuthenticated() && request.auth.uid == adminId; // First-time setup
+      allow update, delete: if false; // Manual only after creation
     }
 
     // USERS - Users can read/update own data, admins can read all
