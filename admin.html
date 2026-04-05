@@ -16,6 +16,7 @@
     <meta name="msapplication-TileImage" content="/assets/logo.jpeg">
     <meta name="msapplication-TileColor" content="#FF69B4">
     <meta name="theme-color" content="#FF69B4">
+    <link rel="stylesheet" href="admin-mobile.css">
     <style>
         .admin-layout {
             display: grid;
@@ -159,84 +160,200 @@
         }
 
         @media (max-width: 768px) {
+            /* CRITICAL RESET - Force everything to fit mobile screen */
+            *, *::before, *::after {
+                box-sizing: border-box !important;
+            }
+            
+            html, body {
+                overflow-x: hidden !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Show mobile toggle */
             .admin-menu-toggle {
                 display: block !important;
+                position: fixed !important;
+                top: 10px !important;
+                left: 10px !important;
+                z-index: 1001 !important;
             }
+
+            /* Sidebar becomes slide-out menu */
             .admin-sidebar {
-                position: fixed;
-                top: 0;
-                left: -280px;
-                width: 280px;
-                height: 100vh;
-                z-index: 1000;
-                transition: left 0.3s ease;
-                overflow-y: auto;
-                padding-top: 70px;
+                position: fixed !important;
+                top: 0 !important;
+                left: -300px !important;
+                width: 280px !important;
+                max-width: 85vw !important;
+                height: 100vh !important;
+                z-index: 1000 !important;
+                transition: left 0.3s ease !important;
+                overflow-y: auto !important;
+                padding-top: 60px !important;
             }
             .admin-sidebar.active {
-                left: 0;
+                left: 0 !important;
             }
-            .admin-overlay.active { display: block; }
+            .admin-overlay {
+                display: none !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                background: rgba(0,0,0,0.5) !important;
+                z-index: 999 !important;
+            }
+            .admin-overlay.active { 
+                display: block !important; 
+            }
+
+            /* Layout becomes single column */
             .admin-layout {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
+                width: 100% !important;
+                overflow-x: hidden !important;
             }
             .admin-content {
-                padding: 80px 15px 20px;
+                padding: 70px 10px 20px !important;
+                width: 100% !important;
+                overflow-x: hidden !important;
             }
+
+            /* Header fixes */
+            .header, .navbar {
+                padding: 10px 15px !important;
+                flex-wrap: wrap !important;
+            }
+            .logo {
+                font-size: 1rem !important;
+            }
+            .nav-menu {
+                display: none !important;
+            }
+
+            /* Stats grid becomes 2 columns */
             .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
             }
             .stat-card {
-                padding: 15px;
+                padding: 12px !important;
             }
             .stat-number {
-                font-size: 1.8rem;
+                font-size: 1.6rem !important;
             }
+            .stat-label {
+                font-size: 0.8rem !important;
+            }
+
+            /* Quick links single column */
             .quick-links-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
             }
+            .quick-link-card {
+                padding: 15px !important;
+            }
+
+            /* Cards reduce padding */
+            .admin-card {
+                padding: 15px !important;
+                margin-bottom: 15px !important;
+            }
+
+            /* Tables horizontal scroll */
             .table-responsive {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                width: 100% !important;
             }
             table {
-                min-width: 600px;
+                min-width: 600px !important;
+                width: 100% !important;
             }
             th, td {
-                padding: 8px 6px;
-                font-size: 0.85rem;
+                padding: 8px 6px !important;
+                font-size: 0.8rem !important;
+                white-space: nowrap !important;
             }
+
+            /* Modals full width */
             .modal-content {
                 width: 95% !important;
-                max-height: 85vh;
-                padding: 20px;
+                max-width: 95% !important;
+                max-height: 85vh !important;
+                padding: 20px !important;
+                margin: 10px auto !important;
             }
+            .modal-header {
+                flex-wrap: wrap !important;
+                gap: 10px !important;
+            }
+
+            /* Forms stack properly */
             .form-group input,
             .form-group textarea,
             .form-group select {
-                padding: 12px;
-                font-size: 16px;
+                padding: 12px !important;
+                font-size: 16px !important; /* Prevents iOS zoom */
+                width: 100% !important;
             }
-            .btn-sm {
-                padding: 10px 15px;
-                min-height: 44px;
-                margin: 3px;
+
+            /* Touch-friendly buttons */
+            .btn-sm, button {
+                padding: 10px 15px !important;
+                min-height: 44px !important;
+                margin: 4px !important;
+            }
+            .btn-primary {
+                padding: 12px 20px !important;
+                min-height: 48px !important;
+            }
+
+            /* Text adjustments */
+            h2 {
+                font-size: 1.3rem !important;
+                margin-bottom: 15px !important;
+                word-wrap: break-word !important;
+            }
+            h3 {
+                font-size: 1.1rem !important;
             }
         }
 
         @media (max-width: 480px) {
+            /* Even smaller screens */
             .stats-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
             }
             .stat-number {
-                font-size: 1.5rem;
+                font-size: 1.4rem !important;
+            }
+            .stat-label {
+                font-size: 0.75rem !important;
             }
             table {
-                min-width: 550px;
+                min-width: 550px !important;
+            }
+            th, td {
+                padding: 6px 4px !important;
+                font-size: 0.75rem !important;
             }
             h2 {
-                font-size: 1.3rem;
+                font-size: 1.2rem !important;
+            }
+            .admin-content {
+                padding: 65px 8px 15px !important;
+            }
+            .admin-card {
+                padding: 12px !important;
+            }
+            .quick-link-card {
+                padding: 12px !important;
             }
         }
     </style>
