@@ -316,22 +316,71 @@ export async function loadProduct(productId) {
     console.log('Loading product with ID:', productId);
 
     try {
-        // Get all products and find the matching one
-        const querySnapshot = await getDocs(collection(db, 'products'));
+        // Show loading state
+        container.innerHTML = `
+            <div class="loading">
+                <div style="font-size: 2rem; animation: spin 1s linear infinite;">⏳</div>
+                <p>Loading product details...</p>
+            </div>
+        `;
+
+        // Get all products with retry logic
+        let querySnapshot = null;
+        let lastError = null;
+        const maxRetries = 3;
+        const retryDelay = 2000;
+
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                console.log(`🔄 Fetching products (Attempt ${attempt}/${maxRetries})...`);
+                querySnapshot = await getDocs(collection(db, 'products'));
+                lastError = null;
+                break; // Success, exit retry loop
+            } catch (error) {
+                lastError = error;
+                console.warn(`❌ Attempt ${attempt} failed:`, error.message);
+                
+                if (attempt < maxRetries) {
+                    const waitTime = retryDelay * Math.pow(2, attempt - 1);
+                    console.log(`⏳ Waiting ${waitTime}ms before retry...`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                }
+            }
+        }
+
+        // If all retries failed, show error with retry button
+        if (lastError && !querySnapshot) {
+            container.innerHTML = `
+                <div class="loading">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
+                    <h2>Connection Error</h2>
+                    <p>Unable to load product details. Please check your internet connection.</p>
+                    <p style="color: #999; font-size: 0.9rem;">Error: ${lastError.message}</p>
+                    <button onclick="window.location.reload()" 
+                            style="padding: 12px 30px; background: #667eea; color: white; border: none; 
+                                   border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; 
+                                   margin-top: 15px;">
+                        🔄 Retry Now
+                    </button>
+                    <br>
+                    <a href="shop.html" class="btn-primary" 
+                       style="display: inline-block; margin-top: 15px; padding: 10px 20px;">
+                        ← Back to Shop
+                    </a>
+                </div>
+            `;
+            return;
+        }
+
+        // Find the product
         let product = null;
-
-        console.log('Total products in Firestore:', querySnapshot.size);
-
         querySnapshot.forEach((doc) => {
-            console.log('Checking product:', doc.id);
             if (doc.id === productId) {
                 product = migrateProductPricing({ id: doc.id, ...doc.data() });
-                console.log('Found product:', product.name);
             }
         });
 
         if (!product) {
-            console.error('Product not found. Available IDs:', querySnapshot.docs.map(d => d.id));
             container.innerHTML = `
                 <div class="loading">
                     <h2>Product not found</h2>

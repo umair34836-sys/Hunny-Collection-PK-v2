@@ -378,6 +378,7 @@
         import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         let allOrders = [];
+        let allProducts = [];
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -385,8 +386,20 @@
                 return;
             }
 
-            await loadOrders();
+            await Promise.all([loadOrders(), loadProducts()]);
         });
+
+        async function loadProducts() {
+            try {
+                const productsSnapshot = await getDocs(collection(db, 'products'));
+                allProducts = [];
+                productsSnapshot.forEach((doc) => {
+                    allProducts.push({ id: doc.id, ...doc.data() });
+                });
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
 
         async function loadOrders() {
             try {
@@ -532,7 +545,16 @@
             const timeStr = orderDate.toLocaleTimeString();
             const statusClass = 'status-' + (order.status || 'pending').toLowerCase();
 
-            const itemsHtml = (order.items || []).map(item => `
+            // Get admin info for each order item
+            const itemsHtml = (order.items || []).map(item => {
+                // Try to find the product in our products array to get admin info
+                const matchingProduct = allProducts.find(p => 
+                    p.name === item.name || 
+                    (p.images && p.images[0] === item.images?.[0])
+                );
+                const addedBy = matchingProduct ? (matchingProduct.addedBy || 'Unknown') : 'Unknown';
+
+                return `
                 <div class="item-card">
                     <img src="${item.images?.[0] || 'https://via.placeholder.com/60'}" alt="${item.name}">
                     <div style="flex: 1;">
@@ -544,9 +566,10 @@
                         <div style="color: #667eea; font-weight: 600;">
                             Rs. ${(item.sellingPrice || item.price || 0).toLocaleString()}
                         </div>
+                        ${addedBy !== 'Unknown' ? `<div style="font-size: 0.75rem; color: #667eea; margin-top: 5px;">👤 Added by: ${addedBy}</div>` : ''}
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
 
             // Calculate investor share
             const totalAmount = order.total || 0;

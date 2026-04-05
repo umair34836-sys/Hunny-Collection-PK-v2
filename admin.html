@@ -1515,13 +1515,16 @@
                                    p.markazAvailability === 'unavailable' ? '❌' : '⏳';
                 const statusText = p.markazCode ? (p.markazAvailability || 'Not Checked') : 'No Code';
                 const codeDisplay = p.markazCode ? `<br><small style="font-family: monospace; font-size: 0.75rem; color: #666;">${p.markazCode}</small>` : '';
-                
+
                 // Pricing info
                 const costPrice = p.costPrice || 0;
                 const sellingPrice = p.sellingPrice || p.price || 0;
                 const originalPrice = p.originalPrice || 0;
                 const profit = sellingPrice - costPrice;
                 const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+
+                // Admin who added this product
+                const addedBy = p.addedBy ? p.addedBy : (p.addedByUserId ? 'Unknown Admin' : 'Legacy Product');
 
                 return `
                 <tr>
@@ -1548,10 +1551,12 @@
                                style="display: inline-block; margin-left: 5px; font-size: 0.75rem; text-decoration: none; cursor: pointer;"
                                title="Search on Markaz">🔍 ${p.markazAvailability === 'available' ? '✅ Available' : p.markazAvailability === 'unavailable' ? '❌ Unavailable' : '🔍 Search'}</a>
                         ` : ''}
+                        <br>
+                        <small style="color: #666; font-size: 0.7rem;">👤 ${addedBy}</small>
                     </td>
                     <td>
                         <button class="btn-sm" onclick="editProduct('${p.id}')">Edit</button>
-                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}')" style="background: #25d366; color: white;">📱 Share</button>
+                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${p.images && p.images[0] ? p.images[0] : ''}', ${p.sellingPrice || p.price || 0}, ${p.originalPrice || 0})" style="background: #25d366; color: white;">📱 Share</button>
                         <button class="btn-sm btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
                     </td>
                 </tr>
@@ -2206,6 +2211,13 @@
             const sellingPrice = Number(document.getElementById('product-selling-price').value);
             const originalPrice = Number(document.getElementById('product-original-price').value) || 0;
 
+            // Get current admin info
+            const currentAdmin = auth.currentUser;
+            const adminInfo = {
+                addedBy: currentAdmin ? currentAdmin.email : 'unknown',
+                addedByUserId: currentAdmin ? currentAdmin.uid : 'unknown'
+            };
+
             const productData = {
                 name: document.getElementById('product-name').value,
                 costPrice: costPrice,
@@ -2218,7 +2230,8 @@
                 images: images,
                 markazCode: markazCode,
                 markazAvailability: 'not-checked',
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
+                ...adminInfo
             };
 
             if (id) {
@@ -2272,22 +2285,33 @@
             const order = orders.find(o => o.id === id);
             if (!order) return;
 
-            const itemsHtml = (order.items || []).map(item => `
+            // Find admin info for each order item
+            const itemsHtml = (order.items || []).map(item => {
+                // Try to find the product in our products array to get admin info
+                const matchingProduct = products.find(p => 
+                    p.name === item.name || 
+                    (p.images && p.images[0] === item.images?.[0])
+                );
+                const addedBy = matchingProduct ? (matchingProduct.addedBy || 'Unknown') : 'Unknown';
+                const addedByEmail = addedBy !== 'Unknown' ? addedBy : '';
+
+                return `
                 <div style="display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #eee;">
-                    <img src="${item.images?.[0] || 'https://via.placeholder.com/50'}" 
+                    <img src="${item.images?.[0] || 'https://via.placeholder.com/50'}"
                          style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
                     <div style="flex: 1;">
                         <div style="font-weight: 600;">${item.name}</div>
                         <div style="font-size: 0.85rem; color: #666;">
-                            Qty: ${item.quantity || 1} 
+                            Qty: ${item.quantity || 1}
                             ${item.variant?.size ? '| Size: ' + item.variant.size : ''}
                         </div>
                         <div style="color: var(--dark-pink); font-weight: 600;">
                             Rs. ${(item.sellingPrice || item.price || 0).toLocaleString()}
                         </div>
+                        ${addedByEmail ? `<div style="font-size: 0.75rem; color: #667eea; margin-top: 3px;">👤 Added by: ${addedByEmail}</div>` : ''}
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
 
             const modalContent = `
                 <div style="max-height: 70vh; overflow-y: auto;">
@@ -2862,17 +2886,34 @@
             });
         };
 
-        window.shareProduct = function(productId, productName) {
+        window.shareProduct = function(productId, productName, imageUrl, sellingPrice, originalPrice) {
             const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/product.html?id=' + productId;
-            const message = '🌸 Check out this product: ' + productName + ' at Hunny Collection PK! Shop now: ' + url;
             
-            if (confirm('Share this product on WhatsApp?\n\n' + productName + '\n\nClick OK for WhatsApp\nCancel to copy link')) {
-                window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
-            } else {
-                navigator.clipboard.writeText(url).then(() => {
-                    alert('✅ Product link copied!\n\n' + url);
-                });
+            // Calculate discount
+            let discountText = '';
+            if (originalPrice > sellingPrice && sellingPrice > 0) {
+                const discount = Math.round(((originalPrice - sellingPrice) / originalPrice) * 100);
+                const savings = originalPrice - sellingPrice;
+                discountText = `\n💸 *Save Rs. ${savings.toLocaleString()}* (${discount}% OFF)\n❌ Was: Rs. ${originalPrice.toLocaleString()}`;
             }
+            
+            // Build message with product details
+            const message = `🌸 *${productName}*
+
+🛍️ *Hunny Collection PK*
+━━━━━━━━━━━━━━━━━━
+💰 *Price: Rs. ${sellingPrice.toLocaleString()}*${discountText}
+
+✅ Premium Quality
+🚚 Fast Delivery Across Pakistan
+💵 Cash on Delivery Available
+
+👉 *Order Now:* ${url}
+━━━━━━━━━━━━━━━━━━
+📱 Contact: +92 301 8858303`;
+            
+            // Direct WhatsApp redirect
+            window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
         };
     </script>
 
