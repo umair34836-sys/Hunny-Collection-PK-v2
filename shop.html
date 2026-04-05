@@ -378,8 +378,7 @@
     </script>
     <script type="module">
         import { db, retryOperation } from './firebase-config.js';
-        import { collection, getDocs, query, orderBy, limit, startAfter } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { getCachedData } from './cache-utils.js';
+        import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const PRODUCTS_PER_PAGE = 20;
         var allProducts = [];
@@ -425,14 +424,6 @@
             });
         }
 
-        // Hide skeleton
-        function hideSkeleton() {
-            var container = document.getElementById('products-container');
-            if (container.querySelector('.skeleton-card')) {
-                container.innerHTML = '';
-            }
-        }
-
         async function loadProducts(isLoadMore = false) {
             if (isLoading) return;
             isLoading = true;
@@ -446,32 +437,29 @@
                     showSkeleton(6);
                 }
 
-                // Try to load from cache first with retry
-                const productsData = await getCachedData('products', async () => {
-                    // Fetch from Firebase with retry
-                    return await retryOperation(async () => {
-                        var q = query(
-                            collection(db, 'products'),
-                            orderBy('createdAt', 'desc'),
-                            limit(100) // Limit to 100 for caching
-                        );
-                        var querySnapshot = await getDocs(q);
-                        
-                        var products = [];
-                        var categories = [];
-                        querySnapshot.forEach(function(doc) {
-                            var product = { id: doc.id, ...doc.data() };
-                            products.push(product);
-                            if (product.category && categories.indexOf(product.category) === -1) {
-                                categories.push(product.category);
-                            }
-                        });
+                // Fetch from Firebase with retry
+                const productsData = await retryOperation(async () => {
+                    var q = query(
+                        collection(db, 'products'),
+                        orderBy('createdAt', 'desc'),
+                        limit(100)
+                    );
+                    var querySnapshot = await getDocs(q);
+                    
+                    var products = [];
+                    var categories = [];
+                    querySnapshot.forEach(function(doc) {
+                        var product = { id: doc.id, ...doc.data() };
+                        products.push(product);
+                        if (product.category && categories.indexOf(product.category) === -1) {
+                            categories.push(product.category);
+                        }
+                    });
 
-                        // Store categories for later use
-                        window.productCategories = categories;
-                        return products;
-                    }, 3, 2000); // 3 retries, 2s delay
-                });
+                    // Store categories for later use
+                    window.productCategories = categories;
+                    return products;
+                }, 3, 2000);
 
                 allProducts = productsData;
                 

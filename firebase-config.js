@@ -1,7 +1,7 @@
 // Firebase Configuration
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, enableMultiTabIndexedDbPersistence } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
 const firebaseConfig = {
@@ -21,42 +21,42 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// Enable Multi-Tab IndexedDB Persistence (supports multiple tabs)
-enableMultiTabIndexedDbPersistence(db)
-  .then(() => {
-    console.log('✅ Firestore multi-tab persistence enabled');
-  })
-  .catch((err) => {
-    if (err.code === 'failed-precondition') {
-      console.warn('⚠️ Multiple tabs open - using shared persistence');
-    } else if (err.code === 'unimplemented') {
-      console.warn('⚠️ Browser not supported, using memory cache');
-    } else {
-      console.error('❌ Persistence error:', err);
-    }
-  });
-
-// Retry utility for Firebase operations
+// Retry utility for Firebase operations with exponential backoff
 export async function retryOperation(operation, maxRetries = 3, delayMs = 2000) {
   let lastError;
   
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      console.log(`🔄 Attempt ${attempt}/${maxRetries}...`);
-      return await operation();
+      console.log(`🔄 Firebase attempt ${attempt}/${maxRetries}...`);
+      const result = await operation();
+      if (attempt > 1) {
+        console.log(`✅ Success on attempt ${attempt}`);
+      }
+      return result;
     } catch (error) {
       lastError = error;
-      console.warn(`❌ Attempt ${attempt} failed:`, error.message);
+      const isOffline = error.code === 'unavailable' || error.message?.includes('offline');
+      
+      if (isOffline) {
+        console.warn(`❌ No internet connection (Attempt ${attempt}/${maxRetries})`);
+      } else {
+        console.warn(`❌ Attempt ${attempt} failed:`, error.code || error.message);
+      }
       
       if (attempt < maxRetries) {
-        // Wait before retry (exponential backoff)
+        // Exponential backoff: 2s, 4s, 8s
         const waitTime = delayMs * Math.pow(2, attempt - 1);
-        console.log(`⏳ Waiting ${waitTime}ms before retry...`);
+        console.log(`⏳ Retrying in ${waitTime / 1000}s...`);
         await new Promise(resolve => setTimeout(resolve, waitTime));
       }
     }
   }
   
-  console.error(`❌ All ${maxRetries} attempts failed`);
+  const isOffline = lastError?.code === 'unavailable' || lastError?.message?.includes('offline');
+  if (isOffline) {
+    console.error('❌ No internet connection. Please check your network.');
+  } else {
+    console.error(`❌ All ${maxRetries} attempts failed. Last error:`, lastError.message);
+  }
   throw lastError;
 }
