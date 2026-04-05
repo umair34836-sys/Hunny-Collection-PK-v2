@@ -1,11 +1,11 @@
 // Admin Common Utilities - Shared functions across all admin pages
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { collection, query, where, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, query, where, getDocs, doc, getDoc, setDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // ========== AUTHENTICATION ==========
 
-// Check if user is admin (by email)
+// Check if user is admin (by UID in admins collection)
 export async function isAdmin(user) {
     try {
         if (!user || !user.email) {
@@ -13,20 +13,37 @@ export async function isAdmin(user) {
             return false;
         }
 
-        console.log('Checking admin status for:', user.email);
+        console.log('Checking admin status for:', user.email, 'UID:', user.uid);
 
-        // Check admins collection for matching email
+        // First, check if admin document exists with user's UID as document ID
+        const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+        
+        if (adminDoc.exists()) {
+            console.log('✅ Admin found by UID:', user.uid);
+            return true;
+        }
+
+        // Fallback: Check if email exists in admins collection (for backward compatibility)
         const q = query(collection(db, 'admins'), where('email', '==', user.email));
         const snapshot = await getDocs(q);
 
-        console.log('Admin check result:', snapshot.empty ? 'NOT FOUND' : 'FOUND');
-
-        if (snapshot.empty) {
-            console.warn('User email not found in admins collection:', user.email);
-            return false;
+        if (!snapshot.empty) {
+            console.log('✅ Admin found by email, creating UID document...');
+            // Create a new document with UID for faster future checks
+            const adminData = snapshot.docs[0].data();
+            await setDoc(doc(db, 'admins', user.uid), {
+                email: user.email,
+                uid: user.uid,
+                migratedAt: new Date().toISOString(),
+                ...adminData
+            });
+            // Delete old document
+            await deleteDoc(snapshot.docs[0].ref);
+            return true;
         }
 
-        return true;
+        console.warn('❌ User not found in admins collection:', user.email);
+        return false;
     } catch (error) {
         console.error('Error checking admin status:', error);
         return false;
