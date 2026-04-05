@@ -376,6 +376,8 @@
         import { auth, db } from './firebase-config.js';
         import { collection, query, getDocs, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { checkAdminAuth, formatCurrency, formatDate, getStatusBadge } from './admin-common.js';
+        import { getAllOrders, getAllProducts } from './admin-api.js';
 
         let allOrders = [];
         let allProducts = [];
@@ -386,16 +388,15 @@
                 return;
             }
 
-            await Promise.all([loadOrders(), loadProducts()]);
+            const adminCheck = await checkAdminAuth();
+            if (adminCheck) {
+                await Promise.all([loadOrders(), loadProducts()]);
+            }
         });
 
         async function loadProducts() {
             try {
-                const productsSnapshot = await getDocs(collection(db, 'products'));
-                allProducts = [];
-                productsSnapshot.forEach((doc) => {
-                    allProducts.push({ id: doc.id, ...doc.data() });
-                });
+                allProducts = await getAllProducts();
             } catch (error) {
                 console.error('Error loading products:', error);
             }
@@ -403,35 +404,7 @@
 
         async function loadOrders() {
             try {
-                const q = query(
-                    collection(db, 'orders')
-                );
-
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) {
-                    document.getElementById('orders-container').innerHTML = `
-                        <div class="no-orders">
-                            <h2>No orders found</h2>
-                            <p>Orders will appear here once customers start placing them.</p>
-                        </div>
-                    `;
-                    updateStats([]);
-                    return;
-                }
-
-                allOrders = [];
-                querySnapshot.forEach((doc) => {
-                    allOrders.push({ id: doc.id, ...doc.data() });
-                });
-
-                // Sort by createdAt (newest first)
-                allOrders.sort((a, b) => {
-                    const dateA = a.createdAt ? new Date(a.createdAt) : 0;
-                    const dateB = b.createdAt ? new Date(b.createdAt) : 0;
-                    return dateB - dateA;
-                });
-
+                allOrders = await getAllOrders();
                 updateStats(allOrders);
                 renderOrders(allOrders);
             } catch (error) {
