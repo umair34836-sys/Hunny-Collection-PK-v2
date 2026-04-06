@@ -32,13 +32,28 @@
     <meta property="twitter:image" content="https://i.ibb.co/ymfRN5Lm/product.jpg" id="twitter-image">
 
     <script>
-        // Check if product ID is in URL and load product data BEFORE page renders
+        // Fix canonical URL dynamically based on product ID (runs BEFORE page renders)
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
-            
+
+            // Update canonical to include ?id= parameter
+            const canonicalLink = document.querySelector('link[rel="canonical"]');
+            const baseUrl = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/product.html';
+            if (canonicalLink) {
+                canonicalLink.href = productId ? baseUrl + '?id=' + productId : baseUrl;
+            }
+
+            // Also update og:url and twitter:url
+            const ogUrl = document.querySelector('meta[property="og:url"]');
+            const twitterUrl = document.querySelector('meta[property="twitter:url"]');
+            const fullUrl = productId ? baseUrl + '?id=' + productId : baseUrl;
+            if (ogUrl) ogUrl.setAttribute('content', fullUrl);
+            if (twitterUrl) twitterUrl.setAttribute('content', fullUrl);
+
             if (productId) {
                 console.log('Product ID found in URL:', productId);
+                console.log('Canonical URL set to:', fullUrl);
                 // Product will be loaded by app.js which will update OG tags
             }
         })();
@@ -107,11 +122,20 @@
             cursor: pointer;
             transition: all 0.3s ease;
             flex-shrink: 0;
+            background: #f0f0f0; /* Placeholder background while loading */
         }
         .product-thumbnail:hover,
         .product-thumbnail.active {
             border-color: var(--dark-pink);
             transform: scale(1.05);
+        }
+        /* Lazy loading animation */
+        .product-thumbnail[data-full-src]:not([src]) {
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes skeleton-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         .image-counter {
             text-align: center;

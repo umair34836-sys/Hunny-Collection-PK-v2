@@ -1,6 +1,6 @@
 // Main Application JavaScript
 import { db, auth } from './firebase-config.js';
-import { collection, getDocs, query, orderBy, limit, addDoc, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, getDocs, getDoc, doc, query, orderBy, limit, addDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
 // Check auth state
@@ -304,7 +304,7 @@ window.removeFromCart = removeFromCart;
 window.updateQuantity = updateCartQuantity;
 window.renderCart = renderCartPage;
 
-// Load single product
+// Load single product by ID (optimized: fetches ONLY one document from Firestore)
 export async function loadProduct(productId) {
     const container = document.getElementById('product-detail');
     const pageTitle = document.getElementById('page-title');
@@ -313,25 +313,15 @@ export async function loadProduct(productId) {
         return;
     }
 
-    console.log('Loading product with ID:', productId);
+    console.log('Loading single product with ID:', productId);
 
     try {
-        // Get all products and find the matching one
-        const querySnapshot = await getDocs(collection(db, 'products'));
-        let product = null;
+        // Fetch ONLY the single product document by ID — no full collection scan
+        const docRef = doc(db, 'products', productId);
+        const docSnap = await getDoc(docRef);
 
-        console.log('Total products in Firestore:', querySnapshot.size);
-
-        querySnapshot.forEach((doc) => {
-            console.log('Checking product:', doc.id);
-            if (doc.id === productId) {
-                product = migrateProductPricing({ id: doc.id, ...doc.data() });
-                console.log('Found product:', product.name);
-            }
-        });
-
-        if (!product) {
-            console.error('Product not found. Available IDs:', querySnapshot.docs.map(d => d.id));
+        if (!docSnap.exists()) {
+            console.error('Product not found:', productId);
             container.innerHTML = `
                 <div class="loading">
                     <h2>Product not found</h2>
@@ -342,6 +332,9 @@ export async function loadProduct(productId) {
             return;
         }
 
+        const product = migrateProductPricing({ id: docSnap.id, ...docSnap.data() });
+        console.log('Found product:', product.name);
+
         if (pageTitle) {
             pageTitle.textContent = `${product.name} - Hunny Collection PK`;
         }
@@ -351,9 +344,8 @@ export async function loadProduct(productId) {
 
         window.currentProduct = product;
         let selectedSize = null;
-        let currentImageIndex = 0;
 
-        // Generate image gallery with navigation
+        // Get images array
         const images = product.images || [product.image || 'https://via.placeholder.com/500x500'];
         const mainImage = images[0] || 'https://via.placeholder.com/500x500';
 
@@ -364,6 +356,7 @@ export async function loadProduct(productId) {
         const costPrice = product.costPrice || 0;
         const profit = sellingPrice - costPrice;
 
+        // Render product — main image loads immediately, thumbnails use lazy loading
         container.innerHTML = `
             <div class="product-detail-grid">
                 <div class="product-images">
@@ -377,8 +370,8 @@ export async function loadProduct(productId) {
                     ${images.length > 1 ? `
                         <div class="product-thumbnails">
                             ${images.map((img, idx) => `
-                                <img src="${img}" class="product-thumbnail ${idx === 0 ? 'active' : ''}"
-                                     onclick="changeImage(${idx}, '${img}', this)">
+                                <img src="${idx === 0 ? img : ''}" data-full-src="${img}" class="product-thumbnail ${idx === 0 ? 'active' : ''}"
+                                     onclick="window.lazyChangeImage('${img}', this)" loading="lazy">
                             `).join('')}
                         </div>
                     ` : ''}
@@ -392,7 +385,7 @@ export async function loadProduct(productId) {
                     </div>
                     ${discountPercent > 0 ? `<p class="discount-savings">You save Rs. ${(originalPrice - sellingPrice).toLocaleString()}!</p>` : ''}
                     ${product.description ? `<p class="description">${product.description}</p>` : ''}
-                    
+
                     ${product.variants?.length ? `
                         <div class="variant-group">
                             <label>Size:</label>
@@ -403,15 +396,15 @@ export async function loadProduct(productId) {
                             </div>
                         </div>
                     ` : ''}
-                    
+
                     <div class="quantity-group">
                         <label>Quantity:</label>
                         <input type="number" id="quantity" value="1" min="1" class="quantity-input">
                     </div>
-                    
+
                     <button onclick="addToCartClick()" class="btn-primary btn-large">Add to Cart</button>
                     <button onclick="buyNow()" class="btn-secondary btn-large">Buy Now</button>
-                    
+
                     <!-- Share Buttons -->
                     <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color);">
                         <h4 style="margin-bottom: 10px; color: var(--text-dark);">Share This Product</h4>
@@ -433,11 +426,28 @@ export async function loadProduct(productId) {
         `;
     } catch (error) {
         console.error('Error loading product:', error);
-        container.innerHTML = '<p>Error loading product</p>';
+        // On slow internet, keep showing loading state instead of error
+        container.innerHTML = `
+            <div class="loading" style="text-align:center;padding:60px 20px;">
+                <div style="border:4px solid #f3f3f3;border-top:4px solid var(--dark-pink);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin:20px auto;"></div>
+                <p style="color:var(--text-light);margin-top:15px;">Loading product details, please wait...</p>
+                <button onclick="window.loadProduct('${productId}')" class="btn-primary" style="margin-top:15px;">Retry</button>
+            </div>
+        `;
     }
 }
 
-// Change main image
+// Lazy change image — loads thumbnail src on first click
+window.lazyChangeImage = function(imageUrl, thumbnail) {
+    if (!thumbnail.src || thumbnail.src === '' || thumbnail.src === window.location.href) {
+        thumbnail.src = thumbnail.getAttribute('data-full-src');
+    }
+    document.getElementById('main-image').src = imageUrl;
+    document.querySelectorAll('.product-thumbnail').forEach(t => t.classList.remove('active'));
+    thumbnail.classList.add('active');
+};
+
+// Change main image (backwards compatibility)
 window.changeImage = (imageUrl, thumbnail) => {
     document.getElementById('main-image').src = imageUrl;
     document.querySelectorAll('.product-thumbnail').forEach(t => t.classList.remove('active'));
@@ -840,90 +850,55 @@ export async function placeOrder(orderData) {
 // Export for global use
 window.updateCartCount = updateCartCount;
 window.loadProduct = loadProduct;
-window.changeImage = changeImage;
 window.selectSize = selectSize;
 window.addToCartClick = addToCartClick;
 window.buyNow = buyNow;
 
-// Image gallery navigation functions
-let currentImageIndex = 0;
-let productImages = [];
-
-window.changeImage = function(index, imageUrl, thumbnailElement) {
-    productImages = productImages || [];
-    if (productImages.length === 0) {
-        const thumbnails = document.querySelectorAll('.product-thumbnail');
-        productImages = Array.from(thumbnails).map(img => img.src);
-    }
-    
-    currentImageIndex = index;
-    const mainImage = document.getElementById('main-image');
-    const counter = document.getElementById('image-counter');
-    
-    if (mainImage) {
-        mainImage.style.opacity = '0';
-        setTimeout(() => {
-            mainImage.src = imageUrl;
-            mainImage.style.opacity = '1';
-        }, 200);
-    }
-    
-    // Update thumbnails
-    document.querySelectorAll('.product-thumbnail').forEach(thumb => {
-        thumb.classList.remove('active');
-    });
-    if (thumbnailElement) {
-        thumbnailElement.classList.add('active');
-    }
-    
-    // Update counter
-    if (counter) {
-        counter.textContent = `${currentImageIndex + 1} / ${productImages.length}`;
-    }
-    
-    // Update navigation buttons
-    updateNavButtons();
-};
-
+// Image gallery navigation (works with lazy-loaded thumbnails)
 window.previousImage = function() {
-    if (productImages.length === 0) {
-        const thumbnails = document.querySelectorAll('.product-thumbnail');
-        productImages = Array.from(thumbnails).map(img => img.src);
+    const thumbnails = document.querySelectorAll('.product-thumbnail');
+    if (thumbnails.length === 0) return;
+
+    // Find current active thumbnail
+    let currentIndex = 0;
+    thumbnails.forEach((t, i) => { if (t.classList.contains('active')) currentIndex = i; });
+
+    const newIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+    const newThumb = thumbnails[newIndex];
+
+    // Load image if not yet loaded
+    if (!newThumb.src || newThumb.src === '' || newThumb.src === window.location.href) {
+        newThumb.src = newThumb.getAttribute('data-full-src');
     }
-    
-    currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
-    const thumbnail = document.querySelectorAll('.product-thumbnail')[currentImageIndex];
-    window.changeImage(currentImageIndex, productImages[currentImageIndex], thumbnail);
+
+    document.getElementById('main-image').src = newThumb.src;
+    thumbnails.forEach(t => t.classList.remove('active'));
+    newThumb.classList.add('active');
+
+    const counter = document.getElementById('image-counter');
+    if (counter) counter.textContent = `${newIndex + 1} / ${thumbnails.length}`;
 };
 
 window.nextImage = function() {
-    if (productImages.length === 0) {
-        const thumbnails = document.querySelectorAll('.product-thumbnail');
-        productImages = Array.from(thumbnails).map(img => img.src);
+    const thumbnails = document.querySelectorAll('.product-thumbnail');
+    if (thumbnails.length === 0) return;
+
+    // Find current active thumbnail
+    let currentIndex = 0;
+    thumbnails.forEach((t, i) => { if (t.classList.contains('active')) currentIndex = i; });
+
+    const newIndex = (currentIndex + 1) % thumbnails.length;
+    const newThumb = thumbnails[newIndex];
+
+    // Load image if not yet loaded
+    if (!newThumb.src || newThumb.src === '' || newThumb.src === window.location.href) {
+        newThumb.src = newThumb.getAttribute('data-full-src');
     }
-    
-    currentImageIndex = (currentImageIndex + 1) % productImages.length;
-    const thumbnail = document.querySelectorAll('.product-thumbnail')[currentImageIndex];
-    window.changeImage(currentImageIndex, productImages[currentImageIndex], thumbnail);
+
+    document.getElementById('main-image').src = newThumb.src;
+    thumbnails.forEach(t => t.classList.remove('active'));
+    newThumb.classList.add('active');
+
+    const counter = document.getElementById('image-counter');
+    if (counter) counter.textContent = `${newIndex + 1} / ${thumbnails.length}`;
 };
-
-function updateNavButtons() {
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    
-    if (prevBtn && nextBtn && productImages.length > 1) {
-        prevBtn.style.display = 'flex';
-        nextBtn.style.display = 'flex';
-    }
-}
-
-// Initialize product images on page load
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        const thumbnails = document.querySelectorAll('.product-thumbnail');
-        if (thumbnails.length > 0) {
-            productImages = Array.from(thumbnails).map(img => img.src);
-            updateNavButtons();
-        }
-    });
-}
