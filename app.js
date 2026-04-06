@@ -96,8 +96,12 @@ export async function loadCategories() {
             </a>
         `).join('');
     } catch (error) {
-        console.error('Error loading categories:', error);
-        container.innerHTML = '<p class="loading">Error loading categories</p>';
+        // On slow internet, show friendly message instead of error
+        if (error.code === 'unavailable' || error.message.includes('offline')) {
+            container.innerHTML = '<p class="loading">Loading categories, please wait...</p>';
+        } else {
+            container.innerHTML = '<p class="loading">Categories coming soon...</p>';
+        }
     }
 }
 
@@ -143,8 +147,12 @@ export async function loadFeaturedProducts() {
             `;
         }).join('');
     } catch (error) {
-        console.error('Error loading products:', error);
-        container.innerHTML = '<p class="loading">Error loading products</p>';
+        // On slow internet, keep loading state instead of showing error
+        if (error.code === 'unavailable' || error.message.includes('offline')) {
+            container.innerHTML = '<p class="loading">Loading products, please wait...</p>';
+        } else {
+            container.innerHTML = '<p class="loading">Products coming soon! Check back later.</p>';
+        }
     }
 }
 

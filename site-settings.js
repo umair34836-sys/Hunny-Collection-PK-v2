@@ -8,19 +8,20 @@ import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-
 export async function loadSiteSettings() {
     try {
         const settingsDoc = await getDoc(doc(db, 'settings', 'site'));
-        
+
         if (settingsDoc.exists()) {
             const settings = settingsDoc.data();
             applySettings(settings);
             return settings;
         } else {
-            console.log('No settings found, using defaults');
             applyDefaultSettings();
             return null;
         }
     } catch (error) {
-        console.error('Error loading settings:', error);
-        applyDefaultSettings();
+        // On slow/offline connections, silently use defaults — no console error
+        if (error.code === 'unavailable' || error.message.includes('offline')) {
+            applyDefaultSettings();
+        }
         return null;
     }
 }
