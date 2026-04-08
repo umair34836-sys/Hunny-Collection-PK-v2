@@ -1695,7 +1695,7 @@
                     ${p.lastEditedBy ? `<br><small style="color: #FF9800; font-size: 0.65rem;">✏️ ${p.lastEditedBy}</small>` : ''}</td>
                     <td>
                         <button class="btn-sm" onclick="editProduct('${p.id}')">✏️ Edit</button>
-                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${p.images && p.images[0] ? p.images[0] : ''}', ${p.sellingPrice || p.price || 0}, ${p.originalPrice || 0})" style="background: #25d366; color: white;">📱 Share</button>
+                        <button class="btn-sm" onclick="shareProduct('${p.id}')" style="background: #25d366; color: white;">📱 Share</button>
                         <button class="btn-sm btn-danger" onclick="deleteProduct('${p.id}')">🗑️ Delete</button>
                     </td>
                 </tr>
@@ -2749,12 +2749,12 @@
 
         // Share functions
         window.shareOnFacebook = function() {
-            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
+            const url = 'https://hunnycollectionpk.com/';
             window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'width=600,height=400');
         };
 
         window.shareOnWhatsApp = function() {
-            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/';
+            const url = 'https://hunnycollectionpk.com/';
             const message = '🌸 Check out Hunny Collection PK - Premium Female Fashion Store! Shop now: ' + url;
             window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
         };
@@ -3219,19 +3219,28 @@
             });
         };
 
-        window.shareProduct = function(productId, productName, imageUrl, sellingPrice, originalPrice) {
-            const url = 'https://umair34836-sys.github.io/Hunny-Collection-PK-v2/product.html?id=' + productId;
-            
+        window.shareProduct = function(productId) {
+            // Find product from global array
+            const product = window.products?.find(p => p.id === productId);
+            if (!product) {
+                alert('Product not found');
+                return;
+            }
+
+            const url = 'https://hunnycollectionpk.com/product.html?id=' + productId;
+
             // Calculate discount
+            const sellingPrice = product.sellingPrice || product.price || 0;
+            const originalPrice = product.originalPrice || 0;
             let discountText = '';
             if (originalPrice > sellingPrice && sellingPrice > 0) {
                 const discount = Math.round(((originalPrice - sellingPrice) / originalPrice) * 100);
                 const savings = originalPrice - sellingPrice;
                 discountText = `\n💸 *Save Rs. ${savings.toLocaleString()}* (${discount}% OFF)\n❌ Was: Rs. ${originalPrice.toLocaleString()}`;
             }
-            
+
             // Build message with product details
-            const message = `🌸 *${productName}*
+            const message = `🌸 *${product.name}*
 
 🛍️ *Hunny Collection PK*
 ━━━━━━━━━━━━━━━━━━
@@ -3244,7 +3253,7 @@
 👉 *Order Now:* ${url}
 ━━━━━━━━━━━━━━━━━━
 📱 Contact: +92 301 8858303`;
-            
+
             // Direct WhatsApp redirect
             window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank');
         };

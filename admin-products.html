@@ -748,7 +748,7 @@
                     ${p.lastEditedBy ? `<br><small style="color: #FF9800; font-size: 0.65rem;">✏️ ${p.lastEditedBy}</small>` : ''}</td>
                     <td>
                         <button class="btn-sm" onclick="editProduct('${p.id}')">✏️ Edit</button>
-                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${p.images && p.images[0] ? p.images[0] : ''}', ${p.sellingPrice || p.price || 0}, ${p.originalPrice || 0})" style="background: #25d366; color: white;">📱 Share</button>
+                        <button class="btn-sm" onclick="shareProduct('${p.id}')" style="background: #25d366; color: white;">📱 Share</button>
                         <button class="btn-sm" onclick="deleteProduct('${p.id}')" style="background: #dc3545; color: white;">🗑️ Delete</button>
                     </td>
                 </tr>
@@ -1548,18 +1548,27 @@
         }
 
         // ========== SHARE PRODUCT ==========
-        window.shareProduct = function(id, name, imageUrl, sellingPrice, originalPrice) {
-            const discount = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
-            const storeUrl = window.location.origin + '/product.html?id=' + id;
+        window.shareProduct = function(id) {
+            // Find product from global array
+            const product = window.products?.find(p => p.id === id);
+            if (!product) {
+                alert('Product not found');
+                return;
+            }
 
-            const shareText = `🌸 *${name}*\n\n` +
+            const sellingPrice = product.sellingPrice || product.price || 0;
+            const originalPrice = product.originalPrice || 0;
+            const discount = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+            const storeUrl = 'https://hunnycollectionpk.com/product.html?id=' + id;
+
+            const shareText = `🌸 *${product.name}*\n\n` +
                 `💰 Price: Rs. ${sellingPrice.toLocaleString()}` +
                 (discount > 0 ? ` (🔥 ${discount}% OFF!)` : '') +
                 `\n\nOrder now from Hunny Collection PK!\n${storeUrl}`;
 
             if (navigator.share) {
                 navigator.share({
-                    title: name,
+                    title: product.name,
                     text: shareText,
                     url: storeUrl
                 }).catch(() => {

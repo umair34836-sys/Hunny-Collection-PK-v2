@@ -416,15 +416,12 @@ export async function loadProduct(productId) {
                     <!-- Share Buttons -->
                     <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color);">
                         <h4 style="margin-bottom: 10px; color: var(--text-dark);">Share This Product</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 10px;">📸 Share product images, price & description</p>
+                        <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 10px;">Copy product details & share anywhere</p>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button onclick="shareProductWhatsApp('${product.id}', '${product.name}')" class="btn-sm" style="background: #25d366; color: white; border: none; cursor: pointer;">
-                                📱 WhatsApp
+                            <button onclick="copyProductDetails('${product.id}')" class="btn-sm" style="background: #25d366; color: white; border: none; cursor: pointer; font-weight: 600;">
+                                📋 Copy Details
                             </button>
-                            <button onclick="shareProductFacebook('${product.id}')" class="btn-sm" style="background: #1877f2; color: white; border: none; cursor: pointer;">
-                                📘 Facebook
-                            </button>
-                            <button onclick="copyProductLink('${product.id}')" class="btn-sm" style="background: #6c757d; color: white; border: none; cursor: pointer;">
+                            <button onclick="copyProductLink('${product.id}')" class="btn-sm" style="background: #6c757d; color: white; border: none; cursor: pointer; font-weight: 600;">
                                 🔗 Copy Link
                             </button>
                         </div>
@@ -534,10 +531,10 @@ function updateProductOGTags(product) {
 // Generate shareable link with product image for WhatsApp
 function generateWhatsAppShareLink(product) {
     const productImage = product.images?.[0] || product.image || '';
-    const productUrl = window.location.href.split('?')[0] + '?id=' + product.id;
+    const productUrl = 'https://hunnycollectionpk.com/product.html?id=' + product.id;
     const price = (product.price || 0).toLocaleString();
     const description = product.description ? product.description.substring(0, 200) : '';
-    
+
     // Create a rich message with product details
     const message = `🌸 *${product.name}*\n\n` +
                    `💰 *Price:* Rs. ${price}\n\n` +
@@ -545,7 +542,7 @@ function generateWhatsAppShareLink(product) {
                    `🛍️ *Hunny Collection PK*\n` +
                    `🔗 Shop now: ${productUrl}\n\n` +
                    `${productImage ? `\n📸 Product Image: ${productImage}` : ''}`;
-    
+
     return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
@@ -585,6 +582,57 @@ window.buyNow = () => {
     }, 500);
 };
 
+// New function: Copy product details (text only, no image) to clipboard
+window.copyProductDetails = function(productId) {
+    const product = window.currentProduct;
+
+    if (!product) {
+        alert('Product not loaded yet. Please wait a moment.');
+        return;
+    }
+
+    const url = 'https://hunnycollectionpk.com/product.html?id=' + productId;
+
+    // Get prices with discount
+    const sellingPrice = product.sellingPrice || product.price || 0;
+    const originalPrice = product.originalPrice || 0;
+    const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+    const savings = originalPrice - sellingPrice;
+
+    const description = product.description || '';
+
+    // Create formatted text
+    let copyText = `🌸 *${product.name}*\n\n`;
+
+    if (discountPercent > 0) {
+        copyText += `🔥 SPECIAL OFFER! ${discountPercent}% OFF 🔥\n\n`;
+        copyText += `💰 *Offer Price: Rs. ${sellingPrice.toLocaleString()}*\n`;
+        copyText += `~~Rs. ${originalPrice.toLocaleString()}~~ (Original Price)\n`;
+        copyText += `🎁 You Save Rs. ${savings.toLocaleString()}!\n\n`;
+    } else {
+        copyText += `💰 Price: Rs. ${sellingPrice.toLocaleString()}\n\n`;
+    }
+
+    if (description) {
+        copyText += `📝 Description:\n${description}\n\n`;
+    }
+
+    copyText += `🛍️ Hunny Collection PK\n`;
+    copyText += `✅ Cash on Delivery Available\n`;
+    copyText += `🚚 Fast Shipping Across Pakistan\n\n`;
+    copyText += `👉 Order Now: ${url}`;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(copyText).then(() => {
+        // Show success message
+        const message = `✅ Product details copied to clipboard!\n\nNow paste it in WhatsApp or anywhere else.\n\n${copyText}`;
+        alert(message);
+    }).catch(() => {
+        // Fallback for older browsers
+        prompt('Copy these product details:', copyText);
+    });
+};
+
 // Share functions - Web Share API with images
 window.shareProductWhatsApp = async function(productId, productName) {
     const product = window.currentProduct;
@@ -594,20 +642,21 @@ window.shareProductWhatsApp = async function(productId, productName) {
         return;
     }
 
-    const url = window.location.href.split('?')[0] + '?id=' + productId;
-    
+    // Use fixed domain URL
+    const url = 'https://hunnycollectionpk.com/product.html?id=' + productId;
+
     // Get prices with discount
     const sellingPrice = product.sellingPrice || product.price || 0;
     const originalPrice = product.originalPrice || 0;
     const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
     const savings = originalPrice - sellingPrice;
-    
+
     const description = product.description || '';
     const mainImage = product.images?.[0] || product.image || '';
 
     // Create formatted message with discount highlight
     let message = `🌸 *${product.name}*\n\n`;
-    
+
     // Price display with discount highlight
     if (discountPercent > 0) {
         message += `🔥 *SPECIAL OFFER! ${discountPercent}% OFF* 🔥\n\n`;
@@ -617,7 +666,7 @@ window.shareProductWhatsApp = async function(productId, productName) {
     } else {
         message += `💰 Price: Rs. ${sellingPrice.toLocaleString()}\n\n`;
     }
-    
+
     message += `${description ? '📝 Description:\n' + description + '\n\n' : ''}`;
     message += `🛍️ *Hunny Collection PK*\n`;
     message += `✅ Cash on Delivery Available\n`;
@@ -786,13 +835,13 @@ function fallbackWhatsAppShare(message) {
 
 window.shareProductFacebook = function(productId) {
     const product = window.currentProduct;
-    const url = window.location.href.split('?')[0] + '?id=' + productId;
-    
+    const url = 'https://hunnycollectionpk.com/product.html?id=' + productId;
+
     // Get prices with discount
     const sellingPrice = product.sellingPrice || product.price || 0;
     const originalPrice = product.originalPrice || 0;
     const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
-    
+
     // Create share text with discount
     let shareText = '';
     if (discountPercent > 0) {
@@ -800,7 +849,7 @@ window.shareProductFacebook = function(productId) {
     } else {
         shareText = `${product.name} - Rs. ${sellingPrice.toLocaleString()} at Hunny Collection PK. `;
     }
-    
+
     // Open Facebook share with custom text
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
     window.open(facebookUrl, '_blank', 'width=600,height=400');
@@ -808,7 +857,7 @@ window.shareProductFacebook = function(productId) {
 
 window.copyProductLink = function(productId) {
     const product = window.currentProduct;
-    const url = window.location.href.split('?')[0] + '?id=' + productId;
+    const url = 'https://hunnycollectionpk.com/product.html?id=' + productId;
     
     // Get prices with discount
     const sellingPrice = product.sellingPrice || product.price || 0;
