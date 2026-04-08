@@ -418,7 +418,7 @@ export async function loadProduct(productId) {
                         <h4 style="margin-bottom: 10px; color: var(--text-dark);">Share This Product</h4>
                         <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 10px;">📸 Share product images, price & description</p>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button onclick="shareProductWhatsApp('${product.id}', '${product.name.replace(/'/g, "\\'")}')" class="btn-sm" style="background: #25d366; color: white; border: none; cursor: pointer;">
+                            <button onclick="shareProductWhatsApp('${product.id}')" class="btn-sm" style="background: #25d366; color: white; border: none; cursor: pointer;">
                                 📱 WhatsApp
                             </button>
                             <button onclick="shareProductFacebook('${product.id}')" class="btn-sm" style="background: #1877f2; color: white; border: none; cursor: pointer;">
@@ -586,7 +586,7 @@ window.buyNow = () => {
 };
 
 // Share functions - Web Share API with images
-window.shareProductWhatsApp = async function(productId, productName) {
+window.shareProductWhatsApp = async function(productId) {
     const product = window.currentProduct;
 
     if (!product) {
