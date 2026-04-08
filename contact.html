@@ -51,9 +51,16 @@
         .contact-card {
             background: var(--white);
             padding: 40px;
-            border-radius: 15px;
+            border-radius: var(--radius-lg);
             text-align: center;
-            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+            box-shadow: var(--shadow-soft);
+            transition: all var(--transition-bounce);
+            border: 2px solid var(--border-color);
+        }
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-pink);
         }
         .contact-icon {
             font-size: 3rem;
@@ -66,13 +73,6 @@
         .contact-card p {
             color: var(--text-light);
             font-size: 1.1rem;
-        }
-        .contact-hero {
-            text-align: center;
-            padding: 40px 20px;
-            background: var(--soft-pink);
-            border-radius: 15px;
-            margin-bottom: 40px;
         }
     </style>
     <!-- Favicon & App Icons -->
@@ -92,15 +92,15 @@
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="index.html" class="logo">
-                    <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="logo-image">
-                    <span class="logo-text">🌸 Hunny Collection PK</span>
-                </a>
                 <div class="hamburger" onclick="toggleMenu()">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
+                <a href="index.html" class="logo">
+                    <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="logo-image">
+                    <span class="logo-text">🌸 Hunny Collection PK</span>
+                </a>
                 <ul class="nav-menu">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="shop.html">Shop</a></li>
@@ -112,36 +112,39 @@
         </div>
     </header>
 
-    <section class="contact-section" style="background-image: url('assets/banner2.jpeg'); background-size: cover; background-position: center; position: relative;">
-        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.9);"></div>
-        <div class="container" style="position: relative; z-index: 1;">
-            <div class="contact-hero">
-                <h1 style="color: var(--dark-pink); margin-bottom: 15px;">Get In Touch</h1>
-                <p style="font-size: 1.2rem; color: var(--text-light);">
-                    We'd love to hear from you! Reach out to us for any queries.
-                </p>
-            </div>
+    <section class="page-hero" style="background-image: url('assets/banner2.jpeg');">
+        <div class="container page-hero-content">
+            <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="page-hero-logo">
+            <div class="page-hero-badge">📞 Contact Us</div>
+            <h1 class="page-hero-title">Contact Us</h1>
+            <p class="page-hero-tagline">Get in touch with us</p>
+        </div>
+    </section>
 
+    <section class="contact-section">
+        <div class="container">
             <div class="contact-grid">
-                <div class="contact-card">
-                    <div class="contact-icon">📱</div>
+                <a href="https://wa.me/923018858303" target="_blank" class="contact-card" style="text-decoration: none; color: inherit;">
+                    <div class="contact-icon" style="animation: float 3s ease-in-out infinite;">📱</div>
                     <h3>WhatsApp</h3>
                     <p>+92 301 8858303</p>
-                </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">📧</div>
+                    <small style="color: var(--primary-pink);">Click to chat →</small>
+                </a>
+
+                <a href="mailto:MrCopper804@gmail.com" class="contact-card" style="text-decoration: none; color: inherit;">
+                    <div class="contact-icon" style="animation: float 3s ease-in-out infinite 0.5s;">📧</div>
                     <h3>Email</h3>
                     <p>MrCopper804@gmail.com</p>
-                </div>
-                
+                    <small style="color: var(--primary-pink);">Click to email →</small>
+                </a>
+
                 <div class="contact-card">
-                    <div class="contact-icon">📍</div>
+                    <div class="contact-icon" style="animation: float 3s ease-in-out infinite 1s;">📍</div>
                     <h3>Location</h3>
                     <p>Pakistan</p>
+                    <small style="color: var(--text-light);">Serving nationwide</small>
                 </div>
             </div>
-        </div>
         </div>
     </section>
 

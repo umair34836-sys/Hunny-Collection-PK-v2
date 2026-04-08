@@ -29,14 +29,12 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
-        .shop-header {
-            padding: 40px 0;
-            background: var(--soft-pink);
-            text-align: center;
-        }
         .filters {
             padding: 30px 0;
             background: var(--white);
+            box-shadow: var(--shadow-soft);
+            position: static;
+            z-index: 100;
         }
         .filters-grid {
             display: grid;
@@ -47,12 +45,41 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
+            color: var(--text-dark);
         }
         .filter-group select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 2px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            background: var(--white);
+        }
+        .filter-group select:focus {
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+            outline: none;
+        }
+        .filter-group select:hover {
+            border-color: var(--primary-pink);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .filters {
+                padding: 20px 0;
+            }
+            .filters-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .product-image {
+                height: 250px;
+            }
         }
 
         /* Mobile Optimized Product Cards */
@@ -285,15 +312,15 @@
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="index.html" class="logo">
-                    <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="logo-image">
-                    <span class="logo-text">🌸 Hunny Collection PK</span>
-                </a>
                 <div class="hamburger" onclick="toggleMenu()">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
+                <a href="index.html" class="logo">
+                    <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="logo-image">
+                    <span class="logo-text">🌸 Hunny Collection PK</span>
+                </a>
                 <ul class="nav-menu">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="shop.html">Shop</a></li>
@@ -305,11 +332,12 @@
         </div>
     </header>
 
-    <section class="shop-header" style="background-image: url('assets/banner1.jpeg'); background-size: cover; background-position: center; position: relative;">
-        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.85);"></div>
-        <div class="container" style="position: relative; z-index: 1;">
-            <h1>Shop All Products</h1>
-            <p>Browse our complete collection</p>
+    <section class="page-hero" style="background-image: url('assets/banner1.jpeg');">
+        <div class="container page-hero-content">
+            <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="page-hero-logo">
+            <div class="page-hero-badge">🛍️ Fashion Shop</div>
+            <h1 class="page-hero-title">Shop All Products</h1>
+            <p class="page-hero-tagline">Browse our complete collection</p>
         </div>
     </section>
 
