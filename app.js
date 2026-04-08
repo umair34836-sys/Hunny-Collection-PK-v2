@@ -106,8 +106,8 @@ export async function loadCategories() {
 }
 
 // Load featured products
-export async function loadFeaturedProducts(containerId = 'products-container') {
-    const container = document.getElementById(containerId);
+export async function loadFeaturedProducts() {
+    const container = document.getElementById('products-container');
     if (!container) return;
 
     try {
@@ -127,7 +127,7 @@ export async function loadFeaturedProducts(containerId = 'products-container') {
             const sellingPrice = product.sellingPrice || product.price || 0;
             const originalPrice = product.originalPrice || 0;
             const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
-
+            
             return `
                 <a href="product.html?id=${product.id}" class="product-card">
                     <div style="position: relative;">
@@ -418,7 +418,7 @@ export async function loadProduct(productId) {
                         <h4 style="margin-bottom: 10px; color: var(--text-dark);">Share This Product</h4>
                         <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 10px;">📸 Share product images, price & description</p>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button onclick="shareProductWhatsApp('${product.id}', '${product.name}')" class="btn-sm" style="background: #25d366; color: white; border: none; cursor: pointer;">
+                            <button onclick="shareProductWhatsApp('${product.id}', '${product.name.replace(/'/g, "\\'")}')" class="btn-sm" style="background: #25d366; color: white; border: none; cursor: pointer;">
                                 📱 WhatsApp
                             </button>
                             <button onclick="shareProductFacebook('${product.id}')" class="btn-sm" style="background: #1877f2; color: white; border: none; cursor: pointer;">
