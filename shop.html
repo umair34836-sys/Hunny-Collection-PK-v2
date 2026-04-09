@@ -574,8 +574,8 @@
                 countInfo.textContent = 'Showing ' + displayedProducts.length + ' products';
                 countInfo.style.display = 'block';
 
-                // Extract categories for filter
-                extractCategories(products);
+                // Load all categories from database
+                loadAllCategories();
 
                 isLoading = false;
             } catch (error) {
@@ -720,7 +720,27 @@
             container.innerHTML = html;
         }
 
-        // ========== EXTRACT CATEGORIES ==========
+        // ========== LOAD ALL CATEGORIES FROM DATABASE ==========
+        async function loadAllCategories() {
+            var categoryFilter = document.getElementById('category-filter');
+            try {
+                var q = query(collection(db, 'categories'), orderBy('createdAt', 'desc'));
+                var querySnapshot = await getDocs(q);
+                
+                var optionsHtml = '<option value="all">All Categories</option>';
+                querySnapshot.forEach(function(doc) {
+                    var category = doc.data();
+                    optionsHtml += '<option value="' + category.name + '">' + category.name + '</option>';
+                });
+                categoryFilter.innerHTML = optionsHtml;
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                // Fallback: extract from currently loaded products
+                extractCategories(allProductsForFilter.length > 0 ? allProductsForFilter : displayedProducts);
+            }
+        }
+
+        // ========== EXTRACT CATEGORIES (fallback only) ==========
         function extractCategories(products) {
             var categoryFilter = document.getElementById('category-filter');
             var categories = [];
