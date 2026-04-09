@@ -487,43 +487,61 @@
                     <input type="text" id="product-name" required>
                 </div>
 
-                <!-- Pricing Section with Discount -->
+                <!-- Pricing Section with Smart Calculator -->
                 <div class="form-group" style="background: linear-gradient(135deg, #fff3f3 0%, #fff 100%); padding: 20px; border-radius: 12px; border: 2px solid #FFB6C1;">
-                    <label style="color: var(--dark-pink); font-size: 1.1rem; margin-bottom: 15px; display: block;">💰 Pricing & Discount Settings</label>
+                    <label style="color: var(--dark-pink); font-size: 1.1rem; margin-bottom: 15px; display: block;">💰 Smart Pricing Calculator</label>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                         <div>
                             <label style="font-size: 0.9rem; color: #666;">
-                                🔒 Cost Price (Rs.)
-                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Your cost from Markaz (Hidden from customers)</span>
+                                🏷️ Product Actual Cost (Rs.)
+                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Product cost from Markaz</span>
                             </label>
-                            <input type="number" id="product-cost-price" placeholder="1800" min="0" style="border-color: #FF6B6B;">
+                            <input type="number" id="product-actual-cost" placeholder="1500" min="0" style="border-color: #666;">
                         </div>
                         <div>
-                            <label style="font-size: 0.9rem; color: var(--dark-pink);">
-                                💵 Selling Price (Rs.) *
-                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Your selling price (Shown to customers)</span>
+                            <label style="font-size: 0.9rem; color: #28a745;">
+                                💵 Your Profit (Rs.)
+                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Your profit per product</span>
                             </label>
-                            <input type="number" id="product-selling-price" placeholder="2499" min="0" required style="border-color: var(--dark-pink);">
+                            <input type="number" id="admin-profit" placeholder="300" min="0" style="border-color: #28a745;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.9rem; color: #FF6B6B;">
+                                🏷️ Fake Discount %
+                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Show this discount to customers</span>
+                            </label>
+                            <input type="number" id="fake-discount-percent" placeholder="30" min="0" max="90" style="border-color: #FF6B6B;">
                         </div>
                     </div>
 
-                    <div style="margin-bottom: 15px;">
-                        <label style="font-size: 0.9rem; color: #666;">
-                            🏷️ Original/Compare Price (Rs.)
-                            <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Higher fake price to show discount (Shown crossed to customers)</span>
-                        </label>
-                        <input type="number" id="product-original-price" placeholder="3500" min="0" style="border-color: #FFB6C1;">
-                    </div>
-
-                    <!-- Auto-calculated Info -->
-                    <div id="pricing-info" style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                            <div style="display: flex; gap: 15px; align-items: center;">
-                                <span id="discount-badge" style="background: #FF6B6B; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; display: none;">🔥 0% OFF</span>
-                                <span id="profit-info" style="color: #28a745; font-weight: 600; display: none;">💰 Profit: Rs. 0</span>
+                    <!-- Auto-calculated Results -->
+                    <div id="pricing-calculator" style="background: white; padding: 20px; border-radius: 12px; margin-top: 15px; border: 2px solid #FFB6C1;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">💰 Final Selling Price</div>
+                                <div id="calc-selling-price" style="font-size: 1.5rem; font-weight: bold; color: #FF69B4;">Rs. 0</div>
+                                <div style="font-size: 0.75rem; color: #999; margin-top: 5px;">Customer pays this</div>
                             </div>
-                            <span id="pricing-hint" style="color: #999; font-size: 0.85rem;">Enter prices to see discount & profit</span>
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">🏷️ Fake Original Price</div>
+                                <div id="calc-fake-price" style="font-size: 1.5rem; font-weight: bold; color: #999; text-decoration: line-through;">Rs. 0</div>
+                                <div style="font-size: 0.75rem; color: #999; margin-top: 5px;">Shown crossed to customers</div>
+                            </div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%); padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                            <div style="font-weight: bold; color: #28a745; margin-bottom: 10px;">📊 Price Breakdown:</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
+                                <div>🏷️ Product Cost: <strong id="breakdown-cost">Rs. 0</strong></div>
+                                <div>💵 Your Profit: <strong id="breakdown-profit" style="color: #28a745;">Rs. 0</strong></div>
+                                <div>📦 7% Platform Share: <strong id="breakdown-platform" style="color: #FF6B6B;">Rs. 0</strong></div>
+                                <div>🏷️ Discount Shown: <strong id="breakdown-discount" style="color: #FF6B6B;">0%</strong></div>
+                            </div>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 2px dashed #ccc; text-align: center;">
+                                <div style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">✅ Is This Worth It?</div>
+                                <div id="worth-it-verdict" style="font-size: 1.2rem; font-weight: bold; color: #666;">Enter values to see analysis</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -704,12 +722,15 @@
                 const statusText = p.markazCode ? (p.markazAvailability || 'Not Checked') : 'No Code';
                 const codeDisplay = p.markazCode ? `<br><small style="font-family: monospace; font-size: 0.75rem; color: #666;">${p.markazCode}</small>` : '';
 
-                // Pricing info
-                const costPrice = p.costPrice || 0;
+                // Pricing info - support both old and new format
+                const actualCost = p.actualCost || p.costPrice || 0;
+                const adminProfit = p.adminProfit || 0;
+                const platformShare = p.platformShare || 0;
                 const sellingPrice = p.sellingPrice || p.price || 0;
                 const originalPrice = p.originalPrice || 0;
-                const profit = sellingPrice - costPrice;
-                const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+                const fakeDiscount = p.fakeDiscountPercent || 0;
+                const profit = sellingPrice ? sellingPrice - actualCost : adminProfit;
+                const discountPercent = fakeDiscount || (originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0);
 
                 // Admin who added this product
                 const addedBy = p.addedBy ? p.addedBy : (p.addedByUserId ? 'Unknown Admin' : 'Legacy Product');
@@ -726,9 +747,10 @@
                     <td>
                         <div style="font-size: 0.85rem;">
                             <div style="color: var(--dark-pink); font-weight: bold;">Sell: Rs. ${sellingPrice.toLocaleString()}</div>
-                            <div style="color: #999; text-decoration: line-through; font-size: 0.75rem;">${originalPrice > 0 ? 'Rs. ' + originalPrice.toLocaleString() : ''}</div>
-                            <div style="color: #666; font-size: 0.75rem;">Cost: Rs. ${costPrice.toLocaleString()}</div>
-                            ${profit > 0 ? `<div style="color: #28a745; font-size: 0.75rem;">💰 Profit: Rs. ${profit.toLocaleString()}</div>` : ''}
+                            ${originalPrice > 0 ? `<div style="color: #999; text-decoration: line-through; font-size: 0.75rem;">Was: Rs. ${originalPrice.toLocaleString()}</div>` : ''}
+                            <div style="color: #666; font-size: 0.75rem;">Cost: Rs. ${actualCost.toLocaleString()}</div>
+                            ${adminProfit > 0 ? `<div style="color: #28a745; font-size: 0.75rem;">💰 Your Profit: Rs. ${adminProfit.toLocaleString()}</div>` : ''}
+                            ${platformShare > 0 ? `<div style="color: #FF6B6B; font-size: 0.75rem;">📦 Platform: Rs. ${platformShare.toLocaleString()}</div>` : ''}
                             ${discountPercent > 0 ? `<div style="color: #FF6B6B; font-size: 0.75rem;">🔥 ${discountPercent}% OFF</div>` : ''}
                         </div>
                     </td>
@@ -847,15 +869,17 @@
 
         // ========== EXPORT ==========
         window.exportProducts = function() {
-            const headers = ['ID', 'Name', 'Category', 'Cost Price', 'Selling Price', 'Original Price', 'Profit', 'Markaz Code', 'Added By', 'Created At'];
+            const headers = ['ID', 'Name', 'Category', 'Actual Cost', 'Admin Profit', 'Platform Share (7%)', 'Selling Price', 'Fake Original Price', 'Discount %', 'Markaz Code', 'Added By', 'Created At'];
             const rows = products.map(p => [
                 p.id,
                 p.name,
                 p.category,
-                p.costPrice || 0,
+                p.actualCost || p.costPrice || 0,
+                p.adminProfit || 0,
+                p.platformShare || 0,
                 p.sellingPrice || p.price || 0,
                 p.originalPrice || 0,
-                (p.sellingPrice || p.price || 0) - (p.costPrice || 0),
+                p.fakeDiscountPercent || 0,
                 p.markazCode || '',
                 p.addedBy || 'Legacy',
                 p.createdAt || ''
@@ -941,9 +965,15 @@
 
             document.getElementById('product-id').value = id;
             document.getElementById('product-name').value = product.name || '';
-            document.getElementById('product-cost-price').value = product.costPrice || '';
-            document.getElementById('product-selling-price').value = product.sellingPrice || product.price || '';
-            document.getElementById('product-original-price').value = product.originalPrice || '';
+            
+            // Smart pricing fields
+            document.getElementById('product-actual-cost').value = product.actualCost || product.costPrice || '';
+            document.getElementById('admin-profit').value = product.adminProfit || '';
+            document.getElementById('fake-discount-percent').value = product.fakeDiscountPercent || '';
+            
+            // Calculate and show pricing
+            updateSmartPricing();
+            
             document.getElementById('product-category').value = product.category || '';
             document.getElementById('product-description').value = product.description || '';
             document.getElementById('product-sizes').value = product.variants?.join(', ') || '';
@@ -982,51 +1012,70 @@
             }
         };
 
-        // ========== PRICING CALCULATION ==========
-        function updatePricingInfo() {
-            const costPrice = Number(document.getElementById('product-cost-price').value) || 0;
-            const sellingPrice = Number(document.getElementById('product-selling-price').value) || 0;
-            const originalPrice = Number(document.getElementById('product-original-price').value) || 0;
+        // ========== SMART PRICING CALCULATOR ==========
+        function updateSmartPricing() {
+            const actualCost = Number(document.getElementById('product-actual-cost').value) || 0;
+            const adminProfit = Number(document.getElementById('admin-profit').value) || 0;
+            const fakeDiscount = Number(document.getElementById('fake-discount-percent').value) || 0;
 
-            const discountBadge = document.getElementById('discount-badge');
-            const profitInfo = document.getElementById('profit-info');
-            const pricingHint = document.getElementById('pricing-hint');
+            // Calculate final selling price
+            // Revenue share: Platform takes 7% of Final Selling Price
+            // Admin gets 93% of Final Selling Price
+            // Admin Profit = (Selling Price × 0.93) - Actual Cost
+            // So: Selling Price = (Actual Cost + Admin Profit) / 0.93
+            let finalSellingPrice = 0;
+            let platformShare = 0;
 
-            if (originalPrice > sellingPrice && sellingPrice > 0) {
-                const discountPercent = Math.round(((originalPrice - sellingPrice) / originalPrice) * 100);
-                discountBadge.textContent = `🔥 ${discountPercent}% OFF`;
-                discountBadge.style.display = 'inline-block';
-            } else {
-                discountBadge.style.display = 'none';
+            if (actualCost > 0 || adminProfit > 0) {
+                finalSellingPrice = Math.round((actualCost + adminProfit) / 0.93);
+                platformShare = Math.round(finalSellingPrice * 0.07); // 7% of selling price
             }
 
-            if (sellingPrice > 0 && costPrice > 0) {
-                const profit = sellingPrice - costPrice;
-                if (profit > 0) {
-                    profitInfo.textContent = `💰 Profit: Rs. ${profit.toLocaleString()}`;
-                    profitInfo.style.display = 'inline-block';
-                    profitInfo.style.color = '#28a745';
+            // Calculate fake original price based on discount percentage
+            let fakeOriginalPrice = 0;
+            if (fakeDiscount > 0 && finalSellingPrice > 0) {
+                fakeOriginalPrice = Math.round(finalSellingPrice / (1 - fakeDiscount / 100));
+            }
+
+            // Update display
+            document.getElementById('calc-selling-price').textContent = `Rs. ${finalSellingPrice.toLocaleString()}`;
+            document.getElementById('calc-fake-price').textContent = fakeOriginalPrice > 0 ? `Rs. ${fakeOriginalPrice.toLocaleString()}` : 'Rs. 0';
+
+            document.getElementById('breakdown-cost').textContent = `Rs. ${actualCost.toLocaleString()}`;
+            document.getElementById('breakdown-profit').textContent = `Rs. ${adminProfit.toLocaleString()}`;
+            document.getElementById('breakdown-platform').textContent = `Rs. ${platformShare.toLocaleString()} (7% revenue share)`;
+            document.getElementById('breakdown-discount').textContent = `${fakeDiscount}%`;
+
+            // Is it worth it? Analysis
+            const verdictEl = document.getElementById('worth-it-verdict');
+            if (actualCost > 0 && adminProfit > 0) {
+                const profitMargin = ((adminProfit / actualCost) * 100).toFixed(1);
+                const totalRevenue = finalSellingPrice;
+                const roi = ((adminProfit / actualCost) * 100).toFixed(1);
+
+                if (adminProfit >= 200 && profitMargin >= 15) {
+                    verdictEl.innerHTML = `✅ YES! Good profit (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform takes Rs. ${platformShare.toLocaleString()} from Rs. ${totalRevenue.toLocaleString()}</small>`;
+                    verdictEl.style.color = '#28a745';
+                } else if (adminProfit >= 100) {
+                    verdictEl.innerHTML = `⚠️ Decent but could be better (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform takes Rs. ${platformShare.toLocaleString()} from Rs. ${totalRevenue.toLocaleString()}</small>`;
+                    verdictEl.style.color = '#ffc107';
                 } else {
-                    profitInfo.textContent = `⚠️ Loss: Rs. ${Math.abs(profit).toLocaleString()}`;
-                    profitInfo.style.color = '#dc3545';
-                    profitInfo.style.display = 'inline-block';
+                    verdictEl.innerHTML = `❌ Low profit margin (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform takes Rs. ${platformShare.toLocaleString()} from Rs. ${totalRevenue.toLocaleString()}</small>`;
+                    verdictEl.style.color = '#dc3545';
                 }
             } else {
-                profitInfo.style.display = 'none';
-            }
-
-            if (sellingPrice > 0 || originalPrice > 0 || costPrice > 0) {
-                pricingHint.style.display = 'none';
-            } else {
-                pricingHint.style.display = 'inline-block';
+                verdictEl.textContent = 'Enter values to see analysis';
+                verdictEl.style.color = '#666';
             }
         }
 
-        function resetPricingInfo() {
-            document.getElementById('discount-badge').style.display = 'none';
-            document.getElementById('profit-info').style.display = 'none';
-            document.getElementById('pricing-hint').style.display = 'inline-block';
-        }
+        // Add event listeners to pricing inputs
+        ['product-actual-cost', 'admin-profit', 'fake-discount-percent'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', updateSmartPricing);
+            }
+        });
 
         // ========== IMAGE HANDLING ==========
         window.handleMainImageUpload = function(event) {
@@ -1201,15 +1250,32 @@
                 return;
             }
 
-            const costPrice = Number(document.getElementById('product-cost-price').value) || 0;
-            const sellingPrice = Number(document.getElementById('product-selling-price').value);
-            const originalPrice = Number(document.getElementById('product-original-price').value) || 0;
+            // Get smart pricing values
+            const actualCost = Number(document.getElementById('product-actual-cost').value) || 0;
+            const adminProfit = Number(document.getElementById('admin-profit').value) || 0;
+            const fakeDiscount = Number(document.getElementById('fake-discount-percent').value) || 0;
+
+            // Calculate selling price - REVENUE SHARE (7% of total selling price)
+            // Platform Share = 7% of Final Selling Price
+            // Admin gets 93% of Final Selling Price
+            // Final Selling Price = (Actual Cost + Admin Profit) / 0.93
+            const sellingPrice = Math.round((actualCost + adminProfit) / 0.93);
+            const platformShare = Math.round(sellingPrice * 0.07);
+            
+            let originalPrice = 0;
+            if (fakeDiscount > 0 && sellingPrice > 0) {
+                originalPrice = Math.round(sellingPrice / (1 - fakeDiscount / 100));
+            }
 
             const currentAdmin = auth.currentUser;
 
             const productData = {
                 name: document.getElementById('product-name').value,
-                costPrice: costPrice,
+                actualCost: actualCost,
+                adminProfit: adminProfit,
+                platformShare: platformShare,
+                fakeDiscountPercent: fakeDiscount,
+                costPrice: actualCost,
                 sellingPrice: sellingPrice,
                 originalPrice: originalPrice,
                 price: sellingPrice,
@@ -1254,12 +1320,8 @@
 
         // ========== PRICING EVENT LISTENERS ==========
         document.addEventListener('DOMContentLoaded', () => {
-            ['product-cost-price', 'product-selling-price', 'product-original-price'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('input', updatePricingInfo);
-                }
-            });
+            // Smart pricing calculator already has inline listeners
+            // No additional setup needed
         });
 
         // ========== MARKAZ AVAILABILITY ==========
