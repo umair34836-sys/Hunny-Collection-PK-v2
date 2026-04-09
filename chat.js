@@ -79,11 +79,13 @@ async function getOrCreateChatRoom(userId, isAdmin) {
 
 // ========== SEND MESSAGE ==========
 async function sendMessage(messageText) {
-    if (!messageText.trim() || !currentUser) return;
+    if (!messageText.trim() || !currentUser || !currentUser.uid) return false;
     
     try {
+        const chatId = currentUser.uid;
+        
         const messageData = {
-            chatId: currentChatId || currentUser.uid,
+            chatId: chatId,
             senderId: currentUser.uid,
             senderName: currentUser.displayName || currentUser.email,
             senderType: isAdminUser ? 'admin' : 'user',
@@ -92,22 +94,29 @@ async function sendMessage(messageText) {
             expiresAt: new Date(Date.now() + MESSAGE_TTL_HOURS * 60 * 60 * 1000).toISOString(),
             isRead: false
         };
-        
+
+        // Add message to messages collection
         await addDoc(collection(db, 'messages'), messageData);
-        
-        // Update chat room's last message
-        if (currentChatId) {
-            await setDoc(doc(db, CHAT_COLLECTION, currentChatId), {
-                lastMessage: messageText.trim().substring(0, 100),
-                lastMessageAt: serverTimestamp(),
-                lastMessageSender: isAdminUser ? 'admin' : 'user'
-            }, { merge: true });
-        }
-        
+
+        // Auto-create chat room if it doesn't exist, or update it
+        await setDoc(doc(db, CHAT_COLLECTION, chatId), {
+            userId: currentUser.uid,
+            userName: currentUser.displayName || currentUser.email,
+            userEmail: currentUser.email,
+            lastMessage: messageText.trim().substring(0, 100),
+            lastMessageAt: serverTimestamp(),
+            lastMessageSender: isAdminUser ? 'admin' : 'user',
+            isActive: true
+        }, { merge: true });
+
         return true;
     } catch (error) {
         console.error('Error sending message:', error);
-        alert('Failed to send message. Please try again.');
+        if (error.code === 'permission-denied') {
+            alert('Permission error. Please make sure you are logged in.');
+        } else {
+            alert('Failed to send message. Please try again.');
+        }
         return false;
     }
 }
