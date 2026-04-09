@@ -140,7 +140,16 @@ function renderMessage(message) {
 
 // ========== LOAD CHAT MESSAGES ==========
 function loadChatMessages(chatId) {
+    if (!chatId) {
+        console.error('chatId is undefined');
+        return;
+    }
+    
     const messagesContainer = document.getElementById('chat-messages');
+    if (!messagesContainer) {
+        console.error('Messages container not found');
+        return;
+    }
     
     if (unsubscribeChat) {
         unsubscribeChat();
@@ -197,6 +206,17 @@ function loadChatMessages(chatId) {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = `chat-message ${messageData.senderType}`;
                 
+                // Add sender label
+                const senderLabel = document.createElement('div');
+                senderLabel.style.cssText = `
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    margin-bottom: 4px;
+                    padding: 0 12px;
+                    color: ${messageData.senderType === 'admin' ? '#34b7f1' : '#666'};
+                `;
+                senderLabel.textContent = messageData.senderType === 'admin' ? '👨‍💼 Admin' : '👤 You';
+                
                 const bubbleDiv = document.createElement('div');
                 bubbleDiv.className = 'message-bubble';
                 bubbleDiv.textContent = messageData.message;
@@ -209,6 +229,7 @@ function loadChatMessages(chatId) {
                     timeDiv.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 }
                 
+                messageDiv.appendChild(senderLabel);
                 messageDiv.appendChild(bubbleDiv);
                 messageDiv.appendChild(timeDiv);
                 messagesContainer.appendChild(messageDiv);
@@ -396,6 +417,11 @@ function openAdminChat(chatData, chatId) {
 function showUserChat() {
     const chatContainer = document.getElementById('chat-container');
     
+    if (!chatContainer) {
+        console.error('Chat container not found');
+        return;
+    }
+    
     chatContainer.innerHTML = `
         <div class="chat-header">
             <div class="chat-header-icon">💬</div>
@@ -416,7 +442,9 @@ function showUserChat() {
     `;
     
     // Load messages
-    loadChatMessages(currentUser.uid);
+    if (currentUser && currentUser.uid) {
+        loadChatMessages(currentUser.uid);
+    }
     
     // Setup event listeners
     const inputField = document.getElementById('chat-input');

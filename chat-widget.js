@@ -65,9 +65,10 @@ window.toggleChatWidget = function() {
 
 // ========== LOAD WIDGET MESSAGES ==========
 function loadWidgetMessages() {
-    if (!currentUser || widgetUnsubscribe) return;
+    if (!currentUser || !currentUser.uid || widgetUnsubscribe) return;
     
     const messagesContainer = document.getElementById('chat-widget-messages');
+    if (!messagesContainer) return;
     
     // Simple query without orderBy (no index needed)
     const messagesQuery = query(
