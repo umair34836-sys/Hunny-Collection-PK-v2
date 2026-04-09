@@ -435,7 +435,6 @@
             collection, 
             addDoc, 
             query, 
-            orderBy, 
             onSnapshot, 
             serverTimestamp, 
             where,
@@ -444,7 +443,7 @@
             setDoc
         } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { checkAdminAccess } from '../admin-common.js';
+        import { isAdmin } from '../admin-common.js';
 
         let currentUser = null;
         let currentChatId = null;
@@ -459,8 +458,8 @@
                 return;
             }
 
-            const isAdmin = await checkAdminAccess(user);
-            if (!isAdmin) {
+            const adminCheck = await isAdmin(user);
+            if (!adminCheck) {
                 alert('Access denied. Admin privileges required.');
                 window.location.href = '../admin.html';
                 return;

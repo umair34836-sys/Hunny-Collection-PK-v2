@@ -245,6 +245,11 @@ function showLoginPrompt() {
 // ========== SHOW ADMIN CHAT LIST ==========
 function showAdminChatList() {
     const chatContainer = document.getElementById('chat-container');
+    if (!chatContainer) {
+        console.error('Chat container not found');
+        return;
+    }
+    
     chatContainer.innerHTML = `
         <div class="chat-header">
             <div class="chat-header-icon">💬</div>
@@ -259,16 +264,20 @@ function showAdminChatList() {
             </div>
         </div>
     `;
-    
-    // Load all chat rooms
+
+    // Load all chat rooms - simple query without orderBy
     const chatsQuery = query(
-        collection(db, CHAT_COLLECTION),
-        orderBy('lastMessageAt', 'desc')
+        collection(db, CHAT_COLLECTION)
     );
-    
+
     onSnapshot(chatsQuery, (snapshot) => {
         const chatListContainer = document.getElementById('chat-list');
         
+        if (!chatListContainer) {
+            console.error('Chat list container not found');
+            return;
+        }
+
         if (snapshot.empty) {
             chatListContainer.innerHTML = `
                 <div class="no-messages">
@@ -277,11 +286,22 @@ function showAdminChatList() {
             `;
             return;
         }
-        
+
         chatListContainer.innerHTML = '';
-        
+        const chats = [];
+
         snapshot.forEach((doc) => {
-            const chatData = doc.data();
+            chats.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Sort client-side
+        chats.sort((a, b) => {
+            const timeA = a.lastMessageAt ? a.lastMessageAt.toMillis() : 0;
+            const timeB = b.lastMessageAt ? b.lastMessageAt.toMillis() : 0;
+            return timeB - timeA;
+        });
+
+        chats.forEach((chatData) => {
             const chatDiv = document.createElement('div');
             chatDiv.className = 'chat-item';
             chatDiv.style.cssText = `
