@@ -334,7 +334,7 @@ function showAdminChatList() {
                 transition: transform 0.2s, box-shadow 0.2s;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             `;
-            
+
             chatDiv.onmouseover = () => {
                 chatDiv.style.transform = 'translateY(-2px)';
                 chatDiv.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
@@ -343,10 +343,10 @@ function showAdminChatList() {
                 chatDiv.style.transform = 'translateY(0)';
                 chatDiv.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
             };
-            
-            const lastMessageTime = chatData.lastMessageAt ? 
+
+            const lastMessageTime = chatData.lastMessageAt ?
                 chatData.lastMessageAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-            
+
             chatDiv.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
@@ -357,9 +357,10 @@ function showAdminChatList() {
                 </div>
                 ${chatData.lastMessage ? `<p style="margin: 8px 0 0 0; color: #999; font-size: 0.85rem;">${chatData.lastMessage}</p>` : ''}
             `;
-            
-            chatDiv.onclick = () => openAdminChat(chatData, doc.id);
-            
+
+            // Use chatData.id (from the sorted array)
+            chatDiv.onclick = () => openAdminChat(chatData, chatData.id);
+
             chatListContainer.appendChild(chatDiv);
         });
     });
