@@ -148,10 +148,11 @@ function loadChatMessages(chatId) {
     
     // Filter expired messages client-side as backup
     const now = new Date();
+    
+    // Simple query without orderBy (no index needed)
     const messagesQuery = query(
         collection(db, 'messages'),
-        where('chatId', '==', chatId),
-        orderBy('timestamp', 'asc')
+        where('chatId', '==', chatId)
     );
     
     unsubscribeChat = onSnapshot(messagesQuery, (snapshot) => {
@@ -166,28 +167,52 @@ function loadChatMessages(chatId) {
             return;
         }
         
-        let validMessageCount = 0;
+        let validMessages = [];
         
         snapshot.forEach((doc) => {
             const messageData = doc.data();
             const expiresAt = new Date(messageData.expiresAt);
             
             // Skip expired messages (client-side cleanup)
-            if (now >= expiresAt) {
-                return;
+            if (now < expiresAt) {
+                validMessages.push({ id: doc.id, ...messageData });
             }
-            
-            const messageDiv = renderMessage(doc);
-            messagesContainer.appendChild(messageDiv);
-            validMessageCount++;
         });
         
-        if (validMessageCount === 0) {
+        // Sort by timestamp client-side
+        validMessages.sort((a, b) => {
+            const timeA = a.timestamp ? a.timestamp.toMillis() : 0;
+            const timeB = b.timestamp ? b.timestamp.toMillis() : 0;
+            return timeA - timeB;
+        });
+        
+        if (validMessages.length === 0) {
             messagesContainer.innerHTML = `
                 <div class="no-messages">
                     <p>💬 No messages yet. Start the conversation!</p>
                 </div>
             `;
+        } else {
+            validMessages.forEach((messageData) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${messageData.senderType}`;
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = 'message-bubble';
+                bubbleDiv.textContent = messageData.message;
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                
+                if (messageData.timestamp) {
+                    const date = messageData.timestamp.toDate();
+                    timeDiv.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+                
+                messageDiv.appendChild(bubbleDiv);
+                messageDiv.appendChild(timeDiv);
+                messagesContainer.appendChild(messageDiv);
+            });
         }
         
         // Scroll to bottom

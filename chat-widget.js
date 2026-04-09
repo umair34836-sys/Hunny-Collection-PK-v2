@@ -69,11 +69,10 @@ function loadWidgetMessages() {
     
     const messagesContainer = document.getElementById('chat-widget-messages');
     
+    // Simple query without orderBy (no index needed)
     const messagesQuery = query(
         collection(db, 'messages'),
-        where('chatId', '==', currentUser.uid),
-        orderBy('timestamp', 'desc'),
-        limit(20)
+        where('chatId', '==', currentUser.uid)
     );
     
     widgetUnsubscribe = onSnapshot(messagesQuery, (snapshot) => {
@@ -101,8 +100,14 @@ function loadWidgetMessages() {
             }
         });
         
-        // Reverse to show oldest first
-        messages.reverse().forEach((messageData) => {
+        // Sort by timestamp client-side (oldest first)
+        messages.sort((a, b) => {
+            const timeA = a.timestamp ? a.timestamp.toMillis() : 0;
+            const timeB = b.timestamp ? b.timestamp.toMillis() : 0;
+            return timeA - timeB;
+        });
+        
+        messages.forEach((messageData) => {
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-widget-message-item ${messageData.senderType}`;
             
