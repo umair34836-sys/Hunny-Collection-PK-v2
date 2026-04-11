@@ -1,0 +1,123 @@
+========================================
+AI BANNER PROMPTS - NEW COLOR THEME
+Hunny Collection PK
+========================================
+
+⚠️ IMPORTANT BRAND PROTECTION:
+All prompts include "NO OTHER BRAND NAMES" instruction to ensure
+that AI generates images with ONLY "Hunny Collection PK" branding.
+No other brand names, logos, or watermarks should appear.
+
+Color Palette:
+- Primary Blue: #8CE4FF (Light Sky Blue)
+- Secondary Yellow: #FEEE91 (Soft Golden Yellow)
+- Accent Orange: #FFA239 (Warm Tangerine Orange)
+- Highlight Red: #FF5656 (Soft Coral Red)
+
+========================================
+
+
+========================================
+1. HOME BANNER (home banner.jpeg)
+========================================
+
+Professional fashion website hero banner for Pakistani female clothing brand "Hunny Collection PK". Elegant Pakistani woman wearing trendy embroidered lawn dress in soft blue and yellow colors. Beautiful aesthetic background with soft bokeh lighting, geometric elements, and light blue/yellow/orange tones. Premium fashion photography style, modern and stylish composition, text space on left side. NO OTHER BRAND NAMES, LOGOS, OR TEXT VISIBLE IN THE IMAGE. Only show "Hunny Collection PK" branding if any text appears. High quality, photorealistic, 1920x800 pixels. Colors: light blue (#8CE4FF), yellow (#FEEE91), orange (#FFA239), white, gold accents. Clean gradient overlays from blue to yellow. --ar 16:9 --v 5
+
+
+========================================
+2. PRODUCT PAGE BANNER (banner.jpeg)
+========================================
+
+Minimalist product showcase banner for female fashion e-commerce brand "Hunny Collection PK". Soft light blue and yellow gradient background with floating geometric patterns and subtle sparkles. Elegant display space for clothing item in center, clean modern design, blue/yellow/orange color palette with warm accents. NO OTHER BRAND NAMES, LOGOS, WATERMARKS, OR TEXT VISIBLE IN THE IMAGE. Professional e-commerce photography style, soft lighting, premium look. 1920x800 pixels. Colors: #8CE4FF, #FEEE91, #FFA239. --ar 16:9 --v 5
+
+
+========================================
+3. SHOP/CHAT PAGES BANNER (banner1.jpeg)
+========================================
+
+Modern fashion shopping banner for women's clothing website "Hunny Collection PK". Beautiful arrangement of colorful Pakistani dresses, kurtis, and accessories on elegant display racks. Light blue, yellow, and orange color scheme, warm boutique lighting, stylish and inviting atmosphere. NO OTHER BRAND NAMES, LOGOS, WATERMARKS, OR TEXT VISIBLE IN THE IMAGE. Professional retail photography style, clean composition with space for text overlay. 1920x800 pixels. Colors: #8CE4FF (primary blue), #FEEE91 (yellow), #FFA239 (orange). --ar 16:9 --v 5
+
+
+========================================
+4. CONTACT PAGE BANNER (banner2.jpeg)
+========================================
+
+Elegant customer service banner for fashion brand "Hunny Collection PK". Beautiful female customer service representative in stylish outfit, warm welcoming gesture, soft light blue and yellow background with modern geometric patterns. NO OTHER BRAND NAMES, LOGOS, WATERMARKS, OR TEXT VISIBLE IN THE IMAGE. Professional communication theme, clean corporate design, soft lighting with blue and orange accents. 1920x800 pixels. Colors: #8CE4FF, #FEEE91, #FFA239, white. --ar 16:9 --v 5
+
+
+========================================
+5. ACCOUNT PAGE BANNER (banner3.jpeg)
+========================================
+
+Premium user account dashboard banner for fashion e-commerce brand "Hunny Collection PK". Elegant woman using smartphone or laptop for online shopping, soft light blue and yellow color scheme, modern UI elements floating around, clean minimalist design. NO OTHER BRAND NAMES, LOGOS, WATERMARKS, OR TEXT VISIBLE IN THE IMAGE. Professional lifestyle photography, warm inviting atmosphere, premium brand aesthetic. 1920x800 pixels. Colors: #8CE4FF (blue), #FEEE91 (yellow), #FFA239 (orange accents). --ar 16:9 --v 5
+
+
+========================================
+6. CART PAGE BANNER (banner4.jpeg)
+========================================
+
+Stylish shopping cart banner for female fashion website "Hunny Collection PK". Beautiful arrangement of shopping bags, gift boxes, and fashion accessories in light blue, yellow, and orange color palette. Elegant shopping theme, premium retail aesthetic, modern composition with space for text. NO OTHER BRAND NAMES, LOGOS, WATERMARKS, OR TEXT VISIBLE IN THE IMAGE. Professional product photography style, blue/yellow/orange colors with metallic gold accents. 1920x800 pixels. Colors: #8CE4FF, #FEEE91, #FFA239. --ar 16:9 --v 5
+
+
+========================================
+7. CHECKOUT PAGE BANNER (banner5.jpeg)
+========================================
+
+Secure online payment and checkout banner for fashion e-commerce brand "Hunny Collection PK". Clean modern checkout interface with soft light blue theme, credit cards, shopping bags, and security icons. NO OTHER BRAND NAMES, LOGOS, WATERMARKS, OR TEXT VISIBLE IN THE IMAGE. Professional payment page design, trustworthy and elegant aesthetic, blue/yellow/orange color palette with subtle gradient background. 1920x800 pixels. Colors: #8CE4FF (primary), #FEEE91 (yellow accents), #FFA239 (orange highlights). --ar 16:9 --v 5
+
+
+========================================
+ADDITIONAL TIPS FOR AI GENERATION
+========================================
+
+MIDJOURNEY:
+- Add "--ar 16:9" ya "--ar 2.4:1" for wide banners
+- Add "--v 5" ya "--v 6" for latest version
+- Add "--quality 2" for higher quality
+- Add "--no text, logos, brands, watermarks" to prevent unwanted elements
+
+DALL-E / CHATGPT:
+- Remove "--ar" aur "--v" parameters
+- Add "Wide banner format, 1920x800 pixels"
+- Add explicit instruction: "Do not include any brand names, logos, or trademarks except where specified"
+
+STABLE DIFFUSION:
+- Add "masterpiece, best quality, ultra-detailed"
+- Use negative prompts: "low quality, blurry, pixelated, text, logos, brand names, watermarks, trademarks"
+
+EXTRA BRAND PROTECTION TIPS:
+- Agar AI tool se unwanted text/brands aa rahe hain, to prompt ke end me ye add karein:
+  "Negative prompt: text, words, letters, logos, brand names, watermarks, signatures"
+- Midjourney me "--no text,words,letters,logos,brands,watermarks" use karein
+- Result check karein aur agar koi unwanted brand name ho, to regenerate karein
+
+
+========================================
+COLOR REFERENCE (Without Hex Codes)
+========================================
+
+#8CE4FF → "sky blue", "light cyan blue", "soft pastel blue"
+#FEEE91 → "soft yellow", "pale golden yellow", "cream yellow"
+#FFA239 → "warm orange", "tangerine orange", "sunset orange"
+#FF5656 → "soft red", "coral red", "warm red"
+
+
+========================================
+BANNER USAGE IN PROJECT
+========================================
+
+File Name               | Used In
+------------------------|---------------------------
+home banner.jpeg        | Home Page (index.html)
+banner.jpeg             | Product Page
+banner1.jpeg            | Shop, Chat, Orders Pages
+banner2.jpeg            | Contact Page
+banner3.jpeg            | Account Page
+banner4.jpeg            | Cart Page
+banner5.jpeg            | Checkout Page
+
+
+========================================
+Generated: April 11, 2026
+Project: Hunny Collection PK
+========================================

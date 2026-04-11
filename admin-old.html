@@ -14,8 +14,8 @@
     <link rel="apple-touch-icon" href="/assets/logo.jpeg">
     <link rel="apple-touch-icon-precomposed" href="/assets/logo.jpeg">
     <meta name="msapplication-TileImage" content="/assets/logo.jpeg">
-    <meta name="msapplication-TileColor" content="#FF69B4">
-    <meta name="theme-color" content="#FF69B4">
+    <meta name="msapplication-TileColor" content="#8CE4FF">
+    <meta name="theme-color" content="#8CE4FF">
     <style>
         .admin-layout {
             display: grid;
@@ -51,7 +51,7 @@
             background: var(--white);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+            box-shadow: 0 4px 15px rgba(140, 228, 255, 0.2);
             margin-bottom: 20px;
         }
         .stats-grid {
@@ -397,7 +397,7 @@
 <body>
     <!-- Admin Login -->
     <div id="admin-login-view" class="auth-container" style="display: none;">
-        <div class="auth-card" style="background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3); width: 100%; max-width: 450px;">
+        <div class="auth-card" style="background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(140, 228, 255, 0.3); width: 100%; max-width: 450px;">
             <h1 class="auth-title" style="text-align: center; color: var(--dark-pink); font-size: 2rem; margin-bottom: 30px;">🔐 Admin Login</h1>
             
             <div id="login-error" style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;"></div>
@@ -837,7 +837,7 @@
                 </div>
                 
                 <!-- Pricing Section with Discount -->
-                <div class="form-group" style="background: linear-gradient(135deg, #fff3f3 0%, #fff 100%); padding: 20px; border-radius: 12px; border: 2px solid #FFB6C1;">
+                <div class="form-group" style="background: linear-gradient(135deg, #FFF8E1 0%, #fff 100%); padding: 20px; border-radius: 12px; border: 2px solid #FEEE91;">
                     <label style="color: var(--dark-pink); font-size: 1.1rem; margin-bottom: 15px; display: block;">💰 Pricing & Discount Settings</label>
                     
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
@@ -862,7 +862,7 @@
                             🏷️ Original/Compare Price (Rs.)
                             <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Higher fake price to show discount (Shown crossed to customers)</span>
                         </label>
-                        <input type="number" id="product-original-price" placeholder="3500" min="0" style="border-color: #FFB6C1;">
+                        <input type="number" id="product-original-price" placeholder="3500" min="0" style="border-color: #FEEE91;">
                     </div>
                     
                     <!-- Auto-calculated Info -->
@@ -894,7 +894,7 @@
                 </div>
 
                 <!-- Markaz Product Code -->
-                <div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B6B;">
+                <div class="form-group" style="background: #FFF8E1; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B6B;">
                     <label>🏪 Markaz Product Code *</label>
                     <input type="text" id="product-markaz-code" placeholder="e.g., MZ1459200006TEBGMR or MZ123456"
                            pattern="[A-Za-z0-9]+" required
@@ -1283,7 +1283,7 @@
                     // For demo, show preview (actual upload needs ImgBB/Cloudinary)
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FEEE91; cursor: pointer;';
                     img.title = 'Click to remove';
                     img.onclick = function() { removeImageByIndex(index); };
                     document.getElementById('image-preview').appendChild(img);
@@ -1341,7 +1341,7 @@
                 uploadedImageUrls.forEach((url, index) => {
                     const img = document.createElement('img');
                     img.src = url;
-                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FEEE91; cursor: pointer;';
                     img.title = 'Click to remove';
                     img.onclick = function() { removeImageByIndex(index); };
                     
@@ -2874,7 +2874,7 @@
                     // For demo, show preview (actual upload needs ImgBB/Cloudinary)
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FEEE91; cursor: pointer;';
                     img.title = 'Click to remove';
                     img.onclick = function() { removeDigitalImageByIndex(index); };
                     document.getElementById('digital-image-preview').appendChild(img);
@@ -2932,7 +2932,7 @@
                 uploadedDigitalImages.forEach((url, index) => {
                     const img = document.createElement('img');
                     img.src = url;
-                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FFB6C1; cursor: pointer;';
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FEEE91; cursor: pointer;';
                     img.title = 'Click to remove';
                     img.onclick = function() { removeDigitalImageByIndex(index); };
 

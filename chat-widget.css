@@ -11,10 +11,10 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    background: linear-gradient(135deg, #8CE4FF 0%, #5CC8FF 100%);
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+    box-shadow: 0 4px 12px rgba(140, 228, 255, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,7 +25,7 @@
 
 .chat-widget-button:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(255, 105, 180, 0.6);
+    box-shadow: 0 6px 16px rgba(140, 228, 255, 0.6);
 }
 
 .chat-widget-button:active {
@@ -57,10 +57,10 @@
 
 @keyframes chatPulse {
     0%, 100% {
-        box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+        box-shadow: 0 4px 12px rgba(140, 228, 255, 0.4);
     }
     50% {
-        box-shadow: 0 4px 20px rgba(255, 105, 180, 0.6), 0 0 0 10px rgba(255, 105, 180, 0.1);
+        box-shadow: 0 4px 20px rgba(140, 228, 255, 0.6), 0 0 0 10px rgba(140, 228, 255, 0.1);
     }
 }
 
@@ -104,7 +104,7 @@
 }
 
 .chat-widget-header {
-    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    background: linear-gradient(135deg, #8CE4FF 0%, #5CC8FF 100%);
     color: white;
     padding: 16px;
     display: flex;
@@ -258,12 +258,12 @@
 
 .chat-widget-input:focus {
     outline: none;
-    border-color: #FF69B4;
+    border-color: #8CE4FF;
 }
 
 .chat-widget-send {
     padding: 10px 20px;
-    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    background: linear-gradient(135deg, #8CE4FF 0%, #5CC8FF 100%);
     color: white;
     border: none;
     border-radius: 20px;
@@ -311,7 +311,7 @@
 
 .chat-widget-login-btn {
     padding: 10px 24px;
-    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    background: linear-gradient(135deg, #8CE4FF 0%, #5CC8FF 100%);
     color: white;
     border: none;
     border-radius: 20px;

@@ -265,7 +265,7 @@ function showLoginPrompt() {
             <div class="chat-login-prompt-icon">🔒</div>
             <h2>Login to Chat</h2>
             <p>Please login to start chatting with our support team</p>
-            <a href="login.html" class="btn-primary" style="display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%); color: white; text-decoration: none; border-radius: 25px; font-weight: 600;">
+            <a href="login.html" class="btn-primary" style="display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, #8CE4FF 0%, #5CC8FF 100%); color: white; text-decoration: none; border-radius: 25px; font-weight: 600;">
                 Login Now
             </a>
         </div>

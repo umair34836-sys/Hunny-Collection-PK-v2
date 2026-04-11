@@ -186,7 +186,7 @@ function showWidgetContent() {
             <div style="padding: 12px; background: white; border-top: 1px solid #eee;">
                 <input type="text" id="widget-message-input" class="chat-widget-input" placeholder="Type a message..." maxlength="500" style="margin-bottom: 8px;">
                 <button id="widget-send-btn" class="chat-widget-send" style="width: 100%;">Send Message</button>
-                <a href="chat.html" style="display: block; text-align: center; margin-top: 8px; color: #FF69B4; font-size: 12px; text-decoration: none;">Open Full Chat →</a>
+                <a href="chat.html" style="display: block; text-align: center; margin-top: 8px; color: #8CE4FF; font-size: 12px; text-decoration: none;">Open Full Chat →</a>
             </div>
         `;
         

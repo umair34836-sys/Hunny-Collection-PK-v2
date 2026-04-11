@@ -164,7 +164,7 @@
         .mobile-selling-price {
             font-size: 1.1rem;
             font-weight: bold;
-            color: #FF69B4;
+            color: #8CE4FF;
         }
 
         .mobile-original-price {
@@ -174,7 +174,7 @@
         }
 
         .mobile-discount-savings {
-            background: linear-gradient(135deg, #fff3f3 0%, #ffe4e1 100%);
+            background: linear-gradient(135deg, #FFF8E1 0%, #ffe4e1 100%);
             color: #FF6B6B;
             padding: 4px 8px;
             border-radius: 6px;
@@ -182,7 +182,7 @@
             font-size: 0.7rem;
             margin-top: 4px;
             display: inline-block;
-            border: 1px dashed #FFB6C1;
+            border: 1px dashed #FEEE91;
         }
 
         /* ========== LOADING SKELETONS ========== */
@@ -342,8 +342,8 @@
     <link rel="apple-touch-icon" href="/assets/logo.jpeg">
     <link rel="apple-touch-icon-precomposed" href="/assets/logo.jpeg">
     <meta name="msapplication-TileImage" content="/assets/logo.jpeg">
-    <meta name="msapplication-TileColor" content="#FF69B4">
-    <meta name="theme-color" content="#FF69B4">
+    <meta name="msapplication-TileColor" content="#8CE4FF">
+    <meta name="theme-color" content="#8CE4FF">
 
     <!-- Preconnect to Firebase for faster loading -->
     <link rel="preconnect" href="https://firestore.googleapis.com">
@@ -375,7 +375,7 @@
         </div>
     </header>
 
-    <section class="page-hero" style="background-image: url('assets/banner1.jpg');">
+    <section class="page-hero" style="background-image: url('assets/banner1.jpeg');">
         <div class="container page-hero-content">
             <img src="assets/logo.jpeg" alt="Hunny Collection PK Logo" class="page-hero-logo">
             <div class="page-hero-badge">🛍️ Fashion Shop</div>
@@ -390,7 +390,7 @@
             <div style="margin-bottom: 20px;">
                 <div style="position: relative; max-width: 600px; margin: 0 auto;">
                     <input type="text" id="search-input" placeholder="🔍 Search products by name..." style="width: 100%; padding: 14px 20px; border: 2px solid var(--border-color); border-radius: 30px; font-size: 1rem; transition: all 0.3s;">
-                    <button id="search-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%); color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: 600;">Search</button>
+                    <button id="search-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #8CE4FF 0%, #5CC8FF 100%); color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: 600;">Search</button>
                 </div>
             </div>
 
@@ -438,7 +438,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div id="results-count" style="color: var(--text-light); font-size: 0.9rem;">Loading products...</div>
                 <div style="display: flex; gap: 8px;">
-                    <button id="grid-view-btn" style="padding: 8px 12px; border: none; background: #FF69B4; color: white; border-radius: 6px; cursor: pointer;">▦ Grid</button>
+                    <button id="grid-view-btn" style="padding: 8px 12px; border: none; background: #8CE4FF; color: white; border-radius: 6px; cursor: pointer;">▦ Grid</button>
                     <button id="list-view-btn" style="padding: 8px 12px; border: none; background: #ddd; color: #666; border-radius: 6px; cursor: pointer;">☰ List</button>
                 </div>
             </div>
@@ -956,12 +956,12 @@
 
             filters.forEach(function(filter) {
                 var tag = document.createElement('span');
-                tag.style.cssText = 'display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #fff3f3; color: #FF69B4; border: 1px solid #FFB6C1; border-radius: 20px; font-size: 0.85rem; font-weight: 600;';
+                tag.style.cssText = 'display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #FFF8E1; color: #8CE4FF; border: 1px solid #FEEE91; border-radius: 20px; font-size: 0.85rem; font-weight: 600;';
                 tag.textContent = filter.label;
 
                 var closeBtn = document.createElement('span');
                 closeBtn.innerHTML = '×';
-                closeBtn.style.cssText = 'cursor: pointer; font-size: 1.2rem; font-weight: bold; color: #FF69B4;';
+                closeBtn.style.cssText = 'cursor: pointer; font-size: 1.2rem; font-weight: bold; color: #8CE4FF;';
                 closeBtn.onclick = function() {
                     // Reset specific filter
                     if (filter.type === 'search') document.getElementById('search-input').value = '';
@@ -1004,7 +1004,7 @@
         if (gridViewBtn && listViewBtn && productsGrid) {
             gridViewBtn.addEventListener('click', function() {
                 productsGrid.classList.remove('list-view');
-                gridViewBtn.style.background = '#FF69B4';
+                gridViewBtn.style.background = '#8CE4FF';
                 gridViewBtn.style.color = 'white';
                 listViewBtn.style.background = '#ddd';
                 listViewBtn.style.color = '#666';
@@ -1012,7 +1012,7 @@
 
             listViewBtn.addEventListener('click', function() {
                 productsGrid.classList.add('list-view');
-                listViewBtn.style.background = '#FF69B4';
+                listViewBtn.style.background = '#8CE4FF';
                 listViewBtn.style.color = 'white';
                 gridViewBtn.style.background = '#ddd';
                 gridViewBtn.style.color = '#666';
