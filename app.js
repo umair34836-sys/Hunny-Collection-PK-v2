@@ -89,12 +89,59 @@ export async function loadCategories() {
             return;
         }
 
-        container.innerHTML = categories.map(cat => `
-            <a href="shop.html?category=${encodeURIComponent(cat.name)}" class="category-card">
-                <div class="category-icon">🌸</div>
-                <div class="category-name">${cat.name}</div>
-            </a>
-        `).join('');
+        // Category icon mapping
+        const categoryIcons = {
+            'women': '👗',
+            'women clothing': '👗',
+            'dresses': '👗',
+            'kurti': '👘',
+            'kurtis': '👘',
+            'lawn': '🌿',
+            'lawn collection': '🌿',
+            'embroidered': '✨',
+            'embroidered lawn': '✨',
+            'pret': '👚',
+            'pret wear': '👚',
+            'unstitched': '🧵',
+            'unstitched fabric': '🧵',
+            'scarf': '🧣',
+            'scarves': '🧣',
+            'dupatta': '🧣',
+            'shawl': '🧣',
+            'shawls': '🧣',
+            'men': '👔',
+            'men clothing': '👔',
+            'kids': '👶',
+            'kids wear': '👶',
+            'children': '👶',
+            'jewelry': '💎',
+            'jewellery': '💎',
+            'accessories': '👜',
+            'bags': '👜',
+            'handbags': '👜',
+            'shoes': '👠',
+            'footwear': '👠',
+            'makeup': '💄',
+            'cosmetics': '💄',
+            'beauty': '💄',
+            'home': '🏠',
+            'home decor': '🏠',
+            'digital': '💻',
+            'digital products': '💻',
+            'electronics': '📱',
+            'default': '🌸'
+        };
+
+        container.innerHTML = categories.map(cat => {
+            const categoryName = (cat.name || '').toLowerCase();
+            const icon = categoryIcons[categoryName] || categoryIcons['default'];
+            return `
+                <a href="shop.html?category=${encodeURIComponent(cat.name)}" class="category-card">
+                    <div class="category-icon">${icon}</div>
+                    <div class="category-name">${cat.name}</div>
+                </a>
+            `;
+        }).join('');
     } catch (error) {
         // On slow internet, show friendly message instead of error
         if (error.code === 'unavailable' || error.message.includes('offline')) {
