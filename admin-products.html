@@ -561,6 +561,24 @@
                     <label>Sizes (comma separated)</label>
                     <input type="text" id="product-sizes" placeholder="S, M, L, XL">
                 </div>
+                <div class="form-group">
+                    <label>🎨 Color</label>
+                    <select id="product-color" style="border-color: #FFB6C1;">
+                        <option value="">Select Color</option>
+                        <option value="Black">Black</option>
+                        <option value="White">White</option>
+                        <option value="Red">Red</option>
+                        <option value="Pink">Pink</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Green">Green</option>
+                        <option value="Yellow">Yellow</option>
+                        <option value="Purple">Purple</option>
+                        <option value="Brown">Brown</option>
+                        <option value="Beige">Beige</option>
+                        <option value="Multi">Multi Color</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
 
                 <!-- Markaz Product Code -->
                 <div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B6B;">
@@ -977,6 +995,7 @@
             document.getElementById('product-category').value = product.category || '';
             document.getElementById('product-description').value = product.description || '';
             document.getElementById('product-sizes').value = product.variants?.join(', ') || '';
+            document.getElementById('product-color').value = product.color || '';
             document.getElementById('product-markaz-code').value = product.markazCode || '';
 
             // Load existing images
@@ -1281,6 +1300,7 @@
                 price: sellingPrice,
                 category: document.getElementById('product-new-category').value || document.getElementById('product-category').value,
                 description: document.getElementById('product-description').value,
+                color: document.getElementById('product-color').value,
                 variants: document.getElementById('product-sizes').value.split(',').map(s => s.trim()).filter(s => s),
                 images: images,
                 markazCode: markazCode,

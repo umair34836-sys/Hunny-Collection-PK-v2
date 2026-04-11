@@ -70,8 +70,8 @@
                 padding: 20px 0;
             }
             .filters-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
             }
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -79,6 +79,49 @@
             }
             .product-image {
                 height: 250px;
+            }
+            #search-input {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+            #search-btn {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* List View */
+        .products-grid.list-view {
+            grid-template-columns: 1fr !important;
+        }
+        .products-grid.list-view .product-card {
+            display: flex;
+            flex-direction: row;
+            height: auto;
+        }
+        .products-grid.list-view .product-image {
+            width: 200px;
+            height: 200px;
+            flex-shrink: 0;
+        }
+        .products-grid.list-view .product-info {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid.list-view .product-card {
+                flex-direction: column;
+            }
+            .products-grid.list-view .product-image {
+                width: 100%;
+                height: 250px;
+            }
+            .filters-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -343,15 +386,24 @@
 
     <section class="filters">
         <div class="container">
-            <div class="filters-grid">
+            <!-- Search Bar -->
+            <div style="margin-bottom: 20px;">
+                <div style="position: relative; max-width: 600px; margin: 0 auto;">
+                    <input type="text" id="search-input" placeholder="🔍 Search products by name..." style="width: 100%; padding: 14px 20px; border: 2px solid var(--border-color); border-radius: 30px; font-size: 1rem; transition: all 0.3s;">
+                    <button id="search-btn" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%); color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: 600;">Search</button>
+                </div>
+            </div>
+
+            <!-- Filter Grid -->
+            <div class="filters-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
                 <div class="filter-group">
-                    <label>Category</label>
+                    <label>📂 Category</label>
                     <select id="category-filter">
                         <option value="all">All Categories</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Price Range</label>
+                    <label>💰 Price Range</label>
                     <select id="price-filter">
                         <option value="all">All Prices</option>
                         <option value="0-1000">Under Rs. 1,000</option>
@@ -361,25 +413,38 @@
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Sort By</label>
+                    <label>🔃 Sort By</label>
                     <select id="sort-filter">
                         <option value="newest">Newest First</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
+                        <option value="name-az">Name: A to Z</option>
+                        <option value="name-za">Name: Z to A</option>
                     </select>
                 </div>
+                <div class="filter-group" style="display: flex; align-items: flex-end;">
+                    <button id="clear-filters-btn" style="width: 100%; padding: 12px; background: #666; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s;">🔄 Clear All</button>
+                </div>
             </div>
+
+            <!-- Active Filters Display -->
+            <div id="active-filters-display" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; min-height: 30px;"></div>
         </div>
     </section>
 
     <section class="products">
         <div class="container">
-            <!-- Products Count Info -->
-            <div id="products-count-info" class="products-count-info" style="display: none;"></div>
+            <!-- Results Count -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div id="results-count" style="color: var(--text-light); font-size: 0.9rem;">Loading products...</div>
+                <div style="display: flex; gap: 8px;">
+                    <button id="grid-view-btn" style="padding: 8px 12px; border: none; background: #FF69B4; color: white; border-radius: 6px; cursor: pointer;">▦ Grid</button>
+                    <button id="list-view-btn" style="padding: 8px 12px; border: none; background: #ddd; color: #666; border-radius: 6px; cursor: pointer;">☰ List</button>
+                </div>
+            </div>
 
             <!-- Products Grid -->
             <div class="products-grid" id="products-container">
-                <!-- Loading Skeletons (shown initially) -->
                 <div class="skeleton-card">
                     <div class="skeleton-image"></div>
                     <div class="skeleton-text"></div>
@@ -524,11 +589,11 @@
 
             var container = document.getElementById('products-container');
             var loadMoreContainer = document.getElementById('load-more-container');
-            var countInfo = document.getElementById('products-count-info');
+            var resultsCount = document.getElementById('results-count');
 
             showSkeletons(6);
             loadMoreContainer.style.display = 'none';
-            countInfo.style.display = 'none';
+            if (resultsCount) resultsCount.textContent = 'Loading products...';
 
             try {
                 var q = query(collection(db, 'products'), orderBy('createdAt', 'desc'), limit(PRODUCTS_PER_PAGE));
@@ -571,8 +636,9 @@
                 }
 
                 // Show count info
-                countInfo.textContent = 'Showing ' + displayedProducts.length + ' products';
-                countInfo.style.display = 'block';
+                if (resultsCount) {
+                    resultsCount.textContent = 'Showing ' + displayedProducts.length + ' product' + (displayedProducts.length !== 1 ? 's' : '') + ' loaded';
+                }
 
                 // Load all categories from database
                 loadAllCategories();
@@ -594,7 +660,7 @@
 
             var btn = document.getElementById('load-more-btn');
             var container = document.getElementById('products-container');
-            var countInfo = document.getElementById('products-count-info');
+            var resultsCount = document.getElementById('results-count');
 
             // Show loading state on button
             btn.disabled = true;
@@ -639,12 +705,16 @@
                 renderProducts(displayedProducts);
 
                 // Update count info
-                countInfo.textContent = 'Showing ' + displayedProducts.length + ' products';
+                if (resultsCount) {
+                    resultsCount.textContent = 'Showing ' + displayedProducts.length + ' product' + (displayedProducts.length !== 1 ? 's' : '') + ' loaded';
+                }
 
                 // Hide load more if no more products
                 if (!hasMoreProducts) {
                     document.getElementById('load-more-container').style.display = 'none';
-                    countInfo.textContent = 'All ' + displayedProducts.length + ' products loaded';
+                    if (resultsCount) {
+                        resultsCount.textContent = 'All ' + displayedProducts.length + ' products loaded';
+                    }
                 }
 
                 // Re-enable button
@@ -781,8 +851,9 @@
             }
         }
 
-        // ========== FILTER PRODUCTS (client-side on already loaded + load more if needed) ==========
+        // ========== FILTER PRODUCTS (Enhanced with Search) ==========
         async function filterProducts() {
+            var searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
             var category = document.getElementById('category-filter').value;
             var price = document.getElementById('price-filter').value;
             var sort = document.getElementById('sort-filter').value;
@@ -791,6 +862,17 @@
             await loadAllProductsForFilter();
 
             var filtered = allProductsForFilter.slice();
+
+            // Search by name
+            if (searchTerm) {
+                var newFiltered = [];
+                for (var i = 0; i < filtered.length; i++) {
+                    if (filtered[i].name && filtered[i].name.toLowerCase().includes(searchTerm)) {
+                        newFiltered.push(filtered[i]);
+                    }
+                }
+                filtered = newFiltered;
+            }
 
             // Category filter
             if (category !== 'all') {
@@ -825,11 +907,15 @@
                 filtered = newFiltered;
             }
 
-            // Sort (using sellingPrice)
+            // Sort
             if (sort === 'price-low') {
                 filtered.sort(function(a, b) { return (a.sellingPrice || a.price || 0) - (b.sellingPrice || b.price || 0); });
             } else if (sort === 'price-high') {
                 filtered.sort(function(a, b) { return (b.sellingPrice || b.price || 0) - (a.sellingPrice || a.price || 0); });
+            } else if (sort === 'name-az') {
+                filtered.sort(function(a, b) { return (a.name || '').localeCompare(b.name || ''); });
+            } else if (sort === 'name-za') {
+                filtered.sort(function(a, b) { return (b.name || '').localeCompare(a.name || ''); });
             } else {
                 filtered.sort(function(a, b) {
                     var dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
@@ -838,22 +924,100 @@
                 });
             }
 
+            // Update active filters display
+            updateActiveFiltersDisplay(searchTerm, category, price);
+
             // Reset pagination and show filtered results
             displayedProducts = filtered;
             renderProducts(filtered);
 
-            // Update UI
-            var countInfo = document.getElementById('products-count-info');
+            // Update results count
+            var resultsCount = document.getElementById('results-count');
             var loadMoreContainer = document.getElementById('load-more-container');
-            countInfo.textContent = filtered.length + ' products found';
-            countInfo.style.display = 'block';
-            loadMoreContainer.style.display = 'none';
+            if (resultsCount) {
+                resultsCount.textContent = filtered.length + ' product' + (filtered.length !== 1 ? 's' : '') + ' found';
+            }
+            if (loadMoreContainer) {
+                loadMoreContainer.style.display = 'none';
+            }
         }
+
+        // ========== UPDATE ACTIVE FILTERS DISPLAY ==========
+        function updateActiveFiltersDisplay(searchTerm, category, price) {
+            var display = document.getElementById('active-filters-display');
+            if (!display) return;
+
+            display.innerHTML = '';
+
+            var filters = [];
+            if (searchTerm) filters.push({ label: '🔍 Search: ' + searchTerm, type: 'search' });
+            if (category !== 'all') filters.push({ label: '📂 ' + category, type: 'category' });
+            if (price !== 'all') filters.push({ label: '💰 Rs. ' + price, type: 'price' });
+
+            filters.forEach(function(filter) {
+                var tag = document.createElement('span');
+                tag.style.cssText = 'display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #fff3f3; color: #FF69B4; border: 1px solid #FFB6C1; border-radius: 20px; font-size: 0.85rem; font-weight: 600;';
+                tag.textContent = filter.label;
+
+                var closeBtn = document.createElement('span');
+                closeBtn.innerHTML = '×';
+                closeBtn.style.cssText = 'cursor: pointer; font-size: 1.2rem; font-weight: bold; color: #FF69B4;';
+                closeBtn.onclick = function() {
+                    // Reset specific filter
+                    if (filter.type === 'search') document.getElementById('search-input').value = '';
+                    if (filter.type === 'category') document.getElementById('category-filter').value = 'all';
+                    if (filter.type === 'price') document.getElementById('price-filter').value = 'all';
+                    filterProducts();
+                };
+
+                tag.appendChild(closeBtn);
+                display.appendChild(tag);
+            });
+        }
+
+        // ========== CLEAR ALL FILTERS ==========
+        document.getElementById('clear-filters-btn').addEventListener('click', function() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('category-filter').value = 'all';
+            document.getElementById('price-filter').value = 'all';
+            document.getElementById('sort-filter').value = 'newest';
+            document.getElementById('active-filters-display').innerHTML = '';
+            filterProducts();
+        });
+
+        // ========== SEARCH FUNCTIONALITY ==========
+        document.getElementById('search-btn').addEventListener('click', filterProducts);
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') filterProducts();
+        });
 
         // ========== EVENT LISTENERS ==========
         document.getElementById('category-filter').addEventListener('change', filterProducts);
         document.getElementById('price-filter').addEventListener('change', filterProducts);
         document.getElementById('sort-filter').addEventListener('change', filterProducts);
+
+        // ========== GRID/LIST VIEW TOGGLE ==========
+        var gridViewBtn = document.getElementById('grid-view-btn');
+        var listViewBtn = document.getElementById('list-view-btn');
+        var productsGrid = document.getElementById('products-container');
+
+        if (gridViewBtn && listViewBtn && productsGrid) {
+            gridViewBtn.addEventListener('click', function() {
+                productsGrid.classList.remove('list-view');
+                gridViewBtn.style.background = '#FF69B4';
+                gridViewBtn.style.color = 'white';
+                listViewBtn.style.background = '#ddd';
+                listViewBtn.style.color = '#666';
+            });
+
+            listViewBtn.addEventListener('click', function() {
+                productsGrid.classList.add('list-view');
+                listViewBtn.style.background = '#FF69B4';
+                listViewBtn.style.color = 'white';
+                gridViewBtn.style.background = '#ddd';
+                gridViewBtn.style.color = '#666';
+            });
+        }
 
         // ========== INITIAL LOAD ==========
         loadFirstPage();
