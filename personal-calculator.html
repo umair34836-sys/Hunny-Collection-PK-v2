@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Profit Calculator - Hunny Collection PK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .calculator {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            padding: 18px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-card.green {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+
+        .result-card.red {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .result-card.orange {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+
+        .result-card label {
+            display: block;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .result-card .value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .result-card.green .value {
+            color: #28a745;
+        }
+
+        .result-card.red .value {
+            color: #dc3545;
+        }
+
+        .result-card.orange .value {
+            color: #ffc107;
+        }
+
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .summary h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .summary .amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 14px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .calculator, .results {
+                padding: 20px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Personal Profit Calculator</h1>
+            <p>Hunny Collection PK - Offline Use Only</p>
+        </div>
+
+        <div class="calculator">
+            <div class="input-group">
+                <label for="sellingPrice">💵 Selling Price (Rs.)</label>
+                <input type="number" id="sellingPrice" placeholder="e.g., 1500" min="0" step="10">
+            </div>
+
+            <div class="input-group">
+                <label for="actualCost">📦 Actual Product Cost (Rs.)</label>
+                <input type="number" id="actualCost" placeholder="e.g., 600" min="0" step="10">
+            </div>
+
+            <div class="input-group">
+                <label for="deliveryCharge">🚚 Delivery Charges (Rs.)</label>
+                <input type="number" id="deliveryCharge" placeholder="e.g., 150" min="0" step="10" value="150">
+            </div>
+
+            <div class="input-group">
+                <label for="investorPercent">👤 Investor Share (%)</label>
+                <input type="number" id="investorPercent" placeholder="e.g., 7" min="0" max="100" step="0.5" value="7">
+            </div>
+
+            <button class="calculate-btn" onclick="calculateProfit()">💰 Calculate Profit</button>
+        </div>
+
+        <div class="results" id="results">
+            <h2>📊 Profit Breakdown</h2>
+            
+            <div class="result-grid">
+                <div class="result-card">
+                    <label>Selling Price</label>
+                    <div class="value" id="result-selling">Rs. 0</div>
+                </div>
+
+                <div class="result-card red">
+                    <label>Product Cost</label>
+                    <div class="value" id="result-cost">Rs. 0</div>
+                </div>
+
+                <div class="result-card red">
+                    <label>Delivery Charges</label>
+                    <div class="value" id="result-delivery">Rs. 0</div>
+                </div>
+
+                <div class="result-card orange">
+                    <label>Gross Profit</label>
+                    <div class="value" id="result-gross">Rs. 0</div>
+                </div>
+
+                <div class="result-card red">
+                    <label>👤 Investor Share (<span id="investor-percent-display">7</span>% Net)</label>
+                    <div class="value" id="result-investor">Rs. 0</div>
+                </div>
+
+                <div class="result-card green">
+                    <label>🏪 Your Final Profit</label>
+                    <div class="value" id="result-final">Rs. 0</div>
+                </div>
+            </div>
+
+            <div class="summary">
+                <h3>💰 Your Net Profit After All Deductions</h3>
+                <div class="amount" id="summary-amount">Rs. 0</div>
+            </div>
+
+            <button class="reset-btn" onclick="resetCalculator()">🔄 Reset Calculator</button>
+        </div>
+    </div>
+
+    <script>
+        function calculateProfit() {
+            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
+            const actualCost = parseFloat(document.getElementById('actualCost').value) || 0;
+            const deliveryCharge = parseFloat(document.getElementById('deliveryCharge').value) || 0;
+            const investorPercent = parseFloat(document.getElementById('investorPercent').value) || 0;
+
+            if (sellingPrice === 0 && actualCost === 0) {
+                alert('Please enter at least Selling Price and Product Cost');
+                return;
+            }
+
+            // Calculate gross profit
+            const grossProfit = sellingPrice - actualCost - deliveryCharge;
+
+            // Calculate investor share (7% of net profit)
+            const investorShare = (grossProfit * investorPercent) / 100;
+
+            // Calculate final profit
+            const finalProfit = grossProfit - investorShare;
+
+            // Update results
+            document.getElementById('result-selling').textContent = `Rs. ${sellingPrice.toLocaleString()}`;
+            document.getElementById('result-cost').textContent = `Rs. ${actualCost.toLocaleString()}`;
+            document.getElementById('result-delivery').textContent = `Rs. ${deliveryCharge.toLocaleString()}`;
+            document.getElementById('result-gross').textContent = `Rs. ${grossProfit.toFixed(2)}`;
+            document.getElementById('investor-percent-display').textContent = investorPercent;
+            document.getElementById('result-investor').textContent = `Rs. ${investorShare.toFixed(2)}`;
+            document.getElementById('result-final').textContent = `Rs. ${finalProfit.toFixed(2)}`;
+            document.getElementById('summary-amount').textContent = `Rs. ${finalProfit.toFixed(2)}`;
+
+            // Show results
+            document.getElementById('results').classList.add('show');
+
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetCalculator() {
+            document.getElementById('sellingPrice').value = '';
+            document.getElementById('actualCost').value = '';
+            document.getElementById('deliveryCharge').value = '150';
+            document.getElementById('investorPercent').value = '7';
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('sellingPrice').focus();
+        }
+
+        // Allow Enter key to calculate
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateProfit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
