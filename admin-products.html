@@ -535,7 +535,7 @@
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
                                 <div>🏷️ Product Cost: <strong id="breakdown-cost">Rs. 0</strong></div>
                                 <div>💵 Your Profit: <strong id="breakdown-profit" style="color: #28a745;">Rs. 0</strong></div>
-                                <div>📦 7% Platform Share: <strong id="breakdown-platform" style="color: #FF6B6B;">Rs. 0</strong></div>
+                                <div>📦 Investor Share (7% Net): <strong id="breakdown-platform" style="color: #FF6B6B;">Rs. 0</strong></div>
                                 <div>🏷️ Discount Shown: <strong id="breakdown-discount" style="color: #FF6B6B;">0%</strong></div>
                             </div>
                             <div style="margin-top: 15px; padding-top: 15px; border-top: 2px dashed #ccc; text-align: center;">
@@ -743,7 +743,7 @@
                 // Pricing info - support both old and new format
                 const actualCost = p.actualCost || p.costPrice || 0;
                 const adminProfit = p.adminProfit || 0;
-                const platformShare = p.platformShare || 0;
+                const investorShare = p.investorShare || p.platformShare || 0;
                 const sellingPrice = p.sellingPrice || p.price || 0;
                 const originalPrice = p.originalPrice || 0;
                 const fakeDiscount = p.fakeDiscountPercent || 0;
@@ -768,7 +768,7 @@
                             ${originalPrice > 0 ? `<div style="color: #999; text-decoration: line-through; font-size: 0.75rem;">Was: Rs. ${originalPrice.toLocaleString()}</div>` : ''}
                             <div style="color: #666; font-size: 0.75rem;">Cost: Rs. ${actualCost.toLocaleString()}</div>
                             ${adminProfit > 0 ? `<div style="color: #28a745; font-size: 0.75rem;">💰 Your Profit: Rs. ${adminProfit.toLocaleString()}</div>` : ''}
-                            ${platformShare > 0 ? `<div style="color: #FF6B6B; font-size: 0.75rem;">📦 Platform: Rs. ${platformShare.toLocaleString()}</div>` : ''}
+                            ${investorShare > 0 ? `<div style="color: #FF6B6B; font-size: 0.75rem;">👤 Investor Share: Rs. ${investorShare.toLocaleString()}</div>` : ''}
                             ${discountPercent > 0 ? `<div style="color: #FF6B6B; font-size: 0.75rem;">🔥 ${discountPercent}% OFF</div>` : ''}
                         </div>
                     </td>
@@ -887,14 +887,14 @@
 
         // ========== EXPORT ==========
         window.exportProducts = function() {
-            const headers = ['ID', 'Name', 'Category', 'Actual Cost', 'Admin Profit', 'Platform Share (7%)', 'Selling Price', 'Fake Original Price', 'Discount %', 'Markaz Code', 'Added By', 'Created At'];
+            const headers = ['ID', 'Name', 'Category', 'Actual Cost', 'Admin Profit', 'Investor Share (7% Net)', 'Selling Price', 'Fake Original Price', 'Discount %', 'Markaz Code', 'Added By', 'Created At'];
             const rows = products.map(p => [
                 p.id,
                 p.name,
                 p.category,
                 p.actualCost || p.costPrice || 0,
                 p.adminProfit || 0,
-                p.platformShare || 0,
+                p.investorShare || p.platformShare || 0,
                 p.sellingPrice || p.price || 0,
                 p.originalPrice || 0,
                 p.fakeDiscountPercent || 0,
@@ -1038,16 +1038,17 @@
             const fakeDiscount = Number(document.getElementById('fake-discount-percent').value) || 0;
 
             // Calculate final selling price
-            // Revenue share: Platform takes 7% of Final Selling Price
-            // Admin gets 93% of Final Selling Price
-            // Admin Profit = (Selling Price × 0.93) - Actual Cost
-            // So: Selling Price = (Actual Cost + Admin Profit) / 0.93
+            // Net profit model: Investor takes 7% of net profit
+            // Selling Price = Actual Cost + Admin Profit (simple addition)
+            // Net Profit = Admin Profit
+            // Investor Share = Net Profit × 7%
+            // Final Admin Profit After Investor = Admin Profit - Investor Share
             let finalSellingPrice = 0;
-            let platformShare = 0;
+            let investorShare = 0;
 
             if (actualCost > 0 || adminProfit > 0) {
-                finalSellingPrice = Math.round((actualCost + adminProfit) / 0.93);
-                platformShare = Math.round(finalSellingPrice * 0.07); // 7% of selling price
+                finalSellingPrice = actualCost + adminProfit;
+                investorShare = Math.round(adminProfit * 0.07); // 7% of net profit
             }
 
             // Calculate fake original price based on discount percentage
@@ -1062,7 +1063,7 @@
 
             document.getElementById('breakdown-cost').textContent = `Rs. ${actualCost.toLocaleString()}`;
             document.getElementById('breakdown-profit').textContent = `Rs. ${adminProfit.toLocaleString()}`;
-            document.getElementById('breakdown-platform').textContent = `Rs. ${platformShare.toLocaleString()} (7% revenue share)`;
+            document.getElementById('breakdown-platform').textContent = `Rs. ${investorShare.toLocaleString()} (7% net profit)`;
             document.getElementById('breakdown-discount').textContent = `${fakeDiscount}%`;
 
             // Is it worth it? Analysis
@@ -1071,15 +1072,16 @@
                 const profitMargin = ((adminProfit / actualCost) * 100).toFixed(1);
                 const totalRevenue = finalSellingPrice;
                 const roi = ((adminProfit / actualCost) * 100).toFixed(1);
+                const finalProfitAfterInvestor = adminProfit - investorShare;
 
-                if (adminProfit >= 200 && profitMargin >= 15) {
-                    verdictEl.innerHTML = `✅ YES! Good profit (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform takes Rs. ${platformShare.toLocaleString()} from Rs. ${totalRevenue.toLocaleString()}</small>`;
+                if (finalProfitAfterInvestor >= 200 && profitMargin >= 15) {
+                    verdictEl.innerHTML = `✅ YES! Good profit (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Investor gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
                     verdictEl.style.color = '#28a745';
-                } else if (adminProfit >= 100) {
-                    verdictEl.innerHTML = `⚠️ Decent but could be better (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform takes Rs. ${platformShare.toLocaleString()} from Rs. ${totalRevenue.toLocaleString()}</small>`;
+                } else if (finalProfitAfterInvestor >= 100) {
+                    verdictEl.innerHTML = `⚠️ Decent but could be better (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Investor gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
                     verdictEl.style.color = '#ffc107';
                 } else {
-                    verdictEl.innerHTML = `❌ Low profit margin (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform takes Rs. ${platformShare.toLocaleString()} from Rs. ${totalRevenue.toLocaleString()}</small>`;
+                    verdictEl.innerHTML = `❌ Low profit margin (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Investor gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
                     verdictEl.style.color = '#dc3545';
                 }
             } else {
@@ -1274,12 +1276,11 @@
             const adminProfit = Number(document.getElementById('admin-profit').value) || 0;
             const fakeDiscount = Number(document.getElementById('fake-discount-percent').value) || 0;
 
-            // Calculate selling price - REVENUE SHARE (7% of total selling price)
-            // Platform Share = 7% of Final Selling Price
-            // Admin gets 93% of Final Selling Price
-            // Final Selling Price = (Actual Cost + Admin Profit) / 0.93
-            const sellingPrice = Math.round((actualCost + adminProfit) / 0.93);
-            const platformShare = Math.round(sellingPrice * 0.07);
+            // Calculate selling price - NET PROFIT MODEL
+            // Selling Price = Actual Cost + Admin Profit (simple addition)
+            // Investor Share = 7% of Admin Profit (net profit)
+            const sellingPrice = actualCost + adminProfit;
+            const investorShare = Math.round(adminProfit * 0.07);
             
             let originalPrice = 0;
             if (fakeDiscount > 0 && sellingPrice > 0) {
@@ -1292,7 +1293,7 @@
                 name: document.getElementById('product-name').value,
                 actualCost: actualCost,
                 adminProfit: adminProfit,
-                platformShare: platformShare,
+                investorShare: investorShare,
                 fakeDiscountPercent: fakeDiscount,
                 costPrice: actualCost,
                 sellingPrice: sellingPrice,

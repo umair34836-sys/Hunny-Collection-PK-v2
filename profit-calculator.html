@@ -344,8 +344,8 @@
                             <th>Actual Price (Rs.)</th>
                             <th>Selling Price (Rs.)</th>
                             <th>Delivery Charges (Rs.)</th>
-                            <th>Investor Profit (Rs.)</th>
-                            <th>Net Revenue (Rs.)</th>
+                            <th>Gross Profit (Rs.)</th>
+                            <th>Investor Share (7% Net)</th>
                             <th>Final Profit (Rs.)</th>
                             <th>Profit %</th>
                         </tr>
@@ -453,9 +453,9 @@
                 const actualPrice = product.actualPrice || product.costPrice || 0;
                 const sellingPrice = product.sellingPrice || product.price || 0;
 
-                const investorProfit = (sellingPrice * investorPercent) / 100;
-                const netRevenue = sellingPrice - investorProfit;
-                const finalProfit = netRevenue - actualPrice - deliveryCharge;
+                const grossProfit = sellingPrice - actualPrice - deliveryCharge;
+                const investorProfit = (grossProfit * investorPercent) / 100;
+                const finalProfit = grossProfit - investorProfit;
                 const profitPercent = actualPrice > 0 ? ((finalProfit / actualPrice) * 100) : 0;
 
                 const profitClass = finalProfit >= 0 ? 'profit-positive' : 'profit-negative';
@@ -477,8 +477,8 @@
                         <td class="price">Rs. ${actualPrice.toLocaleString()}</td>
                         <td class="price">Rs. ${sellingPrice.toLocaleString()}</td>
                         <td class="price">Rs. ${deliveryCharge.toLocaleString()}</td>
+                        <td class="price">Rs. ${grossProfit.toFixed(2)}</td>
                         <td class="profit-positive">Rs. ${investorProfit.toFixed(2)}</td>
-                        <td class="price">Rs. ${netRevenue.toFixed(2)}</td>
                         <td class="${profitClass}">Rs. ${finalProfit.toFixed(2)}</td>
                         <td><span class="${percentClass}">${profitPercent.toFixed(2)}%</span></td>
                     </tr>
@@ -508,9 +508,9 @@
                 const actualPrice = product.actualPrice || product.costPrice || 0;
                 const sellingPrice = product.sellingPrice || product.price || 0;
 
-                const investorProfit = (sellingPrice * investorPercent) / 100;
-                const netRevenue = sellingPrice - investorProfit;
-                const finalProfit = netRevenue - actualPrice - deliveryCharge;
+                const grossProfit = sellingPrice - actualPrice - deliveryCharge;
+                const investorProfit = (grossProfit * investorPercent) / 100;
+                const finalProfit = grossProfit - investorProfit;
                 const profitPercent = actualPrice > 0 ? ((finalProfit / actualPrice) * 100) : 0;
 
                 totalProfit += finalProfit;

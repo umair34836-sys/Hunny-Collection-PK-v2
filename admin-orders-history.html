@@ -633,10 +633,24 @@
                 const statusClass = 'status-' + (order.status || 'pending').toLowerCase();
                 const itemCount = order.items ? order.items.length : 0;
                 const totalAmount = order.total || 0;
-                
-                // Calculate investor share (7% default)
+
+                // Calculate investor share based on net profit (7% of net profit)
                 const investorPercent = 7;
-                const investorShare = (totalAmount * investorPercent) / 100;
+                
+                // Calculate total cost and profit for this order
+                let totalCost = 0;
+                if (order.items && order.items.length > 0) {
+                    order.items.forEach(item => {
+                        const itemCost = item.actualCost || item.costPrice || 0;
+                        const quantity = item.quantity || 1;
+                        totalCost += itemCost * quantity;
+                    });
+                }
+                
+                // Add delivery charges if available
+                const deliveryCharge = order.deliveryCharge || 0;
+                const grossProfit = totalAmount - totalCost - deliveryCharge;
+                const investorShare = (grossProfit * investorPercent) / 100;
                 const ourShare = totalAmount - investorShare;
 
                 html += `
@@ -736,10 +750,24 @@
                 </div>
             `}).join('');
 
-            // Calculate investor share
+            // Calculate investor share based on net profit (7% of net profit)
             const totalAmount = order.total || 0;
             const investorPercent = 7;
-            const investorShare = (totalAmount * investorPercent) / 100;
+            
+            // Calculate total cost and profit for this order
+            let totalCost = 0;
+            if (order.items && order.items.length > 0) {
+                order.items.forEach(item => {
+                    const itemCost = item.actualCost || item.costPrice || 0;
+                    const quantity = item.quantity || 1;
+                    totalCost += itemCost * quantity;
+                });
+            }
+            
+            // Add delivery charges if available
+            const deliveryCharge = order.deliveryCharge || 0;
+            const grossProfit = totalAmount - totalCost - deliveryCharge;
+            const investorShare = (grossProfit * investorPercent) / 100;
             const ourShare = totalAmount - investorShare;
 
             const modalHtml = `
@@ -785,12 +813,20 @@
                             <div style="font-size: 0.85rem; color: #666;">Total Order Amount</div>
                             <div style="font-size: 1.3rem; font-weight: bold; color: #667eea;">Rs. ${totalAmount.toLocaleString()}</div>
                         </div>
+                        <div style="background: white; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 0.85rem; color: #666;">Total Product Cost</div>
+                            <div style="font-size: 1.3rem; font-weight: bold; color: #FF6B6B;">Rs. ${totalCost.toLocaleString()}</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 0.85rem; color: #666;">Gross Profit</div>
+                            <div style="font-size: 1.3rem; font-weight: bold; color: #667eea;">Rs. ${grossProfit.toLocaleString()}</div>
+                        </div>
                         <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-                            <div style="font-size: 0.85rem; color: #666;">👤 Investor Share (${investorPercent}%)</div>
+                            <div style="font-size: 0.85rem; color: #666;">👤 Investor Share (${investorPercent}% Net)</div>
                             <div style="font-size: 1.3rem; font-weight: bold; color: #28a745;">Rs. ${investorShare.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
                         </div>
                         <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
-                            <div style="font-size: 0.85rem; color: #666;">🏪 Our Share (${100 - investorPercent}%)</div>
+                            <div style="font-size: 0.85rem; color: #666;">🏪 Our Share After Investor</div>
                             <div style="font-size: 1.3rem; font-weight: bold; color: #667eea;">Rs. ${ourShare.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
                         </div>
                     </div>
