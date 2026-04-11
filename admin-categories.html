@@ -544,6 +544,7 @@
                 const productCount = products.filter(p => p.category === category.name || p.category === category.slug).length;
                 const createdDate = formatDate(category.createdAt);
                 const icon = category.icon || '🌸';
+                const escapedName = escapeHtml(category.name).replace(/'/g, "\\'");
 
                 return `
                     <tr>
@@ -553,11 +554,11 @@
                         <td><span class="badge badge-active">${productCount} product${productCount !== 1 ? 's' : ''}</span></td>
                         <td>${createdDate}</td>
                         <td>
-                            <button class="btn-sm" onclick="openEditCategoryModal('${category.id}', '${escapeHtml(category.name)}', '${category.icon || '🌸'}')"
+                            <button class="btn-sm" onclick="openEditCategoryModal('${category.id}', '${escapedName}', '${icon}')"
                                     style="background: #007bff; color: white;">
                                 ✏️ Edit
                             </button>
-                            <button class="btn-sm" onclick="handleDeleteCategory('${category.id}', '${escapeHtml(category.name)}')"
+                            <button class="btn-sm" onclick="handleDeleteCategory('${category.id}', '${escapedName}')"
                                     style="background: #dc3545; color: white;">
                                 🗑️ Delete
                             </button>
