@@ -161,6 +161,58 @@
             font-size: 1rem;
         }
 
+        /* Icon Picker Styles */
+        .icon-picker {
+            margin-top: 10px;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .icon-item {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+        .icon-item:hover {
+            border-color: var(--primary-pink);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(140, 228, 255, 0.3);
+        }
+        .icon-item.selected {
+            border-color: var(--dark-pink);
+            background: var(--soft-pink);
+            box-shadow: 0 4px 12px rgba(255, 86, 86, 0.3);
+        }
+        .icon-preview {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--soft-pink);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        #icon-preview-display {
+            font-size: 2.5rem;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 1024px) {
             .admin-content {
@@ -247,6 +299,18 @@
                 padding: 12px;
                 font-size: 16px;
             }
+
+            .icon-grid {
+                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+                gap: 8px;
+                max-height: 250px;
+            }
+
+            .icon-item {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -319,6 +383,7 @@
                     <table id="categories-table">
                         <thead>
                             <tr>
+                                <th>Icon</th>
                                 <th>Category Name</th>
                                 <th>Slug</th>
                                 <th>Product Count</th>
@@ -338,11 +403,11 @@
         </main>
     </div>
 
-    <!-- Add Category Modal -->
+    <!-- Add/Edit Category Modal -->
     <div id="add-category-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Add New Category</h3>
+                <h3 id="modal-title">Add New Category</h3>
                 <button class="close-modal" onclick="closeAddCategoryModal()">&times;</button>
             </div>
             <div id="category-error" style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;"></div>
@@ -351,8 +416,21 @@
                     <label for="category-name">Category Name</label>
                     <input type="text" id="category-name" placeholder="e.g., Dresses, Shoes, Accessories" required>
                 </div>
+                <div class="form-group">
+                    <label>Category Icon</label>
+                    <div class="icon-picker">
+                        <div class="icon-grid" id="icon-grid">
+                            <!-- Icons will be populated by JavaScript -->
+                        </div>
+                        <input type="hidden" id="selected-icon" value="🌸">
+                        <div class="icon-preview">
+                            <span id="icon-preview-display">🌸</span>
+                            <span>Selected Icon Preview</span>
+                        </div>
+                    </div>
+                </div>
                 <div style="display: flex; gap: 10px;">
-                    <button type="submit" class="btn-primary" style="flex: 1;">Add Category</button>
+                    <button type="submit" class="btn-primary" style="flex: 1;" id="submit-btn">Add Category</button>
                     <button type="button" class="btn-sm" onclick="closeAddCategoryModal()" style="background: #6c757d; color: white;">Cancel</button>
                 </div>
             </form>
@@ -361,7 +439,7 @@
 
     <script type="module">
         import { checkAdminAuth, logout, showSection, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers, formatCurrency, formatDate, confirmAction } from './admin-common.js';
-        import { getAllCategories, createCategory, deleteCategory, getAllProducts } from './admin-api.js';
+        import { getAllCategories, createCategory, updateCategory, deleteCategory, getAllProducts } from './admin-api.js';
 
         // Make functions available globally for inline onclick handlers
         window.logout = logout;
@@ -371,6 +449,61 @@
 
         let categories = [];
         let products = [];
+        let editingCategoryId = null;
+
+        // Comprehensive icon list
+        const categoryIcons = [
+            // Fashion & Clothing
+            '👗', '👚', '👕', '👔', '👘', '🥻', '🩱', '🧥', '🦺',
+            // Accessories
+            '👜', '👛', '👝', '💼', '🎒', '🧳', '👓', '🕶️', '💎', '💍', '⌚',
+            // Footwear
+            '👠', '👡', '👢', '👞', '👟', '🥿', '🩴', '👣',
+            // Beauty & Cosmetics
+            '💄', '💅', '💋', '🧴', '🧼', '🪒', '✨', '🌸', '🌺', '🌹', '💐', '🌷',
+            // Fabric & Textile
+            '🧵', '🪡', '🧶', '🎀', '🏷️', '🌿', '🍃', '☘️',
+            // Scarves & Shawls
+            '🧣', '🧤', '🎭',
+            // Kids & Baby
+            '👶', '👧', '👦', '🧸', '🍼', '🎈', '🎉',
+            // Home & Living
+            '🏠', '🛋️', '🛏️', '🪑', '🏡', '🏢',
+            // Digital & Electronics
+            '💻', '📱', '📲', '🖥️', '⌨️', '🖱️', '📷', '🎮', '🎧', '📺', '🔌',
+            // General
+            '🎁', '🎀', '🏆', '⭐', '🌟', '💫', '🔥', '❤️', '💜', '💙', '💚', '💛', '🧡', '🤍', '🖤', '💯', '🎯', '🛍️', '🛒', '📦', '🎊', '🎉'
+        ];
+
+        // Initialize icon picker
+        function initializeIconPicker(selectedIcon = '🌸') {
+            const iconGrid = document.getElementById('icon-grid');
+            if (!iconGrid) return;
+
+            iconGrid.innerHTML = categoryIcons.map(icon => `
+                <div class="icon-item ${icon === selectedIcon ? 'selected' : ''}" 
+                     onclick="selectIcon('${icon}')">
+                    ${icon}
+                </div>
+            `).join('');
+
+            document.getElementById('selected-icon').value = selectedIcon;
+            document.getElementById('icon-preview-display').textContent = selectedIcon;
+        }
+
+        // Select icon function
+        window.selectIcon = function(icon) {
+            document.getElementById('selected-icon').value = icon;
+            document.getElementById('icon-preview-display').textContent = icon;
+
+            // Update selected state
+            document.querySelectorAll('.icon-item').forEach(item => {
+                item.classList.remove('selected');
+                if (item.textContent.trim() === icon) {
+                    item.classList.add('selected');
+                }
+            });
+        };
 
         // Load categories and products on page load
         async function loadData() {
@@ -410,15 +543,21 @@
             tbody.innerHTML = categories.map(category => {
                 const productCount = products.filter(p => p.category === category.name || p.category === category.slug).length;
                 const createdDate = formatDate(category.createdAt);
+                const icon = category.icon || '🌸';
 
                 return `
                     <tr>
+                        <td style="font-size: 1.5rem; text-align: center;">${icon}</td>
                         <td><strong>${escapeHtml(category.name)}</strong></td>
                         <td><code style="background: #f8f9fa; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">${escapeHtml(category.slug || 'N/A')}</code></td>
                         <td><span class="badge badge-active">${productCount} product${productCount !== 1 ? 's' : ''}</span></td>
                         <td>${createdDate}</td>
                         <td>
-                            <button class="btn-sm" onclick="handleDeleteCategory('${category.id}', '${escapeHtml(category.name)}')" 
+                            <button class="btn-sm" onclick="openEditCategoryModal('${category.id}', '${escapeHtml(category.name)}', '${category.icon || '🌸'}')"
+                                    style="background: #007bff; color: white;">
+                                ✏️ Edit
+                            </button>
+                            <button class="btn-sm" onclick="handleDeleteCategory('${category.id}', '${escapeHtml(category.name)}')"
                                     style="background: #dc3545; color: white;">
                                 🗑️ Delete
                             </button>
@@ -437,10 +576,25 @@
 
         // Open add category modal
         window.openAddCategoryModal = function() {
-            document.getElementById('add-category-modal').classList.add('active');
+            editingCategoryId = null;
+            document.getElementById('modal-title').textContent = 'Add New Category';
+            document.getElementById('submit-btn').textContent = 'Add Category';
             document.getElementById('category-name').value = '';
             document.getElementById('category-error').style.display = 'none';
+            initializeIconPicker('🌸');
+            document.getElementById('add-category-modal').classList.add('active');
             document.getElementById('category-name').focus();
+        };
+
+        // Open edit category modal
+        window.openEditCategoryModal = function(categoryId, categoryName, icon = '🌸') {
+            editingCategoryId = categoryId;
+            document.getElementById('modal-title').textContent = 'Edit Category';
+            document.getElementById('submit-btn').textContent = 'Update Category';
+            document.getElementById('category-name').value = categoryName;
+            document.getElementById('category-error').style.display = 'none';
+            initializeIconPicker(icon);
+            document.getElementById('add-category-modal').classList.add('active');
         };
 
         // Close add category modal
@@ -448,12 +602,13 @@
             document.getElementById('add-category-modal').classList.remove('active');
         };
 
-        // Handle add category
+        // Handle add/edit category
         window.handleAddCategory = async function(event) {
             event.preventDefault();
-            
+
             const nameInput = document.getElementById('category-name');
             const errorEl = document.getElementById('category-error');
+            const selectedIcon = document.getElementById('selected-icon').value;
             const name = nameInput.value.trim();
 
             if (!name) {
@@ -462,23 +617,39 @@
                 return;
             }
 
-            // Check for duplicate
-            const duplicate = categories.find(c => c.name.toLowerCase() === name.toLowerCase());
-            if (duplicate) {
-                errorEl.textContent = 'Category already exists';
-                errorEl.style.display = 'block';
-                return;
+            // Check for duplicate (only when adding new category)
+            if (!editingCategoryId) {
+                const duplicate = categories.find(c => c.name.toLowerCase() === name.toLowerCase());
+                if (duplicate) {
+                    errorEl.textContent = 'Category already exists';
+                    errorEl.style.display = 'block';
+                    return;
+                }
             }
 
             try {
                 errorEl.style.display = 'none';
-                await createCategory(name);
-                closeAddCategoryModal();
-                await loadData();
-                alert('Category added successfully!');
+
+                if (editingCategoryId) {
+                    // Update existing category
+                    await updateCategory(editingCategoryId, {
+                        name,
+                        slug: name.toLowerCase().replace(/\s+/g, '-'),
+                        icon: selectedIcon
+                    });
+                    closeAddCategoryModal();
+                    await loadData();
+                    alert('Category updated successfully!');
+                } else {
+                    // Add new category
+                    await createCategory(name, selectedIcon);
+                    closeAddCategoryModal();
+                    await loadData();
+                    alert('Category added successfully!');
+                }
             } catch (error) {
-                console.error('Error adding category:', error);
-                errorEl.textContent = 'Error adding category: ' + error.message;
+                console.error('Error saving category:', error);
+                errorEl.textContent = 'Error saving category: ' + error.message;
                 errorEl.style.display = 'block';
             }
         };

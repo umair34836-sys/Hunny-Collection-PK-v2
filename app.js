@@ -89,52 +89,8 @@ export async function loadCategories() {
             return;
         }
 
-        // Category icon mapping
-        const categoryIcons = {
-            'women': '👗',
-            'women clothing': '👗',
-            'dresses': '👗',
-            'kurti': '👘',
-            'kurtis': '👘',
-            'lawn': '🌿',
-            'lawn collection': '🌿',
-            'embroidered': '✨',
-            'embroidered lawn': '✨',
-            'pret': '👚',
-            'pret wear': '👚',
-            'unstitched': '🧵',
-            'unstitched fabric': '🧵',
-            'scarf': '🧣',
-            'scarves': '🧣',
-            'dupatta': '🧣',
-            'shawl': '🧣',
-            'shawls': '🧣',
-            'men': '👔',
-            'men clothing': '👔',
-            'kids': '👶',
-            'kids wear': '👶',
-            'children': '👶',
-            'jewelry': '💎',
-            'jewellery': '💎',
-            'accessories': '👜',
-            'bags': '👜',
-            'handbags': '👜',
-            'shoes': '👠',
-            'footwear': '👠',
-            'makeup': '💄',
-            'cosmetics': '💄',
-            'beauty': '💄',
-            'home': '🏠',
-            'home decor': '🏠',
-            'digital': '💻',
-            'digital products': '💻',
-            'electronics': '📱',
-            'default': '🌸'
-        };
-
         container.innerHTML = categories.map(cat => {
-            const categoryName = (cat.name || '').toLowerCase();
-            const icon = categoryIcons[categoryName] || categoryIcons['default'];
+            const icon = cat.icon || '🌸';
             return `
                 <a href="shop.html?category=${encodeURIComponent(cat.name)}" class="category-card">
                     <div class="category-icon">${icon}</div>

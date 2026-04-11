@@ -227,17 +227,29 @@ export async function getAllCategories() {
 }
 
 // Create category
-export async function createCategory(name) {
+export async function createCategory(name, icon = '🌸') {
     try {
         const categoryData = {
             name,
             slug: name.toLowerCase().replace(/\s+/g, '-'),
+            icon,
             createdAt: new Date().toISOString()
         };
         const docRef = await addDoc(collection(db, 'categories'), categoryData);
         return docRef.id;
     } catch (error) {
         console.error('Error creating category:', error);
+        throw error;
+    }
+}
+
+// Update category
+export async function updateCategory(categoryId, data) {
+    try {
+        await updateDoc(doc(db, 'categories', categoryId), data);
+        return true;
+    } catch (error) {
+        console.error('Error updating category:', error);
         throw error;
     }
 }
