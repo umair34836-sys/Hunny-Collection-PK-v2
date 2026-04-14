@@ -203,36 +203,28 @@
 
             <div id="alert-container"></div>
 
-            <!-- Invite Sub-Admin Section -->
+            <!-- Grant Sub-Admin Access Section -->
             <div class="admin-card">
-                <h3 style="margin-bottom: 20px;">✉️ Invite New Sub-Admin</h3>
-                <form id="invite-form">
+                <h3 style="margin-bottom: 20px;">➕ Grant Sub-Admin Access</h3>
+                <form id="grant-form">
                     <div class="form-group">
                         <label>Sub-Admin Email</label>
-                        <input type="email" id="invite-email" placeholder="subadmin@example.com" required>
+                        <input type="email" id="grant-email" placeholder="subadmin@example.com" required>
                     </div>
-                    <button type="submit" class="btn-primary">Send Invitation</button>
+                    <div class="form-group">
+                        <label>Set Password (min 6 characters)</label>
+                        <input type="password" id="grant-password" placeholder="Enter password" minlength="6" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Create Sub-Admin Account</button>
                 </form>
-                <p style="margin-top: 15px; font-size: 0.9rem; color: var(--text-light);">
-                    ℹ️ The invited sub-admin will receive an email with login instructions. They can then access their own dashboard at <code>/sub-admin/sub-admin.html</code>
-                </p>
-            </div>
-
-            <!-- Pending Invitations -->
-            <div class="admin-card">
-                <h3 style="margin-bottom: 20px;">⏳ Pending Invitations</h3>
-                <div class="table-responsive">
-                    <table id="pending-invitations-table">
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Invited Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <div style="margin-top: 15px; padding: 15px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #2196F3;">
+                    <p style="font-size: 0.9rem; color: #0C5460; margin: 0;">
+                        <strong>ℹ️ How it works:</strong><br>
+                        1. Enter sub-admin's email and set a password<br>
+                        2. Click "Create Sub-Admin Account"<br>
+                        3. Share the login credentials with the sub-admin<br>
+                        4. They can login at: <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">/sub-admin/sub-admin.html</code>
+                    </p>
                 </div>
             </div>
 
@@ -245,7 +237,7 @@
                             <tr>
                                 <th>Email</th>
                                 <th>UID</th>
-                                <th>Joined Date</th>
+                                <th>Created Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -259,8 +251,8 @@
 
     <script type="module">
         import { auth, db } from './firebase-config.js';
-        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { collection, getDocs, query, where, doc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { onAuthStateChanged, signOut, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { collection, getDocs, query, where, doc, getDoc, addDoc, updateDoc, deleteDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { checkAdminAuth, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers } from './admin-common.js';
 
         // Check if user is god admin
@@ -297,7 +289,7 @@
             await loadSubAdmins();
         });
 
-        // Load all sub-admins and pending invitations
+        // Load all sub-admins
         async function loadSubAdmins() {
             try {
                 // Load sub-admins
@@ -306,12 +298,6 @@
                 const subAdmins = adminsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 renderSubAdminsTable(subAdmins);
-
-                // Load pending invitations
-                const invitationsSnapshot = await getDocs(collection(db, 'sub-admin-invitations'));
-                const invitations = invitationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-                renderPendingInvitations(invitations);
             } catch (error) {
                 console.error('Error loading sub-admins:', error);
                 showAlert('Error loading sub-admins: ' + error.message, 'error');
@@ -324,17 +310,17 @@
             if (!tbody) return;
 
             if (subAdmins.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-light);">No sub-admins yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-light);">No sub-admins yet. Grant access to create your first sub-admin!</td></tr>';
                 return;
             }
 
             tbody.innerHTML = subAdmins.map(admin => {
-                const joinedDate = admin.createdAt ? new Date(admin.createdAt).toLocaleDateString() : 'N/A';
+                const createdDate = admin.createdAt ? new Date(admin.createdAt).toLocaleDateString() : 'N/A';
                 return `
                     <tr>
                         <td>${admin.email}</td>
                         <td><small>${admin.uid ? admin.uid.substring(0, 20) + '...' : 'N/A'}</small></td>
-                        <td>${joinedDate}</td>
+                        <td>${createdDate}</td>
                         <td><span class="badge badge-active">Active</span></td>
                         <td>
                             <button class="btn-danger" onclick="deleteSubAdmin('${admin.id}', '${admin.email}')">Delete</button>
@@ -344,38 +330,14 @@
             }).join('');
         }
 
-        // Render pending invitations table
-        function renderPendingInvitations(invitations) {
-            const tbody = document.querySelector('#pending-invitations-table tbody');
-            if (!tbody) return;
-
-            if (invitations.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--text-light);">No pending invitations</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = invitations.map(inv => {
-                const invitedDate = inv.invitedAt ? new Date(inv.invitedAt.toDate()).toLocaleDateString() : 'N/A';
-                return `
-                    <tr>
-                        <td>${inv.email}</td>
-                        <td>${invitedDate}</td>
-                        <td><span class="badge badge-pending">Pending</span></td>
-                        <td>
-                            <button class="btn-danger" onclick="deleteInvitation('${inv.id}')">Cancel</button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        // Invite sub-admin
-        document.getElementById('invite-form')?.addEventListener('submit', async (e) => {
+        // Grant sub-admin access (create account directly)
+        document.getElementById('grant-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('invite-email').value;
+            const email = document.getElementById('grant-email').value;
+            const password = document.getElementById('grant-password').value;
 
             try {
-                // Check if already an admin
+                // Check if email already exists in admins
                 const adminsQuery = query(collection(db, 'admins'), where('email', '==', email));
                 const adminsSnapshot = await getDocs(adminsQuery);
                 
@@ -384,43 +346,101 @@
                     return;
                 }
 
-                // Check if invitation already exists
-                const invQuery = query(collection(db, 'sub-admin-invitations'), where('email', '==', email));
-                const invSnapshot = await getDocs(invQuery);
+                // Create Firebase Auth account with given credentials
+                // Note: This creates the account, but we need to use a secondary auth instance
+                // For security, we'll create a temporary auth session
                 
-                if (!invSnapshot.empty) {
-                    showAlert('An invitation has already been sent to this email!', 'error');
-                    return;
-                }
-
-                // Create invitation
-                await addDoc(collection(db, 'sub-admin-invitations'), {
+                showAlert('⏳ Creating sub-admin account...', 'success');
+                
+                // Create secondary Firebase app for account creation
+                const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+                const { getAuth } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+                
+                // Get current Firebase config
+                const currentApp = auth.app;
+                const config = currentApp.options;
+                
+                // Create secondary app
+                const secondaryApp = initializeApp({
+                    apiKey: config.apiKey,
+                    authDomain: config.authDomain,
+                    projectId: config.projectId,
+                    storageBucket: config.storageBucket,
+                    messagingSenderId: config.messagingSenderId,
+                    appId: config.appId
+                }, 'sub-admin-creator');
+                
+                const secondaryAuth = getAuth(secondaryApp);
+                
+                // Create user with email and password
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+                const newSubAdmin = userCredential.user;
+                
+                console.log('✅ Created Firebase Auth account:', newSubAdmin.uid);
+                
+                // Create admin document with adminType='sub'
+                await setDoc(doc(db, 'admins', newSubAdmin.uid), {
                     email: email,
-                    invitedAt: serverTimestamp(),
-                    status: 'pending',
-                    invitedBy: auth.currentUser.uid
+                    uid: newSubAdmin.uid,
+                    role: 'sub-admin',
+                    adminType: 'sub',
+                    createdAt: new Date().toISOString(),
+                    createdBy: auth.currentUser.uid
                 });
+                
+                console.log('✅ Created sub-admin document in Firestore');
+                
+                // Sign out from secondary app
+                await signOut(secondaryAuth);
+                await secondaryApp.delete();
+                
+                const message = `✅ Sub-Admin Account Created Successfully!
 
-                showAlert('✅ Invitation sent successfully! The sub-admin can now login at /sub-admin/sub-admin.html', 'success');
-                document.getElementById('invite-email').value = '';
+📧 Email: ${email}
+🔑 Password: ${password}
+
+📋 Login URL: /sub-admin/sub-admin.html
+
+⚠️ Important: Please save these credentials and share with the sub-admin securely.`;
+                
+                showAlert(message, 'success');
+                document.getElementById('grant-email').value = '';
+                document.getElementById('grant-password').value = '';
                 
                 // Reload table
                 await loadSubAdmins();
             } catch (error) {
-                console.error('Error sending invitation:', error);
-                showAlert('Error sending invitation: ' + error.message, 'error');
+                console.error('Error creating sub-admin:', error);
+                let errorMessage = error.message;
+                
+                // Provide user-friendly error messages
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'This email is already registered in Firebase Authentication. Please use a different email.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password should be at least 6 characters.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email format.';
+                }
+                
+                showAlert('Error: ' + errorMessage, 'error');
             }
         });
 
         // Delete sub-admin
         window.deleteSubAdmin = async (adminId, email) => {
-            if (!confirm(`Are you sure you want to delete sub-admin "${email}"? This action cannot be undone.`)) {
+            if (!confirm(`Are you sure you want to delete sub-admin "${email}"?\n\nThis will remove their access to the sub-admin panel.`)) {
                 return;
             }
 
             try {
+                // Delete Firestore document
                 await deleteDoc(doc(db, 'admins', adminId));
-                showAlert('✅ Sub-admin deleted successfully!', 'success');
+                
+                // Note: Firebase Auth account deletion requires Admin SDK or Cloud Function
+                // For now, we just remove the Firestore document
+                // The user can still login but won't have admin access
+                
+                showAlert('✅ Sub-admin access revoked successfully!\n\nNote: The Firebase Auth account still exists but admin access has been removed.', 'success');
                 await loadSubAdmins();
             } catch (error) {
                 console.error('Error deleting sub-admin:', error);
@@ -428,30 +448,14 @@
             }
         };
 
-        // Delete invitation
-        window.deleteInvitation = async (invitationId) => {
-            if (!confirm('Are you sure you want to cancel this invitation?')) {
-                return;
-            }
-
-            try {
-                await deleteDoc(doc(db, 'sub-admin-invitations', invitationId));
-                showAlert('✅ Invitation cancelled successfully!', 'success');
-                await loadSubAdmins();
-            } catch (error) {
-                console.error('Error cancelling invitation:', error);
-                showAlert('Error cancelling invitation: ' + error.message, 'error');
-            }
-        };
-
         // Show alert message
         function showAlert(message, type = 'success') {
             const container = document.getElementById('alert-container');
             const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
-            container.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+            container.innerHTML = `<div class="alert ${alertClass}" style="white-space: pre-line;">${message}</div>`;
             setTimeout(() => {
                 container.innerHTML = '';
-            }, 5000);
+            }, 10000); // Show for 10 seconds for credentials
         }
     </script>
 </body>

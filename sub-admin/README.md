@@ -52,10 +52,11 @@ admins/{uid}
 {
   email: "admin@example.com",
   uid: "firebase-uid",
-  role: "super-admin",
-  adminType: "god" | "sub",  // NEW FIELD
+  role: "super-admin" | "sub-admin",
+  adminType: "god" | "sub",  // Determines access level
   createdAt: "2026-04-14T...",
-  autoRegistered: true/false
+  autoRegistered: true/false,
+  createdBy: "god-admin-uid"  // For sub-admins, shows who created them
 }
 ```
 
@@ -83,16 +84,16 @@ orders/{orderId}
 }
 ```
 
-### Sub-Admin Invitations Collection (New)
-```javascript
-sub-admin-invitations/{invitationId}
-{
-  email: "subadmin@example.com",
-  invitedAt: timestamp,
-  status: "pending",
-  invitedBy: "god-admin-uid"
-}
-```
+## Account Creation Flow (Direct Access - No Invitations)
+
+**Old Flow (Removed)**: ~~Invitation system with pending invitations~~
+
+**New Flow (Direct Access)**:
+1. God admin enters email and sets password
+2. System creates Firebase Auth account using secondary app instance
+3. System creates Firestore admin document with `adminType='sub'`
+4. Credentials displayed to God admin for sharing
+5. Sub-admin can immediately login at `/sub-admin/sub-admin.html`
 
 ## How It Works
 
@@ -102,16 +103,18 @@ sub-admin-invitations/{invitationId}
    - First time login auto-registers as God Admin
    - Full access to everything
 
-2. **Invite Sub-Admins**
+2. **Create Sub-Admin Account (Direct Access)**
    - Go to "Sub-Admins" in sidebar or "Sub-Admin Management" quick action
-   - Enter sub-admin email
-   - Click "Send Invitation"
-   - Sub-admin appears in "Pending Invitations" until they register
+   - Enter sub-admin's email address
+   - Set a password for the sub-admin
+   - Click "Create Sub-Admin Account"
+   - System creates Firebase Auth account + Firestore admin document with `adminType='sub'`
+   - Credentials are displayed - share them with the sub-admin
 
 3. **Manage Sub-Admins**
    - View all active sub-admins
-   - Delete sub-admins (their data remains but becomes inaccessible)
-   - Cancel pending invitations
+   - Delete sub-admins (removes admin access from Firestore)
+   - No invitation system - direct account creation
 
 4. **View All Data**
    - God panel shows ALL products and orders from all admins
@@ -119,13 +122,14 @@ sub-admin-invitations/{invitationId}
 
 ### For Sub-Admins
 
-1. **Receive Invitation**
-   - God admin sends invitation email
-   - Access sub-admin login at: `/sub-admin/sub-admin.html`
+1. **Receive Credentials from God Admin**
+   - God admin creates account with email and password
+   - Receive login credentials directly (no email invitation)
 
 2. **Login to Sub-Admin Panel**
-   - Use the invited email and password
-   - Only invited emails can access sub-admin panel
+   - Access: `/sub-admin/sub-admin.html`
+   - Use the credentials provided by God admin
+   - Only accounts with `adminType='sub'` can access
 
 3. **Manage Own Dashboard**
    - View personal stats (products, orders, revenue)
@@ -181,8 +185,10 @@ allow update: if isAdmin() &&
 ### Test Sub-Admin Management
 
 1. In God Panel, go to "Sub-Admins"
-2. Enter an email to invite
-3. Check Firestore `sub-admin-invitations` - should show pending invitation
+2. Enter email and set password
+3. Click "Create Sub-Admin Account"
+4. Credentials will be displayed - save them
+5. Check Firestore `admins` collection - should show `adminType: 'sub'`
 
 ### Test Sub-Admin Panel
 
@@ -212,12 +218,9 @@ allow update: if isAdmin() &&
 ```javascript
 // Sub-admin management
 getAllSubAdmins()
-createSubAdminInvitation(email, invitedByUid)
-getPendingSubAdminInvitations()
-deleteSubAdminInvitation(invitationId)
 deleteSubAdmin(adminId)
 
-// Product/Order creation (updated)
+// Product/Order creation (updated with ownership)
 createProduct(productData, ownerId, ownerEmail)
 createDigitalProduct(productData, ownerId, ownerEmail)
 ```
@@ -280,8 +283,9 @@ getSubAdminDashboardStats(ownerId)
 ## Troubleshooting
 
 ### Sub-Admin Can't Login
-- Check if email exists in `sub-admin-invitations` collection
-- Verify email matches invitation exactly
+- Verify account was created by God admin
+- Check `adminType: 'sub'` exists in Firestore admins collection
+- Verify email and password are correct
 - Check Firestore rules are deployed
 
 ### Products Not Showing for Sub-Admin
@@ -293,6 +297,12 @@ getSubAdminDashboardStats(ownerId)
 - Verify `adminType: 'god'` in Firestore admins collection
 - Check Firestore rules deployed correctly
 - Verify auth state is correct
+
+### Account Creation Fails
+- Email might already exist in Firebase Auth
+- Password must be at least 6 characters
+- Check browser console for specific error codes
+- Ensure God admin has proper permissions
 
 ## Support
 

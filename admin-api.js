@@ -10,8 +10,7 @@ import {
     deleteDoc,
     query,
     where,
-    orderBy,
-    serverTimestamp
+    orderBy
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // ========== SUB-ADMIN MANAGEMENT ==========
@@ -24,45 +23,6 @@ export async function getAllSubAdmins() {
         return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
         console.error('Error getting sub-admins:', error);
-        throw error;
-    }
-}
-
-// Create sub-admin invitation
-export async function createSubAdminInvitation(email, invitedByUid) {
-    try {
-        const docRef = await addDoc(collection(db, 'sub-admin-invitations'), {
-            email: email,
-            invitedAt: serverTimestamp(),
-            status: 'pending',
-            invitedBy: invitedByUid
-        });
-        return docRef.id;
-    } catch (error) {
-        console.error('Error creating sub-admin invitation:', error);
-        throw error;
-    }
-}
-
-// Get all pending sub-admin invitations
-export async function getPendingSubAdminInvitations() {
-    try {
-        const q = query(collection(db, 'sub-admin-invitations'), where('status', '==', 'pending'));
-        const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    } catch (error) {
-        console.error('Error getting pending invitations:', error);
-        throw error;
-    }
-}
-
-// Delete sub-admin invitation
-export async function deleteSubAdminInvitation(invitationId) {
-    try {
-        await deleteDoc(doc(db, 'sub-admin-invitations', invitationId));
-        return true;
-    } catch (error) {
-        console.error('Error deleting invitation:', error);
         throw error;
     }
 }
