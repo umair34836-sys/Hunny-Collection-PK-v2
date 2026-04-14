@@ -76,14 +76,15 @@ export async function isAdmin(user) {
             console.warn('This might be due to missing index or permissions');
         }
 
-        // STEP 3: Auto-register as admin if not found
-        console.log('🆕 Admin not found in Firestore. Auto-registering...');
-        
+        // STEP 3: Auto-register as god admin if not found
+        console.log('🆕 Admin not found in Firestore. Auto-registering as GOD admin...');
+
         try {
             await setDoc(doc(db, 'admins', user.uid), {
                 email: user.email,
                 uid: user.uid,
                 role: 'super-admin',
+                adminType: 'god',
                 createdAt: new Date().toISOString(),
                 autoRegistered: true
             });

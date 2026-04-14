@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sub-Admin Management - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-mobile.css">
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 60px);
+        }
+        .admin-sidebar {
+            background: linear-gradient(180deg, var(--dark-pink) 0%, var(--primary-pink) 100%);
+            padding: 20px;
+        }
+        .admin-sidebar h3 {
+            color: var(--white);
+            margin-bottom: 30px;
+        }
+        .admin-sidebar a {
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .admin-sidebar a:hover,
+        .admin-sidebar a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .admin-content {
+            padding: 40px;
+            background: var(--soft-pink);
+        }
+        .admin-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(140, 228, 255, 0.2);
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--dark-pink) 100%);
+            color: var(--white);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background: var(--soft-pink);
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="admin-menu-toggle" onclick="toggleMobileSidebar()">☰</button>
+    <div class="admin-overlay" onclick="closeMobileSidebar()"></div>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <ul class="nav-menu">
+                    <li><a href="admin.html">Admin</a></li>
+                    <li><a href="index.html">Back to Store</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <h3>🌸 Admin Panel</h3>
+            <a href="admin.html">Dashboard</a>
+            <a href="admin-products.html">📦 Products</a>
+            <a href="admin-orders.html">📋 Orders</a>
+            <a href="admin-orders-history.html">📊 Orders History</a>
+            <a href="admin-reviews.html">⭐ Reviews</a>
+            <a href="admin-categories.html">📂 Categories</a>
+            <a href="admin-digital-products.html">💻 Digital Products</a>
+            <a href="admin-digital-orders.html">📥 Digital Orders</a>
+            <a href="admin-sub-admins.html" class="active">👥 Sub-Admins</a>
+            <a href="admin-video-ads.html">📺 Video Ads</a>
+            <a href="settings.html">⚙️ Site Settings</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </aside>
+
+        <main class="admin-content">
+            <h2 style="color: var(--dark-pink); margin-bottom: 30px;">👥 Sub-Admin Management</h2>
+
+            <div id="alert-container"></div>
+
+            <!-- Invite Sub-Admin Section -->
+            <div class="admin-card">
+                <h3 style="margin-bottom: 20px;">✉️ Invite New Sub-Admin</h3>
+                <form id="invite-form">
+                    <div class="form-group">
+                        <label>Sub-Admin Email</label>
+                        <input type="email" id="invite-email" placeholder="subadmin@example.com" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Send Invitation</button>
+                </form>
+                <p style="margin-top: 15px; font-size: 0.9rem; color: var(--text-light);">
+                    ℹ️ The invited sub-admin will receive an email with login instructions. They can then access their own dashboard at <code>/sub-admin/sub-admin.html</code>
+                </p>
+            </div>
+
+            <!-- Pending Invitations -->
+            <div class="admin-card">
+                <h3 style="margin-bottom: 20px;">⏳ Pending Invitations</h3>
+                <div class="table-responsive">
+                    <table id="pending-invitations-table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Invited Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Active Sub-Admins -->
+            <div class="admin-card">
+                <h3 style="margin-bottom: 20px;">✅ Active Sub-Admins</h3>
+                <div class="table-responsive">
+                    <table id="sub-admins-table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>UID</th>
+                                <th>Joined Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { collection, getDocs, query, where, doc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { checkAdminAuth, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers } from './admin-common.js';
+
+        // Check if user is god admin
+        async function isGodAdmin(user) {
+            if (!user) return false;
+            const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+            return adminDoc.exists() && adminDoc.data().adminType === 'god';
+        }
+
+        // Initialize page
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            const adminCheck = await checkAdminAuth();
+            if (!adminCheck) {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            // Check if god admin
+            const isGod = await isGodAdmin(user);
+            if (!isGod) {
+                showAlert('⚠️ Only God Admin can access this page!', 'error');
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 2000);
+                return;
+            }
+
+            setupSidebarCloseHandlers();
+            await loadSubAdmins();
+        });
+
+        // Load all sub-admins and pending invitations
+        async function loadSubAdmins() {
+            try {
+                // Load sub-admins
+                const adminsQuery = query(collection(db, 'admins'), where('adminType', '==', 'sub'));
+                const adminsSnapshot = await getDocs(adminsQuery);
+                const subAdmins = adminsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                renderSubAdminsTable(subAdmins);
+
+                // Load pending invitations
+                const invitationsSnapshot = await getDocs(collection(db, 'sub-admin-invitations'));
+                const invitations = invitationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                renderPendingInvitations(invitations);
+            } catch (error) {
+                console.error('Error loading sub-admins:', error);
+                showAlert('Error loading sub-admins: ' + error.message, 'error');
+            }
+        }
+
+        // Render sub-admins table
+        function renderSubAdminsTable(subAdmins) {
+            const tbody = document.querySelector('#sub-admins-table tbody');
+            if (!tbody) return;
+
+            if (subAdmins.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-light);">No sub-admins yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = subAdmins.map(admin => {
+                const joinedDate = admin.createdAt ? new Date(admin.createdAt).toLocaleDateString() : 'N/A';
+                return `
+                    <tr>
+                        <td>${admin.email}</td>
+                        <td><small>${admin.uid ? admin.uid.substring(0, 20) + '...' : 'N/A'}</small></td>
+                        <td>${joinedDate}</td>
+                        <td><span class="badge badge-active">Active</span></td>
+                        <td>
+                            <button class="btn-danger" onclick="deleteSubAdmin('${admin.id}', '${admin.email}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Render pending invitations table
+        function renderPendingInvitations(invitations) {
+            const tbody = document.querySelector('#pending-invitations-table tbody');
+            if (!tbody) return;
+
+            if (invitations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--text-light);">No pending invitations</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = invitations.map(inv => {
+                const invitedDate = inv.invitedAt ? new Date(inv.invitedAt.toDate()).toLocaleDateString() : 'N/A';
+                return `
+                    <tr>
+                        <td>${inv.email}</td>
+                        <td>${invitedDate}</td>
+                        <td><span class="badge badge-pending">Pending</span></td>
+                        <td>
+                            <button class="btn-danger" onclick="deleteInvitation('${inv.id}')">Cancel</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Invite sub-admin
+        document.getElementById('invite-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('invite-email').value;
+
+            try {
+                // Check if already an admin
+                const adminsQuery = query(collection(db, 'admins'), where('email', '==', email));
+                const adminsSnapshot = await getDocs(adminsQuery);
+                
+                if (!adminsSnapshot.empty) {
+                    showAlert('This email is already registered as an admin!', 'error');
+                    return;
+                }
+
+                // Check if invitation already exists
+                const invQuery = query(collection(db, 'sub-admin-invitations'), where('email', '==', email));
+                const invSnapshot = await getDocs(invQuery);
+                
+                if (!invSnapshot.empty) {
+                    showAlert('An invitation has already been sent to this email!', 'error');
+                    return;
+                }
+
+                // Create invitation
+                await addDoc(collection(db, 'sub-admin-invitations'), {
+                    email: email,
+                    invitedAt: serverTimestamp(),
+                    status: 'pending',
+                    invitedBy: auth.currentUser.uid
+                });
+
+                showAlert('✅ Invitation sent successfully! The sub-admin can now login at /sub-admin/sub-admin.html', 'success');
+                document.getElementById('invite-email').value = '';
+                
+                // Reload table
+                await loadSubAdmins();
+            } catch (error) {
+                console.error('Error sending invitation:', error);
+                showAlert('Error sending invitation: ' + error.message, 'error');
+            }
+        });
+
+        // Delete sub-admin
+        window.deleteSubAdmin = async (adminId, email) => {
+            if (!confirm(`Are you sure you want to delete sub-admin "${email}"? This action cannot be undone.`)) {
+                return;
+            }
+
+            try {
+                await deleteDoc(doc(db, 'admins', adminId));
+                showAlert('✅ Sub-admin deleted successfully!', 'success');
+                await loadSubAdmins();
+            } catch (error) {
+                console.error('Error deleting sub-admin:', error);
+                showAlert('Error deleting sub-admin: ' + error.message, 'error');
+            }
+        };
+
+        // Delete invitation
+        window.deleteInvitation = async (invitationId) => {
+            if (!confirm('Are you sure you want to cancel this invitation?')) {
+                return;
+            }
+
+            try {
+                await deleteDoc(doc(db, 'sub-admin-invitations', invitationId));
+                showAlert('✅ Invitation cancelled successfully!', 'success');
+                await loadSubAdmins();
+            } catch (error) {
+                console.error('Error cancelling invitation:', error);
+                showAlert('Error cancelling invitation: ' + error.message, 'error');
+            }
+        };
+
+        // Show alert message
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alert-container');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+            container.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

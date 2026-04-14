@@ -995,6 +995,7 @@
         document.getElementById('digital-product-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const currentAdmin = auth.currentUser;
             const id = document.getElementById('digital-product-id').value;
             const images = [...uploadedDigitalImages];
 
@@ -1022,7 +1023,8 @@
                     alert('Digital product updated successfully!');
                 } else {
                     productData.createdAt = new Date().toISOString();
-                    await createDigitalProduct(productData);
+                    // Pass admin UID and email for ownership tracking
+                    await createDigitalProduct(productData, currentAdmin ? currentAdmin.uid : null, currentAdmin ? currentAdmin.email : null);
                     alert('Digital product created successfully!');
                 }
 

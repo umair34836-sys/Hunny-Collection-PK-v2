@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Products Management - Hunny Collection PK</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Favicon & App Icons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/jpeg" href="/assets/logo.jpeg" sizes="32x32">
-    <link rel="icon" type="image/jpeg" href="/assets/logo.jpeg" sizes="16x16">
-    <link rel="icon" type="image/png" href="/assets/logo.jpeg">
-    <link rel="shortcut icon" type="image/jpeg" href="/assets/logo.jpeg">
-    <link rel="apple-touch-icon" href="/assets/logo.jpeg">
-    <link rel="apple-touch-icon-precomposed" href="/assets/logo.jpeg">
-    <meta name="msapplication-TileImage" content="/assets/logo.jpeg">
-    <meta name="msapplication-TileColor" content="#8CE4FF">
-    <meta name="theme-color" content="#8CE4FF">
-    <link rel="stylesheet" href="admin-mobile.css">
+    <title>Products Management - Sub-Admin Panel</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../admin-mobile.css">
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --dark-color: #5a67d8;
+            --light-bg: #f5f7fa;
+            --white: #ffffff;
+            --border-color: #e2e8f0;
+            --text-light: #718096;
+            --success: #48bb78;
+            --danger: #f56565;
+            --warning: #ed8936;
+        }
+
         .admin-layout {
             display: grid;
             grid-template-columns: 250px 1fr;
             min-height: calc(100vh - 60px);
         }
         .admin-sidebar {
-            background: linear-gradient(180deg, var(--dark-pink) 0%, var(--primary-pink) 100%);
+            background: var(--primary-gradient);
             padding: 20px;
         }
         .admin-sidebar h3 {
@@ -46,19 +49,42 @@
         }
         .admin-content {
             padding: 40px;
-            background: var(--soft-pink);
+            background: var(--light-bg);
         }
         .admin-card {
             background: var(--white);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(140, 228, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
             margin-bottom: 20px;
         }
         .btn-sm {
             padding: 8px 15px;
             font-size: 0.9rem;
             margin: 2px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-sm:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: var(--white);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
         .table-responsive { overflow-x: auto; }
         table {
@@ -71,8 +97,9 @@
             border-bottom: 1px solid var(--border-color);
         }
         th {
-            background: var(--soft-pink);
+            background: var(--light-bg);
             font-weight: 600;
+            color: var(--dark-color);
         }
         .badge {
             padding: 5px 12px;
@@ -146,7 +173,7 @@
             top: 15px;
             left: 15px;
             z-index: 1001;
-            background: var(--dark-pink);
+            background: var(--primary-gradient);
             color: white;
             border: none;
             padding: 12px;
@@ -323,7 +350,7 @@
         /* Loading spinner */
         .spinner {
             border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--dark-pink);
+            border-top: 3px solid var(--primary-color);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -362,10 +389,10 @@
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                <a href="../index.html" class="logo">🌸 Hunny Collection PK</a>
                 <ul class="nav-menu">
-                    <li><a href="admin.html">Admin</a></li>
-                    <li><a href="index.html">Back to Store</a></li>
+                    <li><a href="sub-admin.html">Sub-Admin</a></li>
+                    <li><a href="../index.html">Back to Store</a></li>
                 </ul>
             </nav>
         </div>
@@ -373,30 +400,21 @@
 
     <div class="admin-layout">
         <aside class="admin-sidebar">
-            <h3>🌸 Admin Panel</h3>
-            <a href="admin.html">Dashboard</a>
-            <a href="admin-products.html" class="active">Products</a>
-            <a href="admin.html#orders">Orders</a>
-            <a href="admin-orders-history.html">📊 Orders History</a>
-            <a href="admin.html#reviews">⭐ Reviews</a>
-            <a href="admin.html#categories">Categories</a>
-            <a href="admin.html#digital-products">💻 Digital Products</a>
-            <a href="admin.html#digital-categories">📂 Digital Categories</a>
-            <a href="admin.html#digital-orders">📥 Digital Orders</a>
-            <a href="admin.html#video-ads">📺 Video Ads</a>
-            <a href="profit-calculator.html">💰 Profit Calculator</a>
-            <a href="settings.html">⚙️ Site Settings</a>
+            <h3>👤 Sub-Admin Panel</h3>
+            <a href="sub-admin.html">Dashboard</a>
+            <a href="sub-admin-products.html" class="active">Products</a>
+            <a href="sub-admin.html#orders">Orders</a>
+            <a href="sub-admin-orders.html">📊 Orders History</a>
+            <a href="sub-admin.html#digital-products">💻 Digital Products</a>
+            <a href="sub-admin.html#reviews">⭐ Reviews</a>
             <a href="#" onclick="logout()">Logout</a>
         </aside>
 
         <main class="admin-content">
             <div id="section-products">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
-                    <h2 style="color: var(--dark-pink);">📦 Products Management</h2>
+                    <h2 style="color: var(--primary-color);">📦 My Products</h2>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn-sm" onclick="checkAllProductsAvailability()" style="background: #25d366; color: white;">
-                            🔄 Check Availability
-                        </button>
                         <button class="btn-sm" onclick="exportProducts()" style="background: #007bff; color: white;">
                             📊 Export
                         </button>
@@ -456,8 +474,7 @@
                                     <th>Name</th>
                                     <th>Category</th>
                                     <th>Price</th>
-                                    <th>Markaz Status</th>
-                                    <th>Added By</th>
+                                    <th>Stock</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -489,13 +506,13 @@
 
                 <!-- Pricing Section with Smart Calculator -->
                 <div class="form-group" style="background: linear-gradient(135deg, #FFF8E1 0%, #fff 100%); padding: 20px; border-radius: 12px; border: 2px solid #FEEE91;">
-                    <label style="color: var(--dark-pink); font-size: 1.1rem; margin-bottom: 15px; display: block;">💰 Smart Pricing Calculator</label>
+                    <label style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 15px; display: block;">💰 Smart Pricing Calculator</label>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                         <div>
                             <label style="font-size: 0.9rem; color: #666;">
-                                🏷️ Product Actual Cost (Rs.)
-                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Product cost from Markaz</span>
+                                🏷️ Product Cost (Rs.)
+                                <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 3px;">Your cost for this product</span>
                             </label>
                             <input type="number" id="product-actual-cost" placeholder="1500" min="0" style="border-color: #666;">
                         </div>
@@ -520,7 +537,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                             <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
                                 <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">💰 Final Selling Price</div>
-                                <div id="calc-selling-price" style="font-size: 1.5rem; font-weight: bold; color: #8CE4FF;">Rs. 0</div>
+                                <div id="calc-selling-price" style="font-size: 1.5rem; font-weight: bold; color: #667eea;">Rs. 0</div>
                                 <div style="font-size: 0.75rem; color: #999; margin-top: 5px;">Customer pays this</div>
                             </div>
                             <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
@@ -535,7 +552,7 @@
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
                                 <div>🏷️ Product Cost: <strong id="breakdown-cost">Rs. 0</strong></div>
                                 <div>💵 Your Profit: <strong id="breakdown-profit" style="color: #28a745;">Rs. 0</strong></div>
-                                <div>📦 Investor Share (7% Net): <strong id="breakdown-platform" style="color: #FF6B6B;">Rs. 0</strong></div>
+                                <div>📦 Platform Share (7% Net): <strong id="breakdown-platform" style="color: #FF6B6B;">Rs. 0</strong></div>
                                 <div>🏷️ Discount Shown: <strong id="breakdown-discount" style="color: #FF6B6B;">0%</strong></div>
                             </div>
                             <div style="margin-top: 15px; padding-top: 15px; border-top: 2px dashed #ccc; text-align: center;">
@@ -544,6 +561,11 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Stock Quantity *</label>
+                    <input type="number" id="product-stock" placeholder="100" min="0" required>
                 </div>
 
                 <div class="form-group">
@@ -608,7 +630,7 @@
                         <p id="no-main-image-msg" style="color: #999; font-size: 0.9rem;">No main image set (will use first image from gallery)</p>
                     </div>
 
-                    <!-- Upload Button -->
+                    <!-- Upload Buttons -->
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
                         <button type="button" class="btn-sm" onclick="document.getElementById('main-image-upload').click()" style="background: #4ECDC4; color: white;">
                             📁 Upload Main Image
@@ -641,7 +663,7 @@
 
                     <!-- Upload Buttons -->
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
-                        <button type="button" class="btn-sm" onclick="document.getElementById('product-image-upload').click()" style="background: var(--primary-pink); color: white;">
+                        <button type="button" class="btn-sm" onclick="document.getElementById('product-image-upload').click()" style="background: var(--primary-color); color: white;">
                             📁 Upload Multiple Images
                         </button>
                         <button type="button" class="btn-sm" onclick="openUploadGuide()" style="background: #25d366; color: white;">
@@ -659,7 +681,7 @@
 
                     <!-- Image Preview with Remove -->
                     <div id="image-preview-container" style="margin-top: 15px;">
-                        <h4 style="color: var(--dark-pink); margin-bottom: 10px; font-size: 1rem;">Uploaded Images:</h4>
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px; font-size: 1rem;">Uploaded Images:</h4>
                         <div id="image-preview" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
                         <p id="no-images-msg" style="color: #999; font-size: 0.9rem;">No images uploaded yet</p>
                     </div>
@@ -668,7 +690,7 @@
                     <div style="margin-top: 15px;">
                         <label style="font-size: 0.9rem;">Or Add Image URLs:</label>
                         <input type="text" id="product-image-urls" placeholder="Paste image URL and click Add" style="margin-top: 5px;">
-                        <button type="button" class="btn-sm" onclick="addImageUrl()" style="margin-top: 5px; background: var(--dark-pink); color: white;">➕ Add URL</button>
+                        <button type="button" class="btn-sm" onclick="addImageUrl()" style="margin-top: 5px; background: var(--primary-color); color: white;">➕ Add URL</button>
                         <small style="color: #666; display: block; margin-top: 5px;">
                             💡 Tip: Upload images to ImgBB and paste direct links here
                         </small>
@@ -681,19 +703,21 @@
     </div>
 
     <script type="module">
-        import { checkAdminAuth, logout, showSection, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers, formatCurrency, formatDate, getStatusBadge, showLoading, showError, confirmAction } from './admin-common.js';
-        import { getAllProducts, createProduct, updateProduct, deleteProduct, bulkDeleteProducts, getAllCategories, createCategory, getProduct } from './admin-api.js';
-        import { auth, db } from './firebase-config.js';
-        import { doc, updateDoc, addDoc, collection, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { checkSubAdminAuth, logout, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers, formatCurrency, formatDate, getStatusBadge, showLoading, showError, confirmAction } from './sub-admin-common.js';
+        import { getMyProducts, createProduct, updateProduct, deleteProduct, getAllProducts } from './sub-admin-api.js';
+        import { auth, db } from '../firebase-config.js';
+        import { doc, updateDoc, addDoc, collection, deleteDoc, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         let products = [];
         let categories = [];
         let uploadedImageUrls = [];
         let mainImageFile = null;
+        let currentSubAdmin = null;
 
         // ========== AUTHENTICATION ==========
-        const isAuthorized = await checkAdminAuth();
+        const isAuthorized = await checkSubAdminAuth();
         if (isAuthorized) {
+            currentSubAdmin = auth.currentUser;
             setupSidebarCloseHandlers();
             await loadPageData();
         }
@@ -704,8 +728,20 @@
                 document.getElementById('loading-indicator').style.display = 'block';
                 document.getElementById('error-message').style.display = 'none';
 
-                products = await getAllProducts();
-                categories = await getAllCategories();
+                // Load only sub-admin's own products
+                if (currentSubAdmin) {
+                    products = await getMyProducts(currentSubAdmin.uid);
+                }
+
+                // Load all categories for dropdown
+                try {
+                    const q = query(collection(db, 'categories'), orderBy('name', 'asc'));
+                    const snapshot = await getDocs(q);
+                    categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                } catch (err) {
+                    console.error('Error loading categories:', err);
+                    categories = [];
+                }
 
                 document.getElementById('loading-indicator').style.display = 'none';
 
@@ -732,26 +768,14 @@
             document.querySelector('#products-table').style.display = displayProducts.length === 0 ? 'none' : 'table';
 
             tbody.innerHTML = displayProducts.map(p => {
-                const hasMarkazCode = p.markazCode ? 'yes' : 'no';
-                const statusClass = p.markazAvailability === 'available' ? 'badge-success' :
-                                   p.markazAvailability === 'unavailable' ? 'badge-danger' : 'badge-secondary';
-                const statusIcon = p.markazAvailability === 'available' ? '✅' :
-                                   p.markazAvailability === 'unavailable' ? '❌' : '⏳';
-                const statusText = p.markazCode ? (p.markazAvailability || 'Not Checked') : 'No Code';
-                const codeDisplay = p.markazCode ? `<br><small style="font-family: monospace; font-size: 0.75rem; color: #666;">${p.markazCode}</small>` : '';
-
-                // Pricing info - support both old and new format
+                // Pricing info
                 const actualCost = p.actualCost || p.costPrice || 0;
                 const adminProfit = p.adminProfit || 0;
-                const investorShare = p.investorShare || p.platformShare || 0;
                 const sellingPrice = p.sellingPrice || p.price || 0;
                 const originalPrice = p.originalPrice || 0;
                 const fakeDiscount = p.fakeDiscountPercent || 0;
-                const profit = sellingPrice ? sellingPrice - actualCost : adminProfit;
                 const discountPercent = fakeDiscount || (originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0);
-
-                // Admin who added this product
-                const addedBy = p.addedBy ? p.addedBy : (p.addedByUserId ? 'Unknown Admin' : 'Legacy Product');
+                const stockQty = p.stockQuantity || p.stock || 0;
 
                 return `
                 <tr>
@@ -761,35 +785,24 @@
                         <div style="font-weight: 600;">${p.name}</div>
                         <div style="font-size: 0.75rem; color: #999;">ID: ${p.id.slice(0, 8)}</div>
                     </td>
-                    <td>${p.category}</td>
+                    <td>${p.category || 'N/A'}</td>
                     <td>
                         <div style="font-size: 0.85rem;">
-                            <div style="color: var(--dark-pink); font-weight: bold;">Sell: Rs. ${sellingPrice.toLocaleString()}</div>
-                            ${originalPrice > 0 ? `<div style="color: #999; text-decoration: line-through; font-size: 0.75rem;">Was: Rs. ${originalPrice.toLocaleString()}</div>` : ''}
-                            <div style="color: #666; font-size: 0.75rem;">Cost: Rs. ${actualCost.toLocaleString()}</div>
-                            ${adminProfit > 0 ? `<div style="color: #28a745; font-size: 0.75rem;">💰 Your Profit: Rs. ${adminProfit.toLocaleString()}</div>` : ''}
-                            ${investorShare > 0 ? `<div style="color: #FF6B6B; font-size: 0.75rem;">👤 Investor Share: Rs. ${investorShare.toLocaleString()}</div>` : ''}
+                            <div style="color: var(--primary-color); font-weight: bold;">Rs. ${sellingPrice.toLocaleString()}</div>
+                            ${originalPrice > 0 ? `<div style="color: #999; text-decoration: line-through; font-size: 0.75rem;">Rs. ${originalPrice.toLocaleString()}</div>` : ''}
+                            ${adminProfit > 0 ? `<div style="color: #28a745; font-size: 0.75rem;">💰 Profit: Rs. ${adminProfit.toLocaleString()}</div>` : ''}
                             ${discountPercent > 0 ? `<div style="color: #FF6B6B; font-size: 0.75rem;">🔥 ${discountPercent}% OFF</div>` : ''}
                         </div>
                     </td>
                     <td>
-                        <span class="badge ${statusClass}" style="cursor: pointer;" onclick="checkSingleProductAvailability('${p.id}')" title="Click to check">
-                            ${statusIcon} ${statusText}
+                        <span class="badge ${stockQty > 10 ? 'badge-success' : stockQty > 0 ? 'badge-warning' : 'badge-danger'}">
+                            ${stockQty > 0 ? `${stockQty} in stock` : 'Out of Stock'}
                         </span>
-                        ${codeDisplay}
-                        ${p.markazCode ? `
-                            <a href="javascript:void(0)" onclick="openMarkazAppOrWeb('${p.markazCode}')"
-                               class="badge ${p.markazAvailability === 'available' ? 'badge-success' : p.markazAvailability === 'unavailable' ? 'badge-danger' : 'badge-secondary'}"
-                               style="display: inline-block; margin-left: 5px; font-size: 0.75rem; text-decoration: none; cursor: pointer;"
-                               title="Search on Markaz">🔍 ${p.markazAvailability === 'available' ? '✅ Available' : p.markazAvailability === 'unavailable' ? '❌ Unavailable' : '🔍 Search'}</a>
-                        ` : ''}
                     </td>
-                    <td><small style="color: #666; font-size: 0.7rem;">👤 ${addedBy}</small>
-                    ${p.lastEditedBy ? `<br><small style="color: #FF9800; font-size: 0.65rem;">✏️ ${p.lastEditedBy}</small>` : ''}</td>
                     <td>
-                        <button class="btn-sm" onclick="editProduct('${p.id}')">✏️ Edit</button>
-                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${p.images && p.images[0] ? p.images[0] : ''}', ${p.sellingPrice || p.price || 0}, ${p.originalPrice || 0})" style="background: #25d366; color: white;">📱 Share</button>
-                        <button class="btn-sm" onclick="deleteProduct('${p.id}')" style="background: #dc3545; color: white;">🗑️ Delete</button>
+                        <button class="btn-sm" onclick="editProduct('${p.id}')" style="background: var(--primary-color); color: white;">✏️ Edit</button>
+                        <button class="btn-sm" onclick="shareProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')}', '${p.images && p.images[0] ? p.images[0] : ''}', ${sellingPrice}, ${originalPrice})" style="background: #25d366; color: white;">📱 Share</button>
+                        <button class="btn-sm" onclick="deleteMyProduct('${p.id}')" style="background: #dc3545; color: white;">🗑️ Delete</button>
                     </td>
                 </tr>
             `}).join('');
@@ -873,7 +886,7 @@
 
             for (const id of productIds) {
                 try {
-                    await deleteProduct(id);
+                    await deleteProduct(id, currentSubAdmin.uid);
                     deleted++;
                 } catch (error) {
                     console.error('Error deleting product:', error);
@@ -887,19 +900,18 @@
 
         // ========== EXPORT ==========
         window.exportProducts = function() {
-            const headers = ['ID', 'Name', 'Category', 'Actual Cost', 'Admin Profit', 'Investor Share (7% Net)', 'Selling Price', 'Fake Original Price', 'Discount %', 'Markaz Code', 'Added By', 'Created At'];
+            const headers = ['ID', 'Name', 'Category', 'Cost Price', 'Your Profit', 'Selling Price', 'Fake Original Price', 'Discount %', 'Stock', 'Markaz Code', 'Created At'];
             const rows = products.map(p => [
                 p.id,
                 p.name,
-                p.category,
+                p.category || '',
                 p.actualCost || p.costPrice || 0,
                 p.adminProfit || 0,
-                p.investorShare || p.platformShare || 0,
                 p.sellingPrice || p.price || 0,
                 p.originalPrice || 0,
                 p.fakeDiscountPercent || 0,
+                p.stockQuantity || p.stock || 0,
                 p.markazCode || '',
-                p.addedBy || 'Legacy',
                 p.createdAt || ''
             ]);
 
@@ -912,7 +924,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `products-export-${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = `my-products-export-${new Date().toISOString().split('T')[0]}.csv`;
             a.click();
             window.URL.revokeObjectURL(url);
         };
@@ -977,21 +989,32 @@
             if (noMsg) noMsg.style.display = 'block';
         };
 
+        function resetPricingInfo() {
+            document.getElementById('calc-selling-price').textContent = 'Rs. 0';
+            document.getElementById('calc-fake-price').textContent = 'Rs. 0';
+            document.getElementById('breakdown-cost').textContent = 'Rs. 0';
+            document.getElementById('breakdown-profit').textContent = 'Rs. 0';
+            document.getElementById('breakdown-platform').textContent = 'Rs. 0';
+            document.getElementById('breakdown-discount').textContent = '0%';
+            document.getElementById('worth-it-verdict').textContent = 'Enter values to see analysis';
+            document.getElementById('worth-it-verdict').style.color = '#666';
+        }
+
         window.editProduct = async (id) => {
-            const product = await getProduct(id);
+            const product = products.find(p => p.id === id);
             if (!product) return;
 
             document.getElementById('product-id').value = id;
             document.getElementById('product-name').value = product.name || '';
-            
+
             // Smart pricing fields
             document.getElementById('product-actual-cost').value = product.actualCost || product.costPrice || '';
             document.getElementById('admin-profit').value = product.adminProfit || '';
             document.getElementById('fake-discount-percent').value = product.fakeDiscountPercent || '';
-            
-            // Calculate and show pricing
-            updateSmartPricing();
-            
+
+            // Stock quantity
+            document.getElementById('product-stock').value = product.stockQuantity || product.stock || '';
+
             document.getElementById('product-category').value = product.category || '';
             document.getElementById('product-description').value = product.description || '';
             document.getElementById('product-sizes').value = product.variants?.join(', ') || '';
@@ -1020,10 +1043,10 @@
             document.getElementById('product-modal').classList.add('active');
         };
 
-        window.deleteProduct = async (id) => {
-            if (!confirm('Delete this product?')) return;
+        window.deleteMyProduct = async (id) => {
+            if (!confirm('Delete this product? This cannot be undone.')) return;
             try {
-                await deleteProduct(id);
+                await deleteProduct(id, currentSubAdmin.uid);
                 await loadPageData();
             } catch (error) {
                 console.error('Error deleting product:', error);
@@ -1038,11 +1061,6 @@
             const fakeDiscount = Number(document.getElementById('fake-discount-percent').value) || 0;
 
             // Calculate final selling price
-            // Net profit model: Investor takes 7% of net profit
-            // Selling Price = Actual Cost + Admin Profit (simple addition)
-            // Net Profit = Admin Profit
-            // Investor Share = Net Profit × 7%
-            // Final Admin Profit After Investor = Admin Profit - Investor Share
             let finalSellingPrice = 0;
             let investorShare = 0;
 
@@ -1070,18 +1088,17 @@
             const verdictEl = document.getElementById('worth-it-verdict');
             if (actualCost > 0 && adminProfit > 0) {
                 const profitMargin = ((adminProfit / actualCost) * 100).toFixed(1);
-                const totalRevenue = finalSellingPrice;
                 const roi = ((adminProfit / actualCost) * 100).toFixed(1);
                 const finalProfitAfterInvestor = adminProfit - investorShare;
 
                 if (finalProfitAfterInvestor >= 200 && profitMargin >= 15) {
-                    verdictEl.innerHTML = `✅ YES! Good profit (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Investor gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
+                    verdictEl.innerHTML = `✅ YES! Good profit (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
                     verdictEl.style.color = '#28a745';
                 } else if (finalProfitAfterInvestor >= 100) {
-                    verdictEl.innerHTML = `⚠️ Decent but could be better (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Investor gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
+                    verdictEl.innerHTML = `⚠️ Decent but could be better (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
                     verdictEl.style.color = '#ffc107';
                 } else {
-                    verdictEl.innerHTML = `❌ Low profit margin (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Investor gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
+                    verdictEl.innerHTML = `❌ Low profit margin (ROI: ${roi}%)<br><small style="font-size: 0.8rem; color: #666;">Platform gets Rs. ${investorShare.toLocaleString()} from Rs. ${adminProfit.toLocaleString()} profit</small>`;
                     verdictEl.style.color = '#dc3545';
                 }
             } else {
@@ -1227,7 +1244,7 @@
                     img.onclick = function() { removeImageByIndex(index); };
 
                     if (index === 0) {
-                        img.style.borderColor = 'var(--dark-pink)';
+                        img.style.borderColor = 'var(--primary-color)';
                         img.style.borderWidth = '3px';
                         img.title = 'Main Image (click to remove)';
                     }
@@ -1275,19 +1292,16 @@
             const actualCost = Number(document.getElementById('product-actual-cost').value) || 0;
             const adminProfit = Number(document.getElementById('admin-profit').value) || 0;
             const fakeDiscount = Number(document.getElementById('fake-discount-percent').value) || 0;
+            const stockQuantity = Number(document.getElementById('product-stock').value) || 0;
 
-            // Calculate selling price - NET PROFIT MODEL
-            // Selling Price = Actual Cost + Admin Profit (simple addition)
-            // Investor Share = 7% of Admin Profit (net profit)
+            // Calculate selling price
             const sellingPrice = actualCost + adminProfit;
             const investorShare = Math.round(adminProfit * 0.07);
-            
+
             let originalPrice = 0;
             if (fakeDiscount > 0 && sellingPrice > 0) {
                 originalPrice = Math.round(sellingPrice / (1 - fakeDiscount / 100));
             }
-
-            const currentAdmin = auth.currentUser;
 
             const productData = {
                 name: document.getElementById('product-name').value,
@@ -1299,6 +1313,7 @@
                 sellingPrice: sellingPrice,
                 originalPrice: originalPrice,
                 price: sellingPrice,
+                stockQuantity: stockQuantity,
                 category: document.getElementById('product-new-category').value || document.getElementById('product-category').value,
                 description: document.getElementById('product-description').value,
                 color: document.getElementById('product-color').value,
@@ -1306,27 +1321,28 @@
                 images: images,
                 markazCode: markazCode,
                 markazAvailability: 'not-checked',
-                updatedAt: new Date().toISOString(),
-                lastEditedBy: currentAdmin ? currentAdmin.email : 'unknown',
-                lastEditedByUserId: currentAdmin ? currentAdmin.uid : 'unknown',
-                lastEditedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString()
             };
-
-            if (!id) {
-                productData.addedBy = currentAdmin ? currentAdmin.email : 'unknown';
-                productData.addedByUserId = currentAdmin ? currentAdmin.uid : 'unknown';
-            }
 
             try {
                 if (id) {
-                    await updateProduct(id, productData);
+                    // Update existing product
+                    await updateProduct(id, productData, currentSubAdmin.uid);
                 } else {
-                    // Pass admin UID and email for ownership tracking
-                    await createProduct(productData, currentAdmin ? currentAdmin.uid : null, currentAdmin ? currentAdmin.email : null);
+                    // Create new product
+                    await createProduct(productData, currentSubAdmin.uid, currentSubAdmin.email);
 
+                    // Add new category if created
                     const newCat = document.getElementById('product-new-category').value;
                     if (newCat && !categories.find(c => c.name === newCat)) {
-                        await createCategory(newCat);
+                        try {
+                            await addDoc(collection(db, 'categories'), {
+                                name: newCat,
+                                createdAt: new Date().toISOString()
+                            });
+                        } catch (err) {
+                            console.error('Error creating category:', err);
+                        }
                     }
                 }
 
@@ -1339,297 +1355,6 @@
                 alert('Error saving product: ' + error.message);
             }
         });
-
-        // ========== PRICING EVENT LISTENERS ==========
-        document.addEventListener('DOMContentLoaded', () => {
-            // Smart pricing calculator already has inline listeners
-            // No additional setup needed
-        });
-
-        // ========== MARKAZ AVAILABILITY ==========
-        window.checkSingleProductAvailability = async (productId) => {
-            const product = products.find(p => p.id === productId);
-            if (!product || !product.markazCode) {
-                alert('❌ This product has no Markaz code!\n\nPlease add a Markaz product code first.');
-                return;
-            }
-
-            try {
-                const statusBadge = event.target;
-                const originalText = statusBadge.innerHTML;
-                statusBadge.innerHTML = '🔄 Checking...';
-
-                const isAvailable = await checkMarkazProduct(product.markazCode);
-
-                await updateDoc(doc(db, 'products', productId), {
-                    markazAvailability: isAvailable ? 'available' : 'unavailable',
-                    markazLastChecked: new Date().toISOString()
-                });
-
-                await loadPageData();
-
-                if (!isAvailable) {
-                    const userChoice = confirm(
-                        '⚠️ This product is NOT AVAILABLE on Markaz!\n\n' +
-                        'Product: ' + product.name + '\n' +
-                        'Code: ' + product.markazCode + '\n\n' +
-                        'Would you like to open Markaz to verify manually?'
-                    );
-                    if (userChoice) {
-                        window.open(`https://www.markaz.app/shop/search?q=${product.markazCode}`, '_blank');
-                    }
-                }
-            } catch (error) {
-                console.error('Error checking availability:', error);
-                alert('❌ Error checking availability. Please try again.\n\nYou can manually verify on Markaz.');
-                const product = products.find(p => p.id === productId);
-                if (product) {
-                    window.open(`https://www.markaz.app/shop/search?q=${product.markazCode}`, '_blank');
-                }
-            }
-        };
-
-        window.checkAllProductsAvailability = async () => {
-            const productsWithMarkaz = products.filter(p => p.markazCode);
-
-            if (productsWithMarkaz.length === 0) {
-                alert('ℹ️ No products with Markaz codes found!\n\nPlease add Markaz product codes to your products first.');
-                return;
-            }
-
-            const confirmCheck = confirm(`🔍 Check availability for ${productsWithMarkaz.length} products?\n\nThis will check each product on Markaz and update their status.`);
-            if (!confirmCheck) return;
-
-            let checked = 0;
-            let available = 0;
-            let unavailable = 0;
-            let errors = 0;
-
-            for (const product of productsWithMarkaz) {
-                try {
-                    const isAvailable = await checkMarkazProduct(product.markazCode);
-
-                    await updateDoc(doc(db, 'products', product.id), {
-                        markazAvailability: isAvailable ? 'available' : 'unavailable',
-                        markazLastChecked: new Date().toISOString()
-                    });
-
-                    checked++;
-                    if (isAvailable) {
-                        available++;
-                    } else {
-                        unavailable++;
-                    }
-                } catch (error) {
-                    console.error('Error checking product:', product.name, error);
-                    errors++;
-                }
-
-                await loadPageData();
-            }
-
-            alert(`✅ Availability Check Complete!\n\n` +
-                  `📊 Total Checked: ${checked}\n` +
-                  `✅ Available: ${available}\n` +
-                  `❌ Unavailable: ${unavailable}\n` +
-                  `${errors > 0 ? `⚠️ Errors: ${errors}` : ''}`);
-        };
-
-        window.openMarkazAppOrWeb = function(productCode) {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const isAndroid = /Android/i.test(navigator.userAgent);
-            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-            if (isMobile) {
-                const androidAppUrl = `intent://product/${productCode}#Intent;scheme=markaz;package=com.markaz.app;end`;
-                const iosAppUrl = `markaz://product/${productCode}`;
-                const webUrl = `https://www.markaz.app/shop/search?q=${productCode}`;
-
-                if (isAndroid) {
-                    try {
-                        window.location.href = androidAppUrl;
-                        setTimeout(() => {
-                            window.location.href = webUrl;
-                        }, 2500);
-                    } catch (e) {
-                        window.location.href = webUrl;
-                    }
-                } else if (isIOS) {
-                    try {
-                        window.location.href = iosAppUrl;
-                        setTimeout(() => {
-                            window.location.href = webUrl;
-                        }, 2500);
-                    } catch (e) {
-                        window.location.href = webUrl;
-                    }
-                } else {
-                    window.location.href = webUrl;
-                }
-            } else {
-                const webUrl = `https://www.markaz.app/shop/search?q=${productCode}`;
-                window.open(webUrl, '_blank');
-            }
-        };
-
-        async function checkMarkazProduct(productCode) {
-            console.log('=== Checking Markaz Product:', productCode, '===');
-
-            try {
-                const possibleUrls = [
-                    `https://www.markaz.app/shop/product/${productCode}`,
-                    `https://www.markaz.app/shop/search?q=${productCode}`,
-                    `https://markaz.app/product/${productCode}`,
-                    `https://app.markaz.com/product/${productCode}`
-                ];
-
-                for (const url of possibleUrls) {
-                    console.log('Trying URL:', url);
-                    const result = await tryMarkazUrl(url, productCode);
-                    if (result !== null) {
-                        console.log('✅ Found result for', productCode, ':', result ? 'AVAILABLE' : 'UNAVAILABLE');
-                        return result;
-                    }
-                }
-
-                const numericMatch = productCode.match(/\d+/);
-                if (numericMatch) {
-                    const numericId = numericMatch[0];
-                    console.log('Trying numeric ID:', numericId);
-                    const numericUrl = `https://www.markaz.app/shop/product/${numericId}`;
-                    const result = await tryMarkazUrl(numericUrl, productCode);
-                    if (result !== null) {
-                        console.log('✅ Found result for numeric ID:', result ? 'AVAILABLE' : 'UNAVAILABLE');
-                        return result;
-                    }
-                }
-
-                console.log('❌ All checks failed, assuming UNAVAILABLE');
-                return false;
-            } catch (error) {
-                console.error('Error checking Markaz product:', error);
-                return false;
-            }
-        }
-
-        async function tryMarkazUrl(url, productCode) {
-            const corsProxies = [
-                'https://api.allorigins.win/raw?url=',
-                'https://corsproxy.io/?',
-                'https://api.codetabs.com/v1/proxy?quest='
-            ];
-
-            for (const proxy of corsProxies) {
-                try {
-                    const fullUrl = proxy + encodeURIComponent(url);
-                    const response = await fetch(fullUrl, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'text/html,application/xhtml+xml'
-                        },
-                        timeout: 10000
-                    });
-
-                    if (!response.ok) {
-                        continue;
-                    }
-
-                    const html = await response.text();
-                    const htmlLower = html.toLowerCase();
-
-                    const notFoundIndicators = [
-                        'page not found',
-                        'product not found',
-                        'product doesn\'t exist',
-                        'product does not exist',
-                        'invalid product',
-                        'no products found',
-                        'couldn\'t find what you\'re looking for',
-                        'search returned no results'
-                    ];
-
-                    for (const indicator of notFoundIndicators) {
-                        if (htmlLower.includes(indicator)) {
-                            return false;
-                        }
-                    }
-
-                    const outOfStockIndicators = [
-                        'out of stock',
-                        'sold out',
-                        'discontinued',
-                        'no longer available',
-                        'currently unavailable',
-                        'temporarily out of stock',
-                        'this product is out of stock'
-                    ];
-
-                    for (const indicator of outOfStockIndicators) {
-                        if (htmlLower.includes(indicator)) {
-                            return false;
-                        }
-                    }
-
-                    const availableIndicators = [
-                        'add to cart',
-                        'add to bag',
-                        'buy now',
-                        'in stock',
-                        'available',
-                        'add to wishlist',
-                        'product details',
-                        'price',
-                        'original price',
-                        'sale price',
-                        'discount',
-                        'markaz',
-                        'share product',
-                        'resell',
-                        'earn profit'
-                    ];
-
-                    let positiveCount = 0;
-                    for (const indicator of availableIndicators) {
-                        if (htmlLower.includes(indicator)) {
-                            positiveCount++;
-                        }
-                    }
-
-                    if (positiveCount >= 2) {
-                        return true;
-                    }
-
-                    const productPageIndicators = [
-                        'product',
-                        'shop',
-                        'markaz',
-                        'price',
-                        'rs.',
-                        'pkr',
-                        'rupees'
-                    ];
-
-                    let productPageCount = 0;
-                    for (const indicator of productPageIndicators) {
-                        if (htmlLower.includes(indicator)) {
-                            productPageCount++;
-                        }
-                    }
-
-                    if (productPageCount >= 3 && html.length > 2000) {
-                        return true;
-                    }
-
-                    if (html.length > 5000) {
-                        return true;
-                    }
-                } catch (error) {
-                    console.warn('Proxy failed:', proxy.substring(0, 30), error.message);
-                }
-            }
-
-            return null;
-        }
 
         // ========== SHARE PRODUCT ==========
         window.shareProduct = function(id, name, imageUrl, sellingPrice, originalPrice) {
@@ -1661,23 +1386,6 @@
                 prompt('Copy this share text:', text);
             });
         }
-
-        // ========== CATEGORY MANAGEMENT ==========
-        window.addCategory = async () => {
-            const name = prompt('Enter new category name:');
-            if (!name || !name.trim()) return;
-
-            try {
-                await createCategory(name.trim());
-                categories = await getAllCategories();
-                populateProductCategoryDropdown();
-                populateCategoryFilter();
-                alert('Category added successfully!');
-            } catch (error) {
-                console.error('Error adding category:', error);
-                alert('Error adding category: ' + error.message);
-            }
-        };
 
         // ========== MAKE FUNCTIONS GLOBAL ==========
         window.toggleMobileSidebar = toggleMobileSidebar;

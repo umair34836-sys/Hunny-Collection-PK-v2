@@ -1,18 +1,82 @@
 // Admin API - All Firestore CRUD operations
 import { db } from './firebase-config.js';
-import { 
-    collection, 
-    getDocs, 
-    getDoc, 
-    doc, 
-    addDoc, 
-    updateDoc, 
-    deleteDoc, 
-    query, 
-    where, 
+import {
+    collection,
+    getDocs,
+    getDoc,
+    doc,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    query,
+    where,
     orderBy,
-    serverTimestamp 
+    serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+// ========== SUB-ADMIN MANAGEMENT ==========
+
+// Get all sub-admins
+export async function getAllSubAdmins() {
+    try {
+        const q = query(collection(db, 'admins'), where('adminType', '==', 'sub'));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    } catch (error) {
+        console.error('Error getting sub-admins:', error);
+        throw error;
+    }
+}
+
+// Create sub-admin invitation
+export async function createSubAdminInvitation(email, invitedByUid) {
+    try {
+        const docRef = await addDoc(collection(db, 'sub-admin-invitations'), {
+            email: email,
+            invitedAt: serverTimestamp(),
+            status: 'pending',
+            invitedBy: invitedByUid
+        });
+        return docRef.id;
+    } catch (error) {
+        console.error('Error creating sub-admin invitation:', error);
+        throw error;
+    }
+}
+
+// Get all pending sub-admin invitations
+export async function getPendingSubAdminInvitations() {
+    try {
+        const q = query(collection(db, 'sub-admin-invitations'), where('status', '==', 'pending'));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    } catch (error) {
+        console.error('Error getting pending invitations:', error);
+        throw error;
+    }
+}
+
+// Delete sub-admin invitation
+export async function deleteSubAdminInvitation(invitationId) {
+    try {
+        await deleteDoc(doc(db, 'sub-admin-invitations', invitationId));
+        return true;
+    } catch (error) {
+        console.error('Error deleting invitation:', error);
+        throw error;
+    }
+}
+
+// Delete sub-admin
+export async function deleteSubAdmin(adminId) {
+    try {
+        await deleteDoc(doc(db, 'admins', adminId));
+        return true;
+    } catch (error) {
+        console.error('Error deleting sub-admin:', error);
+        throw error;
+    }
+}
 
 // ========== PRODUCTS ==========
 
@@ -44,10 +108,12 @@ export async function getProduct(productId) {
 }
 
 // Create product
-export async function createProduct(productData) {
+export async function createProduct(productData, ownerId = null, ownerEmail = null) {
     try {
         productData.createdAt = new Date().toISOString();
         productData.updatedAt = new Date().toISOString();
+        if (ownerId) productData.ownerId = ownerId;
+        if (ownerEmail) productData.ownerEmail = ownerEmail;
         const docRef = await addDoc(collection(db, 'products'), productData);
         return docRef.id;
     } catch (error) {
@@ -280,10 +346,12 @@ export async function getAllDigitalProducts() {
 }
 
 // Create digital product
-export async function createDigitalProduct(productData) {
+export async function createDigitalProduct(productData, ownerId = null, ownerEmail = null) {
     try {
         productData.createdAt = new Date().toISOString();
         productData.updatedAt = new Date().toISOString();
+        if (ownerId) productData.ownerId = ownerId;
+        if (ownerEmail) productData.ownerEmail = ownerEmail;
         const docRef = await addDoc(collection(db, 'digital-products'), productData);
         return docRef.id;
     } catch (error) {

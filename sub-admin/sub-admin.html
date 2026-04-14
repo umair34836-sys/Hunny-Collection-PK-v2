@@ -3,20 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Panel - Hunny Collection PK</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Favicon & App Icons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/jpeg" href="/assets/logo.jpeg" sizes="32x32">
-    <link rel="icon" type="image/jpeg" href="/assets/logo.jpeg" sizes="16x16">
-    <link rel="icon" type="image/png" href="/assets/logo.jpeg">
-    <link rel="shortcut icon" type="image/jpeg" href="/assets/logo.jpeg">
-    <link rel="apple-touch-icon" href="/assets/logo.jpeg">
-    <link rel="apple-touch-icon-precomposed" href="/assets/logo.jpeg">
-    <meta name="msapplication-TileImage" content="/assets/logo.jpeg">
-    <meta name="msapplication-TileColor" content="#8CE4FF">
-    <meta name="theme-color" content="#8CE4FF">
-    <link rel="stylesheet" href="admin-mobile.css">
+    <title>Sub-Admin Dashboard - Hunny Collection PK</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../admin-mobile.css">
     <style>
         .admin-layout {
             display: grid;
@@ -24,7 +13,7 @@
             min-height: calc(100vh - 60px);
         }
         .admin-sidebar {
-            background: linear-gradient(180deg, var(--dark-pink) 0%, var(--primary-pink) 100%);
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
             padding: 20px;
         }
         .admin-sidebar h3 {
@@ -62,7 +51,7 @@
             margin-bottom: 30px;
         }
         .stat-card {
-            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--light-pink) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 25px;
             border-radius: 15px;
             text-align: center;
@@ -70,11 +59,12 @@
         .stat-number {
             font-size: 2.5rem;
             font-weight: bold;
-            color: var(--text-dark);
+            color: var(--white);
         }
         .stat-label {
-            color: var(--text-light);
+            color: var(--white);
             margin-top: 10px;
+            opacity: 0.9;
         }
         .quick-links-grid {
             display: grid;
@@ -88,11 +78,11 @@
             text-decoration: none;
             color: var(--text-dark);
             transition: all 0.3s ease;
-            border-left: 4px solid var(--primary-pink);
+            border-left: 4px solid #667eea;
         }
         .quick-link-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(140, 228, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
         .quick-link-icon {
             font-size: 2.5rem;
@@ -137,7 +127,7 @@
             top: 15px;
             left: 15px;
             z-index: 1001;
-            background: var(--dark-pink);
+            background: #2c3e50;
             color: white;
             border: none;
             padding: 12px;
@@ -160,11 +150,10 @@
         }
 
         @media (max-width: 768px) {
-            /* CRITICAL RESET - Force everything to fit mobile screen */
             *, *::before, *::after {
                 box-sizing: border-box !important;
             }
-            
+
             html, body {
                 overflow-x: hidden !important;
                 width: 100% !important;
@@ -172,7 +161,6 @@
                 padding: 0 !important;
             }
 
-            /* Show mobile toggle */
             .admin-menu-toggle {
                 display: block !important;
                 position: fixed !important;
@@ -181,7 +169,6 @@
                 z-index: 1001 !important;
             }
 
-            /* Sidebar becomes slide-out menu */
             .admin-sidebar {
                 position: fixed !important;
                 top: 0 !important;
@@ -207,11 +194,10 @@
                 background: rgba(0,0,0,0.5) !important;
                 z-index: 999 !important;
             }
-            .admin-overlay.active { 
-                display: block !important; 
+            .admin-overlay.active {
+                display: block !important;
             }
 
-            /* Layout becomes single column */
             .admin-layout {
                 grid-template-columns: 1fr !important;
                 width: 100% !important;
@@ -223,7 +209,6 @@
                 overflow-x: hidden !important;
             }
 
-            /* Header fixes */
             .header, .navbar {
                 padding: 10px 15px !important;
                 flex-wrap: wrap !important;
@@ -235,7 +220,6 @@
                 display: none !important;
             }
 
-            /* Stats grid becomes 2 columns */
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 8px !important;
@@ -250,7 +234,6 @@
                 font-size: 0.8rem !important;
             }
 
-            /* Quick links single column */
             .quick-links-grid {
                 grid-template-columns: 1fr !important;
                 gap: 10px !important;
@@ -259,13 +242,11 @@
                 padding: 15px !important;
             }
 
-            /* Cards reduce padding */
             .admin-card {
                 padding: 15px !important;
                 margin-bottom: 15px !important;
             }
 
-            /* Tables horizontal scroll */
             .table-responsive {
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch !important;
@@ -281,52 +262,14 @@
                 white-space: nowrap !important;
             }
 
-            /* Modals full width */
-            .modal-content {
-                width: 95% !important;
-                max-width: 95% !important;
-                max-height: 85vh !important;
-                padding: 20px !important;
-                margin: 10px auto !important;
-            }
-            .modal-header {
-                flex-wrap: wrap !important;
-                gap: 10px !important;
-            }
-
-            /* Forms stack properly */
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                padding: 12px !important;
-                font-size: 16px !important; /* Prevents iOS zoom */
-                width: 100% !important;
-            }
-
-            /* Touch-friendly buttons */
-            .btn-sm, button {
-                padding: 10px 15px !important;
-                min-height: 44px !important;
-                margin: 4px !important;
-            }
-            .btn-primary {
-                padding: 12px 20px !important;
-                min-height: 48px !important;
-            }
-
-            /* Text adjustments */
             h2 {
                 font-size: 1.3rem !important;
                 margin-bottom: 15px !important;
                 word-wrap: break-word !important;
             }
-            h3 {
-                font-size: 1.1rem !important;
-            }
         }
 
         @media (max-width: 480px) {
-            /* Even smaller screens */
             .stats-grid {
                 grid-template-columns: 1fr !important;
             }
@@ -361,27 +304,27 @@
 <body>
     <!-- Admin Login -->
     <div id="admin-login-view" class="auth-container" style="display: none;">
-        <div class="auth-card" style="background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(140, 228, 255, 0.3); width: 100%; max-width: 450px;">
-            <h1 class="auth-title" style="text-align: center; color: var(--dark-pink); font-size: 2rem; margin-bottom: 30px;">🔐 Admin Login</h1>
+        <div class="auth-card" style="background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3); width: 100%; max-width: 450px;">
+            <h1 class="auth-title" style="text-align: center; color: #667eea; font-size: 2rem; margin-bottom: 30px;">🔐 Sub-Admin Login</h1>
             <div id="login-error" style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;"></div>
             <form id="admin-login-form">
                 <div class="form-group">
-                    <label>Admin Email</label>
+                    <label>Sub-Admin Email</label>
                     <input type="email" id="admin-email" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" id="admin-password" required>
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+                <button type="submit" class="btn-primary" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">Login</button>
             </form>
             <p style="text-align: center; margin-top: 20px;">
-                <a href="index.html" style="color: var(--dark-pink);">← Back to Store</a>
+                <a href="../index.html" style="color: #667eea;">← Back to Store</a>
             </p>
         </div>
     </div>
 
-    <!-- Admin Dashboard (Lobby) -->
+    <!-- Sub-Admin Dashboard -->
     <div id="admin-dashboard-view" style="display: none;">
         <!-- Mobile Menu Toggle -->
         <button class="admin-menu-toggle" onclick="toggleMobileSidebar()">☰</button>
@@ -390,10 +333,10 @@
         <header class="header">
             <div class="container">
                 <nav class="navbar">
-                    <a href="index.html" class="logo">🌸 Hunny Collection PK</a>
+                    <a href="../index.html" class="logo">🌸 Hunny Collection PK - Sub-Admin</a>
                     <ul class="nav-menu">
-                        <li><a href="admin.html">Admin</a></li>
-                        <li><a href="index.html">Back to Store</a></li>
+                        <li><a href="sub-admin.html">Dashboard</a></li>
+                        <li><a href="../index.html">Back to Store</a></li>
                     </ul>
                 </nav>
             </div>
@@ -401,92 +344,61 @@
 
         <div class="admin-layout">
             <aside class="admin-sidebar">
-                <h3>🌸 Admin Panel</h3>
-                <a href="admin.html" class="active">Dashboard</a>
-                <a href="admin-products.html">📦 Products</a>
-                <a href="admin-orders.html">📋 Orders</a>
-                <a href="admin-orders-history.html">📊 Orders History</a>
-                <a href="admin-reviews.html">⭐ Reviews</a>
-                <a href="admin-categories.html">📂 Categories</a>
-                <a href="admin-digital-products.html">💻 Digital Products</a>
-                <a href="admin-digital-orders.html">📥 Digital Orders</a>
-                <a href="admin-sub-admins.html">👥 Sub-Admins</a>
-                <a href="admin-video-ads.html">📺 Video Ads</a>
-                <a href="settings.html">⚙️ Site Settings</a>
+                <h3>👤 Sub-Admin Panel</h3>
+                <a href="sub-admin.html" class="active">Dashboard</a>
+                <a href="sub-admin-products.html">📦 My Products</a>
+                <a href="sub-admin-orders.html">📋 My Orders</a>
+                <a href="sub-admin-orders-history.html">📊 Orders History</a>
                 <a href="#" onclick="logout()">Logout</a>
             </aside>
 
             <main class="admin-content">
-                <h2 style="color: var(--dark-pink); margin-bottom: 30px;">👋 Welcome to Admin Panel</h2>
+                <h2 style="color: #667eea; margin-bottom: 10px;">👋 Welcome to Your Dashboard</h2>
+                <p style="color: var(--text-light); margin-bottom: 30px;" id="admin-email-display"></p>
 
                 <!-- Stats -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-number" id="stat-products">0</div>
-                        <div class="stat-label">Total Products</div>
+                        <div class="stat-label">My Products</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number" id="stat-orders">0</div>
-                        <div class="stat-label">Total Orders</div>
+                        <div class="stat-label">My Orders</div>
                     </div>
                     <div class="stat-card" style="background: linear-gradient(135deg, #FFF3CD 0%, #FFE69C 100%);">
-                        <div class="stat-number" id="stat-pending">0</div>
-                        <div class="stat-label">Pending Orders</div>
+                        <div class="stat-number" style="color: #856404;" id="stat-pending">0</div>
+                        <div class="stat-label" style="color: #856404;">Pending Orders</div>
                     </div>
                     <div class="stat-card" style="background: linear-gradient(135deg, #D4EDDA 0%, #C3E6CB 100%);">
-                        <div class="stat-number">Rs. <span id="stat-revenue">0</span></div>
-                        <div class="stat-label">Total Revenue</div>
+                        <div class="stat-number" style="color: #155724;">Rs. <span id="stat-revenue">0</span></div>
+                        <div class="stat-label" style="color: #155724;">My Revenue</div>
                     </div>
                 </div>
 
                 <!-- Quick Links -->
-                <h3 style="color: var(--dark-pink); margin-bottom: 20px;">🚀 Quick Actions</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">🚀 Quick Actions</h3>
                 <div class="quick-links-grid">
-                    <a href="admin-chat.html" class="quick-link-card">
-                        <div class="quick-link-icon">💬</div>
-                        <div class="quick-link-title">User Chats</div>
-                        <div class="quick-link-desc">Chat with customers in real-time</div>
-                    </a>
-                    <a href="admin-products.html" class="quick-link-card">
+                    <a href="sub-admin-products.html" class="quick-link-card">
                         <div class="quick-link-icon">📦</div>
-                        <div class="quick-link-title">Manage Products</div>
-                        <div class="quick-link-desc">Add, edit, or delete products</div>
+                        <div class="quick-link-title">My Products</div>
+                        <div class="quick-link-desc">Add, edit, or manage your products</div>
                     </a>
-                    <a href="admin-orders.html" class="quick-link-card">
+                    <a href="sub-admin-orders.html" class="quick-link-card">
                         <div class="quick-link-icon">📋</div>
-                        <div class="quick-link-title">Manage Orders</div>
-                        <div class="quick-link-desc">View and update order status</div>
+                        <div class="quick-link-title">My Orders</div>
+                        <div class="quick-link-desc">View and update your order status</div>
                     </a>
-                    <a href="admin-reviews.html" class="quick-link-card">
-                        <div class="quick-link-icon">⭐</div>
-                        <div class="quick-link-title">Moderate Reviews</div>
-                        <div class="quick-link-desc">Approve or reject customer reviews</div>
-                    </a>
-                    <a href="admin-categories.html" class="quick-link-card">
-                        <div class="quick-link-icon">📂</div>
-                        <div class="quick-link-title">Manage Categories</div>
-                        <div class="quick-link-desc">Add or remove product categories</div>
-                    </a>
-                    <a href="admin-digital-products.html" class="quick-link-card">
-                        <div class="quick-link-icon">💻</div>
-                        <div class="quick-link-title">Digital Products</div>
-                        <div class="quick-link-desc">Manage digital products & categories</div>
-                    </a>
-                    <a href="admin-sub-admins.html" class="quick-link-card">
-                        <div class="quick-link-icon">👥</div>
-                        <div class="quick-link-title">Sub-Admin Management</div>
-                        <div class="quick-link-desc">Invite and manage sub-admin accounts</div>
-                    </a>
-                    <a href="settings.html" class="quick-link-card">
-                        <div class="quick-link-icon">⚙️</div>
-                        <div class="quick-link-title">Site Settings</div>
-                        <div class="quick-link-desc">Configure website settings & video ads</div>
+                    <a href="sub-admin-orders-history.html" class="quick-link-card">
+                        <div class="quick-link-icon">📊</div>
+                        <div class="quick-link-title">Orders History</div>
+                        <div class="quick-link-desc">View your complete order history</div>
                     </a>
                 </div>
 
                 <!-- Recent Orders -->
                 <div class="admin-card" style="margin-top: 30px;">
-                    <h3 style="margin-bottom: 20px;">📋 Recent Orders</h3>
+                    <h3 style="margin-bottom: 20px;">📋 My Recent Orders</h3>
                     <div class="table-responsive">
                         <table id="recent-orders-table">
                             <thead>
@@ -502,7 +414,7 @@
                         </table>
                     </div>
                     <div style="text-align: center; margin-top: 20px;">
-                        <a href="admin-orders.html" class="btn-primary">View All Orders →</a>
+                        <a href="sub-admin-orders.html" class="btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">View All Orders →</a>
                     </div>
                 </div>
             </main>
@@ -510,13 +422,15 @@
     </div>
 
     <script type="module">
-        import { auth, db } from './firebase-config.js';
+        import { auth, db } from '../firebase-config.js';
         import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { doc, getDoc, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { checkAdminAuth, logout, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers, formatCurrency, formatDate, getStatusBadge } from './admin-common.js';
-        import { getAllProducts, getAllOrders } from './admin-api.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { checkSubAdminAuth, logout, toggleMobileSidebar, closeMobileSidebar, setupSidebarCloseHandlers, formatCurrency, formatDate, getStatusBadge } from './sub-admin-common.js';
+        import { getMyProducts, getMyOrders, getSubAdminDashboardStats } from './sub-admin-api.js';
 
-        // Check admin auth
+        let currentUser = null;
+
+        // Check sub-admin auth
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 document.getElementById('admin-login-view').style.display = 'flex';
@@ -524,10 +438,12 @@
                 return;
             }
 
-            const adminCheck = await checkAdminAuth();
+            currentUser = user;
+            const adminCheck = await checkSubAdminAuth();
             if (adminCheck) {
                 document.getElementById('admin-login-view').style.display = 'none';
                 document.getElementById('admin-dashboard-view').style.display = 'block';
+                document.getElementById('admin-email-display').textContent = user.email;
                 setupSidebarCloseHandlers();
                 await loadDashboard();
             }
@@ -551,23 +467,19 @@
         // Load dashboard stats and recent orders
         async function loadDashboard() {
             try {
-                const [products, orders] = await Promise.all([
-                    getAllProducts(),
-                    getAllOrders()
-                ]);
+                if (!currentUser) return;
+
+                const stats = await getSubAdminDashboardStats(currentUser.uid);
 
                 // Update stats
-                document.getElementById('stat-products').textContent = products.length;
-                document.getElementById('stat-orders').textContent = orders.length;
-                document.getElementById('stat-pending').textContent = orders.filter(o => o.status === 'pending').length;
-                
-                const revenue = orders
-                    .filter(o => o.status === 'delivered' || o.status === 'confirmed')
-                    .reduce((sum, o) => sum + (o.total || 0), 0);
-                document.getElementById('stat-revenue').textContent = revenue.toLocaleString();
+                document.getElementById('stat-products').textContent = stats.totalProducts;
+                document.getElementById('stat-orders').textContent = stats.totalOrders;
+                document.getElementById('stat-pending').textContent = stats.pendingOrders;
+                document.getElementById('stat-revenue').textContent = stats.totalRevenue.toLocaleString();
 
-                // Render recent orders
-                renderRecentOrders(orders.slice(0, 5));
+                // Load recent orders
+                const myOrders = await getMyOrders(currentUser.uid);
+                renderRecentOrders(myOrders.slice(0, 5));
             } catch (error) {
                 console.error('Error loading dashboard:', error);
             }

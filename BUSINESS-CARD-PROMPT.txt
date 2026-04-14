@@ -1,0 +1,144 @@
+========================================
+BUSINESS CARD DESIGN PROMPT
+Hunny Collection PK
+========================================
+
+⚠️ IMPORTANT:
+Only show "Hunny Collection PK" branding. 
+No other brand names, logos, or watermarks.
+
+Brand Colors:
+- Primary Blue: #8CE4FF (Light Sky Blue)
+- Secondary Yellow: #FEEE91 (Soft Golden Yellow)
+- Accent Orange: #FFA239 (Warm Tangerine Orange)
+- Highlight Red: #FF5656 (Soft Coral Red)
+
+========================================
+
+
+========================================
+AI PROMPT FOR BUSINESS CARD DESIGN
+========================================
+
+Professional modern business card design for Pakistani female fashion brand "Hunny Collection PK". Clean minimalist layout with elegant gradient background using light blue (#8CE4FF), yellow (#FEEE91), and orange (#FFA239) colors. Premium fashion brand aesthetic with subtle geometric patterns or floral elements.
+
+FRONT SIDE:
+- Brand name "Hunny Collection PK" prominently displayed in elegant modern typography
+- Logo space (circular logo placeholder)
+- Gradient background from light blue to soft yellow
+- Subtle decorative elements: geometric shapes, soft sparkles, or floral motifs
+- Clean professional layout with plenty of white space
+- NO OTHER BRAND NAMES, LOGOS, WATERMARKS, OR TEXT
+
+BACK SIDE:
+- Contact information layout with clean hierarchy
+- Phone number, email, website, social media icons
+- Address space for physical location
+- Matching gradient background (orange to yellow or blue to yellow)
+- QR code placeholder area
+- Social media icons (Instagram, Facebook, WhatsApp) in brand colors
+- NO OTHER BRAND NAMES, LOGOS, WATERMARKS, OR TEXT
+
+Style: Premium, modern, elegant, minimalist
+Colors: #8CE4FF, #FEEE91, #FFA239, #FF5656, white, gold accents
+Format: Standard business card size 3.5" x 2" (1050 x 600 pixels @ 300 DPI)
+Orientation: Horizontal/Landscape
+Quality: High resolution, print-ready, photorealistic mockup
+
+--ar 7:4 --v 5 --quality 2
+
+
+========================================
+ALTERNATIVE PROMPT (SIMPLER VERSION)
+========================================
+
+Elegant business card for female fashion boutique "Hunny Collection PK". Soft gradient background blending light blue (#8CE4FF) and golden yellow (#FEEE91). Modern clean typography, minimalist design with subtle orange (#FFA239) accent lines. Professional fashion brand aesthetic, premium quality look. White space balanced, no clutter. NO OTHER BRAND NAMES OR LOGOS. Standard card size 3.5x2 inches, horizontal layout, high quality print design. --ar 7:4 --v 5
+
+
+========================================
+AI TOOLS SPECIFIC SETTINGS
+========================================
+
+MIDJOURNEY:
+- Use main prompt above
+- Add "--ar 7:4 --v 6 --quality 2"
+- Add "--no text clutter, other brands, watermarks, logos"
+- For mockup: "business card mockup on elegant surface, soft shadows"
+
+DALL-E / CHATGPT:
+- Remove "--ar", "--v", "--quality" parameters
+- Add "Standard business card format 3.5 x 2 inches"
+- Add "Show both front and back side in flat layout"
+- Add explicit: "No brand names except Hunny Collection PK"
+
+CANVA (Manual Design):
+- Use Canva templates for business cards
+- Apply color palette: #8CE4FF, #FEEE91, #FFA239, #FF5656
+- Use modern elegant fonts: Playfair Display, Montserrat, Poppins
+- Keep design clean with proper spacing
+- Add subtle gradient backgrounds
+
+========================================
+BUSINESS CARD CONTENT SUGGESTIONS
+========================================
+
+FRONT SIDE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Logo - Circular]
+
+HUNNY COLLECTION PK
+
+✨ Premium Fashion Store
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BACK SIDE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📞 Phone: +92 XXX XXXXXXX
+📧 Email: info@hunnycollection.pk
+🌐 Website: www.hunnycollection.pk
+
+📍 Address: Your City, Pakistan
+
+📱 Instagram: @hunnycollectionpk
+💬 WhatsApp: +92 XXX XXXXXXX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OPTIONAL ADDITIONS:
+- QR Code (link to website/WhatsApp)
+- Tagline: "Your Style, Our Passion"
+- Services: "Lawn • Pret • Luxury Pret • Casual Wear"
+
+
+========================================
+DESIGN TIPS FOR PROFESSIONAL LOOK
+========================================
+
+1. FONTS TO USE:
+   - Brand Name: Playfair Display Bold / Cormorant Garamond
+   - Body Text: Montserrat / Poppins Regular
+   - Accent Text: Dancing Script (for tagline)
+
+2. COLOR USAGE:
+   - Background: Gradient #8CE4FF → #FEEE91
+   - Text: Dark gray/black for readability
+   - Accent Lines/Icons: #FFA239 (orange)
+   - Highlights: #FF5656 (red) for special elements
+
+3. LAYOUT PRINCIPLES:
+   - Keep 10mm margin on all sides
+   - Use grid system for alignment
+   - Balance text and white space
+   - Don't overcrowd with information
+
+4. PRINT SPECIFICATIONS:
+   - Size: 3.5" x 2" (88.9mm x 50.8mm)
+   - Bleed: 3mm on all sides
+   - Resolution: 300 DPI minimum
+   - Format: PDF/PNG for print
+   - Paper: Matte or glossy finish (300gsm)
+
+
+========================================
+Generated: April 11, 2026
+Project: Hunny Collection PK
+========================================
