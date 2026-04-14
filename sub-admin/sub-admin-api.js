@@ -28,16 +28,16 @@ export async function getAllProducts() {
     }
 }
 
-// Get sub-admin's own products
+// Get sub-admin's own products (client-side filtering to avoid index requirement)
 export async function getMyProducts(ownerId) {
     try {
-        const q = query(
-            collection(db, 'products'),
-            where('ownerId', '==', ownerId),
-            orderBy('createdAt', 'desc')
-        );
+        // Get all products and filter client-side
+        const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
         const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        // Filter by ownerId client-side
+        return allProducts.filter(product => product.ownerId === ownerId);
     } catch (error) {
         console.error('Error getting my products:', error);
         throw error;
@@ -132,16 +132,14 @@ export async function getAllOrders() {
     }
 }
 
-// Get sub-admin's own orders
+// Get sub-admin's own orders (client-side filtering)
 export async function getMyOrders(adminOwnerId) {
     try {
-        const q = query(
-            collection(db, 'orders'),
-            where('adminOwnerId', '==', adminOwnerId),
-            orderBy('createdAt', 'desc')
-        );
+        const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
         const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        return allOrders.filter(order => order.adminOwnerId === adminOwnerId);
     } catch (error) {
         console.error('Error getting my orders:', error);
         throw error;
@@ -202,16 +200,14 @@ export async function getAllDigitalProducts() {
     }
 }
 
-// Get sub-admin's own digital products
+// Get sub-admin's own digital products (client-side filtering)
 export async function getMyDigitalProducts(ownerId) {
     try {
-        const q = query(
-            collection(db, 'digital-products'),
-            where('ownerId', '==', ownerId),
-            orderBy('createdAt', 'desc')
-        );
+        const q = query(collection(db, 'digital-products'), orderBy('createdAt', 'desc'));
         const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        return allProducts.filter(product => product.ownerId === ownerId);
     } catch (error) {
         console.error('Error getting my digital products:', error);
         throw error;
@@ -304,16 +300,14 @@ export async function getAllDigitalOrders() {
     }
 }
 
-// Get sub-admin's own digital orders
+// Get sub-admin's own digital orders (client-side filtering)
 export async function getMyDigitalOrders(adminOwnerId) {
     try {
-        const q = query(
-            collection(db, 'digital-orders'),
-            where('adminOwnerId', '==', adminOwnerId),
-            orderBy('createdAt', 'desc')
-        );
+        const q = query(collection(db, 'digital-orders'), orderBy('createdAt', 'desc'));
         const snapshot = await getDocs(q);
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        return allOrders.filter(order => order.adminOwnerId === adminOwnerId);
     } catch (error) {
         console.error('Error getting my digital orders:', error);
         throw error;

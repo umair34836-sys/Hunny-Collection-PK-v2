@@ -361,7 +361,13 @@
                 const adminsSnapshot = await getDocs(adminsQuery);
                 
                 if (!adminsSnapshot.empty) {
-                    showAlert('This email is already registered as an admin!', 'error');
+                    const existingAdmin = adminsSnapshot.docs[0].data();
+                    showAlert(`❌ This email is already registered as an admin!
+
+Type: ${existingAdmin.adminType || 'Unknown'}
+UID: ${existingAdmin.uid || 'N/A'}
+
+Please use a different email or delete the existing admin first.`, 'error');
                     return;
                 }
 
@@ -434,11 +440,19 @@
                 
                 // Provide user-friendly error messages
                 if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = 'This email is already registered in Firebase Authentication. Please use a different email.';
+                    errorMessage = `❌ This email is already registered in Firebase Authentication!
+
+Possible reasons:
+1. A sub-admin account was already created with this email
+2. A customer/user account exists with this email
+
+✅ Please use a different email address.`;
                 } else if (error.code === 'auth/weak-password') {
-                    errorMessage = 'Password should be at least 6 characters.';
+                    errorMessage = '❌ Password should be at least 6 characters.';
                 } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'Invalid email format.';
+                    errorMessage = '❌ Invalid email format.';
+                } else if (error.code === 'auth/network-request-failed') {
+                    errorMessage = '❌ Network error. Please check your internet connection.';
                 }
                 
                 showAlert('Error: ' + errorMessage, 'error');
