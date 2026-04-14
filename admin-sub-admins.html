@@ -259,7 +259,26 @@
         async function isGodAdmin(user) {
             if (!user) return false;
             const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-            return adminDoc.exists() && adminDoc.data().adminType === 'god';
+            
+            if (!adminDoc.exists()) return false;
+            
+            const adminData = adminDoc.data();
+            
+            // If adminType is 'god', return true
+            if (adminData.adminType === 'god') return true;
+            
+            // If adminType is missing (old admin), treat as god and update it
+            if (!adminData.adminType) {
+                console.log('⚠️ Old admin account detected. Setting adminType to "god"...');
+                await updateDoc(doc(db, 'admins', user.uid), {
+                    adminType: 'god',
+                    updatedAt: new Date().toISOString()
+                });
+                console.log('✅ adminType set to "god"');
+                return true;
+            }
+            
+            return false;
         }
 
         // Initialize page
@@ -278,10 +297,10 @@
             // Check if god admin
             const isGod = await isGodAdmin(user);
             if (!isGod) {
-                showAlert('⚠️ Only God Admin can access this page!', 'error');
+                showAlert('⚠️ This page is only for God Admin!\n\nSub-Admins should use their own panel at: /sub-admin/sub-admin.html', 'error');
                 setTimeout(() => {
                     window.location.href = 'admin.html';
-                }, 2000);
+                }, 3000);
                 return;
             }
 

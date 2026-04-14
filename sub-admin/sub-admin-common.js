@@ -16,7 +16,7 @@ export async function isSubAdmin(user) {
         console.log('🔍 Checking sub-admin status for:', user.email);
         console.log('🔑 User UID:', user.uid);
 
-        // Check if admin document exists and has adminType='sub'
+        // Check if admin document exists
         const adminDoc = await getDoc(doc(db, 'admins', user.uid));
 
         if (adminDoc.exists()) {
@@ -24,12 +24,20 @@ export async function isSubAdmin(user) {
             console.log('✅ Admin document found');
             console.log('Admin type:', adminData.adminType);
             
+            // If adminType is 'sub', return true
             if (adminData.adminType === 'sub') {
                 console.log('✅ User is a sub-admin');
                 return true;
-            } else if (adminData.adminType === 'god') {
-                console.log('⚠️ User is a god admin, not sub-admin');
-                return false;
+            } 
+            // If adminType is 'god', they can also access sub-admin panel
+            else if (adminData.adminType === 'god') {
+                console.log('✅ God admin accessing sub-admin panel');
+                return true;
+            }
+            // If adminType is missing (old admin), treat as god
+            else if (!adminData.adminType) {
+                console.log('⚠️ Old admin account, treating as god admin');
+                return true;
             }
         }
 
