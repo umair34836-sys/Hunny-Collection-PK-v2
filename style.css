@@ -1138,6 +1138,41 @@ body {
     animation: pulse 2s infinite;
 }
 
+/* Affiliate Badge */
+.affiliate-badge {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.5);
+    z-index: 10;
+}
+
+/* Affiliate Note */
+.affiliate-note {
+    display: block;
+    font-size: 0.8rem;
+    color: #28a745;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+/* Affiliate Info */
+.affiliate-info {
+    background: #f8fff9;
+    border: 1px solid #28a745;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 15px 0;
+    font-size: 0.9rem;
+    color: #155724;
+}
+
 /* Price Group - Product Cards */
 .product-price-group {
     display: flex;

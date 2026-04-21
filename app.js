@@ -326,6 +326,21 @@ export async function loadProduct(productId) {
 
     console.log('Loading single product with ID:', productId);
 
+    // Check for affiliate referral
+    const urlParams = new URLSearchParams(window.location.search);
+    const referrerId = urlParams.get('ref');
+    const commission = parseInt(urlParams.get('commission')) || 0;
+
+    // Store referral info for checkout
+    if (referrerId && commission >= 10 && commission <= 150) {
+        sessionStorage.setItem('affiliateReferral', JSON.stringify({
+            referrerId: referrerId,
+            commission: commission,
+            productId: productId
+        }));
+        console.log('Affiliate referral detected:', { referrerId, commission, productId });
+    }
+
     try {
         // Fetch ONLY the single product document by ID — no full collection scan
         const docRef = doc(db, 'products', productId);
@@ -361,11 +376,20 @@ export async function loadProduct(productId) {
         const mainImage = images[0] || 'https://via.placeholder.com/500x500';
 
         // Calculate prices with discount
-        const sellingPrice = product.sellingPrice || product.price || 0;
+        let sellingPrice = product.sellingPrice || product.price || 0;
         const originalPrice = product.originalPrice || 0;
         const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
         const costPrice = product.costPrice || 0;
         const profit = sellingPrice - costPrice;
+
+        // Adjust price for affiliate commission
+        let affiliateCommission = 0;
+        let adjustedPrice = sellingPrice;
+        if (referrerId && commission >= 10 && commission <= 150) {
+            adjustedPrice = sellingPrice + commission;
+            affiliateCommission = commission;
+            console.log('Price adjusted for affiliate:', { original: sellingPrice, adjusted: adjustedPrice, commission });
+        }
 
         // Render product — main image loads immediately, thumbnails use lazy loading
         container.innerHTML = `
@@ -378,6 +402,7 @@ export async function loadProduct(productId) {
                     </div>
                     <div class="image-counter" id="image-counter" style="${images.length > 1 ? '' : 'display: none;'}">1 / ${images.length}</div>
                     ${discountPercent > 0 ? `<span class="product-detail-discount-badge">🔥 ${discountPercent}% OFF</span>` : ''}
+                    ${affiliateCommission > 0 ? `<span class="affiliate-badge">💰 Affiliate Price (+Rs. ${affiliateCommission})</span>` : ''}
                     ${images.length > 1 ? `
                         <div class="product-thumbnails">
                             ${images.map((img, idx) => `
@@ -391,10 +416,12 @@ export async function loadProduct(productId) {
                     <span class="badge">${product.category}</span>
                     <h1>${product.name}</h1>
                     <div class="product-detail-price-group">
-                        <span class="product-detail-selling-price">Rs. ${sellingPrice.toLocaleString()}</span>
+                        <span class="product-detail-selling-price">Rs. ${adjustedPrice.toLocaleString()}</span>
                         ${originalPrice > sellingPrice ? `<span class="product-detail-original-price">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
+                        ${affiliateCommission > 0 ? `<span class="affiliate-note">Includes Rs. ${affiliateCommission} affiliate commission</span>` : ''}
                     </div>
                     ${discountPercent > 0 ? `<p class="discount-savings">You save Rs. ${(originalPrice - sellingPrice).toLocaleString()}!</p>` : ''}
+                    ${affiliateCommission > 0 ? `<p class="affiliate-info">💡 This price includes a Rs. ${affiliateCommission} commission that goes to our affiliate partner.</p>` : ''}
                     ${product.description ? `<p class="description">${product.description}</p>` : ''}
 
                     ${product.variants?.length ? `
@@ -848,10 +875,60 @@ window.copyProductLink = function(productId) {
 // Place order
 export async function placeOrder(orderData) {
     try {
-        await addDoc(collection(db, 'orders'), orderData);
+        // Check for affiliate referral
+        const referralData = JSON.parse(sessionStorage.getItem('affiliateReferral') || 'null');
+
+        if (referralData) {
+            // Add referral info to order
+            orderData.referrerId = referralData.referrerId;
+            orderData.affiliateCommission = referralData.commission;
+            orderData.referralProductId = referralData.productId;
+        }
+
+        // Add order to database
+        const orderRef = await addDoc(collection(db, 'orders'), orderData);
+
+        // Process affiliate commission if applicable
+        if (referralData) {
+            try {
+                // Update affiliate earnings
+                const affiliateRef = doc(db, 'affiliates', referralData.referrerId);
+                const affiliateSnap = await getDoc(affiliateRef);
+
+                if (affiliateSnap.exists()) {
+                    const affiliateData = affiliateSnap.data();
+                    const newEarnings = (affiliateData.totalEarnings || 0) + referralData.commission;
+                    const newPending = (affiliateData.pendingCommission || 0) + referralData.commission;
+
+                    await setDoc(affiliateRef, {
+                        ...affiliateData,
+                        totalEarnings: newEarnings,
+                        pendingCommission: newPending
+                    });
+                } else {
+                    // Create affiliate record if doesn't exist
+                    await setDoc(affiliateRef, {
+                        totalEarnings: referralData.commission,
+                        totalReferrals: 0, // This will be updated when links are created
+                        pendingCommission: referralData.commission,
+                        paidCommission: 0,
+                        createdAt: new Date()
+                    });
+                }
+
+                // Clear referral data after processing
+                sessionStorage.removeItem('affiliateReferral');
+
+                console.log('Affiliate commission processed:', referralData);
+            } catch (error) {
+                console.error('Error processing affiliate commission:', error);
+                // Don't fail the order if commission processing fails
+            }
+        }
+
         localStorage.removeItem('cart');
         updateCartCount();
-        return { success: true };
+        return { success: true, orderId: orderRef.id };
     } catch (error) {
         console.error('Error placing order:', error);
         return { success: false, error: error.message };

@@ -155,5 +155,33 @@ service cloud.firestore {
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
+
+    // ========== AFFILIATE SYSTEM ==========
+
+    // AFFILIATES - Users can read/update own affiliate data, admins can read all
+    match /affiliates/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // REFERRALS - Users can read their own referrals, admins can read all
+    match /referrals/{referralId} {
+      allow read: if isAuthenticated() && 
+                     (resource.data.referrerId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && 
+                       request.resource.data.referrerId == request.auth.uid;
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // AFFILIATE PAYMENTS - Admins only
+    match /affiliate-payments/{paymentId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
   }
 }

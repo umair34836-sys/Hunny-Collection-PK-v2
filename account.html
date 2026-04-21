@@ -244,6 +244,7 @@
                     <ul class="sidebar-menu">
                         <li><a href="#" class="active" onclick="showSection('overview')">📊 Overview</a></li>
                         <li><a href="#" onclick="showSection('orders')">📦 My Orders</a></li>
+                        <li><a href="#" onclick="showSection('affiliate')">💰 Affiliate Program</a></li>
                         <li><a href="#" onclick="showSection('profile')">👤 Profile</a></li>
                     </ul>
                     <button class="btn-logout" onclick="logout()">Logout</button>
@@ -312,6 +313,23 @@
                             <div class="info-item">
                                 <label>Member Since</label>
                                 <div class="value" id="profile-since">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Affiliate Section -->
+                    <div id="affiliate" class="section-content">
+                        <h2 style="color: var(--dark-pink); margin-bottom: 20px;">💰 Affiliate Program</h2>
+                        <p>Earn commissions by promoting our products! <a href="affiliate.html" style="color: var(--dark-pink); font-weight: bold;">Go to Affiliate Dashboard →</a></p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
+                            <div style="text-align: center; padding: 15px; background: var(--soft-pink); border-radius: 10px;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--dark-pink);" id="affiliate-earnings">Rs. 0</div>
+                                <div style="color: var(--text-light);">Total Earnings</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: var(--soft-pink); border-radius: 10px;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--dark-pink);" id="affiliate-referrals">0</div>
+                                <div style="color: var(--text-light);">Total Referrals</div>
                             </div>
                         </div>
                     </div>
@@ -401,6 +419,23 @@
                 console.log('Profile info not available, using defaults');
                 document.getElementById('profile-phone').textContent = 'Not provided';
                 document.getElementById('profile-since').textContent = 'Recently joined';
+            }
+
+            // Load affiliate stats
+            try {
+                const affiliateDoc = await getDoc(doc(db, 'affiliates', user.uid));
+                if (affiliateDoc.exists()) {
+                    const affiliateData = affiliateDoc.data();
+                    document.getElementById('affiliate-earnings').textContent = `Rs. ${affiliateData.totalEarnings || 0}`;
+                    document.getElementById('affiliate-referrals').textContent = affiliateData.totalReferrals || 0;
+                } else {
+                    document.getElementById('affiliate-earnings').textContent = 'Rs. 0';
+                    document.getElementById('affiliate-referrals').textContent = '0';
+                }
+            } catch (error) {
+                console.log('Affiliate stats not available');
+                document.getElementById('affiliate-earnings').textContent = 'Rs. 0';
+                document.getElementById('affiliate-referrals').textContent = '0';
             }
         }
 
