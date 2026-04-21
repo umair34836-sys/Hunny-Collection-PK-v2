@@ -459,7 +459,7 @@
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { collection, query, where, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateUserProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { updateCartCount } from './app.js';
 
         let currentUser = null;
@@ -625,7 +625,7 @@
 
                 // Update Firebase Auth display name
                 if (currentUser.displayName !== name) {
-                    await updateUserProfile(currentUser, { displayName: name });
+                    await updateProfile(currentUser, { displayName: name });
                 }
 
                 alert('✅ Profile updated successfully!');
