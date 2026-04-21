@@ -296,24 +296,104 @@
 
                     <!-- Profile Section -->
                     <div id="profile" class="section-content">
-                        <h2 style="color: var(--dark-pink); margin-bottom: 20px;">Profile Information</h2>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <label>Full Name</label>
-                                <div class="value" id="profile-name-full">Loading...</div>
+                        <h2 style="color: var(--dark-pink); margin-bottom: 30px;">👤 Profile Information</h2>
+                        
+                        <!-- Edit Profile Form -->
+                        <div style="background: var(--soft-pink); padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                            <h3 style="margin-bottom: 20px; color: var(--dark-pink);">Edit Profile</h3>
+                            <form id="edit-profile-form">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Full Name</label>
+                                        <input type="text" id="edit-name" placeholder="Your full name" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Phone Number</label>
+                                        <input type="tel" id="edit-phone" placeholder="+92 300 1234567" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px;">
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">City</label>
+                                        <input type="text" id="edit-city" placeholder="Your city" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Postal Code</label>
+                                        <input type="text" id="edit-postal" placeholder="Postal code" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px;">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Delivery Address</label>
+                                    <textarea id="edit-address" placeholder="Your complete address" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; min-height: 80px;"></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary" style="margin-top: 15px;">💾 Save Changes</button>
+                            </form>
+                        </div>
+
+                        <!-- Current Profile Info -->
+                        <div style="background: var(--white); padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-bottom: 20px; color: var(--dark-pink);">Current Information</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>Full Name</label>
+                                    <div class="value" id="profile-name-full">Loading...</div>
+                                </div>
+                                <div class="info-item">
+                                    <label>Email Address</label>
+                                    <div class="value" id="profile-email-full">Loading...</div>
+                                </div>
+                                <div class="info-item">
+                                    <label>Phone Number</label>
+                                    <div class="value" id="profile-phone">Not provided</div>
+                                </div>
+                                <div class="info-item">
+                                    <label>City</label>
+                                    <div class="value" id="profile-city">Not provided</div>
+                                </div>
+                                <div class="info-item">
+                                    <label>Postal Code</label>
+                                    <div class="value" id="profile-postal">Not provided</div>
+                                </div>
+                                <div class="info-item">
+                                    <label>Member Since</label>
+                                    <div class="value" id="profile-since">Loading...</div>
+                                </div>
                             </div>
-                            <div class="info-item">
-                                <label>Email Address</label>
-                                <div class="value" id="profile-email-full">Loading...</div>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+                                <label style="font-weight: 600;">Delivery Address</label>
+                                <div style="margin-top: 8px; background: var(--soft-pink); padding: 10px; border-radius: 5px;" id="profile-address">Not provided</div>
                             </div>
-                            <div class="info-item">
-                                <label>Phone Number</label>
-                                <div class="value" id="profile-phone">Loading...</div>
-                            </div>
-                            <div class="info-item">
-                                <label>Member Since</label>
-                                <div class="value" id="profile-since">Loading...</div>
-                            </div>
+                        </div>
+
+                        <!-- Security Section -->
+                        <div style="background: #fff3cd; padding: 20px; border-radius: 10px; border: 1px solid #ffc107;">
+                            <h3 style="margin-bottom: 20px; color: #856404;">🔒 Security Settings</h3>
+                            <button class="btn-primary" onclick="openPasswordModal()" style="background: #dc3545; border: none;">🔑 Change Password</button>
+                        </div>
+                    </div>
+
+                    <!-- Password Change Modal -->
+                    <div id="password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                        <div style="background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+                            <h2 style="color: var(--dark-pink); margin-bottom: 20px;">Change Password</h2>
+                            <form id="password-form">
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Current Password</label>
+                                    <input type="password" id="current-password" placeholder="Enter current password" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; box-sizing: border-box;">
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">New Password</label>
+                                    <input type="password" id="new-password" placeholder="Enter new password" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; box-sizing: border-box;">
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Confirm Password</label>
+                                    <input type="password" id="confirm-password" placeholder="Confirm new password" required style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; box-sizing: border-box;">
+                                </div>
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button type="button" onclick="closePasswordModal()" class="btn-secondary" style="padding: 10px 20px;">Cancel</button>
+                                    <button type="submit" class="btn-primary" style="padding: 10px 20px;">Change Password</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -379,7 +459,7 @@
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { collection, query, where, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateUserProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { updateCartCount } from './app.js';
 
         let currentUser = null;
@@ -408,17 +488,30 @@
                 
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
+                    
+                    // Display values
                     document.getElementById('profile-phone').textContent = userData.phone || 'Not provided';
+                    document.getElementById('profile-city').textContent = userData.city || 'Not provided';
+                    document.getElementById('profile-postal').textContent = userData.postal || 'Not provided';
+                    document.getElementById('profile-address').textContent = userData.address || 'Not provided';
                     document.getElementById('profile-since').textContent = userData.createdAt ?
                         new Date(userData.createdAt.seconds * 1000).toLocaleDateString() : 'Recently joined';
+                    
+                    // Form fields
+                    document.getElementById('edit-name').value = user.displayName || '';
+                    document.getElementById('edit-phone').value = userData.phone || '';
+                    document.getElementById('edit-city').value = userData.city || '';
+                    document.getElementById('edit-postal').value = userData.postal || '';
+                    document.getElementById('edit-address').value = userData.address || '';
                 } else {
                     document.getElementById('profile-phone').textContent = 'Not provided';
+                    document.getElementById('profile-city').textContent = 'Not provided';
+                    document.getElementById('profile-postal').textContent = 'Not provided';
+                    document.getElementById('profile-address').textContent = 'Not provided';
                     document.getElementById('profile-since').textContent = 'Recently joined';
                 }
             } catch (error) {
                 console.log('Profile info not available, using defaults');
-                document.getElementById('profile-phone').textContent = 'Not provided';
-                document.getElementById('profile-since').textContent = 'Recently joined';
             }
 
             // Load affiliate stats
@@ -497,6 +590,113 @@
                 window.location.href = 'index.html';
             }
         };
+
+        // Edit Profile Form Handler
+        document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+
+            const name = document.getElementById('edit-name').value.trim();
+            const phone = document.getElementById('edit-phone').value.trim();
+            const city = document.getElementById('edit-city').value.trim();
+            const postal = document.getElementById('edit-postal').value.trim();
+            const address = document.getElementById('edit-address').value.trim();
+
+            if (!name) {
+                alert('Full name is required');
+                return;
+            }
+
+            try {
+                // Update Firestore user data
+                const userRef = doc(db, 'users', currentUser.uid);
+                await setDoc(userRef, {
+                    name: name,
+                    phone: phone,
+                    city: city,
+                    postal: postal,
+                    address: address,
+                    updatedAt: new Date()
+                }, { merge: true });
+
+                // Update Firebase Auth display name
+                if (currentUser.displayName !== name) {
+                    await updateUserProfile(currentUser, { displayName: name });
+                }
+
+                alert('✅ Profile updated successfully!');
+                await loadProfile(currentUser);
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Error updating profile: ' + error.message);
+            }
+        });
+
+        // Password Modal Functions
+        window.openPasswordModal = () => {
+            document.getElementById('password-modal').style.display = 'flex';
+        };
+
+        window.closePasswordModal = () => {
+            document.getElementById('password-modal').style.display = 'none';
+            document.getElementById('password-form').reset();
+        };
+
+        // Password Change Handler
+        document.getElementById('password-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (newPassword.length < 6) {
+                alert('New password must be at least 6 characters long');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            try {
+                // Verify current password by attempting to re-authenticate
+                const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
+                await reauthenticateWithCredential(currentUser, credential);
+
+                // Update password
+                await updatePassword(currentUser, newPassword);
+
+                alert('✅ Password changed successfully!');
+                closePasswordModal();
+            } catch (error) {
+                console.error('Error changing password:', error);
+                if (error.code === 'auth/wrong-password') {
+                    alert('❌ Current password is incorrect');
+                } else if (error.code === 'auth/weak-password') {
+                    alert('❌ New password is too weak. Use at least 6 characters');
+                } else {
+                    alert('Error changing password: ' + error.message);
+                }
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('password-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'password-modal') {
+                closePasswordModal();
+            }
+        });
     </script>
 
     <!-- Floating WhatsApp Button -->

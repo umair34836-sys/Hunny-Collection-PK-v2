@@ -402,7 +402,6 @@ export async function loadProduct(productId) {
                     </div>
                     <div class="image-counter" id="image-counter" style="${images.length > 1 ? '' : 'display: none;'}">1 / ${images.length}</div>
                     ${discountPercent > 0 ? `<span class="product-detail-discount-badge">🔥 ${discountPercent}% OFF</span>` : ''}
-                    ${affiliateCommission > 0 ? `<span class="affiliate-badge">💰 Affiliate Price (+Rs. ${affiliateCommission})</span>` : ''}
                     ${images.length > 1 ? `
                         <div class="product-thumbnails">
                             ${images.map((img, idx) => `
@@ -418,10 +417,8 @@ export async function loadProduct(productId) {
                     <div class="product-detail-price-group">
                         <span class="product-detail-selling-price">Rs. ${adjustedPrice.toLocaleString()}</span>
                         ${originalPrice > sellingPrice ? `<span class="product-detail-original-price">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
-                        ${affiliateCommission > 0 ? `<span class="affiliate-note">Includes Rs. ${affiliateCommission} affiliate commission</span>` : ''}
                     </div>
                     ${discountPercent > 0 ? `<p class="discount-savings">You save Rs. ${(originalPrice - sellingPrice).toLocaleString()}!</p>` : ''}
-                    ${affiliateCommission > 0 ? `<p class="affiliate-info">💡 This price includes a Rs. ${affiliateCommission} commission that goes to our affiliate partner.</p>` : ''}
                     ${product.description ? `<p class="description">${product.description}</p>` : ''}
 
                     ${product.variants?.length ? `
