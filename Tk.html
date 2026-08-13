@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TikTok Coin Cost Calculator</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #f4f5f7;
+        color: #111;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 520px;
+        margin: auto;
+    }
+
+    .header {
+        background: #111;
+        color: white;
+        padding: 25px;
+        border-radius: 20px;
+        margin-bottom: 18px;
+        text-align: center;
+    }
+
+    .header h1 {
+        font-size: 24px;
+        margin-bottom: 7px;
+    }
+
+    .header p {
+        color: #aaa;
+        font-size: 13px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 18px;
+        margin-bottom: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,.06);
+    }
+
+    .card h2 {
+        font-size: 17px;
+        margin-bottom: 16px;
+    }
+
+    .field {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 7px;
+        color: #444;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+        background: white;
+    }
+
+    input:focus, select:focus {
+        border-color: #111;
+    }
+
+    .calculate {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        background: #111;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .calculate:active {
+        transform: scale(.98);
+    }
+
+    .results {
+        display: none;
+    }
+
+    .result-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 13px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .result-row:last-child {
+        border-bottom: none;
+    }
+
+    .result-label {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .result-value {
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .highlight {
+        background: #111;
+        color: white;
+        border-radius: 15px;
+        padding: 18px;
+        margin-bottom: 15px;
+    }
+
+    .highlight .small {
+        color: #aaa;
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .highlight .big {
+        font-size: 29px;
+        font-weight: bold;
+    }
+
+    .saving {
+        background: #e9f8ef;
+        color: #137333;
+        padding: 14px;
+        border-radius: 12px;
+        margin-top: 15px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .note {
+        font-size: 11px;
+        color: #777;
+        line-height: 1.5;
+        margin-top: 12px;
+    }
+
+    .reset {
+        width: 100%;
+        margin-top: 10px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        background: white;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🪙 TikTok Coin Calculator</h1>
+        <p>Coin Cost • Tax • Promote • Coupons</p>
+    </div>
+
+    <!-- COIN SETTINGS -->
+    <div class="card">
+        <h2>⚙️ Coin Settings</h2>
+
+        <div class="field">
+            <label>Number of Coins</label>
+            <input type="number" id="coins" value="100" min="1">
+        </div>
+
+        <div class="field">
+            <label>Normal Price / Coin (Rs)</label>
+            <input type="number" id="normalPrice" value="4" step="0.000001">
+        </div>
+
+        <div class="field">
+            <label>Tax Included Price / Coin (Rs)</label>
+            <input type="number" id="taxPrice" value="5.139" step="0.000001">
+        </div>
+
+        <div class="field">
+            <label>Promote Value / Coin (Rs)</label>
+            <input type="number" id="promotePrice" value="2.739726027397260" step="0.000001">
+        </div>
+    </div>
+
+    <!-- COUPON -->
+    <div class="card">
+        <h2>🎟️ Coupon</h2>
+
+        <div class="field">
+            <label>Coupon Type</label>
+            <select id="couponType" onchange="updateCouponField()">
+                <option value="none">No Coupon</option>
+                <option value="fixed">Fixed Amount (Rs)</option>
+                <option value="percent">Percentage (%)</option>
+            </select>
+        </div>
+
+        <div class="field" id="couponField" style="display:none;">
+            <label id="couponLabel">Coupon Value</label>
+            <input type="number" id="couponValue" value="0" min="0" step="0.01">
+        </div>
+    </div>
+
+    <button class="calculate" onclick="calculate()">
+        Calculate
+    </button>
+
+    <!-- RESULTS -->
+    <div class="results" id="results">
+
+        <div class="card" style="margin-top:15px;">
+
+            <h2>📊 Calculation</h2>
+
+            <div class="result-row">
+                <span class="result-label">Coins</span>
+                <span class="result-value" id="rCoins">100</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Normal Cost</span>
+                <span class="result-value" id="rNormal">Rs 0</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Tax-Inclusive Cost</span>
+                <span class="result-value" id="rTax">Rs 0</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Promote Value</span>
+                <span class="result-value" id="rPromote">Rs 0</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Coupon Discount</span>
+                <span class="result-value" id="rCoupon">Rs 0</span>
+            </div>
+
+        </div>
+
+        <div class="highlight">
+            <div class="small">FINAL AMOUNT YOU PAY</div>
+            <div class="big" id="rFinal">Rs 0</div>
+        </div>
+
+        <div class="card">
+
+            <h2>💡 Effective Cost</h2>
+
+            <div class="result-row">
+                <span class="result-label">Effective Cost / Coin</span>
+                <span class="result-value" id="rEffective">Rs 0</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Promote Value / Coin</span>
+                <span class="result-value" id="rPromotePerCoin">Rs 0</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Total Saving</span>
+                <span class="result-value" id="rSaving">Rs 0</span>
+            </div>
+
+            <div class="saving" id="savingBox">
+                Saving: Rs 0
+            </div>
+
+        </div>
+
+        <button class="reset" onclick="resetCalculator()">
+            Reset
+        </button>
+
+        <div class="note">
+            Note: Calculator uses the rates entered above. TikTok pricing,
+            taxes, payment-channel fees and coupon terms may vary.
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function money(number) {
+    return "Rs " + Number(number).toFixed(2);
+}
+
+function updateCouponField() {
+
+    const type = document.getElementById("couponType").value;
+    const field = document.getElementById("couponField");
+    const label = document.getElementById("couponLabel");
+
+    if (type === "none") {
+
+        field.style.display = "none";
+
+    } else {
+
+        field.style.display = "block";
+
+        if (type === "fixed") {
+            label.innerText = "Fixed Discount (Rs)";
+        } else {
+            label.innerText = "Discount Percentage (%)";
+        }
+    }
+}
+
+
+function calculate() {
+
+    const coins =
+        parseFloat(document.getElementById("coins").value) || 0;
+
+    const normalPrice =
+        parseFloat(document.getElementById("normalPrice").value) || 0;
+
+    const taxPrice =
+        parseFloat(document.getElementById("taxPrice").value) || 0;
+
+    const promotePrice =
+        parseFloat(document.getElementById("promotePrice").value) || 0;
+
+    const couponType =
+        document.getElementById("couponType").value;
+
+    const couponValue =
+        parseFloat(document.getElementById("couponValue").value) || 0;
+
+
+    // Basic calculations
+
+    const normalCost = coins * normalPrice;
+
+    const taxCost = coins * taxPrice;
+
+    const promoteValue = coins * promotePrice;
+
+
+    // Coupon calculation
+
+    let couponDiscount = 0;
+
+    if (couponType === "fixed") {
+
+        couponDiscount = couponValue;
+
+    }
+
+    else if (couponType === "percent") {
+
+        couponDiscount = taxCost * (couponValue / 100);
+
+    }
+
+
+    // Coupon cannot reduce payment below zero
+
+    couponDiscount = Math.min(couponDiscount, taxCost);
+
+
+    const finalCost = taxCost - couponDiscount;
+
+    const effectiveCost =
+        coins > 0 ? finalCost / coins : 0;
+
+    const totalSaving =
+        normalCost - finalCost;
+
+
+    // Display results
+
+    document.getElementById("rCoins").innerText =
+        coins.toLocaleString();
+
+    document.getElementById("rNormal").innerText =
+        money(normalCost);
+
+    document.getElementById("rTax").innerText =
+        money(taxCost);
+
+    document.getElementById("rPromote").innerText =
+        money(promoteValue);
+
+    document.getElementById("rCoupon").innerText =
+        money(couponDiscount);
+
+    document.getElementById("rFinal").innerText =
+        money(finalCost);
+
+    document.getElementById("rEffective").innerText =
+        money(effectiveCost);
+
+    document.getElementById("rPromotePerCoin").innerText =
+        money(promotePrice);
+
+    document.getElementById("rSaving").innerText =
+        money(Math.max(totalSaving, 0));
+
+    document.getElementById("savingBox").innerText =
+        "Saving: " + money(Math.max(totalSaving, 0));
+
+
+    document.getElementById("results").style.display = "block";
+}
+
+
+function resetCalculator() {
+
+    document.getElementById("coins").value = 100;
+
+    document.getElementById("normalPrice").value = 4;
+
+    document.getElementById("taxPrice").value = 5.139;
+
+    document.getElementById("promotePrice").value =
+        2.739726027397260;
+
+    document.getElementById("couponType").value = "none";
+
+    document.getElementById("couponValue").value = 0;
+
+    updateCouponField();
+
+    document.getElementById("results").style.display = "none";
+}
+
+
+// Calculate automatically when page loads
+
+updateCouponField();
+
+</script>
+
+</body>
+  </html>
