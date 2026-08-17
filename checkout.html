@@ -4,28 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - Hunny Collection PK</title>
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="style.css">
     <style>
-        /* Checkout page styling */
-        .checkout-container { max-width: 1000px; margin: 20px auto; padding: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
-        .order-summary { background: #f9f9f9; padding: 20px; border-radius: 10px; height: fit-content; position: sticky; top: 20px; }
-        .btn-primary { background: #e91e63; color: white; padding: 12px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; width: 100%; }
+        /* Checkout page specific styling */
+        .checkout-container { max-width: 1200px; margin: 30px auto; padding: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+        .checkout-form-section h1 { color: #e91e63; margin-bottom: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #e91e63; }
+        .payment-info { background: #fff3cd; padding: 15px; border-radius: 8px; font-size: 14px; border: 1px solid #ffeeba; }
+        .btn-primary { background: #e91e63; color: white; padding: 15px 20px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; transition: background 0.3s; }
+        .btn-primary:hover { background: #c2185b; }
         .btn-primary:disabled { background: #999; cursor: not-allowed; }
-        @media(max-width: 768px) { .checkout-container { grid-template-columns: 1fr; } }
+        .order-summary { background: #f9f9f9; padding: 25px; border-radius: 12px; height: fit-content; position: sticky; top: 20px; border: 1px solid #eee; }
+        .order-summary h2 { margin-top: 0; border-bottom: 2px solid #e91e63; padding-bottom: 10px; }
+        .cart-summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #555; }
+        .total-row { display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; color: #e91e63; margin-top: 15px; padding-top: 15px; border-top: 2px dashed #ddd; }
+        
+        @media(max-width: 768px) { 
+            .checkout-container { grid-template-columns: 1fr; gap: 20px; } 
+            .order-summary { position: static; }
+        }
+        
+        header nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        header nav a { text-decoration: none; color: #333; font-weight: bold; margin: 0 10px; }
+        footer { text-align: center; padding: 30px; background: #333; color: white; margin-top: 50px; }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
         <nav>
-            <a href="index.html">🌸 Hunny Collection PK</a>
+            <a href="index.html" style="color: #e91e63; font-size: 1.2em;">🌸 Hunny Collection PK</a>
             <div>
                 <a href="index.html">Home</a>
                 <a href="shop.html">Shop</a>
-                <a href="cart.html">Cart</a>
+                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
                 <a href="login.html" id="auth-link">Login</a>
             </div>
         </nav>
@@ -34,7 +49,7 @@
     <main class="checkout-container">
         <div class="checkout-form-section">
             <h1>💳 Secure Checkout</h1>
-            <p>Complete your order</p>
+            <p style="color: #666;">Complete your order</p>
 
             <form id="checkout-form">
                 <h2>Shipping Information</h2>
@@ -46,12 +61,12 @@
 
                 <div class="form-group">
                     <label for="phone">Contact Number *</label>
-                    <input type="tel" id="phone" required>
+                    <input type="tel" id="phone" required placeholder="03XX XXXXXXX">
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email">
+                    <input type="email" id="email" placeholder="example@email.com">
                 </div>
 
                 <div class="form-group">
@@ -61,15 +76,15 @@
 
                 <div class="form-group">
                     <label for="address">Complete Address *</label>
-                    <textarea id="address" rows="3" required></textarea>
+                    <textarea id="address" rows="3" required placeholder="House #, Street, Area, Landmark"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="notes">Order Notes (Optional)</label>
-                    <textarea id="notes" rows="2"></textarea>
+                    <textarea id="notes" rows="2" placeholder="Any special instructions..."></textarea>
                 </div>
 
-                <div class="form-group" style="background:#fff3cd; padding:10px; border-radius:5px; font-size:14px;">
+                <div class="form-group payment-info">
                     <strong>📦 Payment Method:</strong> Cash on Delivery (COD)<br>
                     <small>You will pay when you receive your order</small>
                 </div>
@@ -82,15 +97,18 @@
 
         <div class="order-summary">
             <h2>Order Summary</h2>
-            <div id="cart-summary-items" style="margin-bottom: 15px; font-size: 14px;">
+            <div id="cart-summary-items" style="margin-bottom: 15px;">
                 <!-- Items load here -->
             </div>
-            <hr>
-            <h3>Total: <span id="total-price">Rs. 0</span></h3>
+            <hr style="border: 0; border-top: 1px solid #ddd;">
+            <div class="total-row">
+                <span>Total:</span>
+                <span id="total-price">Rs. 0</span>
+            </div>
         </div>
     </main>
 
-    <footer style="text-align: center; padding: 20px; margin-top: 40px;">
+    <footer>
         <p>🌸 Hunny Collection PK | Contact Us: 📱 +92 301 8858303</p>
     </footer>
 
@@ -113,6 +131,7 @@
                 authLink.href = 'login.html';
             }
             loadCheckout();
+            updateCartCount();
         });
 
         function loadCheckout() {
@@ -122,9 +141,10 @@
 
             if (cart.length === 0) {
                 document.getElementById('checkout-form').innerHTML = `
-                    <div style="text-align:center; padding:40px;">
+                    <div style="text-align:center; padding:40px; background:#fff; border-radius:10px;">
                         <h2>Your cart is empty!</h2>
-                        <a href="shop.html" class="btn-primary" style="display:inline-block; width:auto; margin-top:15px;">Go to Shop</a>
+                        <p>Please add items to your cart before checking out.</p>
+                        <a href="shop.html" class="btn-primary" style="display:inline-block; width:auto; margin-top:15px; text-decoration:none;">Go to Shop</a>
                     </div>
                 `;
                 return;
@@ -139,7 +159,7 @@
                 total += itemTotal;
                 
                 summaryHTML += `
-                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <div class="cart-summary-item">
                         <span>${item.name} (x${item.quantity || 1})</span>
                         <span>Rs. ${itemTotal.toLocaleString()}</span>
                     </div>
@@ -154,11 +174,13 @@
             }
         }
 
-        // THE FIX IS HERE: Proper try-catch with alert and redirect
+        // 🔥 THE FIX: Order Placement Logic
         document.getElementById('checkout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const btn = document.getElementById('place-order-btn');
+            if (!btn) return;
+            
             btn.disabled = true;
             btn.textContent = 'Processing Order...';
             
@@ -192,7 +214,7 @@
             }
 
             try {
-                // Backend Logic: Saving order to Firebase
+                // Backend Logic: Saving order to Firebase (Same as before)
                 const docRef = await addDoc(collection(db, 'orders'), orderData);
                 
                 // ✅ FIX 1: Success Message
@@ -204,7 +226,7 @@
                 // Update header cart count
                 updateCartCount();
                 
-                // ✅ FIX 3: Redirect to Home Page (ya aap 'thank-you.html' likh sakte hain)
+                // ✅ FIX 3: Redirect to Home Page
                 window.location.href = 'index.html'; 
                 
             } catch (error) {
