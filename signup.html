@@ -256,6 +256,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     console.log('Firestore save failed (this is OK):', firestoreError.message);
                 }
 
+                // GA4/GTM sign_up event
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({ event: 'sign_up', method: 'email' });
+
                 // Success
                 successEl.textContent = 'Account created successfully! Redirecting...';
                 successEl.style.display = 'block';

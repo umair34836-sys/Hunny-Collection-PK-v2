@@ -215,6 +215,14 @@ function renderProducts(products) {
     }).join('');
 }
 
+
+// Google Tag Manager ecommerce helper (tracking only; does not affect site functionality)
+function pushGtmEvent(event, ecommerce = {}) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({ event, ecommerce });
+}
+
 // Add to cart
 export function addToCart(product, variant = {}, quantity = 1) {
     if (!currentUser) {
@@ -236,6 +244,19 @@ export function addToCart(product, variant = {}, quantity = 1) {
 
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
+
+    // GA4/GTM ecommerce event
+    pushGtmEvent('add_to_cart', {
+        currency: 'PKR',
+        value: Number(product.sellingPrice || product.price || 0) * Number(quantity || 1),
+        items: [{
+            item_id: product.id,
+            item_name: product.name,
+            price: Number(product.sellingPrice || product.price || 0),
+            quantity: Number(quantity || 1)
+        }]
+    });
+
     return true;
 }
 
@@ -369,6 +390,20 @@ export async function loadProduct(productId) {
         updateProductOGTags(product);
 
         window.currentProduct = product;
+
+        // GA4/GTM ecommerce event
+        pushGtmEvent('view_item', {
+            currency: 'PKR',
+            value: Number(product.sellingPrice || product.price || 0),
+            items: [{
+                item_id: product.id,
+                item_name: product.name,
+                item_category: product.category || undefined,
+                price: Number(product.sellingPrice || product.price || 0),
+                quantity: 1
+            }]
+        });
+
         let selectedSize = null;
 
         // Get images array

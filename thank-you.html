@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Hunny Collection PK</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .thank-you-wrap{min-height:70vh;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+        .thank-you-card{max-width:560px;width:100%;text-align:center;padding:40px 25px;border-radius:16px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+        .thank-you-card .icon{font-size:58px;margin-bottom:15px}
+        .thank-you-card h1{margin:0 0 12px}
+        .thank-you-card p{margin:8px 0}
+        .thank-you-card .order-id{font-weight:700;margin:18px 0}
+        .thank-you-card a{display:inline-block;margin-top:20px}
+    </style>
+</head>
+<body>
+    <main class="thank-you-wrap">
+        <div class="thank-you-card">
+            <div class="icon">✅</div>
+            <h1>Thank You!</h1>
+            <p id="message">Your order has been placed successfully.</p>
+            <p id="orderId" class="order-id"></p>
+            <p id="amount"></p>
+            <a class="btn btn-primary" href="index.html">Continue Shopping</a>
+        </div>
+    </main>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('order');
+        const amount = params.get('amount');
+        const type = params.get('type');
+        if (type === 'digital') {
+            document.getElementById('message').textContent = 'Your digital order has been submitted successfully. We will verify your payment and process it shortly.';
+        }
+        if (id) document.getElementById('orderId').textContent = 'Order ID: ' + id;
+        if (amount) document.getElementById('amount').textContent = 'Total: Rs. ' + Number(amount).toLocaleString();
+    </script>
+</body>
+</html>
