@@ -592,44 +592,34 @@
 
                 const orderRef = await addDoc(collection(db, 'digital-orders'), orderData);
 
-                // GA4/GTM digital purchase event
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({ ecommerce: null });
-                window.dataLayer.push({
-                    event: 'purchase',
-                    ecommerce: {
-                        transaction_id: orderRef.id,
-                        currency: 'PKR',
-                        value: Number(total || 0),
-                        items: cart.map(item => ({
-                            item_id: item.id,
-                            item_name: item.name,
-                            price: Number(item.sellingPrice || item.price || 0),
-                            quantity: Number(item.quantity || 1)
-                        }))
-                    }
-                });
-
-                // Success
-                messageContainer.innerHTML = `
-                    <div class="alert alert-success">
-                        <strong>✅ Order Placed Successfully!</strong><br><br>
-                        Your order has been submitted. We will verify your payment within 24 hours.<br><br>
-                        <strong>Order Details:</strong><br>
-                        - Transaction ID: ${transactionId}<br>
-                        - Payment Method: ${paymentMethod}<br>
-                        - Total Amount: Rs. ${total.toLocaleString()}<br><br>
-                        You will receive an email at <strong>${email}</strong> once your payment is verified and products are delivered.
-                    </div>
-                `;
+                // Purchase event for GA4/GTM. Keep tracking isolated so it cannot block the redirect.
+                try {
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({ ecommerce: null });
+                    window.dataLayer.push({
+                        event: 'purchase',
+                        ecommerce: {
+                            transaction_id: orderRef.id,
+                            currency: 'PKR',
+                            value: Number(total || 0),
+                            items: cart.map(item => ({
+                                item_id: item.id,
+                                item_name: item.name,
+                                price: Number(item.sellingPrice || item.price || 0),
+                                quantity: Number(item.quantity || 1)
+                            }))
+                        }
+                    });
+                } catch (trackingError) {
+                    console.warn('Digital purchase tracking error (order was still created):', trackingError);
+                }
 
                 // Clear cart
                 localStorage.removeItem('digitalCart');
 
-                // Redirect after 3 seconds
-                setTimeout(() => {
-                    window.location.href = `thank-you.html?order=${encodeURIComponent(orderRef.id)}&amount=${encodeURIComponent(total || 0)}&type=digital`;
-                }, 3000);
+                // Order is already saved successfully. Redirect immediately and reliably.
+                const thankYouUrl = `thank-you.html?order=${encodeURIComponent(orderRef.id)}&amount=${encodeURIComponent(total || 0)}&type=digital`;
+                window.location.assign(thankYouUrl);
 
             } catch (error) {
                 console.error('Error placing order:', error);

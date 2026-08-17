@@ -427,37 +427,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             try {
                 const orderRef = await addDoc(collection(db, 'orders'), orderData);
 
-                // GA4/GTM purchase event
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({ ecommerce: null });
-                window.dataLayer.push({
-                    event: 'purchase',
-                    ecommerce: {
-                        transaction_id: orderRef.id,
-                        currency: 'PKR',
-                        value: Number(orderData.total || 0),
-                        shipping: Number(orderData.deliveryCost || 0),
-                        items: cart.map(item => ({
-                            item_id: item.id,
-                            item_name: item.name,
-                            price: Number(item.sellingPrice || item.price || 0),
-                            quantity: Number(item.quantity || 1)
-                        }))
-                    }
-                });
+                // Purchase event for GA4/GTM. Keep this isolated so tracking can never block the redirect.
+                try {
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({ ecommerce: null });
+                    window.dataLayer.push({
+                        event: 'purchase',
+                        ecommerce: {
+                            transaction_id: orderRef.id,
+                            currency: 'PKR',
+                            value: Number(orderData.total || 0),
+                            shipping: Number(orderData.deliveryCost || 0),
+                            items: cart.map(item => ({
+                                item_id: item.id,
+                                item_name: item.name,
+                                price: Number(item.sellingPrice || item.price || 0),
+                                quantity: Number(item.quantity || 1)
+                            }))
+                        }
+                    });
+                } catch (trackingError) {
+                    console.warn('Purchase tracking error (order was still created):', trackingError);
+                }
 
                 localStorage.removeItem('cart');
-                
-                messageContainer.innerHTML = `
-                    <div class="success-message">
-                        <strong>Order placed successfully!</strong><br>
-                        We will contact you soon for confirmation.
-                    </div>
-                `;
-                
-                setTimeout(() => {
-                    window.location.href = `thank-you.html?order=${encodeURIComponent(orderRef.id)}&amount=${encodeURIComponent(orderData.total || 0)}`;
-                }, 2000);
+
+                // Order is already saved successfully. Redirect immediately and reliably.
+                const thankYouUrl = `thank-you.html?order=${encodeURIComponent(orderRef.id)}&amount=${encodeURIComponent(orderData.total || 0)}`;
+                window.location.assign(thankYouUrl);
             } catch (error) {
                 console.error('Error placing order:', error);
                 messageContainer.innerHTML = `
