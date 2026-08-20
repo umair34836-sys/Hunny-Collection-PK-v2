@@ -170,10 +170,13 @@ export async function loadFeaturedProducts() {
     const container = document.getElementById('products-container');
     if (!container) return;
 
-    // File se, agar mojood hai
+    // index.html paints these before this module even runs. Re-drawing the
+    // same cards would only cause a visible flicker, so leave them alone.
+    if (container.getAttribute('data-prefilled') === '1') return;
+
     const cached = staticProducts();
     if (cached) {
-        renderProductCards(container, cached.slice(0, 8));
+        renderProductCards(container, cached.slice(0, 12));
         return;
     }
 

@@ -98,20 +98,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                  alt="Hunny Collection PK - Women's fashion, accessories and beauty. Style, quality, trust."
                  width="1536" height="1024" fetchpriority="high">
         </a>
-        <div class="hero-banner__cta">
-            <a href="shop.html" class="btn-primary">Shop Now</a>
-        </div>
     </section>
-
-    <!-- Trust strip -->
-    <div class="trust-strip">
-        <div class="container">
-            <div class="trust-strip__item"><span>💵</span><p>Cash on Delivery<small>All over Pakistan</small></p></div>
-            <div class="trust-strip__item"><span>🚚</span><p>Fast Delivery<small>2&ndash;5 working days</small></p></div>
-            <div class="trust-strip__item"><span>🔄</span><p>7 Day Exchange<small>Unused, with tags</small></p></div>
-            <div class="trust-strip__item"><span>🔒</span><p>Order Online<small>Sirf 30 second</small></p></div>
-        </div>
-    </div>
 
     <!-- Video Advertisement - Top Position -->
     <div id="video-ad-container-top"></div>
@@ -179,6 +166,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <script type="module" src="firebase-config.js"></script>
     <script src="products-data.js"></script>
+
+    <!-- Products are drawn here, before any module loads.
+         app.js is an ES module that imports Firebase at the top, and a module
+         will not execute until every one of its imports has downloaded. That
+         meant the products sat ready in products-data.js while the page waited
+         on the Firebase SDK from gstatic.com. This plain script has no imports,
+         so it runs the moment the file above is parsed. -->
+    <script>
+    (function () {
+        var list = window.HUNNY_PRODUCTS;
+        if (!list || !list.length) return;
+
+        var box = document.getElementById('products-container');
+        if (!box) return;
+
+        var items = list.slice().sort(function (a, b) {
+            var x = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            var y = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return y - x;
+        }).slice(0, 12);
+
+        var html = '';
+        for (var i = 0; i < items.length; i++) {
+            var p = items[i];
+            var sell = Number(p.sellingPrice || p.price || 0);
+            var was  = Number(p.originalPrice || 0);
+            var off  = (was > sell && was > 0) ? Math.round((was - sell) / was * 100) : 0;
+            var img  = (p.images && p.images[0]) || 'assets/logo-new.png';
+            var href = p.slug ? p.slug + '.html' : 'product.html?id=' + p.id;
+
+            // The first four are what a phone shows without scrolling, so
+            // only those load eagerly. The rest wait until they are scrolled to.
+            var lazy = i < 4 ? '' : ' loading="lazy"';
+
+            html += '<a href="' + href + '" class="product-card">'
+                 +    '<div style="position:relative;">'
+                 +      '<img src="' + img + '" alt="' + String(p.name || '').replace(/"/g, '&quot;')
+                 +        '" class="product-image" width="400" height="400"' + lazy + '>'
+                 +      (off > 0 ? '<span class="discount-badge">🔥 ' + off + '% OFF</span>' : '')
+                 +    '</div>'
+                 +    '<div class="product-info">'
+                 +      '<div class="product-category">' + (p.category || '') + '</div>'
+                 +      '<div class="product-title">' + (p.name || '') + '</div>'
+                 +      '<div class="product-price-group">'
+                 +        '<span class="product-selling-price">Rs. ' + sell.toLocaleString() + '</span>'
+                 +        (was > sell ? '<span class="product-original-price">Rs. ' + was.toLocaleString() + '</span>' : '')
+                 +      '</div>'
+                 +    '</div>'
+                 +  '</a>';
+        }
+
+        box.innerHTML = html;
+        box.setAttribute('data-prefilled', '1');   // app.js checks this and leaves it alone
+    })();
+    </script>
+
     <script type="module" src="app.js"></script>
     <script type="module" src="site-settings.js"></script>
     <script type="module">
@@ -197,10 +240,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <link rel="stylesheet" href="whatsapp-float.css">
     <script src="whatsapp-float.js"></script>
     <link rel="stylesheet" href="chat-widget.css">
-    <script type="module" src="chat-widget.js"></script>
+    <script>
+    // Loaded once the page is interactive, so it never delays the products.
+    window.addEventListener('load', function () {
+        var s = document.createElement('script');
+        s.type = 'module'; s.src = 'chat-widget.js';
+        document.body.appendChild(s);
+    });
+    </script>
 
     <!-- Video Advertisement -->
-    <script type="module" src="video-ad.js"></script>
+    <script>
+    window.addEventListener('load', function () {
+        var s = document.createElement('script');
+        s.type = 'module'; s.src = 'video-ad.js';
+        document.body.appendChild(s);
+    });
+    </script>
 
     <!-- Mobile Menu Toggle -->
     <script>

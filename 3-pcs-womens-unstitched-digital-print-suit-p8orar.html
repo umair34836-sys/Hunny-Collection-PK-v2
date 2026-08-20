@@ -89,6 +89,7 @@ Shirt Back... Rs. 3,350. Cash on Delivery all over Pakistan, 2-5 day delivery, 7
   .pd-cart{display:block;width:100%;text-align:center;background:#fff;color:#1e1a17;border:1px solid #1e1a17;
            font-weight:600;font-size:15px;padding:14px;border-radius:6px;margin-top:10px;
            text-decoration:none;cursor:pointer;font-family:inherit}
+  .pd-opts{display:block;text-align:center;font-size:14px;color:#8a6a2a;margin-top:12px;text-decoration:none}
   .pd-note{font-size:13px;color:#8a8279;text-align:center;margin-top:11px}
   .pd-trust{margin-top:22px;border:1px solid #ececec;border-radius:8px;background:#fbfbfa;padding:2px 15px}
   .pd-trust div{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid #efefef;font-size:14px}
@@ -132,8 +133,9 @@ Shirt Back... Rs. 3,350. Cash on Delivery all over Pakistan, 2-5 day delivery, 7
       </div>
       <div class="pd-stock">In stock</div>
 
-      <a class="pd-buy" href="checkout.html?buy=p8oraRttYlYpF6qaKH7R">Buy Now &mdash; Cash on Delivery</a>
-      <a class="pd-cart" href="product.html?id=p8oraRttYlYpF6qaKH7R">Size &amp; options dekhein</a>
+      <button class="pd-buy" type="button" onclick="hcBuyNow()">Buy Now &mdash; Cash on Delivery</button>
+      <button class="pd-cart" type="button" onclick="hcAddToCart()">Add to Cart</button>
+      <a class="pd-opts" href="product.html?id=p8oraRttYlYpF6qaKH7R">Size &amp; doosre options dekhein</a>
       <p class="pd-note">Paisay parcel milne par dein &middot; Koi advance nahi</p>
 
       <div class="pd-trust">
@@ -183,6 +185,52 @@ Shirt Back... Rs. 3,350. Cash on Delivery all over Pakistan, 2-5 day delivery, 7
 </div>
 
 <script>
+  // The product this page is about. Written into the page at build time so
+  // the cart works without any network request.
+  var HC_PRODUCT = {"id": "p8oraRttYlYpF6qaKH7R", "name": "3 Pcs Women's Unstitched Digital Print Suit", "category": "Women's Unstitched", "sellingPrice": 3350, "originalPrice": 5583, "price": 3350, "images": ["assets/products/p8oraRttYlYpF6qaKH7R-0.jpg"], "slug": "3-pcs-womens-unstitched-digital-print-suit-p8orar", "sku": "p8oraRttYlYpF6qaKH7R"};
+
+  // Same shape and same localStorage key that app.js uses, so the cart,
+  // the header count and checkout all stay in agreement.
+  function hcPutInCart() {
+    var cart = [];
+    try { cart = JSON.parse(localStorage.getItem('cart') || '[]'); } catch (e) { cart = []; }
+    if (!Array.isArray(cart)) cart = [];
+
+    var variant = {};
+    var i = cart.findIndex(function (item) {
+      return item.id === HC_PRODUCT.id && JSON.stringify(item.variant) === JSON.stringify(variant);
+    });
+
+    if (i > -1) {
+      cart[i].quantity = (cart[i].quantity || 1) + 1;
+    } else {
+      var entry = {};
+      for (var k in HC_PRODUCT) entry[k] = HC_PRODUCT[k];
+      entry.variant = variant;
+      entry.quantity = 1;
+      cart.push(entry);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    return true;
+  }
+
+  function hcBuyNow() {
+    hcPutInCart();
+    window.location.href = 'checkout.html';
+  }
+
+  function hcAddToCart() {
+    hcPutInCart();
+    var el = document.createElement('div');
+    el.textContent = 'Cart me add ho gaya';
+    el.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:90px;' +
+      'background:#1e1a17;color:#fff;padding:13px 24px;border-radius:50px;font-size:15px;' +
+      'font-weight:600;z-index:2000;box-shadow:0 6px 24px rgba(0,0,0,.25)';
+    document.body.appendChild(el);
+    setTimeout(function () { el.remove(); }, 1900);
+  }
+
   // Thumbnail switching. Everything above renders without JavaScript;
   // this only adds convenience on top of already-visible content.
   document.querySelectorAll('.pd-thumbs img').forEach(function (t) {

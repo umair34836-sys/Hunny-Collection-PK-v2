@@ -84,6 +84,65 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             resize: vertical;
             min-height: 100px;
         }
+
+        /* ---- choosing what to order ---- */
+        .pick-hint {
+            font-size: 13px;
+            color: #8a8279;
+            margin: 0 0 10px;
+        }
+
+        .pick-all {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            padding-bottom: 12px;
+            margin-bottom: 4px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .order-item--pick {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .order-item--pick .order-item__body { flex: 1; }
+        .order-item__price { white-space: nowrap; font-weight: 600; }
+
+        /* A tap target this size is comfortable on a phone */
+        .pick, #select-all {
+            width: 20px;
+            height: 20px;
+            accent-color: #B8862F;
+            flex: 0 0 auto;
+            cursor: pointer;
+        }
+
+        /* Unticked rows fade back so the choice is obvious at a glance */
+        .order-item--pick:has(.pick:not(:checked)) {
+            opacity: .42;
+        }
+
+        .left-behind {
+            font-size: 13px;
+            color: #8a6a2a;
+            background: #FFF9EC;
+            border: 1px solid #F0DCA8;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin: 12px 0 0;
+        }
+
+        #place-order-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
         .order-summary {
             background: var(--white);
             padding: 25px;
@@ -294,10 +353,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
                 
                 <div class="order-summary">
-                    <h3 style="margin-bottom: 20px;">Order Summary</h3>
+                    <h3 style="margin-bottom: 6px;">Order Summary</h3>
+
+                    <!-- Shown only when there is more than one item. A customer
+                         with three things in the cart may only want one today,
+                         and forcing all three loses the whole order. -->
+                    <div id="pick-bar" style="display:none;">
+                        <p class="pick-hint">Jo cheezein abhi lena chahte hain unhe tick rakhein.</p>
+                        <label class="pick-all">
+                            <input type="checkbox" id="select-all" checked>
+                            <span>Sab select karein</span>
+                        </label>
+                    </div>
+
                     <div id="order-items">
                         <!-- Items will load here -->
                     </div>
+
+                    <p id="left-behind" class="left-behind" style="display:none;"></p>
                     <div class="summary-total">
                         <div style="display: flex; justify-content: space-between;">
                             <span>Total</span>
@@ -364,37 +437,102 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
         });
 
-        // Load order summary
-        const cart = getCartItems();
-        const itemsContainer = document.getElementById('order-items');
-
-        if (cart.length === 0) {
-            window.location.href = 'cart.html';
-        } else {
-            itemsContainer.innerHTML = cart.map(item => {
-                const sellingPrice = item.sellingPrice || item.price || 0;
-                return `
-                    <div class="order-item">
-                        <div>
-                            <strong>${item.name}</strong><br>
-                            <small>Qty: ${item.quantity}</small>
-                        </div>
-                        <div>Rs. ${(sellingPrice * item.quantity).toLocaleString()}</div>
-                    </div>
-                `;
-            }).join('');
-
-            const total = cart.reduce((sum, item) => sum + (((item.sellingPrice || item.price) || 0) * item.quantity), 0);
-            document.getElementById('order-total').textContent = total.toLocaleString();
-        }
-
-        // Handle checkout
         const checkoutForm = document.getElementById('checkout-form');
         const placeOrderBtn = document.getElementById('place-order-btn');
         const messageContainer = document.getElementById('message-container');
 
+        // Load order summary
+        const cart = getCartItems();
+        const itemsContainer = document.getElementById('order-items');
+        const totalEl = document.getElementById('order-total');
+        const pickBar = document.getElementById('pick-bar');
+        const leftBehind = document.getElementById('left-behind');
+        const selectAll = document.getElementById('select-all');
+
+        const priceOf = item => Number(item.sellingPrice || item.price || 0);
+
+        if (cart.length === 0) {
+            window.location.href = 'cart.html';
+        } else {
+            if (cart.length > 1) pickBar.style.display = 'block';
+
+            itemsContainer.innerHTML = cart.map((item, i) => {
+                const line = priceOf(item) * item.quantity;
+                // With a single item there is nothing to choose between, so the
+                // checkbox is hidden rather than shown ticked and pointless.
+                const box = cart.length > 1
+                    ? `<input type="checkbox" class="pick" data-i="${i}" checked>`
+                    : '';
+                return `
+                    <label class="order-item${cart.length > 1 ? ' order-item--pick' : ''}">
+                        ${box}
+                        <div class="order-item__body">
+                            <strong>${item.name}</strong><br>
+                            <small>Qty: ${item.quantity}</small>
+                        </div>
+                        <div class="order-item__price">Rs. ${line.toLocaleString()}</div>
+                    </label>
+                `;
+            }).join('');
+        }
+
+        // The one place that decides what is actually being bought.
+        function chosenItems() {
+            if (cart.length <= 1) return cart.slice();
+            return Array.from(document.querySelectorAll('.pick'))
+                .filter(cb => cb.checked)
+                .map(cb => cart[Number(cb.dataset.i)]);
+        }
+
+        function refreshTotal() {
+            const picked = chosenItems();
+            const total = picked.reduce((s, it) => s + priceOf(it) * it.quantity, 0);
+            totalEl.textContent = total.toLocaleString();
+
+            const rest = cart.length - picked.length;
+            if (rest > 0) {
+                leftBehind.style.display = 'block';
+                leftBehind.textContent = rest + ' cheez' + (rest > 1 ? 'ein' : '') +
+                    ' cart me rahengi, aap baad me order kar sakte hain.';
+            } else {
+                leftBehind.style.display = 'none';
+            }
+
+            // Nothing ticked means nothing to order.
+            placeOrderBtn.disabled = picked.length === 0;
+            placeOrderBtn.textContent = picked.length === 0
+                ? 'Kam se kam ek cheez select karein'
+                : 'Confirm Order';
+
+            if (selectAll) {
+                const boxes = document.querySelectorAll('.pick');
+                selectAll.checked = picked.length === boxes.length && boxes.length > 0;
+            }
+        }
+
+        document.querySelectorAll('.pick').forEach(cb =>
+            cb.addEventListener('change', refreshTotal));
+
+        refreshTotal();
+
+        if (selectAll) {
+            selectAll.addEventListener('change', () => {
+                document.querySelectorAll('.pick').forEach(cb => { cb.checked = selectAll.checked; });
+                refreshTotal();
+            });
+        }
+
+        // Handle checkout
+
         checkoutForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const ordering = chosenItems();
+            if (ordering.length === 0) {
+                messageContainer.innerHTML =
+                    '<div class="error-message">Kam se kam ek cheez select karein.</div>';
+                return;
+            }
 
             placeOrderBtn.textContent = 'Placing Order...';
             placeOrderBtn.disabled = true;
@@ -415,8 +553,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         fullAddress: document.getElementById('address').value,
                         city: document.getElementById('city').value
                     },
-                    items: cart,
-                    total: cart.reduce((sum, item) => sum + (((item.sellingPrice || item.price) || 0) * item.quantity), 0),
+                    items: ordering,
+                    total: ordering.reduce((sum, item) => sum + priceOf(item) * item.quantity, 0),
                     shippingCost: 0, // Can be updated by admin
                     packagingCost: 10, // Default packaging
                     deliveryCost: 250, // Fixed delivery cost
@@ -428,7 +566,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 };
 
                 await addDoc(collection(db, 'orders'), orderData);
-                localStorage.removeItem('cart');
+                // Keep whatever the customer chose not to order this time,
+                // so a second order does not mean adding it all again.
+                const orderedIds = ordering.map(it => it.id + '|' + JSON.stringify(it.variant || {}));
+                const remaining = cart.filter(it =>
+                    !orderedIds.includes(it.id + '|' + JSON.stringify(it.variant || {})));
+
+                if (remaining.length) {
+                    localStorage.setItem('cart', JSON.stringify(remaining));
+                } else {
+                    localStorage.removeItem('cart');
+                }
                 
                 messageContainer.innerHTML = `
                     <div class="success-message">
