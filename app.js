@@ -18,7 +18,9 @@ function updateAuthLink(user) {
     const authLink = document.getElementById('auth-link');
     if (!authLink) return;
 
-    if (user) {
+    // An anonymous guest session is not a real account, so the header must
+    // still offer Login rather than pretending the visitor is signed in.
+    if (user && !user.isAnonymous) {
         authLink.textContent = '👤 Account';
         authLink.href = 'account.html';
     } else {
@@ -225,11 +227,9 @@ function pushGtmEvent(event, ecommerce = {}) {
 
 // Add to cart
 export function addToCart(product, variant = {}, quantity = 1) {
-    if (!currentUser) {
-        alert('Please login to add items to cart');
-        window.location.href = 'login.html';
-        return false;
-    }
+    // No login gate here. The cart lives in localStorage, so it works fine
+    // for a guest. Sign-in is handled silently at checkout, which means a
+    // customer paying cash on delivery never has to create an account.
 
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existingIndex = cart.findIndex(
