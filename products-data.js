@@ -23,7 +23,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/PRMravqJ0ikpLUmC1HC0-1.jpg",
    "assets/products/PRMravqJ0ikpLUmC1HC0-2.jpg",
    "assets/products/PRMravqJ0ikpLUmC1HC0-3.jpg"
-  ]
+  ],
+  "slug": "elegant-butterfly-earrings-for-women-with-gemstones-prmrav"
  },
  {
   "id": "9n3w70pe8aOXhMxE7aiO",
@@ -37,7 +38,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/9n3w70pe8aOXhMxE7aiO-0.jpg",
    "assets/products/9n3w70pe8aOXhMxE7aiO-1.jpg"
-  ]
+  ],
+  "slug": "3-piece-fragrance-set-for-men-women-pakistan-9n3w70"
  },
  {
   "id": "OvjKNyGsASJLgHomb7Ss",
@@ -50,7 +52,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-06-14T11:31:58.157Z",
   "images": [
    "assets/products/OvjKNyGsASJLgHomb7Ss-0.jpg"
-  ]
+  ],
+  "slug": "kashees-glamorous-bridal-makeup-base-ivory-waterproof-ovjkny"
  },
  {
   "id": "CyiqTxUXI718yK4jIA97",
@@ -64,7 +67,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/CyiqTxUXI718yK4jIA97-0.jpg",
    "assets/products/CyiqTxUXI718yK4jIA97-1.jpg"
-  ]
+  ],
+  "slug": "multicolor-flower-hair-catcher-pack-of-2-abs-cyiqtx"
  },
  {
   "id": "4nmmcFufmSQb0dhQ3PWm",
@@ -78,7 +82,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/4nmmcFufmSQb0dhQ3PWm-0.jpg",
    "assets/products/4nmmcFufmSQb0dhQ3PWm-1.jpg"
-  ]
+  ],
+  "slug": "green-gemstone-earrings-set-for-women-4nmmcf"
  },
  {
   "id": "7sbiQSEMXqf5LJbVWxvK",
@@ -91,7 +96,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-05-14T10:01:42.794Z",
   "images": [
    "assets/products/7sbiQSEMXqf5LJbVWxvK-0.jpg"
-  ]
+  ],
+  "slug": "green-floral-printed-cotton-2pc-shirt-trouser-set-7sbiqs"
  },
  {
   "id": "XdhWEFtHsDIlnuySyW3S",
@@ -104,7 +110,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-05-14T09:46:18.505Z",
   "images": [
    "assets/products/XdhWEFtHsDIlnuySyW3S-0.jpg"
-  ]
+  ],
+  "slug": "white-lawn-embroidered-2-piece-suit-with-khussas-xdhwef"
  },
  {
   "id": "gg6jb6vXck9LJTDHZhxx",
@@ -118,7 +125,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/gg6jb6vXck9LJTDHZhxx-0.jpg",
    "assets/products/gg6jb6vXck9LJTDHZhxx-1.jpg"
-  ]
+  ],
+  "slug": "3-piece-embroidered-blue-lawn-suit-for-eid-gg6jb6"
  },
  {
   "id": "RrAfeNv1qxrcuPKkd3Ne",
@@ -132,7 +140,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/RrAfeNv1qxrcuPKkd3Ne-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1689-95-619123-product-2.jpg"
-  ]
+  ],
+  "slug": "purple-embroidered-maxi-dress-for-women-party-wear-rrafen"
  },
  {
   "id": "Qzfpamr41VTerPEjE5RB",
@@ -145,7 +154,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-21T03:44:40.077Z",
   "images": [
    "assets/products/Qzfpamr41VTerPEjE5RB-0.jpg"
-  ]
+  ],
+  "slug": "pink-glitter-2pcs-maxi-dress-set-party-wear-qzfpam"
  },
  {
   "id": "OAhaLjGlr2y0wodnQUls",
@@ -159,7 +169,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/OAhaLjGlr2y0wodnQUls-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/573-2-705496-product-2.webp"
-  ]
+  ],
+  "slug": "3-pcs-womens-unstitched-embroidered-suit-oahalj"
  },
  {
   "id": "Vqjcd0f0nYldjt5Cjflv",
@@ -173,7 +184,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/Vqjcd0f0nYldjt5Cjflv-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1176-3-658312-product-2.webp"
-  ]
+  ],
+  "slug": "blue-block-print-katan-silk-2-piece-suit-vqjcd0"
  },
  {
   "id": "q9xNgpOVysw3aCFnzTOf",
@@ -187,7 +199,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/q9xNgpOVysw3aCFnzTOf-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-3-658316-product-2.webp"
-  ]
+  ],
+  "slug": "block-printed-katan-silk-2-piece-suit-for-q9xngp"
  },
  {
   "id": "BfF5pXuBVHRQ7AuUqz0L",
@@ -201,7 +214,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/BfF5pXuBVHRQ7AuUqz0L-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/594-242-540531-product-2.jpg"
-  ]
+  ],
+  "slug": "mehndi-sticker-plastic-easy-apply-wedding-festival-use-bff5px"
  },
  {
   "id": "AmlEthkhom2Csy4dcJxy",
@@ -215,7 +229,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/AmlEthkhom2Csy4dcJxy-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/729-0-260067-product-2.jpeg"
-  ]
+  ],
+  "slug": "3-piece-womens-stitched-embroidered-anarkali-set-maroon-amleth"
  },
  {
   "id": "0uTAPHr59KsWaUEWxUW0",
@@ -235,7 +250,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/700-44-706765-product-5.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/700-44-706765-product-6.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/700-44-706765-product-9.webp"
-  ]
+  ],
+  "slug": "10pcs-adjustable-fashion-rings-set-black-gold-silver-0utaph"
  },
  {
   "id": "GF6T6rH2tEI8zF5Glqe8",
@@ -251,7 +267,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/GF6T6rH2tEI8zF5Glqe8-1.jpg",
    "assets/products/GF6T6rH2tEI8zF5Glqe8-2.jpg",
    "assets/products/GF6T6rH2tEI8zF5Glqe8-3.jpg"
-  ]
+  ],
+  "slug": "hair-threading-machine-for-smooth-skin-and-hair-gf6t6r"
  },
  {
   "id": "UjdaZSNKESC9ZfvoMnVf",
@@ -266,7 +283,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/UjdaZSNKESC9ZfvoMnVf-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1281-72-444789-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1281-72-444789-product-3.jpg"
-  ]
+  ],
+  "slug": "matte-liquid-lip-gloss-pack-of-12-huda-ujdazs"
  },
  {
   "id": "JTkCtqbJDXMDWaaaIkmr",
@@ -279,7 +297,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-09T09:53:08.823Z",
   "images": [
    "assets/products/JTkCtqbJDXMDWaaaIkmr-0.jpg"
-  ]
+  ],
+  "slug": "swiss-lawn-3-pcs-womens-unstitched-printed-suit-jtkctq"
  },
  {
   "id": "3qxOiSLK8Yhwy33izDnJ",
@@ -292,7 +311,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-09T09:46:27.947Z",
   "images": [
    "assets/products/3qxOiSLK8Yhwy33izDnJ-0.jpg"
-  ]
+  ],
+  "slug": "maroon-printed-3-pcs-women-suit-cotton-lawn-3qxois"
  },
  {
   "id": "SXS3PDNWLODmwOdcFqUz",
@@ -305,7 +325,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-09T09:45:20.651Z",
   "images": [
    "assets/products/SXS3PDNWLODmwOdcFqUz-0.jpg"
-  ]
+  ],
+  "slug": "womens-3-pcs-printed-cotton-lawn-suit-black-sxs3pd"
  },
  {
   "id": "MYQRcAl2kdq0c7yVCr6i",
@@ -318,7 +339,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-09T09:43:12.970Z",
   "images": [
    "assets/products/MYQRcAl2kdq0c7yVCr6i-0.jpg"
-  ]
+  ],
+  "slug": "summer-printed-3-pcs-women-suit-cotton-lawn-myqrca"
  },
  {
   "id": "Bx64vz1NpJ6buvW2Izvs",
@@ -334,7 +356,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/714-11-649370-product-1.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/714-11-649370-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/714-11-649370-product-3.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-stitched-silk-embroidered-shirt-and-bx64vz"
  },
  {
   "id": "EAEiZl3E5HBW1XCZJFey",
@@ -350,7 +373,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/2185-11-717767-product-1.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/2185-11-717767-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/2185-11-717767-product-3.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-stitched-shamoz-silk-embroidered-shirt-eaeizl"
  },
  {
   "id": "Cpzg5subUkkhZL6Z3rXM",
@@ -371,7 +395,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/Cpzg5subUkkhZL6Z3rXM-6.jpg",
    "assets/products/Cpzg5subUkkhZL6Z3rXM-7.jpg",
    "assets/products/Cpzg5subUkkhZL6Z3rXM-8.jpg"
-  ]
+  ],
+  "slug": "24-pcs-multicolor-fake-nails-diy-party-wear-cpzg5s"
  },
  {
   "id": "JJOjjgF041jP2NRFwzXU",
@@ -386,7 +411,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/JJOjjgF041jP2NRFwzXU-0.jpg",
    "assets/products/JJOjjgF041jP2NRFwzXU-1.jpg",
    "assets/products/JJOjjgF041jP2NRFwzXU-2.jpg"
-  ]
+  ],
+  "slug": "sauvage-long-lasting-unisex-perfume-1-pcs-citrusy-jjojjg"
  },
  {
   "id": "PIjvoleoVfOl2kmik6gy",
@@ -400,7 +426,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/PIjvoleoVfOl2kmik6gy-0.jpg",
    "assets/products/PIjvoleoVfOl2kmik6gy-1.jpg"
-  ]
+  ],
+  "slug": "fancy-gold-plated-crystal-earrings-set-of-3-pijvol"
  },
  {
   "id": "Oe67It6FeTjOfvZkuOj7",
@@ -417,7 +444,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1119-35-709645-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1119-35-709645-product-3.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1119-35-709645-product-4.webp"
-  ]
+  ],
+  "slug": "girls-fleece-printed-2pc-set-multicolor-oe67it"
  },
  {
   "id": "SeIEX2wWaBpNKgK4CfDq",
@@ -433,7 +461,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1119-207-680862-product-4.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1119-207-680862-product-3.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1119-207-680862-product-2.webp"
-  ]
+  ],
+  "slug": "2-pcs-boys-girls-printed-hoodie-tracksuit-winter-seiex2"
  },
  {
   "id": "Sia3uHlNqkj5KQTj2J8X",
@@ -448,7 +477,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/Sia3uHlNqkj5KQTj2J8X-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/592-77-659605-product-3.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/592-77-659605-product-1.webp"
-  ]
+  ],
+  "slug": "vaseline-petroleum-jelly-original-100-pure-for-all-sia3uh"
  },
  {
   "id": "P8A6fHiw2fJZBljI0quY",
@@ -466,7 +496,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1701-55-681101-product-3.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1701-55-681101-product-4.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1701-55-681101-product-5.webp"
-  ]
+  ],
+  "slug": "anti-hair-fall-derma-roller-plastic-brightening-anti-p8a6fh"
  },
  {
   "id": "Pgmc5tsb7T9NC7Tw5FKj",
@@ -482,7 +513,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/943-241-682036-product-1.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/943-241-682036-product-5.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/943-241-682036-product-8.webp"
-  ]
+  ],
+  "slug": "quick-lather-liquid-soap-for-daily-use-pgmc5t"
  },
  {
   "id": "7BKbFfqdvDgAjzXEq6y8",
@@ -499,7 +531,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1598-72-695538-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1598-72-695538-product-3.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1598-72-695538-product-4.webp"
-  ]
+  ],
+  "slug": "multicolor-hydrating-lip-oil-gloss-30g-7bkbff"
  },
  {
   "id": "LwpkPsfCBJkFXrk7xjSP",
@@ -515,7 +548,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1701-241-689223-product-1.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1701-241-689223-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1701-241-689223-product-4.webp"
-  ]
+  ],
+  "slug": "teeth-whitening-serum-purple-toothpaste-daily-use-lwpkps"
  },
  {
   "id": "EQpFHZ0vmqxubMmHFuG7",
@@ -529,7 +563,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/EQpFHZ0vmqxubMmHFuG7-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1049-3-690965-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-eqpfhz"
  },
  {
   "id": "MOvaGPSwkAgO4faeHWTt",
@@ -543,7 +578,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/MOvaGPSwkAgO4faeHWTt-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718756-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-movagp"
  },
  {
   "id": "L41HYgARiJK0gSALtCc3",
@@ -557,7 +593,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/L41HYgARiJK0gSALtCc3-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718759-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-l41hyg"
  },
  {
   "id": "IrUab0hFsPjF8X57PQzw",
@@ -571,7 +608,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/IrUab0hFsPjF8X57PQzw-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1249-3-709869-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-women-printed-cotton-suit-black-iruab0"
  },
  {
   "id": "J1GCcNxmtJxXVxowY741",
@@ -589,7 +627,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1734-2-715563-product-4.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1734-2-715563-product-5.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1734-2-715563-product-6.webp"
-  ]
+  ],
+  "slug": "3-pcs-womens-unstitched-embroidered-suit-j1gccn"
  },
  {
   "id": "L6hcWU65ORgUOumXlCOs",
@@ -604,7 +643,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1140-207-703875-product-1.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1140-207-703875-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1140-207-703875-product-3.webp"
-  ]
+  ],
+  "slug": "boys-printed-polyester-tracksuit-brown-2pcs-l6hcwu"
  },
  {
   "id": "BDM3XnRYOT2eunGyRZZG",
@@ -618,7 +658,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "https://content.public.markaz.app/markazimagevideo/public/products/817-35-701145-product-1.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/817-35-701145-product-2.webp"
-  ]
+  ],
+  "slug": "maroon-embroidered-girls-kurta-shalwar-suit-3pcs-bdm3xn"
  },
  {
   "id": "4Uto6z3FOXHKW6OqZfuN",
@@ -633,7 +674,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/4Uto6z3FOXHKW6OqZfuN-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1046-14-403738-product-1.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1046-14-403738-product-2.jpg"
-  ]
+  ],
+  "slug": "women-printed-cotton-night-suit-pink-medium-to-4uto6z"
  },
  {
   "id": "TmWH2bYGJVfRcRgzkKdq",
@@ -646,7 +688,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-03-31T06:31:48.990Z",
   "images": [
    "https://content.public.markaz.app/markazimagevideo/public/products/74-165-303062-product-1.jpeg"
-  ]
+  ],
+  "slug": "fancy-tissue-3-piece-women-suit-teal-embroidered-tmwh2b"
  },
  {
   "id": "TKU4efkWDv5BPKveEmb4",
@@ -665,7 +708,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/TKU4efkWDv5BPKveEmb4-4.jpg",
    "assets/products/TKU4efkWDv5BPKveEmb4-5.jpg",
    "assets/products/TKU4efkWDv5BPKveEmb4-6.jpg"
-  ]
+  ],
+  "slug": "women-crystal-watch-square-dial-touch-screen-rhinestone-tku4ef"
  },
  {
   "id": "GmDzKK6vng1Gc6x7QWlS",
@@ -679,7 +723,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406051-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406051-product-1.jpg"
-  ]
+  ],
+  "slug": "black-katan-silk-womens-3-piece-suit-set-gmdzkk"
  },
  {
   "id": "PHYS4ND3oxuIFr04qhft",
@@ -694,7 +739,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-1.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-3.webp"
-  ]
+  ],
+  "slug": "long-lasting-odor-protection-body-spray-2-phys4n"
  },
  {
   "id": "BnY7oIazUEvSnLaiy4Sh",
@@ -709,7 +755,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-1.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-3.jpg"
-  ]
+  ],
+  "slug": "kushta-hair-oil-120ml-anti-hair-loss-booster-bny7oi"
  },
  {
   "id": "QexdqGoUcIp267r3ZhKs",
@@ -724,7 +771,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-1-withcode.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-1.jpg"
-  ]
+  ],
+  "slug": "3-pcs-womens-unstitched-katan-silk-plain-suit-qexdqg"
  },
  {
   "id": "8fWjaMa9MfQIWr2Vg7vN",
@@ -737,7 +785,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-03-19T10:01:34.631Z",
   "images": [
    "https://i.ibb.co/wrPK0GB2/Whats-App-Image-2026-03-19-at-2-55-48-PM.jpg"
-  ]
+  ],
+  "slug": "turquoise-printed-womens-2pcs-polo-cotton-suit-8fwjam"
  },
  {
   "id": "68sfU9aYCRc8XTaFTGIx",
@@ -754,7 +803,8 @@ window.HUNNY_PRODUCTS = [
    "https://i.ibb.co/RpQTqXGs/Whats-App-Image-2026-03-18-at-12-31-51-PM-1.jpg",
    "https://i.ibb.co/Pv3gK9Vb/Whats-App-Image-2026-03-18-at-12-31-50-PM.jpg",
    "https://i.ibb.co/4w6Y1Yf8/Whats-App-Image-2026-03-18-at-12-31-51-PM.jpg"
-  ]
+  ],
+  "slug": "black-chiffon-embroidered-maxi-suit-set-for-eid-68sfu9"
  },
  {
   "id": "X8LNFBbOSKHDIk2rYJV3",
@@ -773,7 +823,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-2.jpeg",
    "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-3.jpeg",
    "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-4.jpeg"
-  ]
+  ],
+  "slug": "elevate-your-wardrobe-with-our-maxi-collection-x8lnfb"
  },
  {
   "id": "yfQkhC2iTVeMRDmZpPaI",
@@ -788,7 +839,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/yfQkhC2iTVeMRDmZpPaI-0.jpg",
    "assets/products/yfQkhC2iTVeMRDmZpPaI-1.jpg",
    "assets/products/yfQkhC2iTVeMRDmZpPaI-2.jpg"
-  ]
+  ],
+  "slug": "luxury-ladies-watch-off-white-leather-quartz-yfqkhc"
  },
  {
   "id": "gMY45UGYC8hegqdcAzNK",
@@ -803,7 +855,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/gMY45UGYC8hegqdcAzNK-0.jpg",
    "assets/products/gMY45UGYC8hegqdcAzNK-1.jpg",
    "assets/products/gMY45UGYC8hegqdcAzNK-2.jpg"
-  ]
+  ],
+  "slug": "luxury-ladies-watch-off-white-leather-quartz-gmy45u"
  },
  {
   "id": "kGY2uAwr2LlARYbLjdfD",
@@ -818,7 +871,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/kGY2uAwr2LlARYbLjdfD-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/648-2-719700-product-4.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/648-2-719700-product-1.webp"
-  ]
+  ],
+  "slug": "3-pcs-womens-unstitched-digital-print-suit-kgy2ua"
  },
  {
   "id": "x2iZXOzMxpoHv54nsthK",
@@ -833,7 +887,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/x2iZXOzMxpoHv54nsthK-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/556-43-378422-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/556-43-378422-product-3.jpg"
-  ]
+  ],
+  "slug": "stainless-steel-adjustable-chain-bracelet-for-men-x2izxo"
  },
  {
   "id": "myfm7KzgSqKq0HtGPlxy",
@@ -849,7 +904,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/573-84-476338-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/573-84-476338-product-3.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/573-84-476338-product-5.jpg"
-  ]
+  ],
+  "slug": "black-embroidered-womens-abaya-with-cross-front-sleeves-myfm7k"
  },
  {
   "id": "ngPcr2knQ6ZZibEMvrM8",
@@ -864,7 +920,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/ngPcr2knQ6ZZibEMvrM8-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511384-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511384-product-3.jpg"
-  ]
+  ],
+  "slug": "stylish-georgette-full-abaya-for-women-1-pc-ngpcr2"
  },
  {
   "id": "hodp99w6Ox7WARkthVP8",
@@ -881,7 +938,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-3.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-4.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-5.jpg"
-  ]
+  ],
+  "slug": "stylish-georgette-full-abaya-for-women-1-pc-hodp99"
  },
  {
   "id": "qRmsjIWDTWx973N0OyQZ",
@@ -898,7 +956,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-3.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-4.jpg"
-  ]
+  ],
+  "slug": "blackhead-remover-nose-pore-cleaner-white-device-qrmsji"
  },
  {
   "id": "mWkzZ0xiihcHEsun0jxs",
@@ -912,7 +971,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/mWkzZ0xiihcHEsun0jxs-0.jpg",
    "assets/products/mWkzZ0xiihcHEsun0jxs-1.jpg"
-  ]
+  ],
+  "slug": "rice-glow-kit-face-wash-scrub-mask-set-mwkzz0"
  },
  {
   "id": "g5J5JNWYAU61qNtWL7ie",
@@ -925,7 +985,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-10T12:50:26.344Z",
   "images": [
    "assets/products/g5J5JNWYAU61qNtWL7ie-0.jpg"
-  ]
+  ],
+  "slug": "5-in-1-makeup-skincare-bundle-300-g-g5j5jn"
  },
  {
   "id": "s9zg503Zdorr97IDyfsr",
@@ -938,7 +999,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-09T09:44:18.844Z",
   "images": [
    "assets/products/s9zg503Zdorr97IDyfsr-0.jpg"
-  ]
+  ],
+  "slug": "womens-3-pcs-printed-cotton-lawn-suit-grey-s9zg50"
  },
  {
   "id": "rNbVhzqWHSJqifs2V1dd",
@@ -951,7 +1013,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-09T09:41:22.926Z",
   "images": [
    "assets/products/rNbVhzqWHSJqifs2V1dd-0.jpg"
-  ]
+  ],
+  "slug": "summer-printed-3-pcs-women-suit-cotton-lawn-rnbvhz"
  },
  {
   "id": "p8oraRttYlYpF6qaKH7R",
@@ -968,7 +1031,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-3.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-4.webp"
-  ]
+  ],
+  "slug": "3-pcs-womens-unstitched-digital-print-suit-p8orar"
  },
  {
   "id": "mSveFFz6ScZi9Om8aIQj",
@@ -983,7 +1047,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/mSveFFz6ScZi9Om8aIQj-0.jpg",
    "assets/products/mSveFFz6ScZi9Om8aIQj-1.jpg",
    "assets/products/mSveFFz6ScZi9Om8aIQj-2.jpg"
-  ]
+  ],
+  "slug": "288-pcs-multicolor-fake-nails-for-party-wear-msveff"
  },
  {
   "id": "gwgfnqmzlLmwxq0OgQpG",
@@ -997,7 +1062,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/gwgfnqmzlLmwxq0OgQpG-0.jpg",
    "assets/products/gwgfnqmzlLmwxq0OgQpG-1.jpg"
-  ]
+  ],
+  "slug": "unisex-perfume-set-3-pieces-j-alcohol-free-gwgfnq"
  },
  {
   "id": "ZNgkB0ce5Edq7LhyuiCF",
@@ -1016,7 +1082,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/ZNgkB0ce5Edq7LhyuiCF-4.jpg",
    "assets/products/ZNgkB0ce5Edq7LhyuiCF-5.jpg",
    "assets/products/ZNgkB0ce5Edq7LhyuiCF-6.jpg"
-  ]
+  ],
+  "slug": "unisex-long-lasting-perfume-100ml-black-galbanum-zngkb0"
  },
  {
   "id": "sZTVtp9RXaJdVHhCW0Dv",
@@ -1030,7 +1097,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/sZTVtp9RXaJdVHhCW0Dv-0.jpg",
    "assets/products/sZTVtp9RXaJdVHhCW0Dv-1.jpg"
-  ]
+  ],
+  "slug": "long-lasting-floral-pocket-perfume-set-5-pcs-sztvtp"
  },
  {
   "id": "aVlqiLW3Ki1xRpq6r7k4",
@@ -1046,7 +1114,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/aVlqiLW3Ki1xRpq6r7k4-1.jpg",
    "assets/products/aVlqiLW3Ki1xRpq6r7k4-2.jpg",
    "assets/products/aVlqiLW3Ki1xRpq6r7k4-3.jpg"
-  ]
+  ],
+  "slug": "best-friend-heart-necklaces-gold-and-silver-set-avlqil"
  },
  {
   "id": "smbCUgDhAAhqDRULPq5n",
@@ -1062,7 +1131,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-1.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-2.JPG",
    "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-3.JPG"
-  ]
+  ],
+  "slug": "papaya-white-spf-60-sunblock-face-body-100ml-smbcug"
  },
  {
   "id": "hlI4hQGnl1gpARbP1DBx",
@@ -1076,7 +1146,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/hlI4hQGnl1gpARbP1DBx-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718752-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-hli4hq"
  },
  {
   "id": "qNxNLbqh9pbTX5NVLeLP",
@@ -1090,7 +1161,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/qNxNLbqh9pbTX5NVLeLP-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718753-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-qnxnlb"
  },
  {
   "id": "mnptsl9FyXPHDJrvF6Dj",
@@ -1104,7 +1176,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/mnptsl9FyXPHDJrvF6Dj-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718755-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-mnptsl"
  },
  {
   "id": "fvfhD4QlPunJbS05jH09",
@@ -1118,7 +1191,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/fvfhD4QlPunJbS05jH09-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718757-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-fvfhd4"
  },
  {
   "id": "wHKiOW5NeUcveRY88rDC",
@@ -1132,7 +1206,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/wHKiOW5NeUcveRY88rDC-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718758-product-1.webp"
-  ]
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-whkiow"
  },
  {
   "id": "a4X05FwUqI5fkDjzXRcd",
@@ -1146,7 +1221,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/a4X05FwUqI5fkDjzXRcd-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1249-3-674408-product-1.webp"
-  ]
+  ],
+  "slug": "women-printed-polo-cotton-suit-pink-2-pcs-a4x05f"
  },
  {
   "id": "nXKxaYHupDq1bf3TyB6x",
@@ -1160,7 +1236,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/nXKxaYHupDq1bf3TyB6x-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1049-3-712161-product-1.webp"
-  ]
+  ],
+  "slug": "women-printed-cotton-suit-2-pcs-purple-all-nxkxay"
  },
  {
   "id": "uN5wVh1ugv6odvRH4qk9",
@@ -1175,7 +1252,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/uN5wVh1ugv6odvRH4qk9-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406080-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406080-product-1.jpg"
-  ]
+  ],
+  "slug": "purple-katan-silk-3-piece-womens-suit-set-un5wvh"
  },
  {
   "id": "cjuK1MuXmCdzzfNScMSd",
@@ -1190,7 +1268,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/cjuK1MuXmCdzzfNScMSd-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/2185-35-700265-product-1.webp",
    "https://content.public.markaz.app/markazimagevideo/public/products/2185-35-700265-product-2.webp"
-  ]
+  ],
+  "slug": "3-pcs-girls-shamoz-silk-embroidered-shirt-and-cjuk1m"
  },
  {
   "id": "jjMFoupuMpnQFbAfWRZz",
@@ -1203,7 +1282,8 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-04-03T11:43:05.568Z",
   "images": [
    "assets/products/jjMFoupuMpnQFbAfWRZz-0.jpg"
-  ]
+  ],
+  "slug": "21-in-1-makeup-kit-for-all-seasons-jjmfou"
  },
  {
   "id": "ZH3L2NCjIeZololABsVK",
@@ -1218,7 +1298,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/ZH3L2NCjIeZololABsVK-0.jpg",
    "assets/products/ZH3L2NCjIeZololABsVK-1.jpg",
    "assets/products/ZH3L2NCjIeZololABsVK-2.jpg"
-  ]
+  ],
+  "slug": "womens-heart-shaped-bracelet-watch-red-white-blue-zh3l2n"
  },
  {
   "id": "y2JVh1GCL5C28F2WRI24",
@@ -1233,7 +1314,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1466-282-497270-product-1.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1466-282-497270-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1466-282-497270-product-3.jpg"
-  ]
+  ],
+  "slug": "flawless-facial-hair-remover-pain-free-rose-gold-y2jvh1"
  },
  {
   "id": "rArn0WNEHJsfhrl5o6HQ",
@@ -1248,7 +1330,8 @@ window.HUNNY_PRODUCTS = [
    "assets/products/rArn0WNEHJsfhrl5o6HQ-0.jpg",
    "assets/products/rArn0WNEHJsfhrl5o6HQ-1.jpg",
    "assets/products/rArn0WNEHJsfhrl5o6HQ-2.jpg"
-  ]
+  ],
+  "slug": "blue-moon-embroidered-georgette-abaya-with-stoller-rarn0w"
  },
  {
   "id": "ch5bq3qbhZrFeBj43WPl",
@@ -1265,7 +1348,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1304-71-487100-product-3.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1304-71-487100-product-4.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1304-71-487100-product-5.jpg"
-  ]
+  ],
+  "slug": "waterproof-smudge-proof-eyebrow-pencil-brown-ch5bq3"
  },
  {
   "id": "u5ojz2WA7MKQ1VGboxd1",
@@ -1280,7 +1364,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/714-84-511383-product-1.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/714-84-511383-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/714-84-511383-product-4.jpg"
-  ]
+  ],
+  "slug": "stylish-georgette-full-abaya-for-women-1-pc-u5ojz2"
  },
  {
   "id": "vGQ3KGkCCSpFHT69sqXq",
@@ -1294,7 +1379,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/vGQ3KGkCCSpFHT69sqXq-0.jpg",
    "assets/products/vGQ3KGkCCSpFHT69sqXq-1.jpg"
-  ]
+  ],
+  "slug": "purple-daisy-print-18-waterproof-backpack-set-of-vgq3kg"
  },
  {
   "id": "kZ1pBoqwhtVh5W5iRIH0",
@@ -1308,7 +1394,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "assets/products/kZ1pBoqwhtVh5W5iRIH0-0.jpg",
    "assets/products/kZ1pBoqwhtVh5W5iRIH0-1.jpg"
-  ]
+  ],
+  "slug": "stylish-girls-5-piece-leather-bag-set-in-kz1pbo"
  },
  {
   "id": "fOE0fjQhNmOQqNjdHHSg",
@@ -1322,7 +1409,8 @@ window.HUNNY_PRODUCTS = [
   "images": [
    "https://content.public.markaz.app/markazimagevideo/public/products/221-36038-197297-product-1.jpeg",
    "https://content.public.markaz.app/markazimagevideo/public/products/221-36038-197297-product-2.jpeg"
-  ]
+  ],
+  "slug": "face-body-scrub-gel-100ml-skin-brightening-foe0fj"
  },
  {
   "id": "a7pD0AN3ZJnxMkGpkpek",
@@ -1338,7 +1426,8 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1304-77-464503-product-2.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1304-77-464503-product-3.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1304-77-464503-product-1-withcode.jpg"
-  ]
+  ],
+  "slug": "night-cream-for-bright-white-clear-skin-all-a7pd0a"
  },
  {
   "id": "gRcdKZlPTx7paQ6ZyXQA",
@@ -1351,6 +1440,7 @@ window.HUNNY_PRODUCTS = [
   "createdAt": "2026-03-19T10:03:15.232Z",
   "images": [
    "https://i.ibb.co/m5Q7CCZW/Whats-App-Image-2026-03-19-at-2-56-PM.jpg"
-  ]
+  ],
+  "slug": "turquoise-printed-womens-2pcs-polo-cotton-suit-grcdkz"
  }
 ];

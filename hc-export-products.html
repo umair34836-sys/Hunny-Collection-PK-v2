@@ -6,9 +6,9 @@
 <title>Export Products</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
-  body{font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:0 auto;
+  body{font-family:system-ui,-apple-system,sans-serif;max-width:790px;margin:0 auto;
        padding:24px 18px 70px;background:#faf9f7;color:#1e1a17;line-height:1.6}
-  h1{font-size:24px;margin:0 0 4px}
+  h1{font-size:25px;margin:0 0 4px}
   .sub{color:#77706a;margin:0 0 22px;font-size:15px}
   .card{background:#fff;border:1px solid #e6e1db;border-radius:10px;padding:20px;margin-bottom:16px}
   .card h2{font-size:17px;margin:0 0 8px}
@@ -19,21 +19,23 @@
   button:disabled{opacity:.4;cursor:not-allowed}
   #log{background:#14110f;color:#d6ffd6;border-radius:8px;padding:16px;font-size:13px;
        font-family:ui-monospace,monospace;white-space:pre-wrap;min-height:90px;
-       max-height:300px;overflow:auto;margin-top:14px}
+       max-height:330px;overflow:auto;margin-top:14px}
   .warn{background:#FFF6E5;border:1px solid #F0DCA8;border-radius:8px;padding:14px;font-size:14px;margin-bottom:16px}
-  .stat{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
-  .stat div{flex:1;min-width:110px;background:#f4f1ed;border-radius:8px;padding:12px;text-align:center}
-  .stat b{display:block;font-size:26px}
+  .stat{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .stat div{flex:1;min-width:105px;background:#f4f1ed;border-radius:8px;padding:12px;text-align:center}
+  .stat b{display:block;font-size:24px}
   .stat small{color:#77706a}
-  ol{padding-left:20px;font-size:15px} ol li{margin-bottom:8px}
+  ol{padding-left:20px;font-size:15px} ol li{margin-bottom:9px}
   code{background:#f0ece7;padding:2px 6px;border-radius:4px;font-size:13px}
   a{color:#B8862F}
+  .bar{height:8px;background:#eee;border-radius:99px;overflow:hidden;margin-top:12px;display:none}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#D9AF57,#B8862F);width:0;transition:width .2s}
 </style>
 </head>
 <body>
 
 <h1>Export Products</h1>
-<p class="sub">Firestore ke saare products ek file me nikal deta hai, taake website unhe backend se mangwaye bagair foran dikha sake.</p>
+<p class="sub">Products, tasveerein, aur har product ka apna Google-friendly page &mdash; sab ek ZIP me.</p>
 
 <div class="warn">
   <b>Pehle admin me login karein.</b> Warna Firestore products parhne nahi dega.
@@ -41,50 +43,63 @@
 </div>
 
 <div class="card">
-  <h2>Qadam 1 — Products nikalein</h2>
-  <p>Ye sirf parhta hai. Aapke Firestore me kuch nahi badalta.</p>
+  <h2>Qadam 1 &mdash; Products parhein</h2>
+  <p>Ye sirf parhta hai. Firestore me kuch nahi badalta.</p>
   <button id="load">Firestore se products parhein</button>
   <div class="stat" id="stats" style="display:none">
     <div><b id="count">0</b><small>products</small></div>
-    <div><b id="imgs">0</b><small>tasveer ke saath</small></div>
-    <div><b id="size">0</b><small>KB file</small></div>
+    <div><b id="imgs">0</b><small>tasveerein</small></div>
+    <div><b id="emb">0</b><small>nikalni hain</small></div>
   </div>
 </div>
 
 <div class="card">
-  <h2>Qadam 2 — File download karein</h2>
-  <p>
-    <code>products-data.js</code> naam ki file banegi. Isay GitHub pe upload karna hai,
-    baaki files ke saath, wahi root folder me.
-  </p>
+  <h2>Qadam 2 &mdash; ZIP download karein</h2>
+  <p>ZIP me char cheezein hongi:</p>
+  <ol style="margin-top:-6px">
+    <li><code>products-data.js</code> &mdash; chhoti file</li>
+    <li><code>assets/products/</code> &mdash; saari tasveerein alag files</li>
+    <li><b>Har product ka apna HTML page</b> &mdash; Google ke liye</li>
+    <li><code>sitemap.xml</code> &mdash; naye pages ke saath</li>
+  </ol>
   <button id="save" class="gold" disabled>Pehle Qadam 1 chalayein</button>
+  <div class="bar" id="bar"><i></i></div>
 </div>
 
 <div class="card">
-  <h2>Qadam 3 — Uske baad</h2>
+  <h2>Qadam 3 &mdash; GitHub par upload</h2>
   <ol>
-    <li><code>products-data.js</code> GitHub pe upload karein</li>
-    <li>2 minute rukein (GitHub Pages build hone do)</li>
-    <li>Website incognito me kholein — products foran nazar aayenge, bina intezaar ke</li>
+    <li>ZIP kholein</li>
+    <li>Andar ki <b>saari cheezein</b> repo par upload karein</li>
+    <li>2&ndash;3 minute rukein</li>
+    <li>Website <b>incognito</b> me kholein</li>
   </ol>
   <p style="margin:0">
-    <b>Yaad rakhein:</b> jab bhi admin me naya product add karein ya price badlein,
-    yahan wapas aayein aur dobara export karke file upload karein. Warna website purani
-    file hi dikhati rahegi.
+    <b>Naye products ke liye:</b> Google Search Console kholein &rarr;
+    URL Inspection &rarr; naye page ka pata daal kar <b>Request Indexing</b> dabayein.
+    Warna Google ko dhoondne me hafte lag jate hain.
   </p>
 </div>
 
 <div id="log">Taiyaar...</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script type="module">
 import { db, auth } from './firebase-config.js';
 import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-const logEl = document.getElementById('log');
-const say = m => { logEl.textContent += '\n' + m; logEl.scrollTop = logEl.scrollHeight; };
+const SITE = 'https://hunnycollectionpk.com';
 
-let fileText = '';
+const logEl = document.getElementById('log');
+const bar = document.getElementById('bar');
+const barFill = bar.querySelector('i');
+const say = m => { logEl.textContent += '\n' + m; logEl.scrollTop = logEl.scrollHeight; };
+const kb = n => Math.round(n / 1024) + ' KB';
+const mb = n => (n / 1024 / 1024).toFixed(1) + ' MB';
+const nf = n => Number(n || 0).toLocaleString('en-US');
+
+let items = [];
 
 onAuthStateChanged(auth, u => {
   logEl.textContent = (u && !u.isAnonymous)
@@ -92,13 +107,307 @@ onAuthStateChanged(auth, u => {
     : 'Login nahi hain. Pehle admin me login karein.';
 });
 
-// Only the fields the storefront actually uses. Keeping it lean means a
-// smaller file, which means a faster page.
+// ============================================================
+// HELPERS
+// ============================================================
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// A readable, unique filename. The short id on the end guarantees two
+// products with the same name never collide.
+function slugify(name, id) {
+  let s = String(name || '').toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-|-$/g, '');
+  s = s.split('-').filter(Boolean).slice(0, 8).join('-') || 'product';
+  return s + '-' + String(id).slice(0, 6).toLowerCase();
+}
+
+function cleanDesc(d, limit) {
+  if (!d) return '';
+  let t = String(d).replace(/\*([^*]+)\*/g, '$1')
+                   .replace(/[ \t]+/g, ' ')
+                   .replace(/\n{3,}/g, '\n\n').trim();
+  if (limit && t.length > limit) {
+    t = t.slice(0, limit);
+    if (t.includes(' ')) t = t.slice(0, t.lastIndexOf(' '));
+    t += '...';
+  }
+  return t;
+}
+
+function descToHtml(d) {
+  if (!d) return '<p>Details coming soon.</p>';
+  const out = [];
+  let bullets = [];
+  d.split('\n').forEach(function (line) {
+    line = line.trim();
+    if (!line) return;
+    if (line.startsWith('-')) { bullets.push(esc(line.replace(/^-\s*/, ''))); return; }
+    if (bullets.length) { out.push('<ul>' + bullets.map(b => '<li>' + b + '</li>').join('') + '</ul>'); bullets = []; }
+    out.push('<p>' + esc(line) + '</p>');
+  });
+  if (bullets.length) out.push('<ul>' + bullets.map(b => '<li>' + b + '</li>').join('') + '</ul>');
+  return out.join('\n            ');
+}
+
+function absUrl(src) {
+  return /^https?:/i.test(src) ? src : SITE + '/' + src;
+}
+
+// ============================================================
+// PRODUCT PAGE
+// Everything a search engine needs sits in the HTML itself. No
+// JavaScript is required to read the name, price or description.
+// ============================================================
+function buildProductPage(p, siblings) {
+  const name  = p.name || 'Product';
+  const cat   = (p.category || 'Fashion').trim();
+  const price = Math.round(Number(p.sellingPrice || p.price || 0));
+  const orig  = Math.round(Number(p.originalPrice || 0));
+  const imgs  = p.images || [];
+  const img   = imgs[0] || 'assets/logo-new.png';
+  const url   = SITE + '/' + p.slug + '.html';
+
+  let short = cleanDesc(p.description, 155) || (name + ' available in Pakistan.');
+  const metaDesc = (short + ' Rs. ' + nf(price) +
+    '. Cash on Delivery all over Pakistan, 2-5 day delivery, 7 day exchange.').slice(0, 300);
+
+  let title = name + ' - Rs. ' + nf(price) + ' | Hunny Collection PK';
+  if (title.length > 65) title = name.slice(0, 38).trim() + '... - Rs. ' + nf(price) + ' | Hunny Collection PK';
+
+  let wasHtml = '';
+  if (orig > price && price > 0) {
+    wasHtml = '<span class="pd-was">Rs.&nbsp;' + nf(orig) + '</span>' +
+              '<span class="pd-off">' + Math.round((orig - price) / orig * 100) + '% OFF</span>';
+  }
+
+  let stockLine = 'In stock', avail = 'https://schema.org/InStock';
+  const st = Number(p.stock);
+  if (!isNaN(st) && st > 0 && st <= 10) stockLine = 'In stock &mdash; sirf ' + st + ' baaki hain';
+  else if (!isNaN(st) && st <= 0 && p.stock !== undefined && p.stock !== '') {
+    stockLine = 'Abhi out of stock'; avail = 'https://schema.org/OutOfStock';
+  }
+
+  let thumbs = '';
+  if (imgs.length > 1) {
+    thumbs = '<div class="pd-thumbs">' + imgs.slice(0, 5).map(function (i, n) {
+      return '<img src="' + esc(i) + '" alt="' + esc(name) + ' view ' + (n + 1) + '"' +
+             (n === 0 ? ' class="on"' : '') + ' loading="lazy">';
+    }).join('') + '</div>';
+  }
+
+  const schema = JSON.stringify({
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: name,
+    image: (imgs.length ? imgs.slice(0, 4) : [img]).map(absUrl),
+    description: cleanDesc(p.description, 900) || name,
+    category: cat,
+    sku: p.sku || p.id,
+    brand: { '@type': 'Brand', name: 'Hunny Collection PK' },
+    offers: {
+      '@type': 'Offer',
+      url: url,
+      priceCurrency: 'PKR',
+      price: String(price),
+      availability: avail,
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@type': 'Organization', name: 'Hunny Collection PK' }
+    }
+  }, null, 2);
+
+  let related = '';
+  if (siblings.length) {
+    const cards = siblings.slice(0, 4).map(function (s) {
+      const si = (s.images || ['assets/logo-new.png'])[0];
+      const sp = Math.round(Number(s.sellingPrice || s.price || 0));
+      return '<a href="' + s.slug + '.html">' +
+             '<img src="' + esc(si) + '" alt="' + esc(s.name || '') + '" loading="lazy">' +
+             '<span>' + esc(String(s.name || '').slice(0, 52)) + '</span>' +
+             '<b>Rs. ' + nf(sp) + '</b></a>';
+    }).join('');
+    related = '<section class="pd-sec" style="max-width:none"><h2>Isi tarah ki cheezein</h2>' +
+              '<div class="pd-more">' + cards + '</div></section>';
+  }
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(metaDesc)}">
+<link rel="canonical" href="${url}">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0d0b09">
+
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="Hunny Collection PK">
+<meta property="og:title" content="${esc(name + ' - Rs. ' + nf(price))}">
+<meta property="og:description" content="${esc(metaDesc)}">
+<meta property="og:image" content="${esc(absUrl(img))}">
+<meta property="og:url" content="${url}">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
+<link rel="stylesheet" href="style.css">
+
+<script type="application/ld+json">
+${schema}
+<\/script>
+
+<style>
+  .pd{max-width:1100px;margin:0 auto;padding:24px 18px 60px}
+  .pd-crumb{font-size:13px;color:#8a8279;margin-bottom:18px}
+  .pd-crumb a{color:#8a8279;text-decoration:none}
+  .pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+  @media(max-width:860px){.pd-grid{grid-template-columns:1fr;gap:24px}}
+  .pd-hero{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;background:#f5f2ef}
+  .pd-thumbs{display:flex;gap:9px;margin-top:10px;flex-wrap:wrap}
+  .pd-thumbs img{width:70px;height:70px;object-fit:cover;border-radius:5px;cursor:pointer;border:2px solid transparent;background:#f5f2ef}
+  .pd-thumbs img.on{border-color:#B8862F}
+  .pd h1{font-size:clamp(21px,3.6vw,29px);line-height:1.25;margin:0 0 6px}
+  .pd-cat{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:#8a8279;margin-bottom:8px}
+  .pd-price{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin:16px 0 6px}
+  .pd-now{font-size:28px;font-weight:800}
+  .pd-was{font-size:17px;color:#9a9289;text-decoration:line-through}
+  .pd-off{font-size:12px;font-weight:700;color:#fff;background:#C2334D;border-radius:3px;padding:4px 9px}
+  .pd-stock{font-size:14px;color:#1b7f3b;font-weight:600;margin-bottom:20px}
+  .pd-buy{display:block;width:100%;text-align:center;background:linear-gradient(135deg,#E8B44F,#C0872B);
+          color:#1a1409;font-weight:800;font-size:16px;padding:16px;border-radius:6px;
+          text-decoration:none;border:none;cursor:pointer;font-family:inherit}
+  .pd-cart{display:block;width:100%;text-align:center;background:#fff;color:#1e1a17;border:1px solid #1e1a17;
+           font-weight:600;font-size:15px;padding:14px;border-radius:6px;margin-top:10px;
+           text-decoration:none;cursor:pointer;font-family:inherit}
+  .pd-note{font-size:13px;color:#8a8279;text-align:center;margin-top:11px}
+  .pd-trust{margin-top:22px;border:1px solid #ececec;border-radius:8px;background:#fbfbfa;padding:2px 15px}
+  .pd-trust div{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid #efefef;font-size:14px}
+  .pd-trust div:last-child{border-bottom:0}
+  .pd-trust p{margin:0;color:#3a3a3a}
+  .pd-sec{margin-top:46px;max-width:760px}
+  .pd-sec h2{font-size:21px;margin-bottom:12px}
+  .pd-sec p{margin:0 0 11px;color:#3f3a35;font-size:15px;line-height:1.65}
+  .pd-sec ul{margin:0 0 13px 19px;color:#3f3a35;font-size:15px}
+  .pd-sec li{margin-bottom:5px}
+  .pd-spec{width:100%;border-collapse:collapse;font-size:15px}
+  .pd-spec th,.pd-spec td{text-align:left;padding:10px 0;border-bottom:1px solid #ececec}
+  .pd-spec th{width:140px;color:#8a8279;font-weight:600}
+  .pd-more{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-top:16px}
+  .pd-more a{text-decoration:none;color:inherit}
+  .pd-more img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:6px;background:#f5f2ef}
+  .pd-more span{display:block;font-size:13px;margin-top:6px;line-height:1.35}
+  .pd-more b{display:block;font-size:14px;margin-top:3px}
+</style>
+</head>
+<body>
+
+<div class="pd">
+  <nav class="pd-crumb">
+    <a href="index.html">Home</a> / <a href="shop.html">Shop</a> / ${esc(cat)}
+  </nav>
+
+  <div class="pd-grid">
+    <div>
+      <img class="pd-hero" id="pd-hero" src="${esc(img)}" alt="${esc(name + ' - ' + cat + ' - Hunny Collection PK')}" width="800" height="800">
+      ${thumbs}
+    </div>
+
+    <div>
+      <div class="pd-cat">${esc(cat)}</div>
+      <h1>${esc(name)}</h1>
+
+      <div class="pd-price">
+        <span class="pd-now">Rs.&nbsp;${nf(price)}</span>
+        ${wasHtml}
+      </div>
+      <div class="pd-stock">${stockLine}</div>
+
+      <a class="pd-buy" href="checkout.html?buy=${esc(p.id)}">Buy Now &mdash; Cash on Delivery</a>
+      <a class="pd-cart" href="product.html?id=${esc(p.id)}">Size &amp; options dekhein</a>
+      <p class="pd-note">Paisay parcel milne par dein &middot; Koi advance nahi</p>
+
+      <div class="pd-trust">
+        <div><span>🚚</span><p>Delivery 2&ndash;5 working days</p></div>
+        <div><span>💵</span><p>Cash on Delivery all over Pakistan</p></div>
+        <div><span>🔄</span><p>7 day exchange &mdash; <a href="return-policy.html">policy dekhein</a></p></div>
+        <div><span>📞</span><p>Booking se pehle hum aap ko call karte hain</p></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="pd-sec">
+    <h2>Product details</h2>
+    ${descToHtml(cleanDesc(p.description))}
+  </section>
+
+  <section class="pd-sec">
+    <h2>Information</h2>
+    <table class="pd-spec">
+      <tr><th>Category</th><td>${esc(cat)}</td></tr>
+      <tr><th>Price</th><td>Rs. ${nf(price)}</td></tr>
+      <tr><th>Payment</th><td>Cash on Delivery, Pakistan bhar me</td></tr>
+      <tr><th>Delivery</th><td>2&ndash;5 working days</td></tr>
+      <tr><th>Exchange</th><td>7 din, article istemal na hua ho</td></tr>
+    </table>
+  </section>
+
+  ${related}
+</div>
+
+<script>
+  document.querySelectorAll('.pd-thumbs img').forEach(function (t) {
+    t.addEventListener('click', function () {
+      document.getElementById('pd-hero').src = this.src;
+      document.querySelectorAll('.pd-thumbs img').forEach(function (o) { o.classList.remove('on'); });
+      this.classList.add('on');
+    });
+  });
+<\/script>
+<script src="whatsapp-float.js"><\/script>
+</body>
+</html>
+`;
+}
+
+function buildSitemap(list) {
+  const today = new Date().toISOString().slice(0, 10);
+  const core = [
+    ['', 'daily', '1.0'],
+    ['shop.html', 'daily', '0.9'],
+    ['contact.html', 'monthly', '0.5'],
+    ['return-policy.html', 'monthly', '0.6'],
+    ['privacy-policy.html', 'yearly', '0.3']
+  ];
+  let x = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  core.forEach(function (c) {
+    x += '  <url><loc>' + SITE + '/' + c[0] + '</loc><lastmod>' + today +
+         '</lastmod><changefreq>' + c[1] + '</changefreq><priority>' + c[2] + '</priority></url>\n';
+  });
+  list.forEach(function (p) {
+    x += '  <url><loc>' + SITE + '/' + p.slug + '.html</loc><lastmod>' + today +
+         '</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>\n';
+  });
+  return x + '</urlset>\n';
+}
+
+// ============================================================
+// LOAD
+// ============================================================
 function slim(id, p) {
-  const out = { id };
-  const keep = ['name','category','description','sellingPrice','originalPrice','price',
-                'stock','sizes','colors','sku','createdAt'];
-  keep.forEach(k => { if (p[k] !== undefined && p[k] !== null && p[k] !== '') out[k] = p[k]; });
+  const out = { id: id };
+  ['name','category','description','sellingPrice','originalPrice','price',
+   'stock','sizes','colors','sku','createdAt'].forEach(function (k) {
+    if (p[k] !== undefined && p[k] !== null && p[k] !== '') out[k] = p[k];
+  });
   if (Array.isArray(p.images) && p.images.length) out.images = p.images;
   return out;
 }
@@ -109,7 +418,7 @@ document.getElementById('load').onclick = async () => {
   logEl.textContent = 'Firestore se products parh raha hoon...';
   try {
     const snap = await getDocs(collection(db, 'products'));
-    const items = [];
+    items = [];
     snap.forEach(d => items.push(slim(d.id, d.data())));
 
     items.sort((a, b2) => {
@@ -118,63 +427,159 @@ document.getElementById('load').onclick = async () => {
       return y - x;
     });
 
-    const withImg = items.filter(i => i.images && i.images.length).length;
+    let totalImgs = 0, embedded = 0, embBytes = 0;
+    items.forEach(p => (p.images || []).forEach(i => {
+      totalImgs++;
+      if (typeof i === 'string' && i.startsWith('data:')) { embedded++; embBytes += i.length; }
+    }));
 
-    fileText =
-`// ============================================================
-// Hunny Collection PK - products
-//
-// Ye file admin panel se export hui hai. Haath se edit karna ho
-// to kar sakte hain, lekin agle export par sab dobara likha jayega.
-//
-// Export: ${new Date().toLocaleString('en-PK')}
-// Products: ${items.length}
-//
-// NAYA PRODUCT ADD KARNE KE BAAD:
-// hc-export-products.html kholein, dobara export karein,
-// aur ye file wapas upload karein.
-// ============================================================
-
-window.HUNNY_PRODUCTS = ${JSON.stringify(items, null, 2)};
-`;
-
-    const kb = Math.round(new Blob([fileText]).size / 1024);
     document.getElementById('stats').style.display = 'flex';
     document.getElementById('count').textContent = items.length;
-    document.getElementById('imgs').textContent = withImg;
-    document.getElementById('size').textContent = kb;
+    document.getElementById('imgs').textContent = totalImgs;
+    document.getElementById('emb').textContent = embedded;
 
-    say(`\nMile: ${items.length} products`);
-    say(`Tasveer ke saath: ${withImg}`);
-    say(`File ka size: ${kb} KB`);
-    if (kb > 400) say('\nNOTE: file bari hai. Ye tab hota hai jab tasveerein base64 me hon.');
-    say('\nPehle 10 products:');
-    items.slice(0, 10).forEach(i => say('  - ' + (i.name || '(bina naam)')));
-    if (items.length > 10) say(`  ...aur ${items.length - 10} aur`);
+    say('\nProducts: ' + items.length);
+    say('Tasveerein: ' + totalImgs);
+    say('File ke andar bhari hui: ' + embedded + ' (' + mb(embBytes * 0.75) + ')');
 
-    if (items.length) {
+    if (!items.length) {
+      say('\nKoi product nahi mila. Pehle admin se products add karein.');
+    } else {
       const s = document.getElementById('save');
       s.disabled = false;
-      s.textContent = `products-data.js download karein (${items.length} products)`;
-    } else {
-      say('\nFirestore me koi product nahi mila. Pehle admin se products add karein.');
+      s.textContent = 'ZIP download karein (' + items.length + ' products)';
     }
   } catch (e) {
     say('\nERROR: ' + e.code + ' — ' + e.message);
-    if (e.code === 'permission-denied')
-      say('Firestore parhne nahi de raha. Admin login check karein.');
+    if (e.code === 'permission-denied') say('Admin login check karein.');
   }
   b.disabled = false; b.textContent = 'Dobara parhein';
 };
 
-document.getElementById('save').onclick = () => {
-  const blob = new Blob([fileText], { type: 'text/javascript' });
+// ============================================================
+// BUILD ZIP
+// ============================================================
+document.getElementById('save').onclick = async () => {
+  const btn = document.getElementById('save');
+  btn.disabled = true; btn.textContent = 'ZIP bana raha hoon...';
+  bar.style.display = 'block';
+  say('\n--- ZIP banaya ja raha hai ---');
+
+  const zip = new JSZip();
+  const imgFolder = zip.folder('assets/products');
+
+  // ---------- 1. images out of the data, into real files ----------
+  let extracted = 0, kept = 0, failed = 0, bytes = 0, processed = 0;
+
+  for (const p of items) {
+    const imgs = p.images || [];
+    const newImgs = [];
+
+    for (let idx = 0; idx < imgs.length; idx++) {
+      const img = imgs[idx];
+      if (typeof img === 'string' && img.startsWith('data:')) {
+        try {
+          const comma = img.indexOf(',');
+          const meta = img.slice(0, comma);
+          const ext = meta.includes('png') ? 'png' : meta.includes('webp') ? 'webp' : 'jpg';
+          const binary = atob(img.slice(comma + 1));
+          const arr = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+
+          const fname = p.id + '-' + idx + '.' + ext;
+          imgFolder.file(fname, arr);
+          newImgs.push('assets/products/' + fname);
+          bytes += arr.length;
+          extracted++;
+        } catch (err) {
+          console.error('image failed', p.id, idx, err);
+          failed++;
+        }
+      } else {
+        newImgs.push(img);
+        kept++;
+      }
+    }
+    if (newImgs.length) p.images = newImgs;
+
+    processed++;
+    barFill.style.width = Math.round(processed / items.length * 50) + '%';
+    if (processed % 10 === 0) await new Promise(r => setTimeout(r, 0));
+  }
+
+  say('Tasveerein nikali: ' + extracted + (kept ? ' | pehle se URL wali: ' + kept : '') +
+      (failed ? ' | nakaam: ' + failed : ''));
+  say('Tasveeron ka kul size: ' + mb(bytes));
+
+  // ---------- 2. slugs, then one page per product ----------
+  const usedSlugs = {};
+  items.forEach(function (p) {
+    let s = slugify(p.name, p.id);
+    while (usedSlugs[s]) s = s + '-x';   // belt and braces; ids make this unlikely
+    usedSlugs[s] = true;
+    p.slug = s;
+  });
+
+  const byCat = {};
+  items.forEach(function (p) {
+    const k = (p.category || '').trim().toLowerCase();
+    (byCat[k] = byCat[k] || []).push(p);
+  });
+
+  say('\nProduct pages banaye ja rahe hain...');
+  let built = 0;
+  for (const p of items) {
+    const k = (p.category || '').trim().toLowerCase();
+    const sibs = (byCat[k] || []).filter(s => s.id !== p.id);
+    zip.file(p.slug + '.html', buildProductPage(p, sibs));
+    built++;
+    barFill.style.width = (50 + Math.round(built / items.length * 30)) + '%';
+    if (built % 15 === 0) {
+      say('  ' + built + ' / ' + items.length + ' pages');
+      await new Promise(r => setTimeout(r, 0));
+    }
+  }
+  say('Pages ban gaye: ' + built);
+
+  // ---------- 3. data file + sitemap ----------
+  const stamp = new Date().toLocaleString('en-PK');
+  const fileText =
+`// ============================================================
+// Hunny Collection PK - products
+//
+// Tasveerein assets/products/ me alag files hain. Har product ka
+// apna HTML page bhi is ZIP me maujood hai.
+//
+// Export: ${stamp}
+// Products: ${items.length}
+// ============================================================
+
+window.HUNNY_PRODUCTS = ${JSON.stringify(items, null, 1)};
+`;
+  zip.file('products-data.js', fileText);
+  zip.file('sitemap.xml', buildSitemap(items));
+
+  say('products-data.js: ' + kb(fileText.length));
+  say('sitemap.xml: ' + (items.length + 5) + ' URLs');
+  say('\nZIP compress ho raha hai, thora intezaar...');
+
+  const blob = await zip.generateAsync(
+    { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
+    meta => { barFill.style.width = (80 + Math.round(meta.percent * 0.2)) + '%'; }
+  );
+
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'products-data.js';
+  a.download = 'hunny-products-export.zip';
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(a.href);
-  say('\nFile download ho gayi. Ab isay GitHub pe upload karein.');
+
+  say('\nZIP taiyaar: ' + mb(blob.size));
+  say('Ab isay kholein aur saari cheezein GitHub par upload karein.');
+  say('\nNaye products ke liye Search Console me Request Indexing dabana na bhoolein.');
+  btn.textContent = 'Ho gaya — dobara banane ke liye dabayein';
+  btn.disabled = false;
+  bar.style.display = 'none';
 };
 </script>
 </body>

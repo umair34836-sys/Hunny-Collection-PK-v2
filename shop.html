@@ -557,7 +557,13 @@
         var isLoading = false;
         var hasMoreProducts = true;
         var allProductsLoaded = false;
-        var staticOffset = 0;   // Flag: have we fetched ALL products once?
+        var staticOffset = 0;
+        var searchedWideness = '';
+
+        // "Perfumes " and "Perfumes" are the same category to a customer.
+        function normCat(c) {
+            return (c || '').toString().trim().toLowerCase();
+        }   // Flag: have we fetched ALL products once?
 
         // ========== SHOW LOADING SKELETONS ==========
         function showSkeletons(count) {
@@ -627,7 +633,7 @@
                 displayedProducts = all.slice(0, PRODUCTS_PER_PAGE);
                 hasMoreProducts = all.length > PRODUCTS_PER_PAGE;
                 staticOffset = displayedProducts.length;
-                renderProducts(displayedProducts, false);
+                renderProducts(displayedProducts);
                 if (resultsCount) resultsCount.textContent = all.length + ' products';
                 loadMoreContainer.style.display = hasMoreProducts ? 'block' : 'none';
                 isLoading = false;
@@ -701,7 +707,7 @@
                 var next = allProductsForFilter.slice(staticOffset, staticOffset + PRODUCTS_PER_PAGE);
                 staticOffset += next.length;
                 displayedProducts = displayedProducts.concat(next);
-                renderProducts(next, true);
+                renderProducts(displayedProducts);
                 hasMoreProducts = staticOffset < allProductsForFilter.length;
                 document.getElementById('load-more-container').style.display =
                     hasMoreProducts ? 'block' : 'none';
@@ -786,13 +792,27 @@
             }
         };
 
+        window.resetFilters = function () {
+            document.getElementById('search-input').value = '';
+            document.getElementById('category-filter').value = 'all';
+            document.getElementById('price-filter').value = 'all';
+            filterProducts();
+        };
+
         // ========== RENDER PRODUCTS ==========
         function renderProducts(products) {
             var container = document.getElementById('products-container');
             if (!container) return;
 
             if (products.length === 0) {
-                container.innerHTML = '<p class="loading">No products found.</p>';
+                var term = (document.getElementById('search-input') || {}).value || '';
+                container.innerHTML =
+                    '<div class="loading" style="text-align:center;padding:40px 20px;">' +
+                    '<p style="font-size:1.05rem;margin-bottom:6px;"><b>Kuch nahi mila' +
+                    (term ? ' "' + term.replace(/</g, '&lt;') + '" ke liye' : '') + '</b></p>' +
+                    '<p style="color:#888;margin-bottom:18px;">Doosre lafz try karein, ya saare products dekhein.</p>' +
+                    '<button onclick="resetFilters()" class="btn-primary" style="padding:12px 26px;border:none;border-radius:50px;cursor:pointer;">Saare Products Dekhein</button>' +
+                    '</div>';
                 return;
             }
 
@@ -812,7 +832,7 @@
                 }
                 var savings = originalPrice - sellingPrice;
 
-                html += '<a href="product.html?id=' + product.id + '" class="product-card">';
+                html += '<a href="' + (product.slug ? product.slug + '.html' : 'product.html?id=' + product.id) + '" class="product-card">';
 
                 // Image with discount badge
                 html += '<div style="position: relative;">';
@@ -844,41 +864,60 @@
             container.innerHTML = html;
         }
 
-        // ========== LOAD ALL CATEGORIES FROM DATABASE ==========
+        // ========== LOAD ALL CATEGORIES ==========
+        // Built from the products themselves, not the categories collection.
+        // That way the dropdown can only ever offer a category that actually
+        // has products behind it, and it shows how many.
         async function loadAllCategories() {
-            var categoryFilter = document.getElementById('category-filter');
+            if (window.HUNNY_PRODUCTS && window.HUNNY_PRODUCTS.length) {
+                extractCategories(window.HUNNY_PRODUCTS);
+                return;
+            }
             try {
                 var q = query(collection(db, 'categories'), orderBy('createdAt', 'desc'));
                 var querySnapshot = await getDocs(q);
-                
+
                 var optionsHtml = '<option value="all">All Categories</option>';
                 querySnapshot.forEach(function(doc) {
                     var category = doc.data();
                     optionsHtml += '<option value="' + category.name + '">' + category.name + '</option>';
                 });
-                categoryFilter.innerHTML = optionsHtml;
+                document.getElementById('category-filter').innerHTML = optionsHtml;
             } catch (error) {
                 console.error('Error loading categories:', error);
-                // Fallback: extract from currently loaded products
                 extractCategories(allProductsForFilter.length > 0 ? allProductsForFilter : displayedProducts);
             }
         }
 
-        // ========== EXTRACT CATEGORIES (fallback only) ==========
+        // ========== EXTRACT CATEGORIES ==========
         function extractCategories(products) {
             var categoryFilter = document.getElementById('category-filter');
-            var categories = [];
+            var seen = {};
 
+            // Merge duplicates that differ only by spacing or case, and keep
+            // the tidiest spelling of each as the label.
             for (var i = 0; i < products.length; i++) {
-                if (products[i].category && categories.indexOf(products[i].category) === -1) {
-                    categories.push(products[i].category);
+                var raw = products[i].category;
+                if (!raw) continue;
+                var key = normCat(raw);
+                if (!key) continue;
+                var label = raw.toString().trim();
+                if (!seen[key]) {
+                    seen[key] = { label: label, count: 1 };
+                } else {
+                    seen[key].count++;
+                    if (label.length < seen[key].label.length) seen[key].label = label;
                 }
             }
 
-            var optionsHtml = '<option value="all">All Categories</option>';
-            for (var i = 0; i < categories.length; i++) {
-                optionsHtml += '<option value="' + categories[i] + '">' + categories[i] + '</option>';
-            }
+            var list = Object.keys(seen).map(function (k) { return seen[k]; });
+            list.sort(function (a, b) { return b.count - a.count; });
+
+            var optionsHtml = '<option value="all">All Categories (' + products.length + ')</option>';
+            list.forEach(function (c) {
+                var safe = c.label.replace(/"/g, '&quot;');
+                optionsHtml += '<option value="' + safe + '">' + safe + ' (' + c.count + ')</option>';
+            });
             categoryFilter.innerHTML = optionsHtml;
         }
 
@@ -922,26 +961,40 @@
 
             var filtered = allProductsForFilter.slice();
 
-            // Search by name
+            // Search: name, category and SKU first. Searching the full
+            // description as well would match almost everything (the word
+            // "wedding" appears in 40 descriptions), so the description is
+            // only used as a fallback when the precise search finds nothing.
+            searchedWideness = '';
             if (searchTerm) {
-                var newFiltered = [];
-                for (var i = 0; i < filtered.length; i++) {
-                    if (filtered[i].name && filtered[i].name.toLowerCase().includes(searchTerm)) {
-                        newFiltered.push(filtered[i]);
-                    }
+                var words = searchTerm.split(/\s+/).filter(function (w) { return w.length > 0; });
+
+                var precise = filtered.filter(function (p) {
+                    var hay = ((p.name || '') + ' ' + (p.category || '') + ' ' + (p.sku || '')).toLowerCase();
+                    return words.every(function (w) { return hay.indexOf(w) !== -1; });
+                });
+
+                if (precise.length === 0) {
+                    var wide = filtered.filter(function (p) {
+                        var hay = ((p.name || '') + ' ' + (p.category || '') + ' ' +
+                                   (p.sku || '') + ' ' + (p.description || '')).toLowerCase();
+                        return words.every(function (w) { return hay.indexOf(w) !== -1; });
+                    });
+                    if (wide.length > 0) searchedWideness = 'related';
+                    filtered = wide;
+                } else {
+                    filtered = precise;
                 }
-                filtered = newFiltered;
             }
 
-            // Category filter
+            // Category filter. Admin-entered categories carry stray spaces
+            // and inconsistent case ("Perfumes " vs "Perfumes"), which split
+            // one real category into two. Compare them normalised.
             if (category !== 'all') {
-                var newFiltered = [];
-                for (var i = 0; i < filtered.length; i++) {
-                    if (filtered[i].category === category) {
-                        newFiltered.push(filtered[i]);
-                    }
-                }
-                filtered = newFiltered;
+                var wanted = normCat(category);
+                filtered = filtered.filter(function (p) {
+                    return normCat(p.category) === wanted;
+                });
             }
 
             // Price filter (using sellingPrice)
