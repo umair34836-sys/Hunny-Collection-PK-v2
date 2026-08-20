@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Staff Access</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-mobile.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+        }
+        .access-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+        .access-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        .access-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        .access-btn:hover {
+            transform: translateY(-2px);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #718096;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            color: #667eea;
+        }
+        .secret-hint {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body>
+    <div class="access-container">
+        <div class="access-icon">🔐</div>
+        <h1>Staff Access Portal</h1>
+        <p class="subtitle">Authorized personnel only</p>
+        
+        <button class="access-btn" onclick="window.location.href='admin.html'">
+            🛡️ God Admin Panel
+        </button>
+        
+        <button class="access-btn" onclick="window.location.href='sub-admin/sub-admin.html'">
+            👤 Sub-Admin Panel
+        </button>
+        
+        <a href="index.html" class="back-link">← Back to Store</a>
+    </div>
+</body>
+</html>

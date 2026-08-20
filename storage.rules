@@ -1,57 +1,64 @@
 rules_version = '2';
-match /b/{bucket}/o {
-  
-  function isAuthenticated() {
-    return request.auth != null;
-  }
-  
-  function isImage() {
-    return request.resource.contentType.matches('image/.*');
-  }
-  
-  function isValidSize() {
-    return request.resource.size <= 5 * 1024 * 1024;
-  }
-  
-  // ========== PHYSICAL PRODUCTS ==========
-  
-  match /products/{userId}/{allPaths=**} {
-    allow read: if true;
-    allow create, update, delete: if isAuthenticated() && request.auth.uid == userId;
-  }
-  
-  // ========== DIGITAL PRODUCTS ==========
-  
-  // Digital product files (admin only upload)
-  match /digital-products/{allPaths=**} {
-    allow read: if true;
-    allow create: if isAuthenticated();
-    allow update, delete: if isAuthenticated();
-  }
-  
-  // Payment proofs for digital orders
-  match /payment-proofs/{orderId}/{allPaths=**} {
-    allow read: if isAuthenticated();
-    allow create: if isAuthenticated() && isImage() && isValidSize();
-    allow update, delete: if false;
-  }
-  
-  // ========== PUBLIC & BANNERS ==========
-  
-  match /public/{allPaths=**} {
-    allow read: if true;
-    allow write: if false;
-  }
-  
-  match /banners/{allPaths=**} {
-    allow read: if true;
-    allow write: if false;
-  }
-  
-  // ========== DEFAULT ==========
-  
-  match /{allPaths=**} {
-    allow read: if false;
-    allow write: if false;
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+             firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid));
+    }
+
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    function under(mb) {
+      return request.resource.size <= mb * 1024 * 1024;
+    }
+
+    // ========== PRODUCT IMAGES ==========
+    // Public to read, admin only to write.
+    match /products/{allPaths=**} {
+      allow read:  if true;
+      allow write: if isAdmin() && isImage() && under(5);
+    }
+
+    // ========== DIGITAL PRODUCT FILES ==========
+    // These are the paid files. They must NOT be publicly readable, or
+    // anyone with the URL downloads them without paying. Serve them
+    // through short-lived signed URLs from a Cloud Function after the
+    // order is marked paid.
+    match /digital-products/{allPaths=**} {
+      allow read:  if isAdmin();
+      allow write: if isAdmin() && under(200);
+    }
+
+    // ========== PAYMENT PROOFS ==========
+    // These are screenshots of bank and Easypaisa transfers. Only the
+    // customer who uploaded it and admins may read it.
+    match /payment-proofs/{userId}/{allPaths=**} {
+      allow read:   if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create: if isSignedIn() && request.auth.uid == userId && isImage() && under(5);
+      allow update, delete: if isAdmin();
+    }
+
+    // ========== PUBLIC & BANNERS ==========
+    match /public/{allPaths=**} {
+      allow read:  if true;
+      allow write: if isAdmin() && isImage() && under(5);
+    }
+
+    match /banners/{allPaths=**} {
+      allow read:  if true;
+      allow write: if isAdmin() && isImage() && under(5);
+    }
+
+    // ========== DEFAULT DENY ==========
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
   }
 }

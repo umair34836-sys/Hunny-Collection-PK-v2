@@ -17,7 +17,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta name="keywords" content="checkout, order now, secure payment, pakistan">
     <meta name="author" content="Hunny Collection PK">
     <meta name="robots" content="noindex, nofollow">
-    <link rel="canonical" href="https://umair34836-sys.github.io/Hunny-Collection-PK-v2/checkout.html">
+    <link rel="canonical" href="https://hunnycollectionpk.com/checkout.html">
 
     <!-- Favicon & App Icons -->
     
@@ -32,14 +32,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://umair34836-sys.github.io/Hunny-Collection-PK-v2/checkout.html">
+    <meta property="og:url" content="https://hunnycollectionpk.com/checkout.html">
     <meta property="og:title" content="Checkout - Hunny Collection PK | Secure Order Placement">
     <meta property="og:description" content="Complete your order securely at Hunny Collection PK. Easy checkout process ✓ Cash on Delivery available ✓ Fast delivery across Pakistan.">
     <meta property="og:image" content="https://i.ibb.co/C5CGqLpj/checkout.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://umair34836-sys.github.io/Hunny-Collection-PK-v2/checkout.html">
+    <meta property="twitter:url" content="https://hunnycollectionpk.com/checkout.html">
     <meta property="twitter:title" content="Checkout - Hunny Collection PK | Secure Order Placement">
     <meta property="twitter:description" content="Complete your order securely at Hunny Collection PK. Easy checkout process ✓ Cash on Delivery available ✓ Fast delivery across Pakistan.">
     <meta property="twitter:image" content="https://i.ibb.co/C5CGqLpj/checkout.jpg">
@@ -337,14 +337,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { onAuthStateChanged, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { getCartItems } from './app.js';
 
-        // Check if user is logged in
-        onAuthStateChanged(auth, (user) => {
+        // Guest checkout. A customer paying cash on delivery should never be
+        // forced to create an account, so anyone who is not signed in gets a
+        // silent anonymous session instead of being sent to the login page.
+        // Requires Anonymous sign-in to be enabled in the Firebase Console
+        // under Authentication -> Sign-in method.
+        onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                window.location.href = 'login.html';
-            } else {
+                try {
+                    await signInAnonymously(auth);
+                } catch (err) {
+                    console.error('Guest session failed:', err);
+                    document.getElementById('message-container').innerHTML =
+                        '<div class="error-message">Could not start a guest session. ' +
+                        'Please order on <a href="https://wa.me/923018858303">WhatsApp</a> instead.</div>';
+                }
+                return;
+            }
+            if (!user.isAnonymous) {
                 document.getElementById('name').value = user.displayName || '';
                 document.getElementById('email').value = user.email || '';
             }
@@ -395,7 +408,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     userId: auth.currentUser.uid,
                     customerName: document.getElementById('name').value,
                     contact: document.getElementById('contact').value,
-                    email: document.getElementById('email').value,
+                    email: document.getElementById('email').value || '',
+                    isGuest: auth.currentUser.isAnonymous === true,
                     address: {
                         fullAddress: document.getElementById('address').value,
                         city: document.getElementById('city').value

@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+Allow: /shop.html
+Allow: /contact.html
+Allow: /privacy-policy.html
+Allow: /return-policy.html
+
+# Private areas - never index
+Disallow: /admin
+Disallow: /admin-old.html
+Disallow: /hc-staff-7x92k.html
+Disallow: /sub-admin/
+Disallow: /vendor/
+Disallow: /investor-panel.html
+Disallow: /seo-dashboard.html
+Disallow: /settings.html
+Disallow: /account.html
+Disallow: /cart.html
+Disallow: /checkout.html
+Disallow: /digital-checkout.html
+Disallow: /orders.html
+Disallow: /my-downloads.html
+Disallow: /thank-you.html
+Disallow: /login.html
+Disallow: /signup.html
+Disallow: /profit-calculator.html
+Disallow: /personal-calculator.html
+Disallow: /Tk.html
+
+Sitemap: https://hunnycollectionpk.com/sitemap.xml

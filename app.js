@@ -474,6 +474,18 @@ export async function loadProduct(productId) {
 
                     <button onclick="addToCartClick()" class="btn-primary btn-large">Add to Cart</button>
                     <button onclick="buyNow()" class="btn-secondary btn-large">Buy Now</button>
+                    <button onclick="orderOnWhatsApp('${(product.name || '').replace(/'/g, "\\'")}', ${adjustedPrice})" class="btn-large" style="background:#25D366;color:#fff;border:none;cursor:pointer;width:100%;margin-top:10px;font-weight:600;">
+                        Order on WhatsApp
+                    </button>
+                    <p style="font-size:0.85rem;color:var(--text-light);text-align:center;margin-top:10px;">
+                        Cash on Delivery &middot; No advance payment
+                    </p>
+
+                    <div style="margin-top:20px;border:1px solid var(--border-color);border-radius:8px;padding:4px 16px;background:#fafafa;font-size:0.9rem;">
+                        <p style="padding:10px 0;border-bottom:1px solid var(--border-color);">Delivery in 2&ndash;4 working days</p>
+                        <p style="padding:10px 0;border-bottom:1px solid var(--border-color);">7 day exchange &mdash; <a href="return-policy.html">see policy</a></p>
+                        <p style="padding:10px 0;">Call or WhatsApp 0301 8858303, 10am&ndash;9pm</p>
+                    </div>
 
                     <!-- Share Buttons -->
                     <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color);">
@@ -1021,4 +1033,28 @@ window.nextImage = function() {
 
     const counter = document.getElementById('image-counter');
     if (counter) counter.textContent = `${newIndex + 1} / ${thumbnails.length}`;
+};
+
+
+// ============ WHATSAPP DIRECT ORDER ============
+// Many customers will not fill a checkout form but will happily send a
+// WhatsApp message. This pre-fills the message with the product, the
+// chosen size and quantity, and the page link.
+window.orderOnWhatsApp = function (productName, price) {
+    const PHONE = '923018858303';
+
+    const qtyEl = document.getElementById('quantity');
+    const qty = qtyEl ? (parseInt(qtyEl.value, 10) || 1) : 1;
+
+    const activeSize = document.querySelector('.size-btn.active, .size-btn.selected');
+    const size = activeSize ? activeSize.textContent.trim() : '';
+
+    let msg = 'Assalam o Alaikum! Mujhe ye order karna hai:\n\n';
+    msg += productName + '\n';
+    if (size) msg += 'Size: ' + size + '\n';
+    msg += 'Quantity: ' + qty + '\n';
+    msg += 'Price: Rs. ' + Number(price).toLocaleString() + '\n\n';
+    msg += window.location.href;
+
+    window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(msg), '_blank');
 };
