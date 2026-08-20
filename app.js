@@ -146,7 +146,7 @@ function renderProductCards(container, products) {
         const discountPercent = originalPrice > sellingPrice
             ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
         return `
-            <a href="product.html?id=${product.id}" class="product-card">
+            <a href="${product.slug ? product.slug + ".html" : "product.html?id=" + product.id}" class="product-card">
                 <div style="position: relative;">
                     <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}"
                          alt="${product.name}" class="product-image" loading="lazy">
@@ -196,7 +196,7 @@ export async function loadFeaturedProducts() {
             const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
             
             return `
-                <a href="product.html?id=${product.id}" class="product-card">
+                <a href="${product.slug ? product.slug + ".html" : "product.html?id=" + product.id}" class="product-card">
                     <div style="position: relative;">
                         <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}"
                              alt="${product.name}" class="product-image">
@@ -267,7 +267,7 @@ function renderProducts(products) {
         const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
         
         return `
-            <a href="product.html?id=${product.id}" class="product-card">
+            <a href="${product.slug ? product.slug + ".html" : "product.html?id=" + product.id}" class="product-card">
                 <div style="position: relative;">
                     <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}"
                          alt="${product.name}" class="product-image">

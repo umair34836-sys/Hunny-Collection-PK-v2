@@ -1099,23 +1099,85 @@
             }
         });
 
+
+        // ========== IMAGE COMPRESSION ==========
+        // Images are stored as base64 inside the Firestore document, because
+        // Cloud Storage now requires a paid Blaze plan. That makes size
+        // critical: a Firestore document cannot exceed 1 MB, so a single
+        // large photo can break the whole product. Every upload is therefore
+        // resized and re-encoded here before it is ever saved.
+        function compressImage(file, maxSize, quality) {
+            maxSize = maxSize || 900;
+            quality = quality || 0.78;
+
+            return new Promise(function (resolve, reject) {
+                var reader = new FileReader();
+                reader.onerror = function () { reject(new Error('Could not read file')); };
+                reader.onload = function (e) {
+                    var img = new Image();
+                    img.onerror = function () { reject(new Error('Not a valid image')); };
+                    img.onload = function () {
+                        var w = img.width, h = img.height;
+                        if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+                        else if (h >= w && h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+
+                        var canvas = document.createElement('canvas');
+                        canvas.width = w; canvas.height = h;
+                        var ctx = canvas.getContext('2d');
+                        // White backing: JPEG has no transparency, and without
+                        // this a PNG with a clear background turns black.
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, w, h);
+                        ctx.drawImage(img, 0, 0, w, h);
+
+                        var out = canvas.toDataURL('image/jpeg', quality);
+
+                        // Step the quality down until it is comfortably small.
+                        var q = quality;
+                        while (out.length > 160 * 1024 && q > 0.4) {
+                            q -= 0.08;
+                            out = canvas.toDataURL('image/jpeg', q);
+                        }
+                        resolve({
+                            data: out,
+                            before: file.size,
+                            after: Math.round(out.length * 0.75),
+                            width: w,
+                            height: h
+                        });
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function kb(n) { return Math.round(n / 1024) + ' KB'; }
+
         // ========== IMAGE HANDLING ==========
-        window.handleMainImageUpload = function(event) {
+        window.handleMainImageUpload = async function(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                mainImageFile = e.target.result;
+            const noMsg = document.getElementById('no-main-image-msg');
+            if (noMsg) { noMsg.textContent = 'Compressing image...'; noMsg.style.display = 'block'; }
+
+            try {
+                const r = await compressImage(file);
+                mainImageFile = r.data;
+
                 const previewDiv = document.getElementById('main-image-preview');
                 const previewImg = document.getElementById('main-image-preview-img');
-                const noMsg = document.getElementById('no-main-image-msg');
-
-                previewImg.src = e.target.result;
+                previewImg.src = r.data;
                 previewDiv.style.display = 'block';
-                noMsg.style.display = 'none';
-            };
-            reader.readAsDataURL(file);
+                if (noMsg) noMsg.style.display = 'none';
+
+                console.log('[Hunny] main image ' + kb(r.before) + ' -> ' + kb(r.after));
+            } catch (err) {
+                alert('Is tasveer ko process nahi kar saka: ' + err.message);
+                if (noMsg) { noMsg.textContent = 'No main image selected'; }
+                event.target.value = '';
+            }
         };
 
         window.addMainImageUrl = function() {
@@ -1158,30 +1220,36 @@
             }
         };
 
-        window.handleFileSelect = function(event) {
-            const files = event.target.files;
+        window.handleFileSelect = async function(event) {
+            const files = Array.from(event.target.files);
             if (files.length === 0) return;
 
             const statusDiv = document.getElementById('upload-status');
-            statusDiv.innerHTML = '<span style="color: blue;">Processing ' + files.length + ' image(s)...</span>';
+            let totalBefore = 0, totalAfter = 0, done = 0, failed = 0;
 
-            Array.from(files).forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #FEEE91; cursor: pointer;';
-                    img.title = 'Click to remove';
-                    img.onclick = function() { removeImageByIndex(index); };
-                    document.getElementById('image-preview').appendChild(img);
+            for (const file of files) {
+                statusDiv.innerHTML = '<span style="color:#1565c0;">Compressing image ' +
+                    (done + failed + 1) + ' of ' + files.length + '...</span>';
+                try {
+                    const r = await compressImage(file);
+                    totalBefore += r.before;
+                    totalAfter += r.after;
 
-                    uploadedImageUrls.push(e.target.result);
+                    uploadedImageUrls.push(r.data);
+                    done++;
                     updateImagePreview();
-                };
-                reader.readAsDataURL(file);
-            });
+                } catch (err) {
+                    console.error('[Hunny] image failed:', file.name, err);
+                    failed++;
+                }
+            }
 
-            statusDiv.innerHTML = '<span style="color: orange;">⚠️ For live hosting, upload to ImgBB/Cloudinary and paste URLs</span>';
+            statusDiv.innerHTML =
+                '<span style="color:#1b7f3b;">' + done + ' image(s) ready &mdash; ' +
+                kb(totalBefore) + ' compressed to ' + kb(totalAfter) + '</span>' +
+                (failed ? '<br><span style="color:#c62828;">' + failed + ' image(s) could not be read</span>' : '');
+
+            event.target.value = '';
         };
 
         window.addImageUrl = function() {
