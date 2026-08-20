@@ -261,10 +261,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </div>
                         
                         <div class="form-row">
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" id="email">
-                            </div>
+
                             <div class="form-group">
                                 <label>City *</label>
                                 <input type="text" id="city" required>
@@ -286,8 +283,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <small>You will pay when you receive your order</small>
                         </div>
                         
+                        <div class="cod-reassure">
+                            <p><b>Cash on Delivery</b> &mdash; abhi kuch pay nahi karna</p>
+                            <p>Parcel milne par paisay dein. Pasand na aaye to wapas kar dein.</p>
+                        </div>
                         <button type="submit" id="place-order-btn" class="btn-primary" style="width: 100%;">
-                            Place Order
+                            Confirm Order
                         </button>
                     </form>
                 </div>
@@ -359,7 +360,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
             if (!user.isAnonymous) {
                 document.getElementById('name').value = user.displayName || '';
-                document.getElementById('email').value = user.email || '';
+                
             }
         });
 
@@ -408,7 +409,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     userId: auth.currentUser.uid,
                     customerName: document.getElementById('name').value,
                     contact: document.getElementById('contact').value,
-                    email: document.getElementById('email').value || '',
+                    email: '',
                     isGuest: auth.currentUser.isAnonymous === true,
                     address: {
                         fullAddress: document.getElementById('address').value,
@@ -447,7 +448,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <small>${error.message}</small>
                     </div>
                 `;
-                placeOrderBtn.textContent = 'Place Order';
+                placeOrderBtn.textContent = 'Confirm Order';
                 placeOrderBtn.disabled = false;
             }
         });

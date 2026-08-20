@@ -31,11 +31,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <main class="thank-you-wrap">
         <div class="thank-you-card">
             <div class="icon">✅</div>
-            <h1>Thank You!</h1>
-            <p id="message">Your order has been placed successfully.</p>
+            <h1>Order Confirm Ho Gaya!</h1>
+            <p id="message">Shukriya! Aap ka order humein mil gaya hai.</p>
             <p id="orderId" class="order-id"></p>
             <p id="amount"></p>
-            <a class="btn btn-primary" href="index.html">Continue Shopping</a>
+
+            <!-- Telling the customer exactly what happens next is what stops
+                 them from messaging to ask whether the order went through. -->
+            <div class="next-steps">
+                <div><b>1</b><p>Hum aap ko call kar ke order confirm karenge</p></div>
+                <div><b>2</b><p>Parcel book ho jayega, tracking aap ko mil jayegi</p></div>
+                <div><b>3</b><p>Parcel milne par paisay dein &mdash; abhi kuch nahi</p></div>
+            </div>
+
+            <p class="tip">Parcel kholte waqt video zaroor bana lein. Koi masla ho to us se claim foran manzoor ho jata hai.</p>
+
+            <a class="btn btn-primary" href="shop.html">Aur Shopping Karein</a>
+            <a class="btn-plain" href="orders.html">Apne orders dekhein</a>
+
+<style>
+.next-steps{text-align:left;margin:26px 0 18px;border:1px solid #eee;border-radius:10px;padding:4px 16px;background:#fbfbfa}
+.next-steps div{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px solid #efefef}
+.next-steps div:last-child{border-bottom:0}
+.next-steps b{flex:0 0 26px;height:26px;border-radius:50%;background:#1e1a17;color:#fff;
+              display:flex;align-items:center;justify-content:center;font-size:13px}
+.next-steps p{margin:0;font-size:.92rem;color:#3a3a3a;line-height:1.5}
+.tip{font-size:.85rem;color:#7a7a7a;margin:0 0 22px}
+.btn-plain{display:block;margin-top:14px;color:#8a6a2a;font-size:.92rem;text-decoration:none}
+</style>
         </div>
     </main>
     <script>

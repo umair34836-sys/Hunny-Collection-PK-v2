@@ -1817,3 +1817,99 @@ body {
     object-fit: cover;
     background: #0d0b09;
 }
+
+/* ============================================================
+   ORDERING ON THE SITE
+   The website is the shop, so the buying path gets the emphasis.
+   ============================================================ */
+
+.buy-now-btn {
+    background: linear-gradient(135deg, #E8B44F, #C0872B);
+    color: #1a1409;
+    border: none;
+    font-weight: 800;
+    letter-spacing: .2px;
+}
+
+.buy-now-btn:hover { filter: brightness(1.06); }
+
+.pay-note {
+    font-size: .88rem;
+    color: #6b6b6b;
+    text-align: center;
+    margin: 12px 0 0;
+}
+
+/* --- trust block on the product page --- */
+.product-trust {
+    margin-top: 20px;
+    border: 1px solid #ececec;
+    border-radius: 10px;
+    background: #fbfbfa;
+    padding: 4px 16px;
+}
+
+.product-trust div {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #efefef;
+}
+
+.product-trust div:last-child { border-bottom: 0; }
+.product-trust span { font-size: 18px; line-height: 1.35; }
+.product-trust p { margin: 0; font-size: .9rem; color: #3a3a3a; }
+
+/* --- reassurance right above the confirm button --- */
+.cod-reassure {
+    background: #FFF9EC;
+    border: 1px solid #F0DCA8;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.cod-reassure p { margin: 0; font-size: .9rem; color: #4a4034; }
+.cod-reassure p + p { margin-top: 5px; color: #7a6f5f; font-size: .85rem; }
+
+/* ============================================================
+   STICKY BUY BAR (mobile product page)
+   On a phone the buttons scroll out of view while the customer reads.
+   This keeps buying one tap away at all times.
+   ============================================================ */
+.buy-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    background: #fff;
+    border-top: 1px solid #e8e8e8;
+    box-shadow: 0 -4px 18px rgba(0,0,0,.08);
+    padding: 10px 14px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    z-index: 900;
+}
+
+.buy-bar__price { font-weight: 800; font-size: 1.05rem; white-space: nowrap; }
+.buy-bar__price small { display: block; font-weight: 400; font-size: .68rem; color: #8a8a8a; }
+
+.buy-bar__btn {
+    flex: 1;
+    background: linear-gradient(135deg, #E8B44F, #C0872B);
+    color: #1a1409;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 10px;
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .buy-bar.is-on { display: flex; }
+    body.has-buy-bar { padding-bottom: 78px; }
+    /* the floating WhatsApp button must not sit on top of the buy bar */
+    body.has-buy-bar .whatsapp-float { bottom: 90px; }
+}

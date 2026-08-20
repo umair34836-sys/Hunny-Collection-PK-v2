@@ -472,6 +472,10 @@ export async function loadProduct(productId) {
 
         window.currentProduct = product;
 
+        // Sticky buy bar for phones. It appears once the main buttons have
+        // scrolled past, so buying stays one tap away while reading.
+        mountBuyBar(product);
+
         // GA4/GTM ecommerce event
         pushGtmEvent('view_item', {
             currency: 'PKR',
@@ -553,19 +557,21 @@ export async function loadProduct(productId) {
                         <input type="number" id="quantity" value="1" min="1" class="quantity-input">
                     </div>
 
-                    <button onclick="addToCartClick()" class="btn-primary btn-large">Add to Cart</button>
-                    <button onclick="buyNow()" class="btn-secondary btn-large">Buy Now</button>
-                    <button onclick="orderOnWhatsApp('${(product.name || '').replace(/'/g, "\\'")}', ${adjustedPrice})" class="btn-large" style="background:#25D366;color:#fff;border:none;cursor:pointer;width:100%;margin-top:10px;font-weight:600;">
-                        Order on WhatsApp
-                    </button>
-                    <p style="font-size:0.85rem;color:var(--text-light);text-align:center;margin-top:10px;">
-                        Cash on Delivery &middot; No advance payment
+                    <!-- Buy Now is the main action. Ordering happens on this
+                         site, so it gets the loudest button and Add to Cart
+                         sits underneath it as the quieter option. -->
+                    <button onclick="buyNow()" class="btn-primary btn-large buy-now-btn">Buy Now &mdash; Cash on Delivery</button>
+                    <button onclick="addToCartClick()" class="btn-secondary btn-large">Add to Cart</button>
+
+                    <p class="pay-note">
+                        Paisay parcel milne par dein &middot; Koi advance nahi
                     </p>
 
-                    <div style="margin-top:20px;border:1px solid var(--border-color);border-radius:8px;padding:4px 16px;background:#fafafa;font-size:0.9rem;">
-                        <p style="padding:10px 0;border-bottom:1px solid var(--border-color);">Delivery in 2&ndash;4 working days</p>
-                        <p style="padding:10px 0;border-bottom:1px solid var(--border-color);">7 day exchange &mdash; <a href="return-policy.html">see policy</a></p>
-                        <p style="padding:10px 0;">Call or WhatsApp 0301 8858303, 10am&ndash;9pm</p>
+                    <div class="product-trust">
+                        <div><span>🚚</span><p>Delivery 2&ndash;5 working days</p></div>
+                        <div><span>💵</span><p>Cash on Delivery all over Pakistan</p></div>
+                        <div><span>🔄</span><p>7 day exchange &mdash; <a href="return-policy.html">policy dekhein</a></p></div>
+                        <div><span>📞</span><p>Booking se pehle hum aap ko call karte hain</p></div>
                     </div>
 
                     <!-- Share Buttons -->
@@ -727,18 +733,45 @@ window.selectSize = (size, btn) => {
 window.addToCartClick = () => {
     const quantity = parseInt(document.getElementById('quantity')?.value || 1);
     const variant = window.selectedSize ? { size: window.selectedSize } : {};
-    
+
     if (addToCart(window.currentProduct, variant, quantity)) {
-        alert('Added to cart!');
+        // A browser alert freezes the page and has to be dismissed. A small
+        // toast says the same thing without interrupting the customer.
+        showToast('Cart me add ho gaya');
     }
 };
 
 window.buyNow = () => {
-    window.addToCartClick();
-    setTimeout(() => {
+    const quantity = parseInt(document.getElementById('quantity')?.value || 1);
+    const variant = window.selectedSize ? { size: window.selectedSize } : {};
+
+    // Straight to checkout: no alert to dismiss, no artificial delay.
+    // The cart is written to localStorage synchronously, so the next page
+    // already has it.
+    if (addToCart(window.currentProduct, variant, quantity)) {
         window.location.href = 'checkout.html';
-    }, 500);
+    }
 };
+
+function showToast(message) {
+    const old = document.getElementById('hc-toast');
+    if (old) old.remove();
+
+    const el = document.createElement('div');
+    el.id = 'hc-toast';
+    el.textContent = message;
+    el.style.cssText =
+        'position:fixed;left:50%;transform:translateX(-50%);bottom:100px;' +
+        'background:#1e1a17;color:#fff;padding:13px 24px;border-radius:50px;' +
+        'font-size:15px;font-weight:600;z-index:2000;box-shadow:0 6px 24px rgba(0,0,0,.25);' +
+        'opacity:0;transition:opacity .2s';
+    document.body.appendChild(el);
+    requestAnimationFrame(() => { el.style.opacity = '1'; });
+    setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 250);
+    }, 1900);
+}
 
 // Share functions - Web Share API with images
 window.shareProductWhatsApp = async function(productId) {
@@ -1117,25 +1150,38 @@ window.nextImage = function() {
 };
 
 
-// ============ WHATSAPP DIRECT ORDER ============
-// Many customers will not fill a checkout form but will happily send a
-// WhatsApp message. This pre-fills the message with the product, the
-// chosen size and quantity, and the page link.
-window.orderOnWhatsApp = function (productName, price) {
-    const PHONE = '923018858303';
+// Ordering happens on the website, not on WhatsApp, so the direct-order
+// handler has been removed. WhatsApp stays available for questions only.
 
-    const qtyEl = document.getElementById('quantity');
-    const qty = qtyEl ? (parseInt(qtyEl.value, 10) || 1) : 1;
 
-    const activeSize = document.querySelector('.size-btn.active, .size-btn.selected');
-    const size = activeSize ? activeSize.textContent.trim() : '';
+// ============ STICKY BUY BAR ============
+function mountBuyBar(product) {
+    if (window.innerWidth > 768) return;
+    if (document.getElementById('buy-bar')) return;
 
-    let msg = 'Assalam o Alaikum! Mujhe ye order karna hai:\n\n';
-    msg += productName + '\n';
-    if (size) msg += 'Size: ' + size + '\n';
-    msg += 'Quantity: ' + qty + '\n';
-    msg += 'Price: Rs. ' + Number(price).toLocaleString() + '\n\n';
-    msg += window.location.href;
+    const price = Number(product.sellingPrice || product.price || 0);
 
-    window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(msg), '_blank');
-};
+    const bar = document.createElement('div');
+    bar.id = 'buy-bar';
+    bar.className = 'buy-bar';
+    bar.innerHTML = `
+        <div class="buy-bar__price">Rs. ${price.toLocaleString()}<small>Cash on Delivery</small></div>
+        <button class="buy-bar__btn" type="button">Buy Now</button>
+    `;
+    document.body.appendChild(bar);
+    document.body.classList.add('has-buy-bar');
+
+    bar.querySelector('button').addEventListener('click', () => {
+        if (typeof window.buyNow === 'function') window.buyNow();
+    });
+
+    // Only show it once the real buttons are out of sight
+    const primary = document.querySelector('.buy-now-btn');
+    if (primary && 'IntersectionObserver' in window) {
+        new IntersectionObserver(entries => {
+            bar.classList.toggle('is-on', !entries[0].isIntersecting);
+        }, { threshold: 0 }).observe(primary);
+    } else {
+        bar.classList.add('is-on');
+    }
+}

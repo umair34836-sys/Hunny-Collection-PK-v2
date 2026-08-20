@@ -556,7 +556,8 @@
         var lastVisible = null;          // Firestore cursor for pagination
         var isLoading = false;
         var hasMoreProducts = true;
-        var allProductsLoaded = false;   // Flag: have we fetched ALL products once?
+        var allProductsLoaded = false;
+        var staticOffset = 0;   // Flag: have we fetched ALL products once?
 
         // ========== SHOW LOADING SKELETONS ==========
         function showSkeletons(count) {
@@ -610,6 +611,28 @@
             showSkeletons(6);
             loadMoreContainer.style.display = 'none';
             if (resultsCount) resultsCount.textContent = 'Loading products...';
+
+            // Static file first. It ships with the page, so products appear
+            // immediately instead of waiting on a Firestore round trip.
+            if (window.HUNNY_PRODUCTS && window.HUNNY_PRODUCTS.length) {
+                removeSkeletons();
+                var all = window.HUNNY_PRODUCTS.slice();
+                all.sort(function (a, b) {
+                    var x = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                    var y = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                    return y - x;
+                });
+                allProductsForFilter = all;
+                allProductsLoaded = true;
+                displayedProducts = all.slice(0, PRODUCTS_PER_PAGE);
+                hasMoreProducts = all.length > PRODUCTS_PER_PAGE;
+                staticOffset = displayedProducts.length;
+                renderProducts(displayedProducts, false);
+                if (resultsCount) resultsCount.textContent = all.length + ' products';
+                loadMoreContainer.style.display = hasMoreProducts ? 'block' : 'none';
+                isLoading = false;
+                return;
+            }
 
             try {
                 var q = query(collection(db, 'products'), orderBy('createdAt', 'desc'), limit(PRODUCTS_PER_PAGE));
@@ -671,6 +694,21 @@
 
         // ========== LOAD MORE PRODUCTS ==========
         window.loadMoreProducts = async function() {
+            // Static path: the next page is already in memory, just slice it.
+            if (window.HUNNY_PRODUCTS && window.HUNNY_PRODUCTS.length) {
+                if (isLoading || !hasMoreProducts) return;
+                isLoading = true;
+                var next = allProductsForFilter.slice(staticOffset, staticOffset + PRODUCTS_PER_PAGE);
+                staticOffset += next.length;
+                displayedProducts = displayedProducts.concat(next);
+                renderProducts(next, true);
+                hasMoreProducts = staticOffset < allProductsForFilter.length;
+                document.getElementById('load-more-container').style.display =
+                    hasMoreProducts ? 'block' : 'none';
+                isLoading = false;
+                return;
+            }
+
             if (isLoading || !hasMoreProducts || !lastVisible) return;
             isLoading = true;
 
@@ -848,6 +886,11 @@
         async function loadAllProductsForFilter() {
             if (allProductsLoaded) return;  // Already loaded
             allProductsLoaded = true;
+
+            if (window.HUNNY_PRODUCTS && window.HUNNY_PRODUCTS.length) {
+                allProductsForFilter = window.HUNNY_PRODUCTS.slice();
+                return;
+            }
 
             try {
                 var q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
