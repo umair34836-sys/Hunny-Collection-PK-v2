@@ -110,10 +110,72 @@ export async function loadCategories() {
     }
 }
 
+
+// ============================================================
+// STATIC PRODUCTS
+// Products products-data.js se aate hain, jo page ke saath hi load ho
+// jati hai. Isliye Firestore ka intezaar nahi karna parta aur products
+// foran nazar aate hain.
+//
+// Agar woh file khaali ho, to purane tareeqe se Firestore se aa jate
+// hain. Isliye kuch bhi tootta nahi.
+// ============================================================
+
+function staticProducts() {
+    const list = (typeof window !== 'undefined' && window.HUNNY_PRODUCTS) || [];
+    if (!Array.isArray(list) || list.length === 0) return null;
+
+    const items = list.map(p => migrateProductPricing({ ...p }));
+    items.sort((a, b) => {
+        const x = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const y = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return y - x;
+    });
+    return items;
+}
+
+
+function renderProductCards(container, products) {
+    if (!products.length) {
+        container.innerHTML = '<p class="loading">Products coming soon! Check back later.</p>';
+        return;
+    }
+    container.innerHTML = products.map(product => {
+        const sellingPrice = product.sellingPrice || product.price || 0;
+        const originalPrice = product.originalPrice || 0;
+        const discountPercent = originalPrice > sellingPrice
+            ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
+        return `
+            <a href="product.html?id=${product.id}" class="product-card">
+                <div style="position: relative;">
+                    <img src="${product.images?.[0] || 'https://via.placeholder.com/300x300/FFB6C1/333?text=No+Image'}"
+                         alt="${product.name}" class="product-image" loading="lazy">
+                    ${discountPercent > 0 ? `<span class="discount-badge">🔥 ${discountPercent}% OFF</span>` : ''}
+                </div>
+                <div class="product-info">
+                    <div class="product-category">${product.category || ''}</div>
+                    <div class="product-title">${product.name}</div>
+                    <div class="product-price-group">
+                        <span class="product-selling-price">Rs. ${sellingPrice.toLocaleString()}</span>
+                        ${originalPrice > sellingPrice ? `<span class="product-original-price">Rs. ${originalPrice.toLocaleString()}</span>` : ''}
+                    </div>
+                </div>
+            </a>
+        `;
+    }).join('');
+}
+
 // Load featured products
 export async function loadFeaturedProducts() {
     const container = document.getElementById('products-container');
     if (!container) return;
+
+    // File se, agar mojood hai
+    const cached = staticProducts();
+    if (cached) {
+        renderProductCards(container, cached.slice(0, 8));
+        return;
+    }
 
     try {
         const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'), limit(8));
@@ -165,6 +227,13 @@ export async function loadFeaturedProducts() {
 export async function loadAllProducts() {
     const container = document.getElementById('products-container');
     if (!container) return;
+
+    const cached = staticProducts();
+    if (cached) {
+        window.allProducts = cached;
+        renderProducts(cached);
+        return;
+    }
 
     try {
         const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
@@ -363,23 +432,35 @@ export async function loadProduct(productId) {
     }
 
     try {
-        // Fetch ONLY the single product document by ID — no full collection scan
-        const docRef = doc(db, 'products', productId);
-        const docSnap = await getDoc(docRef);
+        let product = null;
 
-        if (!docSnap.exists()) {
-            console.error('Product not found:', productId);
-            container.innerHTML = `
-                <div class="loading">
-                    <h2>Product not found</h2>
-                    <p>The product you're looking for doesn't exist or has been removed.</p>
-                    <a href="shop.html" class="btn-primary" style="display:inline-block;margin-top:20px;">Browse Shop</a>
-                </div>
-            `;
-            return;
+        // Pehle file me dhoondein. Mil gaya to Firestore ko chhera hi nahi
+        // jata, isliye page foran khulta hai.
+        const cachedList = staticProducts();
+        if (cachedList) {
+            const hit = cachedList.find(item => item.id === productId);
+            if (hit) product = hit;
         }
 
-        const product = migrateProductPricing({ id: docSnap.id, ...docSnap.data() });
+        if (!product) {
+            // Fetch ONLY the single product document by ID — no full collection scan
+            const docRef = doc(db, 'products', productId);
+            const docSnap = await getDoc(docRef);
+
+            if (!docSnap.exists()) {
+                console.error('Product not found:', productId);
+                container.innerHTML = `
+                    <div class="loading">
+                        <h2>Product not found</h2>
+                        <p>The product you're looking for doesn't exist or has been removed.</p>
+                        <a href="shop.html" class="btn-primary" style="display:inline-block;margin-top:20px;">Browse Shop</a>
+                    </div>
+                `;
+                return;
+            }
+
+            product = migrateProductPricing({ id: docSnap.id, ...docSnap.data() });
+        }
         console.log('Found product:', product.name);
 
         if (pageTitle) {

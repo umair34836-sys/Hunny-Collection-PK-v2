@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Export Products</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;max-width:760px;margin:0 auto;
+       padding:24px 18px 70px;background:#faf9f7;color:#1e1a17;line-height:1.6}
+  h1{font-size:24px;margin:0 0 4px}
+  .sub{color:#77706a;margin:0 0 22px;font-size:15px}
+  .card{background:#fff;border:1px solid #e6e1db;border-radius:10px;padding:20px;margin-bottom:16px}
+  .card h2{font-size:17px;margin:0 0 8px}
+  .card p{margin:0 0 14px;font-size:15px;color:#5c5550}
+  button{background:#1e1a17;color:#fff;border:0;border-radius:8px;padding:15px 24px;
+         font-size:16px;font-weight:600;cursor:pointer;width:100%;font-family:inherit}
+  button.gold{background:linear-gradient(135deg,#D9AF57,#B8862F);color:#1a1409}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  #log{background:#14110f;color:#d6ffd6;border-radius:8px;padding:16px;font-size:13px;
+       font-family:ui-monospace,monospace;white-space:pre-wrap;min-height:90px;
+       max-height:300px;overflow:auto;margin-top:14px}
+  .warn{background:#FFF6E5;border:1px solid #F0DCA8;border-radius:8px;padding:14px;font-size:14px;margin-bottom:16px}
+  .stat{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+  .stat div{flex:1;min-width:110px;background:#f4f1ed;border-radius:8px;padding:12px;text-align:center}
+  .stat b{display:block;font-size:26px}
+  .stat small{color:#77706a}
+  ol{padding-left:20px;font-size:15px} ol li{margin-bottom:8px}
+  code{background:#f0ece7;padding:2px 6px;border-radius:4px;font-size:13px}
+  a{color:#B8862F}
+</style>
+</head>
+<body>
+
+<h1>Export Products</h1>
+<p class="sub">Firestore ke saare products ek file me nikal deta hai, taake website unhe backend se mangwaye bagair foran dikha sake.</p>
+
+<div class="warn">
+  <b>Pehle admin me login karein.</b> Warna Firestore products parhne nahi dega.
+  <a href="hc-staff-7x92k.html">Yahan se login karein</a>, phir wapas aayein.
+</div>
+
+<div class="card">
+  <h2>Qadam 1 — Products nikalein</h2>
+  <p>Ye sirf parhta hai. Aapke Firestore me kuch nahi badalta.</p>
+  <button id="load">Firestore se products parhein</button>
+  <div class="stat" id="stats" style="display:none">
+    <div><b id="count">0</b><small>products</small></div>
+    <div><b id="imgs">0</b><small>tasveer ke saath</small></div>
+    <div><b id="size">0</b><small>KB file</small></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Qadam 2 — File download karein</h2>
+  <p>
+    <code>products-data.js</code> naam ki file banegi. Isay GitHub pe upload karna hai,
+    baaki files ke saath, wahi root folder me.
+  </p>
+  <button id="save" class="gold" disabled>Pehle Qadam 1 chalayein</button>
+</div>
+
+<div class="card">
+  <h2>Qadam 3 — Uske baad</h2>
+  <ol>
+    <li><code>products-data.js</code> GitHub pe upload karein</li>
+    <li>2 minute rukein (GitHub Pages build hone do)</li>
+    <li>Website incognito me kholein — products foran nazar aayenge, bina intezaar ke</li>
+  </ol>
+  <p style="margin:0">
+    <b>Yaad rakhein:</b> jab bhi admin me naya product add karein ya price badlein,
+    yahan wapas aayein aur dobara export karke file upload karein. Warna website purani
+    file hi dikhati rahegi.
+  </p>
+</div>
+
+<div id="log">Taiyaar...</div>
+
+<script type="module">
+import { db, auth } from './firebase-config.js';
+import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+const logEl = document.getElementById('log');
+const say = m => { logEl.textContent += '\n' + m; logEl.scrollTop = logEl.scrollHeight; };
+
+let fileText = '';
+
+onAuthStateChanged(auth, u => {
+  logEl.textContent = (u && !u.isAnonymous)
+    ? 'Logged in: ' + (u.email || u.uid)
+    : 'Login nahi hain. Pehle admin me login karein.';
+});
+
+// Only the fields the storefront actually uses. Keeping it lean means a
+// smaller file, which means a faster page.
+function slim(id, p) {
+  const out = { id };
+  const keep = ['name','category','description','sellingPrice','originalPrice','price',
+                'stock','sizes','colors','sku','createdAt'];
+  keep.forEach(k => { if (p[k] !== undefined && p[k] !== null && p[k] !== '') out[k] = p[k]; });
+  if (Array.isArray(p.images) && p.images.length) out.images = p.images;
+  return out;
+}
+
+document.getElementById('load').onclick = async () => {
+  const b = document.getElementById('load');
+  b.disabled = true; b.textContent = 'Parh raha hoon...';
+  logEl.textContent = 'Firestore se products parh raha hoon...';
+  try {
+    const snap = await getDocs(collection(db, 'products'));
+    const items = [];
+    snap.forEach(d => items.push(slim(d.id, d.data())));
+
+    items.sort((a, b2) => {
+      const x = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const y = b2.createdAt ? new Date(b2.createdAt).getTime() : 0;
+      return y - x;
+    });
+
+    const withImg = items.filter(i => i.images && i.images.length).length;
+
+    fileText =
+`// ============================================================
+// Hunny Collection PK - products
+//
+// Ye file admin panel se export hui hai. Haath se edit karna ho
+// to kar sakte hain, lekin agle export par sab dobara likha jayega.
+//
+// Export: ${new Date().toLocaleString('en-PK')}
+// Products: ${items.length}
+//
+// NAYA PRODUCT ADD KARNE KE BAAD:
+// hc-export-products.html kholein, dobara export karein,
+// aur ye file wapas upload karein.
+// ============================================================
+
+window.HUNNY_PRODUCTS = ${JSON.stringify(items, null, 2)};
+`;
+
+    const kb = Math.round(new Blob([fileText]).size / 1024);
+    document.getElementById('stats').style.display = 'flex';
+    document.getElementById('count').textContent = items.length;
+    document.getElementById('imgs').textContent = withImg;
+    document.getElementById('size').textContent = kb;
+
+    say(`\nMile: ${items.length} products`);
+    say(`Tasveer ke saath: ${withImg}`);
+    say(`File ka size: ${kb} KB`);
+    if (kb > 400) say('\nNOTE: file bari hai. Ye tab hota hai jab tasveerein base64 me hon.');
+    say('\nPehle 10 products:');
+    items.slice(0, 10).forEach(i => say('  - ' + (i.name || '(bina naam)')));
+    if (items.length > 10) say(`  ...aur ${items.length - 10} aur`);
+
+    if (items.length) {
+      const s = document.getElementById('save');
+      s.disabled = false;
+      s.textContent = `products-data.js download karein (${items.length} products)`;
+    } else {
+      say('\nFirestore me koi product nahi mila. Pehle admin se products add karein.');
+    }
+  } catch (e) {
+    say('\nERROR: ' + e.code + ' — ' + e.message);
+    if (e.code === 'permission-denied')
+      say('Firestore parhne nahi de raha. Admin login check karein.');
+  }
+  b.disabled = false; b.textContent = 'Dobara parhein';
+};
+
+document.getElementById('save').onclick = () => {
+  const blob = new Blob([fileText], { type: 'text/javascript' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'products-data.js';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(a.href);
+  say('\nFile download ho gayi. Ab isay GitHub pe upload karein.');
+};
+</script>
+</body>
+</html>

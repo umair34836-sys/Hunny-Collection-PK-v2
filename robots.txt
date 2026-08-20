@@ -9,6 +9,7 @@ Allow: /return-policy.html
 Disallow: /admin
 Disallow: /admin-old.html
 Disallow: /hc-staff-7x92k.html
+Disallow: /hc-export-products.html
 Disallow: /sub-admin/
 Disallow: /vendor/
 Disallow: /investor-panel.html
