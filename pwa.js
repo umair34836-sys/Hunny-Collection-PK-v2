@@ -185,16 +185,46 @@
   }
 
   // ---------- wiring ----------
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault();
+  function activate(e) {
     deferred = e;
-
-    // The quiet option goes up straight away and stays.
     showPersistentOption();
-
-    // The ask happens once ever, and only after the page has settled.
     if (!alreadyAsked()) setTimeout(askOnce, 4000);
-  });
+  }
+
+  // The event may already have fired and been caught by the stub in <head>,
+  // or it may fire later. Both paths are handled.
+  if (window.__hcInstall) {
+    activate(window.__hcInstall);
+  } else {
+    window.addEventListener('hc-installable', function () {
+      if (window.__hcInstall) activate(window.__hcInstall);
+    });
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      activate(e);
+    });
+  }
+
+  // If nothing appears, this says why. Chrome will not offer an install
+  // unless every one of these is satisfied, and it stays silent about which
+  // one failed.
+  setTimeout(function () {
+    if (deferred || installed()) return;
+    var reasons = [];
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost')
+      reasons.push('site HTTPS par nahi hai');
+    if (!document.querySelector('link[rel="manifest"]'))
+      reasons.push('manifest.json ka link page me nahi hai');
+    if (!('serviceWorker' in navigator))
+      reasons.push('is browser me service worker nahi chalta');
+    else if (!navigator.serviceWorker.controller)
+      reasons.push('service worker ne page abhi sambhala nahi — ek baar page refresh karein');
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent))
+      reasons.push('iPhone par Chrome install ka button nahi deta: Share > Add to Home Screen');
+
+    console.log('[PWA] Install ka button kyun nahi dikha:',
+      reasons.length ? reasons : ['sab theek lagta hai — Chrome ko thodi browsing chahiye, ya app pehle se install hai']);
+  }, 9000);
 
   window.addEventListener('appinstalled', function () {
     deferred = null;

@@ -814,10 +814,7 @@ window.HUNNY_PRODUCTS = [
   "sellingPrice": 1599,
   "originalPrice": 0,
   "price": 1599,
-  "createdAt": {
-   "seconds": 1774593542,
-   "nanoseconds": 124000000
-  },
+  "createdAt": "2026-03-27T06:39:02Z",
   "images": [
    "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-1.jpeg",
    "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-2.jpeg",

@@ -13,7 +13,7 @@
  *   Firebase / CDN    -> never cached. Live data must stay live.
  */
 
-const VERSION = 'hunny-v1';
+const VERSION = 'hunny-v2';
 const SHELL = 'shell-' + VERSION;
 const RUNTIME = 'runtime-' + VERSION;
 
@@ -26,7 +26,6 @@ const SHELL_FILES = [
   '/offline.html',
   '/style.css',
   '/app.js',
-  '/products-data.js',
   '/assets/logo-new.png',
   '/assets/icons/icon-192.png',
   '/manifest.json'
