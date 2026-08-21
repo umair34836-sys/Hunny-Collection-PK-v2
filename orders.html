@@ -63,6 +63,49 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             font-weight: bold;
             color: var(--dark-pink);
         }
+
+        .cancel-box {
+            border-top: 1px solid #eee;
+            padding: 14px 0 0;
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-cancel {
+            background: #fff;
+            color: #B0243A;
+            border: 1px solid #E3A0AC;
+            border-radius: 8px;
+            padding: 11px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .btn-cancel:hover { background: #FDF3F4; }
+        .btn-cancel:disabled { opacity: .5; cursor: not-allowed; }
+
+        .cancel-left { font-size: 14px; color: #6b6b6b; }
+        .cancel-left b { color: #B0243A; font-variant-numeric: tabular-nums; }
+
+        .cancel-note {
+            border-top: 1px solid #eee;
+            padding-top: 13px;
+            margin-top: 13px;
+            font-size: 13.5px;
+            color: #8a8279;
+        }
+
+        @media (max-width: 600px) {
+            .cancel-box { flex-direction: column; align-items: stretch; gap: 9px; }
+            .btn-cancel { width: 100%; }
+            .cancel-left { text-align: center; }
+        }
+
         .order-status {
             padding: 6px 15px;
             border-radius: 20px;
@@ -254,105 +297,179 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script type="module" src="site-settings.js"></script>
     <script type="module">
         import { auth, db } from './firebase-config.js';
-        import { collection, query, where, getDocs, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { collection, query, where, getDocs, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { updateCartCount } from './app.js';
 
+        // A guest who ordered has an anonymous session, so they belong here too.
+        // Anyone with no session at all still gets whatever this browser saved
+        // locally, instead of being thrown at the login page.
         onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            await loadOrders(user.uid);
+            await loadOrders(user ? user.uid : null);
             updateCartCount();
         });
 
-        async function loadOrders(userId) {
-            const container = document.getElementById('orders-container');
-
+        // Orders are read from Firestore, then merged with the copy this
+        // browser saved at checkout. Either source alone can be incomplete:
+        // Firestore is tied to a session that guests can lose, and the local
+        // copy does not know about status changes made by the admin.
+        function localOrders() {
             try {
-                // Query without orderBy to avoid index requirement
-                const q = query(
-                    collection(db, 'orders'),
-                    where('userId', '==', userId)
-                );
-
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    container.innerHTML = `
-                        <div class="empty-orders">
-                            <h2>No orders yet</h2>
-                            <p class="loading">Start shopping to see your orders here!</p>
-                            <a href="shop.html" class="btn-primary" style="display: inline-block; margin-top: 20px;">Start Shopping</a>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // Get all orders and sort client-side
-                let orders = [];
-                querySnapshot.forEach((doc) => {
-                    orders.push({ id: doc.id, ...doc.data() });
-                });
-
-                // Sort by createdAt (newest first)
-                orders.sort((a, b) => {
-                    const dateA = a.createdAt ? (a.createdAt.seconds || 0) : 0;
-                    const dateB = b.createdAt ? (b.createdAt.seconds || 0) : 0;
-                    return dateB - dateA;
-                });
-
-                let html = '';
-                orders.forEach(order => {
-                    html += createOrderCard(order);
-                });
-
-                container.innerHTML = html;
-            } catch (error) {
-                console.error('Error loading orders:', error);
-                container.innerHTML = '<p class="loading">Error loading orders. Please make sure you are logged in.</p>';
+                const raw = JSON.parse(localStorage.getItem('my-orders') || '[]');
+                return Array.isArray(raw) ? raw : [];
+            } catch (e) {
+                return [];
             }
         }
 
-        function createOrderCard(order) {
-            const statusClass = 'status-' + (order.status || 'pending').toLowerCase();
-            const orderDate = order.createdAt ? 
-                new Date(order.createdAt.seconds * 1000).toLocaleDateString() : 
-                'Recent';
+        function orderTime(order) {
+            const c = order.createdAt;
+            if (!c) return 0;
+            if (typeof c === 'string') return new Date(c).getTime() || 0;
+            if (c.seconds) return c.seconds * 1000;
+            if (c.toDate) { try { return c.toDate().getTime(); } catch (e) { return 0; } }
+            return 0;
+        }
 
-            let itemsHtml = '';
-            if (order.items && order.items.length > 0) {
-                order.items.forEach(item => {
-                    const imageUrl = item.images && item.images.length > 0 
-                        ? item.images[0] 
-                        : 'https://via.placeholder.com/60x60/FFB6C1/333?text=Item';
-                    
-                    itemsHtml += `
-                        <div class="order-item">
-                            <img src="${imageUrl}" alt="${item.name}" class="order-item-image">
-                            <div class="order-item-details">
-                                <div class="order-item-name">${item.name}</div>
-                                <div style="color: var(--text-light); font-size: 0.9rem;">
-                                    Qty: ${item.quantity || 1}
-                                    ${item.variant?.size ? ' | Size: ' + item.variant.size : ''}
-                                </div>
-                                <div class="order-item-price">Rs. ${(item.price || 0).toLocaleString()}</div>
-                            </div>
-                        </div>
-                    `;
-                });
+        let ALL_ORDERS = [];
+
+        async function loadOrders(userId) {
+            const container = document.getElementById('orders-container');
+            const merged = {};
+
+            // local first, so something always shows
+            localOrders().forEach(o => { merged[o.id] = Object.assign({ _local: true }, o); });
+
+            if (userId) {
+                try {
+                    const snap = await getDocs(query(
+                        collection(db, 'orders'),
+                        where('userId', '==', userId)
+                    ));
+                    snap.forEach(d => {
+                        // Firestore wins on anything both have, because the admin
+                        // updates status there.
+                        merged[d.id] = Object.assign({}, merged[d.id] || {}, { id: d.id }, d.data());
+                    });
+                } catch (error) {
+                    console.error('[Hunny] orders read failed:', error.code, error.message);
+                    if (!Object.keys(merged).length) {
+                        container.innerHTML =
+                            '<p class="loading">Orders load nahi ho sake. Page refresh karein, ya ' +
+                            '<a href="https://wa.me/923018858303">humein WhatsApp karein</a>.</p>';
+                        return;
+                    }
+                }
             }
 
+            let orders = Object.values(merged);
+            orders.sort((a, b) => orderTime(b) - orderTime(a));
+            ALL_ORDERS = orders;
+
+            if (!orders.length) {
+                container.innerHTML = `
+                    <div class="empty-orders">
+                        <h2>No orders yet</h2>
+                        <p class="loading">Start shopping to see your orders here!</p>
+                        <a href="shop.html" class="btn-primary" style="display: inline-block; margin-top: 20px;">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = orders.map(createOrderCard).join('');
+            startCancelTimers();
+        }
+
+        const CANCEL_WINDOW_MS = 30 * 60 * 1000;   // 30 minutes
+
+        // Cancelling is allowed while the order is still pending and inside the
+        // window. Once the admin confirms it, the parcel is on its way to being
+        // booked and the customer should call instead.
+        function canCancel(order) {
+            const status = (order.status || 'pending').toLowerCase();
+            if (status !== 'pending') return false;
+            const t = orderTime(order);
+            if (!t) return false;
+            return (Date.now() - t) < CANCEL_WINDOW_MS;
+        }
+
+        function msLeft(order) {
+            return Math.max(0, CANCEL_WINDOW_MS - (Date.now() - orderTime(order)));
+        }
+
+        function clock(ms) {
+            const total = Math.ceil(ms / 1000);
+            const m = Math.floor(total / 60);
+            const s = total % 60;
+            return m + ':' + (s < 10 ? '0' : '') + s;
+        }
+
+        function createOrderCard(order) {
+            const status = (order.status || 'pending').toLowerCase();
+            const statusClass = 'status-' + status;
+
+            const t = orderTime(order);
+            const orderDate = t
+                ? new Date(t).toLocaleString('en-PK', {
+                    day: 'numeric', month: 'short', year: 'numeric',
+                    hour: 'numeric', minute: '2-digit'
+                  })
+                : 'Recent';
+
+            let itemsHtml = '';
+            (order.items || []).forEach(item => {
+                const imageUrl = item.images && item.images.length > 0
+                    ? item.images[0]
+                    : 'https://via.placeholder.com/60x60/FFB6C1/333?text=Item';
+                // Cart items carry sellingPrice; item.price alone showed Rs. 0.
+                const unit = Number(item.sellingPrice || item.price || 0);
+                const qty = Number(item.quantity || 1);
+                itemsHtml += `
+                    <div class="order-item">
+                        <img src="${imageUrl}" alt="${item.name || ''}" class="order-item-image" loading="lazy">
+                        <div class="order-item-details">
+                            <div class="order-item-name">${item.name || ''}</div>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">
+                                Qty: ${qty}${item.variant && item.variant.size ? ' | Size: ' + item.variant.size : ''}
+                            </div>
+                            <div class="order-item-price">Rs. ${(unit * qty).toLocaleString()}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            let actions = '';
+            if (status === 'cancelled') {
+                actions = '<div class="cancel-note">Ye order cancel ho chuka hai.</div>';
+            } else if (canCancel(order)) {
+                actions = `
+                    <div class="cancel-box" data-order="${order.id}">
+                        <button class="btn-cancel" onclick="cancelOrder('${order.id}')">Order Cancel Karein</button>
+                        <div class="cancel-left">Cancel karne ka waqt: <b class="cancel-timer">${clock(msLeft(order))}</b></div>
+                    </div>
+                `;
+            } else if (status === 'pending') {
+                actions = `
+                    <div class="cancel-note">
+                        Cancel ka 30 minute ka waqt guzar chuka hai.
+                        <a href="https://wa.me/923018858303?text=${encodeURIComponent('Order #' + order.id.slice(0,8).toUpperCase() + ' cancel karna hai')}">Humein message karein</a>
+                    </div>
+                `;
+            }
+
+            const help = status !== 'cancelled'
+                ? `<button class="btn-track" onclick="contactSupport('${order.id}')">Need Help?</button>`
+                : '';
+
             return `
-                <div class="order-card">
+                <div class="order-card" id="order-${order.id}">
                     <div class="order-header">
                         <div>
                             <div class="order-id">Order #${order.id.slice(0, 8).toUpperCase()}</div>
                             <div style="color: var(--text-light); font-size: 0.9rem;">${orderDate}</div>
                         </div>
-                        <span class="order-status ${statusClass}">${(order.status || 'Pending').toUpperCase()}</span>
+                        <span class="order-status ${statusClass}">${status.toUpperCase()}</span>
                     </div>
 
                     <div class="order-info">
@@ -367,7 +484,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             </div>
                             <div class="info-item">
                                 <strong>Delivery Address</strong>
-                                ${order.address?.fullAddress ? order.address.fullAddress + ', ' + order.address.city : 'N/A'}
+                                ${order.address && order.address.fullAddress ? order.address.fullAddress + ', ' + order.address.city : 'N/A'}
                             </div>
                         </div>
                     </div>
@@ -385,13 +502,76 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <div style="color: var(--text-light); margin-bottom: 5px;">Payment Method</div>
                             <div style="font-weight: 600;">${order.paymentMethod || 'COD'}</div>
                         </div>
-                        ${order.status === 'pending' ? `
-                            <button class="btn-track" onclick="contactSupport('${order.id}')">Need Help?</button>
-                        ` : ''}
+                        ${help}
                     </div>
+
+                    ${actions}
                 </div>
             `;
         }
+
+        // The countdown has to keep running, otherwise a customer could sit on
+        // the page past the window and still see a button that will fail.
+        let timerHandle = null;
+        function startCancelTimers() {
+            if (timerHandle) clearInterval(timerHandle);
+            timerHandle = setInterval(() => {
+                let live = 0;
+                document.querySelectorAll('.cancel-box').forEach(box => {
+                    const order = ALL_ORDERS.find(o => o.id === box.dataset.order);
+                    if (!order) return;
+                    const left = msLeft(order);
+                    if (left <= 0) {
+                        box.outerHTML = '<div class="cancel-note">Cancel ka 30 minute ka waqt guzar chuka hai. ' +
+                            '<a href="https://wa.me/923018858303">Humein message karein</a></div>';
+                    } else {
+                        const el = box.querySelector('.cancel-timer');
+                        if (el) el.textContent = clock(left);
+                        live++;
+                    }
+                });
+                if (!live) { clearInterval(timerHandle); timerHandle = null; }
+            }, 1000);
+        }
+
+        window.cancelOrder = async function (orderId) {
+            const order = ALL_ORDERS.find(o => o.id === orderId);
+            if (!order) return;
+
+            if (!canCancel(order)) {
+                alert('Is order ka cancel waqt guzar chuka hai. Humein WhatsApp par message karein.');
+                return;
+            }
+            if (!confirm('Kya aap waqai ye order cancel karna chahte hain?')) return;
+
+            const box = document.querySelector('.cancel-box[data-order="' + orderId + '"]');
+            const btn = box ? box.querySelector('.btn-cancel') : null;
+            if (btn) { btn.disabled = true; btn.textContent = 'Cancel ho raha hai...'; }
+
+            try {
+                await updateDoc(doc(db, 'orders', orderId), {
+                    status: 'cancelled',
+                    cancelledAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+
+                // keep the local copy in step
+                try {
+                    const mine = localOrders().map(o =>
+                        o.id === orderId ? Object.assign({}, o, { status: 'cancelled' }) : o);
+                    localStorage.setItem('my-orders', JSON.stringify(mine));
+                } catch (e) { /* not fatal */ }
+
+                order.status = 'cancelled';
+                const card = document.getElementById('order-' + orderId);
+                if (card) card.outerHTML = createOrderCard(order);
+                startCancelTimers();
+            } catch (err) {
+                console.error('[Hunny] cancel failed:', err.code, err.message);
+                if (btn) { btn.disabled = false; btn.textContent = 'Order Cancel Karein'; }
+                alert('Cancel nahi ho saka. Humein WhatsApp par message kar dein, hum kar denge.');
+            }
+        };
 
         window.contactSupport = function(orderId) {
             const message = 'Hi! I need help with my order #' + orderId.slice(0, 8).toUpperCase();

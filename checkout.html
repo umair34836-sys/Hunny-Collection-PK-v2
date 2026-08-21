@@ -565,7 +565,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     updatedAt: new Date().toISOString()
                 };
 
-                await addDoc(collection(db, 'orders'), orderData);
+                const orderRef = await addDoc(collection(db, 'orders'), orderData);
+
+                // A light copy is kept in this browser too. A guest session can
+                // be lost (cleared data, different device), and without this the
+                // customer would open Orders and see nothing at all.
+                try {
+                    const mine = JSON.parse(localStorage.getItem('my-orders') || '[]');
+                    mine.unshift({
+                        id: orderRef.id,
+                        createdAt: orderData.createdAt,
+                        total: orderData.total,
+                        status: 'pending',
+                        customerName: orderData.customerName,
+                        contact: orderData.contact,
+                        address: orderData.address,
+                        paymentMethod: 'COD',
+                        items: ordering.map(it => ({
+                            name: it.name,
+                            quantity: it.quantity,
+                            sellingPrice: it.sellingPrice || it.price || 0,
+                            images: (it.images || []).slice(0, 1),
+                            variant: it.variant || {}
+                        }))
+                    });
+                    localStorage.setItem('my-orders', JSON.stringify(mine.slice(0, 30)));
+                } catch (e) {
+                    console.warn('could not save local order copy', e);
+                }
                 // Keep whatever the customer chose not to order this time,
                 // so a second order does not mean adding it all again.
                 const orderedIds = ordering.map(it => it.id + '|' + JSON.stringify(it.variant || {}));
