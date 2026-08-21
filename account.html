@@ -210,7 +210,13 @@
     <meta name="msapplication-TileColor" content="#8CE4FF">
     <meta name="theme-color" content="#8CE4FF">
 
-    </head>
+        <!-- Installable app -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hunny">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+</head>
 <body>
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BHG9R3Z"
@@ -738,5 +744,6 @@
             });
         });
     </script>
+    <script src="/pwa.js"></script>
 </body>
 </html>

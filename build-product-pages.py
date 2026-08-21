@@ -97,6 +97,9 @@ TEMPLATE = """<!DOCTYPE html>
 <link rel="icon" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/favicon-180.png">
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
 
 <script type="application/ld+json">
 {schema}
@@ -260,6 +263,7 @@ TEMPLATE = """<!DOCTYPE html>
   }});
 </script>
 <script src="whatsapp-float.js"></script>
+<script src="/pwa.js"></script>
 </body>
 </html>
 """
