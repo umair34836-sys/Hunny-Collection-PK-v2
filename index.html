@@ -57,6 +57,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
     <!-- Installable app -->
     <link rel="manifest" href="/manifest.json">
+    <script>
+    // Catches Chrome's install event before pwa.js has loaded. Without this
+    // the event fires into nothing and the Install option never appears.
+    window.__hcInstall = null;
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        window.__hcInstall = e;
+        window.dispatchEvent(new Event('hc-installable'));
+    });
+    </script>
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Hunny">
@@ -187,10 +198,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var box = document.getElementById('products-container');
         if (!box) return;
 
+
+    // createdAt arrives in two shapes: an ISO string from the admin panel, and
+    // a Firestore Timestamp object from anything written directly to the
+    // console. new Date() returns NaN on the second one, and a comparator that
+    // returns NaN makes Array.sort scramble the whole list — which is how new
+    // products ended up buried instead of on top.
+    function hcTime(c) {
+        if (!c) return 0;
+        if (typeof c === 'string') { var t = new Date(c).getTime(); return isNaN(t) ? 0 : t; }
+        if (typeof c === 'number') return c;
+        if (c.seconds) return c.seconds * 1000;
+        if (typeof c.toDate === 'function') { try { return c.toDate().getTime(); } catch (e) { return 0; } }
+        return 0;
+    }
+
         var items = list.slice().sort(function (a, b) {
-            var x = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-            var y = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-            return y - x;
+            return hcTime(b.createdAt) - hcTime(a.createdAt);
         }).slice(0, 12);
 
         var html = '';

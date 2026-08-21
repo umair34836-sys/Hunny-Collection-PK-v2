@@ -185,7 +185,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 height: 180px;
             }
         }
-    </style>
+    
+        /* ---- mobile layout ---- */
+        .cart-grid > *, .cart-item > * { min-width: 0; }
+
+        @media (max-width: 860px) {
+            .cart-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+        }
+
+        @media (max-width: 560px) {
+            /* Image on the left, everything else stacked beside it, so the
+               row never needs more width than the screen. */
+            .cart-item {
+                grid-template-columns: 70px minmax(0, 1fr);
+                gap: 12px;
+                align-items: start;
+            }
+            .cart-item img { width: 70px; height: 70px; }
+        }
+</style>
     <!-- Favicon & App Icons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/jpeg" href="/assets/logo-new.png" sizes="32x32">
@@ -200,6 +218,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <!-- Installable app -->
     <link rel="manifest" href="/manifest.json">
+    <script>
+    // Catches Chrome's install event before pwa.js has loaded. Without this
+    // the event fires into nothing and the Install option never appears.
+    window.__hcInstall = null;
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        window.__hcInstall = e;
+        window.dispatchEvent(new Event('hc-installable'));
+    });
+    </script>
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Hunny">

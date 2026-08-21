@@ -121,16 +121,25 @@ export async function loadCategories() {
 // hain. Isliye kuch bhi tootta nahi.
 // ============================================================
 
+
+// A Firestore Timestamp is an object, not a string, and new Date() gives NaN
+// for it. A comparator returning NaN leaves Array.sort free to reorder
+// arbitrarily, so one badly-shaped date could bury every new product.
+function hcTime(c) {
+    if (!c) return 0;
+    if (typeof c === 'string') { const t = new Date(c).getTime(); return isNaN(t) ? 0 : t; }
+    if (typeof c === 'number') return c;
+    if (c.seconds) return c.seconds * 1000;
+    if (typeof c.toDate === 'function') { try { return c.toDate().getTime(); } catch (e) { return 0; } }
+    return 0;
+}
+
 function staticProducts() {
     const list = (typeof window !== 'undefined' && window.HUNNY_PRODUCTS) || [];
     if (!Array.isArray(list) || list.length === 0) return null;
 
     const items = list.map(p => migrateProductPricing({ ...p }));
-    items.sort((a, b) => {
-        const x = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-        const y = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-        return y - x;
-    });
+    items.sort((a, b) => hcTime(b.createdAt) - hcTime(a.createdAt));
     return items;
 }
 
