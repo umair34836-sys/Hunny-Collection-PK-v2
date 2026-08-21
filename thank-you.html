@@ -22,6 +22,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .thank-you-card .order-id{font-weight:700;margin:18px 0}
         .thank-you-card a{display:inline-block;margin-top:20px}
     </style>
+    <!-- Installable app -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hunny">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -72,5 +78,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (id) document.getElementById('orderId').textContent = 'Order ID: ' + id;
         if (amount) document.getElementById('amount').textContent = 'Total: Rs. ' + Number(amount).toLocaleString();
     </script>
+    <script src="/pwa.js"></script>
 </body>
 </html>

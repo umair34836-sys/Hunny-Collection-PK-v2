@@ -360,7 +360,13 @@
     <link rel="preconnect" href="https://firebase.googleapis.com">
     <link rel="preconnect" href="https://firebasestorage.googleapis.com">
 
-    </head>
+        <!-- Installable app -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hunny">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+</head>
 <body>
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BHG9R3Z"
@@ -1157,5 +1163,6 @@
             });
         });
     </script>
+    <script src="/pwa.js"></script>
 </body>
 </html>

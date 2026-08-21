@@ -1,126 +1,112 @@
-# Export Ab Selective Hai
+# Install Ka Tareeqa Badal Diya
 
 ---
 
-## Jo aap ne kaha, wahi kiya
+# ⬆️ GITHUB PAR SIRF EK FILE UPLOAD KAREIN
 
-Ab export tool me har product ke saath tick box hai.
+- **`pwa.js`**
 
-- **Selected products** ke hi HTML pages aur tasveerein ZIP me aate hain
-- **`products-data.js` me hamesha saare products** aate hain
-- **`sitemap.xml` me bhi hamesha saare** aate hain
-
-Matlab 2 naye product add karein to ZIP me sirf 2 pages aur unki tasveerein
-hongi &mdash; 90 dobara upload nahi karne parenge. Lekin data file aur
-sitemap poore rahenge, isliye website par kuch bhi gayab nahi hoga.
+Baaki sab pehle jaisa. (Agar pichhli baar wali PWA files upload nahi ki
+thin to poora zip upload kar dein.)
 
 ---
 
-## Ye kaam kaise karta hai (zaroori baat)
+## Aap ne jo kaha, wahi kiya
 
-Sawal ye banta hai: agar 88 products ki tasveerein ZIP me nahi hain, to unki
-tasveerein website par kaise chalengi?
+Purani wali patti har baar neeche se upar aati thi — aap theek keh rahe
+the, woh pareshan karti hai.
 
-Jawab: **har tasveer ka naam har baar bilkul ek jaisa banta hai.**
+Ab aisa hai:
 
-```
-assets/products/<product-ki-id>-0.jpg
-assets/products/<product-ki-id>-1.jpg
-```
+### 1. Ek hi baar poocha jayega
 
-Ye naam product ki apni ID se banta hai, jo kabhi nahi badalti. Isliye
-`products-data.js` me un 88 products ki tasveer ka wahi pata likha hota
-hai jo pichhli baar upload hui thi &mdash; aur woh file server par pehle se
-maujood hai.
+Pehli baar jab customer site kholega, 4 second baad ek chhota sa box aayega:
 
-Isi liye ye tareeqa mehfooz hai.
+> **Hunny Collection app install karein?**
+> Phone par icon ban jayega, tez khulegi, aur internet na ho tab bhi aap ka
+> cart mehfooz rahega.
+>
+> **[Install Karein]**
+> Abhi nahi
 
----
+Agar usne **"Abhi nahi"** dabaya — ya bahar khali jagah par tap kiya — to
+**ye box dobara kabhi nahi aayega.** Hamesha ke liye. Koi 7 din wala
+chakkar nahi, koi dobara poochna nahi.
 
-## Ek extra cheez jo main ne khud add ki
+### 2. Lekin option hamesha maujood rahega
 
-Tool ab khud bata deta hai **kaun se products naye hain aur kaun se badle
-hain.**
+Menu me hamesha ek chhota sa link rahega:
 
-Jab aap "Firestore se products parhein" dabate hain, tool aapki live website
-se `products-data.js` mangwa kar muqabla karta hai:
+> 🟢 **Install App**
 
-- **NAYA** &mdash; ye product website par hai hi nahi
-- **BADLA** &mdash; naam, price ya tasveer badli hai
-- Bina tag ke &mdash; bilkul waise hi hai, dobara bhejne ki zaroorat nahi
+Ye kabhi gayab nahi hota. Customer jab chahe, jis din chahe, khud dabaye
+aur install kar le.
 
-Aur naye + badle hue products **khud ba khud ticked** aate hain. Yani zyada
-tar waqt aap ko kuch chunna hi nahi parega &mdash; bas ZIP download karein.
+**Yahi asal baat hai:** mana karne se **pareshani** khatam hoti hai,
+**option** nahi.
 
-Upar ginti bhi dikhti hai: kul, naye, badle hue, waise hi.
+### 3. Install ke baad sab gayab
 
-### Chunne ke liye teen button
-
-- **Sab** &mdash; poora export (pehli baar ya kuch garbar ho to)
-- **Koi nahi** &mdash; sab hata kar khud chunein
-- **Sirf naye + badle** &mdash; aam tor par yahi chahiye hota hai
-
-Aur upar search box hai, taake 90 products me se koi ek dhoondna ho to
-naam likh kar mil jaye.
+Jab app install ho jaye, na box aayega, na menu ka link. Kyunki ab
+zaroorat hi nahi.
 
 ---
 
-## Ek ehtiyat jo tool khud karta hai
+## Ek chhoti si baat jo maine dhyan se ki
 
-Agar koi **naya** product aap ne select nahi kiya, to neeche laal warning
-aayegi:
+"Asked" wala nishan **box dikhane se pehle** likh diya jata hai, baad me
+nahi.
 
-> *Dhyan dein: 1 naya product select nahi kiya. Uski tasveerein pehle kabhi
-> upload nahi huin, isliye website par uski tasveer tootegi.*
-
-Wajah: naye product ki tasveer server par hai hi nahi. Agar uska naam data
-file me chala jaye lekin tasveer na jaye, to website par tooti hui tasveer
-dikhegi. **Naye products hamesha select rakhein.**
+Wajah: agar customer box dekhte hi page refresh kar de, ya net chala jaye,
+to box dobara aa jata. Ab woh soorat mumkin hi nahi — ek baar box bana,
+matlab poocha ja chuka.
 
 ---
 
-## Test kiya hua
+## Menu ka link kaisa dikhega
 
-20 products le kar, un me se sirf 3 select kar ke poora export simulate kiya:
+Woh aap ke site ke apne menu ka hissa banta hai, isliye baaki links jaisa
+hi dikhega — wahi font, wahi rang. Bas saath me ek chhota hara nishan hoga
+taake nazar me aa jaye.
+
+Agar kisi page par menu na ho, to neeche baayen kone me ek chhoti si goli
+aa jayegi. WhatsApp ka button daayen kone me hai, isliye takraav nahi hoga.
+
+---
+
+## Test kiya hua — 14/14
+
+Ek nakli browser bana kar poora chakkar chalaya:
 
 | Test | Nateeja |
 |---|---|
-| ZIP me pages | Sirf 3 |
-| ZIP me tasveerein | Sirf un 3 ki |
-| `products-data.js` | Poore 20 |
-| `sitemap.xml` | Poore 20 (+5 baaki pages) |
-| **Chhoote hue 17 products ki tasveer ka pata** | **Sahi file path, base64 nahi** |
-| Tasveer ka naam do baar banaya | Dono baar bilkul same |
-| Data file me base64 leak | 0 |
-| Andar ke faaltu fields | Nikal diye |
-| Selected page par cart fix + schema | Dono maujood |
-| Tool ka poora code | 7/7 hisse |
+| Pehli baar: menu me option | Foran aa gaya |
+| Box foran nahi aata | 4 second baad |
+| Box aane par nishan lag gaya | Theek |
+| **Doosri baar: box bilkul nahi** | **Theek** |
+| **Doosri baar: menu ka option ab bhi** | **Theek — yahi maqsad tha** |
+| Pehle se install ho | Na box, na link |
+| Menu na ho to goli | Aa gayi |
+| Install hote hi sab gayab | Theek |
+| Koi repeating timer | Nahi |
+| 7 din wala purana chakkar | Nikal diya |
 
-Purane test bhi dobara chalaye &mdash; cart ka fix (6/6) aur checkout ka
-selection (7/7), dono salamat hain.
-
----
-
-# UPLOAD KARNA HAI
-
-Sirf ek file badli hai:
-
-- **`hc-export-products.html`**
-
-Chahein to poora zip upload kar dein, koi harj nahi.
+Aur baaki sab bhi dobara chalaya — PWA 25/25, cart 6/6, checkout 7/7,
+orders 23/23, export 10/10, builder 12/12.
 
 ---
 
-# AB SE KA TAREEQA
+# TEST KARNE KA TAREEQA
 
-1. Admin panel se naya product add karein
-2. `hc-export-products.html` kholein
-3. **"Firestore se products parhein"** &mdash; naye product par NAYA ka
-   tag aa jayega aur woh khud ticked hoga
-4. **"ZIP download karein"**
-5. ZIP kholein, sab kuch GitHub par upload karein
-6. Google Search Console &rarr; URL Inspection &rarr; naye page ka pata
-   daal kar **Request Indexing**
+Asli Android phone par, Chrome me:
 
-Pehle har baar 30 MB ka ZIP milta tha. Ab do naye products ke liye shayad
-1 MB se bhi kam.
+1. Site kholein **incognito** me (taake pehli baar wala experience mile)
+2. 4 second rukein — box aana chahiye
+3. **"Abhi nahi"** dabayein
+4. Page **refresh** karein — **box dobara nahi aana chahiye**
+5. Menu kholein — **"🟢 Install App"** nazar aana chahiye
+6. Usay dabayein — Chrome ka apna install wala dialog khulna chahiye
+7. Install karein — icon ban jaye, aur menu ka link gayab ho jaye
+
+Agar step 4 par box dobara aa jaye to matlab browser ne localStorage saaf
+kar diya — normal window me test karein, incognito me nahi.

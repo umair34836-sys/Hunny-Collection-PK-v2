@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offline — Hunny Collection PK</title>
+<meta name="robots" content="noindex">
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;background:#0d0b09;color:#fdf7f3;
+       margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       padding:28px;text-align:center;line-height:1.6}
+  .box{max-width:330px}
+  img{width:88px;height:88px;border-radius:20px;margin-bottom:20px}
+  h1{font-size:22px;margin:0 0 8px}
+  p{color:#b6aa9c;font-size:15px;margin:0 0 24px}
+  a,button{display:block;width:100%;padding:14px;border-radius:10px;font-size:15px;
+           font-weight:600;text-decoration:none;font-family:inherit;cursor:pointer;border:0;
+           margin-bottom:10px}
+  .gold{background:linear-gradient(135deg,#D9AF57,#B8862F);color:#1a1409}
+  .ghost{background:transparent;color:#D9AF57;border:1px solid #4a3f33}
+</style>
+</head>
+<body>
+  <div class="box">
+    <img src="assets/icons/icon-192.png" alt="Hunny Collection PK">
+    <h1>Internet nahi hai</h1>
+    <p>Aap ka cart aur pehle dekhe hue products mehfooz hain. Internet aate hi sab wapas aa jayega.</p>
+    <button class="gold" onclick="location.reload()">Dobara Koshish Karein</button>
+    <a class="ghost" href="cart.html">Cart Dekhein</a>
+  </div>
+  <script>
+    // Come back on its own the moment the connection returns.
+    window.addEventListener('online', function () { location.reload(); });
+  </script>
+</body>
+</html>

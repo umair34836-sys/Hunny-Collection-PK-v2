@@ -31,6 +31,12 @@ a{color:var(--sea)}
 footer{background:var(--ink);color:#9FB6C2;font-size:14px;padding:34px 20px;text-align:center}
 footer a{color:var(--sky);text-decoration:none;margin:0 9px}
 </style>
+    <!-- Installable app -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hunny">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
 </head>
 <body>
 <header>
@@ -106,5 +112,6 @@ footer a{color:var(--sky);text-decoration:none;margin:0 9px}
   </div>
   <div style="margin-top:12px">© 2026 Hunny Collection PK</div>
 </footer>
+    <script src="/pwa.js"></script>
 </body>
 </html>
