@@ -6,36 +6,57 @@
 <title>Export Products</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
-  body{font-family:system-ui,-apple-system,sans-serif;max-width:790px;margin:0 auto;
-       padding:24px 18px 70px;background:#faf9f7;color:#1e1a17;line-height:1.6}
+  body{font-family:system-ui,-apple-system,sans-serif;max-width:820px;margin:0 auto;
+       padding:22px 16px 70px;background:#faf9f7;color:#1e1a17;line-height:1.6}
   h1{font-size:25px;margin:0 0 4px}
-  .sub{color:#77706a;margin:0 0 22px;font-size:15px}
-  .card{background:#fff;border:1px solid #e6e1db;border-radius:10px;padding:20px;margin-bottom:16px}
+  .sub{color:#77706a;margin:0 0 20px;font-size:15px}
+  .card{background:#fff;border:1px solid #e6e1db;border-radius:10px;padding:18px;margin-bottom:14px}
   .card h2{font-size:17px;margin:0 0 8px}
-  .card p{margin:0 0 14px;font-size:15px;color:#5c5550}
-  button{background:#1e1a17;color:#fff;border:0;border-radius:8px;padding:15px 24px;
+  .card p{margin:0 0 12px;font-size:15px;color:#5c5550}
+  button{background:#1e1a17;color:#fff;border:0;border-radius:8px;padding:14px 22px;
          font-size:16px;font-weight:600;cursor:pointer;width:100%;font-family:inherit}
   button.gold{background:linear-gradient(135deg,#D9AF57,#B8862F);color:#1a1409}
   button:disabled{opacity:.4;cursor:not-allowed}
-  #log{background:#14110f;color:#d6ffd6;border-radius:8px;padding:16px;font-size:13px;
-       font-family:ui-monospace,monospace;white-space:pre-wrap;min-height:90px;
-       max-height:330px;overflow:auto;margin-top:14px}
-  .warn{background:#FFF6E5;border:1px solid #F0DCA8;border-radius:8px;padding:14px;font-size:14px;margin-bottom:16px}
-  .stat{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-  .stat div{flex:1;min-width:105px;background:#f4f1ed;border-radius:8px;padding:12px;text-align:center}
-  .stat b{display:block;font-size:24px}
-  .stat small{color:#77706a}
-  ol{padding-left:20px;font-size:15px} ol li{margin-bottom:9px}
+  .mini{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .mini button{width:auto;flex:1;min-width:96px;padding:9px 12px;font-size:13px;
+               background:#f0ece7;color:#1e1a17;border:1px solid #e0d9d0}
+  .mini button:hover{background:#e7e1d9}
+  #log{background:#14110f;color:#d6ffd6;border-radius:8px;padding:14px;font-size:13px;
+       font-family:ui-monospace,monospace;white-space:pre-wrap;min-height:80px;
+       max-height:300px;overflow:auto;margin-top:12px}
+  .warn{background:#FFF6E5;border:1px solid #F0DCA8;border-radius:8px;padding:13px;font-size:14px;margin-bottom:14px}
+  .danger{background:#FDECEC;border:1px solid #F5B9B9;border-radius:8px;padding:13px;font-size:14px;margin-top:12px}
+  .stat{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .stat div{flex:1;min-width:92px;background:#f4f1ed;border-radius:8px;padding:10px;text-align:center}
+  .stat b{display:block;font-size:22px}
+  .stat small{color:#77706a;font-size:12px}
+  ol{padding-left:19px;font-size:15px} ol li{margin-bottom:7px}
   code{background:#f0ece7;padding:2px 6px;border-radius:4px;font-size:13px}
   a{color:#B8862F}
-  .bar{height:8px;background:#eee;border-radius:99px;overflow:hidden;margin-top:12px;display:none}
+  .bar{height:8px;background:#eee;border-radius:99px;overflow:hidden;margin-top:10px;display:none}
   .bar i{display:block;height:100%;background:linear-gradient(90deg,#D9AF57,#B8862F);width:0;transition:width .2s}
+
+  #search{width:100%;padding:11px 13px;font-size:15px;border:1px solid #e0d9d0;
+          border-radius:8px;font-family:inherit;margin-bottom:10px}
+  #plist{max-height:400px;overflow:auto;border:1px solid #eee;border-radius:8px}
+  .row{display:flex;align-items:center;gap:11px;padding:9px 12px;border-bottom:1px solid #f2efeb;cursor:pointer}
+  .row:last-child{border-bottom:0}
+  .row:hover{background:#faf8f5}
+  .row input{width:19px;height:19px;accent-color:#B8862F;flex:0 0 auto;cursor:pointer}
+  .row img{width:40px;height:40px;object-fit:cover;border-radius:5px;background:#f2efeb;flex:0 0 auto}
+  .row .nm{flex:1;font-size:14px;line-height:1.35;min-width:0}
+  .row .nm b{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .row .nm small{color:#8a8279;font-size:12px}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.04em;padding:3px 7px;border-radius:99px;flex:0 0 auto}
+  .tag.new{background:#E3F6E8;color:#1b7f3b}
+  .tag.upd{background:#FFF3DA;color:#9A6B12}
+  .picked{font-size:14px;font-weight:600;margin:12px 0 0;text-align:center}
 </style>
 </head>
 <body>
 
 <h1>Export Products</h1>
-<p class="sub">Products, tasveerein, aur har product ka apna Google-friendly page &mdash; sab ek ZIP me.</p>
+<p class="sub">Jo products chahiyein sirf unke pages aur tasveerein &mdash; lekin data file aur sitemap hamesha poore.</p>
 
 <div class="warn">
   <b>Pehle admin me login karein.</b> Warna Firestore products parhne nahi dega.
@@ -47,38 +68,51 @@
   <p>Ye sirf parhta hai. Firestore me kuch nahi badalta.</p>
   <button id="load">Firestore se products parhein</button>
   <div class="stat" id="stats" style="display:none">
-    <div><b id="count">0</b><small>products</small></div>
-    <div><b id="imgs">0</b><small>tasveerein</small></div>
-    <div><b id="emb">0</b><small>nikalni hain</small></div>
+    <div><b id="c-all">0</b><small>kul</small></div>
+    <div><b id="c-new">0</b><small>naye</small></div>
+    <div><b id="c-upd">0</b><small>badle hue</small></div>
+    <div><b id="c-same">0</b><small>waise hi</small></div>
   </div>
 </div>
 
-<div class="card">
-  <h2>Qadam 2 &mdash; ZIP download karein</h2>
-  <p>ZIP me char cheezein hongi:</p>
-  <ol style="margin-top:-6px">
-    <li><code>products-data.js</code> &mdash; chhoti file</li>
-    <li><code>assets/products/</code> &mdash; saari tasveerein alag files</li>
-    <li><b>Har product ka apna HTML page</b> &mdash; Google ke liye</li>
-    <li><code>sitemap.xml</code> &mdash; naye pages ke saath</li>
+<div class="card" id="pick-card" style="display:none">
+  <h2>Qadam 2 &mdash; Kaun se products chahiyein</h2>
+  <p>Naye aur badle hue pehle se ticked hain. Chahein to badal lein.</p>
+
+  <input type="text" id="search" placeholder="Naam se dhoondein...">
+
+  <div class="mini">
+    <button id="sel-all">Sab</button>
+    <button id="sel-none">Koi nahi</button>
+    <button id="sel-new">Sirf naye + badle</button>
+  </div>
+
+  <div id="plist"></div>
+  <p class="picked" id="picked">0 selected</p>
+</div>
+
+<div class="card" id="zip-card" style="display:none">
+  <h2>Qadam 3 &mdash; ZIP download karein</h2>
+  <p>ZIP me ye hoga:</p>
+  <ol style="margin-top:-4px">
+    <li><b>Sirf selected</b> products ke HTML pages</li>
+    <li><b>Sirf selected</b> products ki tasveerein</li>
+    <li><code>products-data.js</code> &mdash; <b>saare</b> products ke saath</li>
+    <li><code>sitemap.xml</code> &mdash; <b>saare</b> products ke saath</li>
   </ol>
-  <button id="save" class="gold" disabled>Pehle Qadam 1 chalayein</button>
+  <button id="save" class="gold">ZIP download karein</button>
   <div class="bar" id="bar"><i></i></div>
+  <div id="never-warn" class="danger" style="display:none"></div>
 </div>
 
 <div class="card">
-  <h2>Qadam 3 &mdash; GitHub par upload</h2>
+  <h2>Qadam 4 &mdash; GitHub par upload</h2>
   <ol>
     <li>ZIP kholein</li>
-    <li>Andar ki <b>saari cheezein</b> repo par upload karein</li>
-    <li>2&ndash;3 minute rukein</li>
-    <li>Website <b>incognito</b> me kholein</li>
+    <li>Andar ki saari cheezein repo par upload karein</li>
+    <li>2&ndash;3 minute rukein, phir website incognito me kholein</li>
+    <li>Naye pages ke liye: Google Search Console &rarr; URL Inspection &rarr; <b>Request Indexing</b></li>
   </ol>
-  <p style="margin:0">
-    <b>Naye products ke liye:</b> Google Search Console kholein &rarr;
-    URL Inspection &rarr; naye page ka pata daal kar <b>Request Indexing</b> dabayein.
-    Warna Google ko dhoondne me hafte lag jate hain.
-  </p>
 </div>
 
 <div id="log">Taiyaar...</div>
@@ -100,6 +134,7 @@ const mb = n => (n / 1024 / 1024).toFixed(1) + ' MB';
 const nf = n => Number(n || 0).toLocaleString('en-US');
 
 let items = [];
+const picked = new Set();
 
 onAuthStateChanged(auth, u => {
   logEl.textContent = (u && !u.isAnonymous)
@@ -451,6 +486,7 @@ function buildSitemap(list) {
   return x + '</urlset>\n';
 }
 
+
 // ============================================================
 // LOAD
 // ============================================================
@@ -462,6 +498,37 @@ function slim(id, p) {
   });
   if (Array.isArray(p.images) && p.images.length) out.images = p.images;
   return out;
+}
+
+// Filename for an image is worked out the same way every single export, so a
+// product that is not selected this time still points at the file uploaded
+// last time.
+function imgName(p, idx, src) {
+  const meta = typeof src === 'string' ? src.slice(0, src.indexOf(',')) : '';
+  const ext = meta.includes('png') ? 'png' : meta.includes('webp') ? 'webp' : 'jpg';
+  return 'assets/products/' + p.id + '-' + idx + '.' + ext;
+}
+
+// What is already published. Comparing against it is how the tool knows
+// which products are new or changed, instead of making you remember.
+async function fetchLive() {
+  try {
+    const res = await fetch('products-data.js?t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) return null;
+    const txt = await res.text();
+    const a = txt.indexOf('[');
+    const b = txt.lastIndexOf(']');
+    if (a < 0 || b < 0) return null;
+    return JSON.parse(txt.slice(a, b + 1));
+  } catch (e) {
+    return null;
+  }
+}
+
+function fingerprint(p) {
+  return [p.name || '', p.category || '', p.sellingPrice || p.price || '',
+          p.originalPrice || '', (p.images || []).length,
+          (p.description || '').length].join('|');
 }
 
 document.getElementById('load').onclick = async () => {
@@ -479,33 +546,123 @@ document.getElementById('load').onclick = async () => {
       return y - x;
     });
 
-    let totalImgs = 0, embedded = 0, embBytes = 0;
-    items.forEach(p => (p.images || []).forEach(i => {
-      totalImgs++;
-      if (typeof i === 'string' && i.startsWith('data:')) { embedded++; embBytes += i.length; }
-    }));
+    // slugs and image paths, for every product, always
+    const used = {};
+    items.forEach(function (p) {
+      let s = slugify(p.name, p.id);
+      while (used[s]) s = s + '-x';
+      used[s] = true;
+      p.slug = s;
 
-    document.getElementById('stats').style.display = 'flex';
-    document.getElementById('count').textContent = items.length;
-    document.getElementById('imgs').textContent = totalImgs;
-    document.getElementById('emb').textContent = embedded;
+      p._raw = p.images || [];
+      p.images = p._raw.map(function (src, i) {
+        return (typeof src === 'string' && src.startsWith('data:')) ? imgName(p, i, src) : src;
+      });
+    });
 
     say('\nProducts: ' + items.length);
-    say('Tasveerein: ' + totalImgs);
-    say('File ke andar bhari hui: ' + embedded + ' (' + mb(embBytes * 0.75) + ')');
+    say('Live file se muqabla kar raha hoon...');
 
-    if (!items.length) {
-      say('\nKoi product nahi mila. Pehle admin se products add karein.');
-    } else {
-      const s = document.getElementById('save');
-      s.disabled = false;
-      s.textContent = 'ZIP download karein (' + items.length + ' products)';
-    }
+    const live = await fetchLive();
+    const liveMap = {};
+    if (live) live.forEach(p => { liveMap[p.id] = fingerprint(p); });
+
+    let nNew = 0, nUpd = 0, nSame = 0;
+    items.forEach(function (p) {
+      if (!live) { p._state = 'new'; nNew++; return; }
+      if (!(p.id in liveMap)) { p._state = 'new'; nNew++; }
+      else if (liveMap[p.id] !== fingerprint(p)) { p._state = 'upd'; nUpd++; }
+      else { p._state = 'same'; nSame++; }
+    });
+
+    if (!live) say('Live file nahi mili — sab ko naya maan raha hoon.');
+    else say('Naye: ' + nNew + ' | badle hue: ' + nUpd + ' | waise hi: ' + nSame);
+
+    document.getElementById('stats').style.display = 'flex';
+    document.getElementById('c-all').textContent = items.length;
+    document.getElementById('c-new').textContent = nNew;
+    document.getElementById('c-upd').textContent = nUpd;
+    document.getElementById('c-same').textContent = nSame;
+
+    picked.clear();
+    items.forEach(p => { if (p._state !== 'same') picked.add(p.id); });
+
+    renderList();
+    document.getElementById('pick-card').style.display = 'block';
+    document.getElementById('zip-card').style.display = 'block';
+
+    if (!items.length) say('\nKoi product nahi mila. Pehle admin se products add karein.');
   } catch (e) {
     say('\nERROR: ' + e.code + ' — ' + e.message);
     if (e.code === 'permission-denied') say('Admin login check karein.');
   }
   b.disabled = false; b.textContent = 'Dobara parhein';
+};
+
+// ============================================================
+// PICKER
+// ============================================================
+function renderList() {
+  const term = (document.getElementById('search').value || '').toLowerCase().trim();
+  const list = document.getElementById('plist');
+
+  const shown = items.filter(function (p) {
+    if (!term) return true;
+    return ((p.name || '') + ' ' + (p.category || '')).toLowerCase().includes(term);
+  });
+
+  if (!shown.length) {
+    list.innerHTML = '<div style="padding:18px;text-align:center;color:#8a8279;font-size:14px;">Kuch nahi mila</div>';
+  } else {
+    list.innerHTML = shown.map(function (p) {
+      const tag = p._state === 'new' ? '<span class="tag new">NAYA</span>'
+                : p._state === 'upd' ? '<span class="tag upd">BADLA</span>' : '';
+      const thumb = (p._raw && p._raw[0]) || (p.images && p.images[0]) || '';
+      return '<label class="row">' +
+        '<input type="checkbox" data-id="' + p.id + '"' + (picked.has(p.id) ? ' checked' : '') + '>' +
+        (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '<img alt="">') +
+        '<span class="nm"><b>' + esc(p.name || '(bina naam)') + '</b>' +
+        '<small>' + esc(p.category || '') + ' &middot; Rs. ' + nf(p.sellingPrice || p.price || 0) + '</small></span>' +
+        tag + '</label>';
+    }).join('');
+
+    list.querySelectorAll('input').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        this.checked ? picked.add(this.dataset.id) : picked.delete(this.dataset.id);
+        updateCount();
+      });
+    });
+  }
+  updateCount();
+}
+
+function updateCount() {
+  const n = picked.size;
+  document.getElementById('picked').textContent =
+    n + ' selected' + (n ? '' : ' — kam se kam ek chunein');
+  document.getElementById('save').disabled = n === 0;
+
+  // A product that has never been exported and is not selected now would end
+  // up in the data file pointing at an image that is not on the server.
+  const orphan = items.filter(p => p._state === 'new' && !picked.has(p.id));
+  const w = document.getElementById('never-warn');
+  if (orphan.length) {
+    w.style.display = 'block';
+    w.innerHTML = '<b>Dhyan dein:</b> ' + orphan.length + ' naya product select nahi kiya. ' +
+      'Uski tasveerein pehle kabhi upload nahi huin, isliye website par uski tasveer toot' +
+      (orphan.length > 1 ? 'engi' : 'egi') + '. Naye products hamesha select rakhein.';
+  } else {
+    w.style.display = 'none';
+  }
+}
+
+document.getElementById('search').addEventListener('input', renderList);
+document.getElementById('sel-all').onclick = () => { items.forEach(p => picked.add(p.id)); renderList(); };
+document.getElementById('sel-none').onclick = () => { picked.clear(); renderList(); };
+document.getElementById('sel-new').onclick = () => {
+  picked.clear();
+  items.forEach(p => { if (p._state !== 'same') picked.add(p.id); });
+  renderList();
 };
 
 // ============================================================
@@ -515,105 +672,86 @@ document.getElementById('save').onclick = async () => {
   const btn = document.getElementById('save');
   btn.disabled = true; btn.textContent = 'ZIP bana raha hoon...';
   bar.style.display = 'block';
+
+  const chosen = items.filter(p => picked.has(p.id));
   say('\n--- ZIP banaya ja raha hai ---');
+  say('Selected: ' + chosen.length + ' | data file aur sitemap me: ' + items.length);
 
   const zip = new JSZip();
   const imgFolder = zip.folder('assets/products');
 
-  // ---------- 1. images out of the data, into real files ----------
-  let extracted = 0, kept = 0, failed = 0, bytes = 0, processed = 0;
+  // ---------- images, only for the selected ----------
+  let extracted = 0, failed = 0, bytes = 0, done = 0;
 
-  for (const p of items) {
-    const imgs = p.images || [];
-    const newImgs = [];
-
-    for (let idx = 0; idx < imgs.length; idx++) {
-      const img = imgs[idx];
-      if (typeof img === 'string' && img.startsWith('data:')) {
-        try {
-          const comma = img.indexOf(',');
-          const meta = img.slice(0, comma);
-          const ext = meta.includes('png') ? 'png' : meta.includes('webp') ? 'webp' : 'jpg';
-          const binary = atob(img.slice(comma + 1));
-          const arr = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
-
-          const fname = p.id + '-' + idx + '.' + ext;
-          imgFolder.file(fname, arr);
-          newImgs.push('assets/products/' + fname);
-          bytes += arr.length;
-          extracted++;
-        } catch (err) {
-          console.error('image failed', p.id, idx, err);
-          failed++;
-        }
-      } else {
-        newImgs.push(img);
-        kept++;
+  for (const p of chosen) {
+    const raw = p._raw || [];
+    for (let i = 0; i < raw.length; i++) {
+      const src = raw[i];
+      if (typeof src !== 'string' || !src.startsWith('data:')) continue;
+      try {
+        const binary = atob(src.slice(src.indexOf(',') + 1));
+        const arr = new Uint8Array(binary.length);
+        for (let n = 0; n < binary.length; n++) arr[n] = binary.charCodeAt(n);
+        imgFolder.file(p.images[i].replace('assets/products/', ''), arr);
+        bytes += arr.length;
+        extracted++;
+      } catch (err) {
+        console.error('image failed', p.id, i, err);
+        failed++;
       }
     }
-    if (newImgs.length) p.images = newImgs;
-
-    processed++;
-    barFill.style.width = Math.round(processed / items.length * 50) + '%';
-    if (processed % 10 === 0) await new Promise(r => setTimeout(r, 0));
+    done++;
+    barFill.style.width = Math.round(done / chosen.length * 45) + '%';
+    if (done % 10 === 0) await new Promise(r => setTimeout(r, 0));
   }
+  say('Tasveerein: ' + extracted + (failed ? ' | nakaam: ' + failed : '') + ' (' + mb(bytes) + ')');
 
-  say('Tasveerein nikali: ' + extracted + (kept ? ' | pehle se URL wali: ' + kept : '') +
-      (failed ? ' | nakaam: ' + failed : ''));
-  say('Tasveeron ka kul size: ' + mb(bytes));
-
-  // ---------- 2. slugs, then one page per product ----------
-  const usedSlugs = {};
-  items.forEach(function (p) {
-    let s = slugify(p.name, p.id);
-    while (usedSlugs[s]) s = s + '-x';   // belt and braces; ids make this unlikely
-    usedSlugs[s] = true;
-    p.slug = s;
-  });
-
+  // ---------- pages, only for the selected ----------
   const byCat = {};
   items.forEach(function (p) {
     const k = (p.category || '').trim().toLowerCase();
     (byCat[k] = byCat[k] || []).push(p);
   });
 
-  say('\nProduct pages banaye ja rahe hain...');
+  say('Product pages banaye ja rahe hain...');
   let built = 0;
-  for (const p of items) {
+  for (const p of chosen) {
     const k = (p.category || '').trim().toLowerCase();
     const sibs = (byCat[k] || []).filter(s => s.id !== p.id);
     zip.file(p.slug + '.html', buildProductPage(p, sibs));
     built++;
-    barFill.style.width = (50 + Math.round(built / items.length * 30)) + '%';
-    if (built % 15 === 0) {
-      say('  ' + built + ' / ' + items.length + ' pages');
-      await new Promise(r => setTimeout(r, 0));
-    }
+    barFill.style.width = (45 + Math.round(built / chosen.length * 35)) + '%';
+    if (built % 15 === 0) await new Promise(r => setTimeout(r, 0));
   }
-  say('Pages ban gaye: ' + built);
+  say('Pages: ' + built);
 
-  // ---------- 3. data file + sitemap ----------
-  const stamp = new Date().toLocaleString('en-PK');
+  // ---------- data file and sitemap: always everything ----------
+  const clean = items.map(function (p) {
+    const c = {};
+    for (const k in p) if (k !== '_raw' && k !== '_state') c[k] = p[k];
+    return c;
+  });
+
   const fileText =
-`// ============================================================
-// Hunny Collection PK - products
-//
-// Tasveerein assets/products/ me alag files hain. Har product ka
-// apna HTML page bhi is ZIP me maujood hai.
-//
-// Export: ${stamp}
-// Products: ${items.length}
-// ============================================================
+'// ============================================================\n' +
+'// Hunny Collection PK - products\n' +
+'//\n' +
+'// Is file me HAMESHA saare products hote hain, chahe export me\n' +
+'// sirf kuch chune gaye hon. Tasveeron ke naam har baar ek jaise\n' +
+'// bante hain, isliye purani tasveerein bhi theek chalti rehti hain.\n' +
+'//\n' +
+'// Export: ' + new Date().toLocaleString('en-PK') + '\n' +
+'// Products: ' + clean.length + '\n' +
+'// Is baar bheje gaye pages: ' + chosen.length + '\n' +
+'// ============================================================\n\n' +
+'window.HUNNY_PRODUCTS = ' + JSON.stringify(clean, null, 1) + ';\n';
 
-window.HUNNY_PRODUCTS = ${JSON.stringify(items, null, 1)};
-`;
   zip.file('products-data.js', fileText);
   zip.file('sitemap.xml', buildSitemap(items));
 
-  say('products-data.js: ' + kb(fileText.length));
+  say('products-data.js: ' + kb(fileText.length) + ' (' + clean.length + ' products)');
   say('sitemap.xml: ' + (items.length + 5) + ' URLs');
-  say('\nZIP compress ho raha hai, thora intezaar...');
+  say('\nZIP compress ho raha hai...');
 
   const blob = await zip.generateAsync(
     { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
@@ -622,13 +760,16 @@ window.HUNNY_PRODUCTS = ${JSON.stringify(items, null, 1)};
 
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'hunny-products-export.zip';
+  a.download = 'hunny-export.zip';
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(a.href);
 
   say('\nZIP taiyaar: ' + mb(blob.size));
-  say('Ab isay kholein aur saari cheezein GitHub par upload karein.');
-  say('\nNaye products ke liye Search Console me Request Indexing dabana na bhoolein.');
+  say('Sab kuch GitHub par upload karein.');
+  if (chosen.length < items.length) {
+    say('Baaki ' + (items.length - chosen.length) + ' products ke pages pehle se server par hain,');
+    say('unhe dobara bhejne ki zaroorat nahi.');
+  }
   btn.textContent = 'Ho gaya — dobara banane ke liye dabayein';
   btn.disabled = false;
   bar.style.display = 'none';
