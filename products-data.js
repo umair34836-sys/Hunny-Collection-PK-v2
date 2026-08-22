@@ -5,12 +5,28 @@
 // sirf kuch chune gaye hon. Tasveeron ke naam har baar ek jaise
 // bante hain, isliye purani tasveerein bhi theek chalti rehti hain.
 //
-// Export: 22/08/2026, 5:56:12 am
-// Products: 92
-// Is baar bheje gaye pages: 2
+// Export: 22/08/2026, 9:11:25 pm
+// Products: 93
+// Is baar bheje gaye pages: 3
 // ============================================================
 
 window.HUNNY_PRODUCTS = [
+ {
+  "id": "OYF7NsDyC22uq8l6QINT",
+  "name": "Avocado Print Night Suit for Women Medium to XL",
+  "category": "Women's Stitched Suits",
+  "description": "*Product Description*: Stay cool and comfy in this stylish night suit perfect for Pakistan’s warm nights. Designed for everyday comfort, this premium quality set is ideal for lounging, sleeping, or relaxing at home without sacrificing style. The soft jersey fabric feels light and breathable, making it durable enough for daily wear while keeping you fresh and relaxed.\n\nThis new arrival features a fun avocado print that adds a trendy, youthful vibe to your sleepwear. The round neck design and relaxed fit ensure maximum comfort, while the stitched construction guarantees long-lasting wear. The shirt’s 30-inch length and 22-inch chest offer a balanced silhouette, while the trousers’ 40-inch length and 22-inch hip provide a loose, flowing fit. Ideal for home, travel, or casual outings, this set is both practical and fashionable.\n\n- Premium quality jersey fabric for soft, breathable comfort\n- Stylish avocado print design that stands out\n- Durable stitched construction for long-term use\n- Perfect fit for medium to X-large sizes\n- Ideal for daily wear, sleep, or lounging\n- New arrival with best price in Pakistan\n*Product Details*:Fabric: Jersey\nPattern: Printed\nNeck Type: Round Neck\nProduct Feature: Size Chart Attached\nAvailable Sizes: Medium, Large, X-Large\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Sleep Shirt, 1 x Sleep Trouser\nShirt Length: 30 Inches\nShirt Chest: 22 Inches\nShirt Shoulder: 14 Inches\nArm Length: 11 Inches\nTrouser Length: 40 Inches\nTrouser Waist: 36 Inches\nTrouser Hip: 22 Inches\n Color: Multicolor\nNight suits Size chart\n\n Medium \ntop\nChest.  19\nLength  26\n\n Trouser \nWaiste. 32 to 40\nLength  37 to 38\n\n Large \n top\nChest.  21\nLength  27\n\n Trouser \nWaiste. 34 to 42\nLength  38 to 39\n\n *XLarge \ntop\nChest.  23\nLength  27\n\n Trouser \nWaiste. 34 to 44\nLength  38 to 39\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n",
+  "sellingPrice": 2399,
+  "originalPrice": 2999,
+  "price": 2399,
+  "createdAt": "2026-08-22T16:10:47.352Z",
+  "images": [
+   "assets/products/OYF7NsDyC22uq8l6QINT-0.jpg",
+   "assets/products/OYF7NsDyC22uq8l6QINT-1.jpg",
+   "assets/products/OYF7NsDyC22uq8l6QINT-2.jpg"
+  ],
+  "slug": "avocado-print-night-suit-for-women-medium-to-oyf7ns"
+ },
  {
   "id": "HRPN2Q8lp9Z4QBcqBjMQ",
   "name": "Girls Rexine Hand Bag Set with Top Handle",
