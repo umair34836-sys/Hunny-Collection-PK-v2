@@ -233,6 +233,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Hunny">
     <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+    <script src="/analytics.js"></script>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -369,5 +370,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <script type="module" src="video-ad.js"></script>
     <script src="/pwa.js"></script>
+    <script>
+    // Fires once the cart is on screen. The gap between this and
+    // begin_checkout is where most carts are abandoned, and it cannot be
+    // measured without both numbers.
+    (function () {
+        try {
+            var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (!Array.isArray(cart) || !cart.length) return;
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ ecommerce: null });
+            window.dataLayer.push({
+                event: 'view_cart',
+                ecommerce: {
+                    currency: 'PKR',
+                    value: cart.reduce(function (s, it) {
+                        return s + Number(it.sellingPrice || it.price || 0) * Number(it.quantity || 1);
+                    }, 0),
+                    items: cart.map(function (it) {
+                        return {
+                            item_id: it.id,
+                            item_name: it.name,
+                            item_category: it.category || undefined,
+                            price: Number(it.sellingPrice || it.price || 0),
+                            quantity: Number(it.quantity || 1)
+                        };
+                    })
+                }
+            });
+        } catch (e) {}
+    })();
+    </script>
 </body>
 </html>

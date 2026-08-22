@@ -465,6 +465,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
         });
 
+
+        // ---- analytics ----
+        // dataLayer is the shared queue; analytics.js picks these up and
+        // forwards them to GA4. Kept here so the numbers come from the same
+        // place the order does, and cannot drift apart.
+        function trackEvent(name, payload) {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ ecommerce: null });
+            window.dataLayer.push({ event: name, ecommerce: payload });
+        }
+
+        function toGaItems(list) {
+            return list.map(function (it) {
+                return {
+                    item_id: it.id,
+                    item_name: it.name,
+                    item_category: it.category || undefined,
+                    price: Number(it.sellingPrice || it.price || 0),
+                    quantity: Number(it.quantity || 1)
+                };
+            });
+        }
+
         const checkoutForm = document.getElementById('checkout-form');
         const placeOrderBtn = document.getElementById('place-order-btn');
         const messageContainer = document.getElementById('message-container');
@@ -542,6 +565,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             cb.addEventListener('change', refreshTotal));
 
         refreshTotal();
+
+        if (cart.length) {
+            trackEvent('begin_checkout', {
+                currency: 'PKR',
+                value: cart.reduce((s, it) => s + priceOf(it) * it.quantity, 0),
+                items: toGaItems(cart)
+            });
+        }
 
         if (selectAll) {
             selectAll.addEventListener('change', () => {
@@ -641,6 +672,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 `;
                 
                 setTimeout(() => {
+                    // The single most important event: without it there is no
+                    // way to know which product, ad or page actually earns money.
+                    trackEvent('purchase', {
+                        transaction_id: orderRef.id,
+                        currency: 'PKR',
+                        value: orderData.total,
+                        shipping: 0,
+                        items: toGaItems(ordering)
+                    });
+
                     window.location.href = 'thank-you.html';
                 }, 2000);
             } catch (error) {
