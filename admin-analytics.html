@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics - Hunny Collection PK</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="style.css">
+<style>
+  .an-wrap { max-width: 1100px; }
+  .an-head { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:18px }
+  .an-head h1 { margin:0; font-size:24px }
+  .an-range { display:flex; gap:7px; flex-wrap:wrap }
+  .an-range button { background:#f1ece5; border:1px solid #e0d9d0; color:#1e1a17;
+                     border-radius:50px; padding:8px 16px; font-size:13.5px;
+                     font-weight:600; cursor:pointer; font-family:inherit }
+  .an-range button.on { background:#1e1a17; color:#fff; border-color:#1e1a17 }
+
+  .an-live { background:#0f1512; color:#d8ffe4; border-radius:12px; padding:16px 18px; margin-bottom:16px }
+  .an-live .n { font-size:38px; font-weight:800; line-height:1.1 }
+  .an-live .n small { font-size:14px; font-weight:500; color:#8fbf9f; display:block; margin-top:2px }
+  .an-live .dot { display:inline-block; width:9px; height:9px; border-radius:50%;
+                  background:#25D366; margin-right:7px; animation:blip 1.6s infinite }
+  @keyframes blip { 0%,100%{opacity:1} 50%{opacity:.25} }
+  .an-live table { width:100%; margin-top:12px; font-size:13.5px; border-collapse:collapse }
+  .an-live td { padding:6px 0; border-top:1px solid #21302a; color:#bfe6cc }
+  .an-live td:last-child { text-align:right; color:#7fae90 }
+
+  .an-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:18px }
+  .an-card { background:#fff; border:1px solid #e6e0d8; border-radius:12px; padding:15px }
+  .an-card b { display:block; font-size:27px; line-height:1.15 }
+  .an-card span { font-size:12.5px; color:#7a7168 }
+  .an-card small { display:block; font-size:11.5px; color:#a49b91; margin-top:3px }
+
+  .an-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px }
+  .an-box { background:#fff; border:1px solid #e6e0d8; border-radius:12px; padding:16px }
+  .an-box h3 { margin:0 0 12px; font-size:15px }
+  .an-row { display:flex; align-items:center; gap:10px; padding:7px 0; font-size:14px }
+  .an-row .lbl { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+  .an-row .val { font-weight:700; white-space:nowrap }
+  .an-bar { height:6px; background:#f0ece7; border-radius:99px; overflow:hidden; margin-top:3px }
+  .an-bar i { display:block; height:100%; background:linear-gradient(90deg,#D9AF57,#B8862F) }
+
+  .an-funnel div { display:flex; align-items:baseline; gap:10px; padding:9px 0; border-bottom:1px solid #f2efeb }
+  .an-funnel div:last-child { border-bottom:0 }
+  .an-funnel .step { flex:1; font-size:14px }
+  .an-funnel .num { font-weight:700; font-size:16px }
+  .an-funnel .pct { font-size:12px; color:#7a7168; min-width:52px; text-align:right }
+
+  .an-note { font-size:13px; color:#7a7168; background:#faf8f5; border:1px solid #eee7dd;
+             border-radius:10px; padding:13px; margin-top:16px }
+  .an-empty { text-align:center; padding:26px; color:#a49b91; font-size:14px }
+  @media (max-width:560px){ .an-cards{grid-template-columns:repeat(2,minmax(0,1fr))} }
+</style>
+</head>
+<body>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <h3>🌸 Admin Panel</h3>
+    <a href="admin.html">Dashboard</a>
+    <a href="admin-analytics.html" class="active">📈 Analytics</a>
+    <a href="admin-quick-add.html">⚡ Quick Add</a>
+    <a href="admin-products.html">📦 Products</a>
+    <a href="admin-orders.html">📋 Orders</a>
+    <a href="admin-orders-history.html">📊 Orders History</a>
+    <a href="admin-reviews.html">⭐ Reviews</a>
+    <a href="admin-categories.html">📂 Categories</a>
+    <a href="admin-digital-products.html">💻 Digital Products</a>
+    <a href="admin-digital-orders.html">📥 Digital Orders</a>
+    <a href="admin-sub-admins.html">👥 Sub-Admins</a>
+    <a href="admin-affiliates.html">💰 Affiliates</a>
+    <a href="admin-video-ads.html">📺 Video Ads</a>
+    <a href="settings.html">⚙️ Site Settings</a>
+    <a href="hc-builder-9x4kt2.html">🏗️ Store Builder</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </aside>
+
+  <main class="admin-content an-wrap">
+    <div class="an-head">
+      <h1>Analytics</h1>
+      <div class="an-range">
+        <button data-days="1" class="on">Aaj</button>
+        <button data-days="7">7 din</button>
+        <button data-days="30">30 din</button>
+      </div>
+    </div>
+
+    <div class="an-live">
+      <div class="n"><span class="dot"></span><span id="live-n">—</span>
+        <small>Abhi site par (pichhle 5 minute)</small></div>
+      <table id="live-list"></table>
+    </div>
+
+    <div class="an-cards">
+      <div class="an-card"><b id="c-views">—</b><span>Pageviews</span></div>
+      <div class="an-card"><b id="c-sessions">—</b><span>Visitors</span></div>
+      <div class="an-card"><b id="c-orders">—</b><span>Orders</span></div>
+      <div class="an-card"><b id="c-revenue">—</b><span>Revenue</span></div>
+      <div class="an-card"><b id="c-conv">—</b><span>Conversion</span>
+        <small>visitors se orders</small></div>
+    </div>
+
+    <div class="an-grid">
+      <div class="an-box">
+        <h3>Log kahan se aaye</h3>
+        <div id="b-sources"><div class="an-empty">Koi data nahi</div></div>
+      </div>
+
+      <div class="an-box">
+        <h3>Sabse zyada dekhe gaye pages</h3>
+        <div id="b-pages"><div class="an-empty">Koi data nahi</div></div>
+      </div>
+
+      <div class="an-box">
+        <h3>Kharidne ka rasta</h3>
+        <div class="an-funnel" id="b-funnel"><div class="an-empty">Koi data nahi</div></div>
+      </div>
+
+      <div class="an-box">
+        <h3>Phone ya computer</h3>
+        <div id="b-devices"><div class="an-empty">Koi data nahi</div></div>
+      </div>
+    </div>
+
+    <div class="an-note" id="note"></div>
+  </main>
+</div>
+
+<script type="module">
+import { db } from './firebase-config.js';
+import { checkAdminAuth, logout, toggleMobileSidebar } from './admin-common.js';
+import { doc, getDoc, collection, query, where, getDocs, deleteDoc }
+  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+window.logout = logout;
+window.toggleMobileSidebar = toggleMobileSidebar;
+
+const admin = await checkAdminAuth();
+if (!admin) throw new Error('not admin');
+
+const nf = n => Number(n || 0).toLocaleString('en-US');
+
+// Shop days run on Pakistan time, not UTC, so the numbers line up with
+// what the owner actually saw happen that day.
+function pkDate(offsetDays) {
+  const d = new Date();
+  const pk = new Date(d.getTime() + (5 * 60 - d.getTimezoneOffset()) * 60000);
+  pk.setDate(pk.getDate() - (offsetDays || 0));
+  return pk.toISOString().slice(0, 10);
+}
+
+let days = 1;
+
+async function loadRange() {
+  const wanted = [];
+  for (let i = 0; i < days; i++) wanted.push(pkDate(i));
+
+  // One read per day, so a month costs 30 reads rather than thousands.
+  const docs = await Promise.all(
+    wanted.map(d => getDoc(doc(db, 'stats', d)).catch(() => null))
+  );
+
+  const total = {
+    pageviews: 0, sessions: 0, revenue: 0,
+    pages: {}, sources: {}, devices: {}, events: {}
+  };
+
+  let anyData = false;
+  docs.forEach(snap => {
+    if (!snap || !snap.exists()) return;
+    anyData = true;
+    const d = snap.data();
+    total.pageviews += Number(d.pageviews || 0);
+    total.sessions += Number(d.sessions || 0);
+    total.revenue += Number(d.revenue || 0);
+    ['pages', 'sources', 'devices', 'events'].forEach(group => {
+      const m = d[group] || {};
+      for (const k in m) total[group][k] = (total[group][k] || 0) + Number(m[k] || 0);
+    });
+  });
+
+  render(total, anyData);
+}
+
+function bars(target, map, formatter) {
+  const el = document.getElementById(target);
+  const rows = Object.keys(map).map(k => [k, map[k]]).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  if (!rows.length) { el.innerHTML = '<div class="an-empty">Koi data nahi</div>'; return; }
+  const max = rows[0][1] || 1;
+  el.innerHTML = rows.map(([k, v]) => `
+    <div>
+      <div class="an-row">
+        <span class="lbl">${formatter ? formatter(k) : k}</span>
+        <span class="val">${nf(v)}</span>
+      </div>
+      <div class="an-bar"><i style="width:${Math.round(v / max * 100)}%"></i></div>
+    </div>`).join('');
+}
+
+function render(t, anyData) {
+  const ev = t.events || {};
+  const orders = Number(ev.purchase || 0);
+
+  document.getElementById('c-views').textContent = nf(t.pageviews);
+  document.getElementById('c-sessions').textContent = nf(t.sessions);
+  document.getElementById('c-orders').textContent = nf(orders);
+  document.getElementById('c-revenue').textContent = 'Rs. ' + nf(t.revenue);
+  document.getElementById('c-conv').textContent =
+    t.sessions ? (orders / t.sessions * 100).toFixed(1) + '%' : '—';
+
+  bars('b-sources', t.sources, k => k === 'direct' ? 'Seedha aaye' : k);
+  bars('b-pages', t.pages, k => k.replace(/_html$/, '').replace(/_/g, ' ').slice(0, 40));
+  bars('b-devices', t.devices, k => k === 'mobile' ? 'Phone' : 'Computer');
+
+  const steps = [
+    ['Product dekha', Number(ev.view_item || 0)],
+    ['Cart me daala', Number(ev.add_to_cart || 0)],
+    ['Checkout khola', Number(ev.begin_checkout || 0)],
+    ['Order kiya', orders]
+  ];
+  const top = steps[0][1] || 0;
+  const fEl = document.getElementById('b-funnel');
+  fEl.innerHTML = top === 0
+    ? '<div class="an-empty">Abhi tak koi product nahi dekha gaya</div>'
+    : steps.map(([label, n]) => `
+        <div>
+          <span class="step">${label}</span>
+          <span class="num">${nf(n)}</span>
+          <span class="pct">${top ? Math.round(n / top * 100) + '%' : '—'}</span>
+        </div>`).join('');
+
+  document.getElementById('note').innerHTML = anyData
+    ? 'Ye ginti aap ki apni website rakhti hai, Google Analytics se alag. ' +
+      'Chhota sa farq normal hai &mdash; ad-blocker wale visitors kisi bhi ' +
+      'analytics me nazar nahi aate.'
+    : '<b>Abhi koi data nahi hai.</b> Tracking naye visitors se shuru hoti hai, ' +
+      'purana traffic nahi ginti. Files upload karne ke baad site kisi doosre ' +
+      'phone par kholein, phir ye page refresh karein.';
+}
+
+// ---------- live ----------
+async function loadLive() {
+  try {
+    const cutoff = Date.now() - 5 * 60 * 1000;
+    const snap = await getDocs(query(collection(db, 'live'), where('at', '>', cutoff)));
+
+    const rows = [];
+    snap.forEach(d => rows.push(d.data()));
+    document.getElementById('live-n').textContent = rows.length;
+
+    document.getElementById('live-list').innerHTML = rows.length
+      ? rows.slice(0, 8).map(r =>
+          `<tr><td>${(r.page || '').replace(/_html$/, '').replace(/_/g, ' ')}</td>` +
+          `<td>${r.source || ''} · ${r.device || ''}</td></tr>`).join('')
+      : '<tr><td style="border:0;color:#6f8f7a">Abhi koi nahi</td></tr>';
+
+    // Old heartbeats are cleared a few at a time, so storage cannot creep up
+    // and the cleanup never costs a big read.
+    const old = await getDocs(query(collection(db, 'live'),
+      where('at', '<', Date.now() - 60 * 60 * 1000)));
+    let n = 0;
+    for (const d of old.docs) {
+      if (n++ >= 20) break;
+      deleteDoc(d.ref).catch(() => {});
+    }
+  } catch (e) {
+    console.warn('[live]', e.code || e.message);
+    document.getElementById('live-n').textContent = '—';
+  }
+}
+
+document.querySelectorAll('.an-range button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.an-range button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    days = Number(b.dataset.days);
+    loadRange();
+  });
+});
+
+await loadRange();
+await loadLive();
+setInterval(loadLive, 20000);      // live view refreshes on its own
+setInterval(loadRange, 120000);    // totals every two minutes is plenty
+</script>
+</body>
+</html>

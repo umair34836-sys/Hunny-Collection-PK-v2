@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Add - Hunny Collection PK</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="style.css">
+<style>
+  .qa { max-width: 760px; }
+  .qa h1 { font-size: 23px; margin: 0 0 4px }
+  .qa .sub { color:#7a7168; font-size:14.5px; margin:0 0 18px }
+
+  .qa-box { background:#fff; border:1px solid #e6e0d8; border-radius:12px; padding:16px; margin-bottom:14px }
+  .qa-box h3 { margin:0 0 4px; font-size:15px; display:flex; align-items:center; gap:8px }
+  .qa-box h3 i { width:21px;height:21px;background:#1e1a17;color:#fff;border-radius:50%;
+                 display:flex;align-items:center;justify-content:center;font-size:11px;font-style:normal;flex:0 0 auto }
+  .qa-box .hint { color:#8a8279; font-size:13px; margin:0 0 12px }
+
+  textarea, input[type=text], input[type=number], select {
+    width:100%; padding:11px 12px; font-size:15px; border:1px solid #e0d9d0;
+    border-radius:9px; font-family:inherit; background:#fff }
+  textarea { min-height:120px; line-height:1.5 }
+  textarea:focus, input:focus, select:focus { outline:2px solid #B8862F; outline-offset:-1px }
+  label { display:block; font-size:13px; font-weight:600; margin:12px 0 5px }
+  label span { font-weight:400; color:#8a8279 }
+
+  .row2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px }
+  .row3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px }
+  @media(max-width:520px){ .row3{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+  button { background:#1e1a17;color:#fff;border:0;border-radius:9px;padding:14px 22px;
+           font-size:15.5px;font-weight:600;cursor:pointer;font-family:inherit;width:100% }
+  button.gold { background:linear-gradient(135deg,#D9AF57,#B8862F); color:#1a1409 }
+  button.ghost { background:#f1ece5;color:#1e1a17;border:1px solid #e0d9d0;font-size:13.5px;padding:10px 14px;width:auto }
+  button:disabled { opacity:.45; cursor:not-allowed }
+
+  .pics { display:flex; gap:9px; flex-wrap:wrap; margin-top:11px }
+  .pic { position:relative; width:78px; height:78px; border-radius:9px; overflow:hidden;
+         border:2px solid #e6e0d8; background:#f5f2ef }
+  .pic img { width:100%; height:100%; object-fit:cover }
+  .pic b { position:absolute; top:2px; left:2px; background:#1e1a17; color:#fff;
+           font-size:9.5px; padding:2px 5px; border-radius:4px; font-weight:600 }
+  .pic span { position:absolute; top:2px; right:2px; background:rgba(0,0,0,.65); color:#fff;
+              width:19px;height:19px;border-radius:50%;display:flex;align-items:center;
+              justify-content:center;cursor:pointer;font-size:13px;line-height:1 }
+
+  .money { background:#FFF9EC; border:1px solid #F0DCA8; border-radius:10px; padding:13px; margin-top:12px }
+  .money div { display:flex; justify-content:space-between; font-size:14px; padding:3px 0 }
+  .money div.big { font-size:17px; font-weight:800; border-top:1px solid #EBD9A8; margin-top:6px; padding-top:9px }
+
+  .msg { border-radius:10px; padding:13px; font-size:14.5px; margin-bottom:14px; display:none }
+  .msg.ok { background:#E9F8ED; border:1px solid #B6E4C4; color:#1b6b33; display:block }
+  .msg.bad { background:#FDECEC; border:1px solid #F5B9B9; color:#9E2A2A; display:block }
+
+  .queue { background:#EEF6FF; border:1px solid #C4DDF5; border-radius:10px;
+           padding:12px 14px; margin-bottom:14px; font-size:14px; color:#1A4E7A }
+  .q-names { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px }
+  .q-names span { font-size:11.5px; background:#fff; border:1px solid #C4DDF5;
+                  border-radius:50px; padding:4px 10px; color:#5A7794 }
+  .q-names span.now { background:#1A4E7A; color:#fff; border-color:#1A4E7A; font-weight:600 }
+  .q-names span.done { opacity:.5; text-decoration:line-through }
+
+  .tally { text-align:center; font-size:13.5px; color:#7a7168; margin-top:14px }
+  .tally b { color:#1e1a17 }
+</style>
+</head>
+<body>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <h3>🌸 Admin Panel</h3>
+    <a href="admin.html">Dashboard</a>
+    <a href="admin-analytics.html">📈 Analytics</a>
+    <a href="admin-quick-add.html" class="active">⚡ Quick Add</a>
+    <a href="admin-products.html">📦 Products</a>
+    <a href="admin-orders.html">📋 Orders</a>
+    <a href="admin-categories.html">📂 Categories</a>
+    <a href="settings.html">⚙️ Site Settings</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </aside>
+
+  <main class="admin-content qa">
+    <h1>⚡ Quick Add</h1>
+    <p class="sub">Markaz se copy karein, yahan paste karein, tasveerein chunein, save. Bas.</p>
+
+    <div class="msg" id="msg"></div>
+    <div class="queue" id="queue" style="display:none"></div>
+
+    <div class="qa-box">
+      <h3><i>1</i> Markaz ka text paste karein</h3>
+      <p class="hint">Markaz se ek ya kai products ka text ek saath paste karein. Main sab alag
+         kar doonga. <b>Price Markaz ke text me nahi hota</b>, woh khud daalna parega.</p>
+      <textarea id="blob" placeholder="Markaz app se product ka poora text copy kar ke yahan paste karein..."></textarea>
+      <div style="display:flex;gap:9px;margin-top:10px;flex-wrap:wrap">
+        <button class="ghost" id="parse">Alag alag karein</button>
+        <button class="ghost" id="clear-blob">Khali karein</button>
+      </div>
+    </div>
+
+    <div class="qa-box">
+      <h3><i>2</i> Tasveerein</h3>
+      <p class="hint">Ek saath kai chunein. Har tasveer khud chhoti ho jayegi.</p>
+      <input type="file" id="pics" accept="image/*" multiple>
+      <div class="pics" id="preview"></div>
+      <p class="hint" id="pic-info" style="margin-top:9px"></p>
+    </div>
+
+    <div class="qa-box">
+      <h3><i>3</i> Tafseel</h3>
+
+      <label>Product ka naam</label>
+      <input type="text" id="name" placeholder="Embroidered Lawn 3 Piece Suit">
+
+      <div class="row2">
+        <div>
+          <label>Category</label>
+          <select id="category"></select>
+        </div>
+        <div>
+          <label>Stock <span>(kitne hain)</span></label>
+          <input type="number" id="stock" value="10" min="0">
+        </div>
+      </div>
+
+      <label>Tafseel</label>
+      <textarea id="desc" style="min-height:100px" placeholder="Product ki tafseel..."></textarea>
+
+      <div class="row2">
+        <div>
+          <label>Sizes <span>(comma se alag)</span></label>
+          <input type="text" id="sizes" placeholder="Small, Medium, Large">
+        </div>
+        <div>
+          <label>Product Code <span>(Markaz ka)</span></label>
+          <input type="text" id="sku" placeholder="MZ1176200322SHKLFS">
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-box">
+      <h3><i>4</i> Price</h3>
+      <p class="hint">Markaz ka price daalein, baaki main ginti kar deta hoon.</p>
+
+      <div class="row3">
+        <div>
+          <label>Markaz price</label>
+          <input type="number" id="cost" placeholder="1200" min="0">
+        </div>
+        <div>
+          <label>Margin %</label>
+          <input type="number" id="margin" value="30" min="0" max="200">
+        </div>
+        <div>
+          <label>Discount dikhayein %</label>
+          <input type="number" id="fake" value="20" min="0" max="70">
+        </div>
+      </div>
+
+      <div class="money" id="money"></div>
+    </div>
+
+    <button class="gold" id="save">Save karein aur agla product</button>
+    <p class="tally" id="tally"></p>
+  </main>
+</div>
+
+<script type="module">
+import { db } from './firebase-config.js';
+import { checkAdminAuth, logout, toggleMobileSidebar } from './admin-common.js';
+import { createProduct, getAllCategories } from './admin-api.js';
+
+window.logout = logout;
+window.toggleMobileSidebar = toggleMobileSidebar;
+
+const admin = await checkAdminAuth();
+if (!admin) throw new Error('not admin');
+
+const $ = id => document.getElementById(id);
+const nf = n => Number(n || 0).toLocaleString('en-US');
+
+function say(text, bad) {
+  const m = $('msg');
+  m.className = 'msg ' + (bad ? 'bad' : 'ok');
+  m.textContent = text;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (!bad) setTimeout(() => { m.className = 'msg'; }, 4000);
+}
+
+  // ============================================================
+  // MARKAZ TEXT PARSER
+  //
+  // Built against the real thing Markaz puts on the clipboard, which looks
+  // like this and repeats once per product:
+  //
+  //   *Product Name*: ...
+  //   *Product Description*: ...
+  //   *Product Details*:Key: Value
+  //   Key: Value
+  //   Note: ...
+  //   Product Code: MZ...
+  //
+  // Two facts drive the design:
+  //   1. There is no price anywhere in it, so price is always entered by hand.
+  //   2. Several products arrive in one paste, so this returns a list.
+  // ============================================================
+
+  function parseMarkaz(raw) {
+    if (!raw || !String(raw).trim()) return [];
+
+    const text = String(raw).replace(/\r\n/g, '\n');
+
+    // Split on the name marker. Anything before the first one is preamble.
+    const chunks = text.split(/^\s*\*?\s*Product Name\s*\*?\s*:/im).slice(1);
+    if (!chunks.length) return [parseLoose(text)].filter(p => p.name || p.desc);
+
+    return chunks.map(chunk => parseOne(chunk)).filter(p => p.name);
+  }
+
+  function section(chunk, label) {
+    // Grabs everything after "*Label*:" up to the next *Label*: or Product Code.
+    const re = new RegExp(
+      '\\*?\\s*' + label + '\\s*\\*?\\s*:([\\s\\S]*?)(?=\\n\\s*\\*?\\s*Product\\s+(?:Name|Description|Details)\\s*\\*?\\s*:|\\n\\s*Product\\s+Code\\s*:|$)',
+      'i');
+    const m = chunk.match(re);
+    return m ? m[1].trim() : '';
+  }
+
+  function parseOne(chunk) {
+    const out = { name: '', desc: '', details: '', sizes: '', sku: '', price: 0 };
+
+    // --- name: the first line of this chunk ---
+    out.name = (chunk.split('\n')[0] || '').trim().replace(/^[*\s:]+|[*\s]+$/g, '');
+
+    // --- product code becomes the SKU ---
+    const code = chunk.match(/Product\s+Code\s*:\s*([A-Za-z0-9_-]+)/i);
+    if (code) out.sku = code[1].trim();
+
+    const description = section(chunk, 'Product Description');
+    const details = section(chunk, 'Product Details');
+
+    // --- sizes live inside the details block ---
+    const sizeLine = details.match(/Available\s+Sizes?\s*:\s*([^\n]+)/i)
+                  || chunk.match(/Available\s+Sizes?\s*:\s*([^\n]+)/i);
+    if (sizeLine) {
+      out.sizes = sizeLine[1]
+        .split(/[,/]/)
+        .map(s => s.trim())
+        .filter(Boolean)
+        .join(', ');
+    }
+
+    // --- details kept as clean Key: Value lines ---
+    out.details = details
+      .split('\n')
+      .map(l => l.trim())
+      .filter(Boolean)
+      .filter(l => /^[A-Za-z][A-Za-z ()/&-]{1,34}:/.test(l))
+      .filter(l => !/^Available\s+Sizes?\s*:/i.test(l))   // already its own field
+      .filter(l => !/^Note\s*:/i.test(l))                   // notes are collected separately
+      .join('\n');
+
+    // --- description, with the boilerplate stripped ---
+    const notes = [];
+    const body = description
+      .split('\n')
+      .map(l => l.trim())
+      .filter(l => {
+        if (/^Note\s*:/i.test(l)) { notes.push(l.replace(/^Note\s*:\s*/i, '')); return false; }
+        return true;
+      })
+      .filter(l => !/^Product\s+Code\s*:/i.test(l))
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+
+    // Markaz repeats the same warning inside the description and again after
+    // the details block. Collect from the whole chunk, then keep one copy.
+    chunk.replace(/^\s*Note\s*:\s*([^\n]+)/gim, (m, n) => { notes.push(n.trim()); return m; });
+    const allNotes = [...new Set(notes.map(n => n.replace(/\s+/g, ' ').trim()))].filter(Boolean);
+
+    const parts = [];
+    if (body) parts.push(body);
+    if (out.details) parts.push(out.details);
+    if (allNotes.length) parts.push('Note: ' + allNotes[0]);
+
+    out.desc = parts.join('\n\n').trim();
+
+    // A product with no description of its own still deserves one, built from
+    // whatever facts the details block gave us.
+    if (!body && out.details) out.descWasEmpty = true;
+
+    return out;
+  }
+
+  // Fallback for text that is not in the Markaz shape at all.
+  function parseLoose(raw) {
+    const out = { name: '', desc: '', details: '', sizes: '', sku: '', price: 0 };
+    const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+    if (!lines.length) return out;
+
+    const priced = [];
+    raw.replace(/(?:rs\.?|pkr|price|rate|qeemat)\s*:?\s*([\d,]{2,9})/gi,
+      (m, n) => { priced.push(Number(n.replace(/,/g, ''))); return m; });
+    const sane = priced.filter(n => n >= 50 && n <= 500000);
+    if (sane.length) out.price = Math.max.apply(null, sane);
+
+    const nameLine = lines.find(l =>
+      l.length >= 8 && l.length <= 110 &&
+      !/^(rs\.?|pkr|price|rate|code|sku|note|http)/i.test(l) &&
+      (l.match(/[a-z]/gi) || []).length > 5);
+    if (nameLine) out.name = nameLine.replace(/^[•\-*\s]+/, '').trim();
+
+    const sizeLine = lines.find(l => /\bsizes?\b\s*:/i.test(l));
+    if (sizeLine) out.sizes = sizeLine.replace(/^.*?sizes?\s*:/i, '').trim();
+
+    out.desc = lines
+      .filter(l => l !== nameLine && l !== sizeLine)
+      .filter(l => !/^\s*(rs\.?|pkr|price|rate|qeemat)\b/i.test(l))
+      .filter(l => !/(https?:\/\/|wa\.me|whatsapp|markaz|order now)/i.test(l))
+      .join('\n').trim();
+
+    return out;
+  }
+
+  // ============================================================
+  // QUEUE
+  // Markaz hands over several products in one paste, so they are worked
+  // through one at a time instead of being pasted again for each.
+  // ============================================================
+  let queue = [];
+  let at = 0;
+
+  function showQueue() {
+    const bar = $('queue');
+    if (queue.length < 2) { bar.style.display = 'none'; return; }
+    bar.style.display = 'block';
+    bar.innerHTML =
+      '<b>' + (at + 1) + ' / ' + queue.length + '</b> &mdash; ' +
+      (queue.length - at) + ' baaki hain' +
+      '<div class="q-names">' + queue.map((q, i) =>
+        '<span class="' + (i < at ? 'done' : i === at ? 'now' : '') + '">' +
+        (i < at ? '✓ ' : '') + q.name.slice(0, 26) + '</span>').join('') + '</div>';
+  }
+
+  function fillFrom(item) {
+    $('name').value = item.name || '';
+    $('desc').value = item.desc || '';
+    $('sizes').value = item.sizes || '';
+    $('sku').value = item.sku || '';
+    $('cost').value = item.price || '';
+    images = [];
+    drawPics();
+    recalc();
+  }
+
+  $('parse').addEventListener('click', () => {
+    const items = parseMarkaz($('blob').value);
+
+    if (!items.length) {
+      say('Is text me se koi product nahi mila. Khud bhar dein.', true);
+      return;
+    }
+
+    queue = items;
+    at = 0;
+    fillFrom(queue[0]);
+    showQueue();
+
+    const noPrice = items.every(i => !i.price);
+    say(items.length === 1
+      ? 'Product mil gaya' + (noPrice ? '. Price khud daalna hoga — Markaz text me price hota hi nahi.' : '.')
+      : items.length + ' products mil gaye. Ek ek kar ke save karein.' +
+        (noPrice ? ' Price har product ka khud daalna hoga.' : ''));
+  });
+
+  $('clear-blob').addEventListener('click', () => { $('blob').value = ''; });
+
+// Paste and parse in one go, since that is what happens every time anyway.
+$('blob').addEventListener('paste', () => setTimeout(() => $('parse').click(), 60));
+
+// ============================================================
+// PRICE
+// ============================================================
+function recalc() {
+  const cost = Number($('cost').value || 0);
+  const margin = Number($('margin').value || 0);
+  const fake = Number($('fake').value || 0);
+
+  const selling = Math.round(cost * (1 + margin / 100) / 10) * 10;
+  // The "was" price is worked backwards from the discount to be shown, so
+  // the badge and the numbers can never disagree.
+  const original = fake > 0 ? Math.round(selling / (1 - fake / 100) / 10) * 10 : 0;
+  const profit = selling - cost;
+
+  $('money').innerHTML =
+    '<div><span>Markaz ko dena</span><span>Rs. ' + nf(cost) + '</span></div>' +
+    '<div><span>Aap ka munafa</span><span>Rs. ' + nf(profit) + '</span></div>' +
+    (original ? '<div><span>Kata hua price</span><span style="text-decoration:line-through">Rs. ' + nf(original) + '</span></div>' : '') +
+    '<div class="big"><span>Website par price</span><span>Rs. ' + nf(selling) + '</span></div>';
+
+  $('money').dataset.selling = selling;
+  $('money').dataset.original = original;
+  $('money').dataset.profit = profit;
+}
+['cost', 'margin', 'fake'].forEach(id => $(id).addEventListener('input', recalc));
+
+// ============================================================
+// IMAGES
+// Compressed here, before anything is saved. A Firestore document cannot
+// exceed 1 MB, and an uncompressed phone photo alone can break that.
+// ============================================================
+let images = [];
+
+function compress(file, maxSize, quality) {
+  maxSize = maxSize || 900;
+  quality = quality || 0.78;
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('read failed'));
+    reader.onload = e => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('not an image'));
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else if (h >= w && h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#FFFFFF';       // JPEG has no transparency
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+
+        let out = c.toDataURL('image/jpeg', quality);
+        let q = quality;
+        while (out.length > 160 * 1024 && q > 0.4) { q -= 0.08; out = c.toDataURL('image/jpeg', q); }
+        resolve({ data: out, before: file.size, after: Math.round(out.length * 0.75) });
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function drawPics() {
+  $('preview').innerHTML = images.map((im, i) =>
+    '<div class="pic">' +
+      (i === 0 ? '<b>MAIN</b>' : '') +
+      '<img src="' + im.data + '" alt="">' +
+      '<span data-i="' + i + '">&times;</span>' +
+    '</div>').join('');
+
+  $('preview').querySelectorAll('span').forEach(s =>
+    s.addEventListener('click', () => {
+      images.splice(Number(s.dataset.i), 1);
+      drawPics();
+    }));
+
+  const total = images.reduce((s, im) => s + im.after, 0);
+  $('pic-info').textContent = images.length
+    ? images.length + ' tasveer · kul ' + Math.round(total / 1024) + ' KB · pehli wali main hai'
+    : '';
+}
+
+$('pics').addEventListener('change', async e => {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+  $('pic-info').textContent = 'Chhoti ki ja rahi hain...';
+
+  let before = 0, after = 0, bad = 0;
+  for (const f of files) {
+    try {
+      const r = await compress(f);
+      images.push(r);
+      before += r.before; after += r.after;
+    } catch (err) { bad++; }
+  }
+  drawPics();
+  if (before) {
+    $('pic-info').textContent = images.length + ' tasveer · ' +
+      Math.round(before / 1024) + ' KB se ' + Math.round(after / 1024) + ' KB' +
+      (bad ? ' · ' + bad + ' nahi khuli' : '');
+  }
+  e.target.value = '';
+});
+
+// ============================================================
+// CATEGORIES — the last one used is remembered, because products come in
+// batches of the same kind.
+// ============================================================
+async function loadCategories() {
+  let names = [];
+  try {
+    const cats = await getAllCategories();
+    names = cats.map(c => c.name).filter(Boolean);
+  } catch (e) { /* fall through to the defaults */ }
+
+  if (!names.length) {
+    names = ["Women's Unstitched", "Women's Stitched Suits", 'Cosmetics',
+             'Jewellery', 'Perfumes', 'Watches', 'Bags', 'Abaya\'s', 'Kids', 'Nails'];
+  }
+
+  const last = localStorage.getItem('qa-cat');
+  $('category').innerHTML = names.map(n =>
+    '<option value="' + n.replace(/"/g, '&quot;') + '"' + (n === last ? ' selected' : '') + '>' + n + '</option>'
+  ).join('');
+}
+
+// margin is remembered too — it rarely changes between products
+const savedMargin = localStorage.getItem('qa-margin');
+if (savedMargin) $('margin').value = savedMargin;
+
+// ============================================================
+// SAVE
+// ============================================================
+function todayKey() { return 'qa-count-' + new Date().toISOString().slice(0, 10); }
+
+function showTally() {
+  const n = Number(localStorage.getItem(todayKey()) || 0);
+  $('tally').innerHTML = n ? 'Aaj tak <b>' + n + '</b> product add kiye' : '';
+}
+showTally();
+
+$('save').addEventListener('click', async () => {
+  const name = $('name').value.trim();
+  const selling = Number($('money').dataset.selling || 0);
+
+  if (!name) { say('Product ka naam likhein.', true); return; }
+  if (!selling) { say('Markaz price daalein.', true); return; }
+  if (!images.length) { say('Kam se kam ek tasveer chunein.', true); return; }
+
+  const btn = $('save');
+  btn.disabled = true;
+  btn.textContent = 'Save ho raha hai...';
+
+  const data = {
+    name: name,
+    category: $('category').value,
+    description: $('desc').value.trim(),
+    sellingPrice: selling,
+    originalPrice: Number($('money').dataset.original || 0) || selling,
+    price: selling,
+    costPrice: Number($('cost').value || 0),
+    stock: Number($('stock').value || 0),
+    images: images.map(im => im.data),
+    status: 'active'
+  };
+
+  const sizes = $('sizes').value.trim();
+  if (sizes) data.sizes = sizes.split(',').map(s => s.trim()).filter(Boolean);
+
+  const sku = $('sku').value.trim();
+  if (sku) data.sku = sku;
+
+  try {
+    await createProduct(data, admin.uid, admin.email);
+
+    localStorage.setItem('qa-cat', data.category);
+    localStorage.setItem('qa-margin', $('margin').value);
+    localStorage.setItem(todayKey(), String(Number(localStorage.getItem(todayKey()) || 0) + 1));
+
+    // Clear only what changes per product. Category, margin and the pretend
+    // discount stay, because the next product almost always shares them.
+    $('name').value = '';
+    $('desc').value = '';
+    $('sizes').value = '';
+    $('sku').value = '';
+    $('cost').value = '';
+    images = [];
+    drawPics();
+    recalc();
+    showTally();
+
+    // More in the paste? Load the next one instead of asking for another paste.
+    if (queue.length && at < queue.length - 1) {
+      at++;
+      fillFrom(queue[at]);
+      showQueue();
+      say('"' + name.slice(0, 34) + '" save ho gaya. Ab #' + (at + 1) +
+          ': ' + queue[at].name.slice(0, 34) + ' — price aur tasveerein daalein.');
+    } else {
+      queue = [];
+      at = 0;
+      showQueue();
+      $('blob').value = '';
+      say('"' + name.slice(0, 40) + '" save ho gaya. Sab ho gaye — naya text paste karein.');
+      $('blob').focus();
+    }
+  } catch (err) {
+    console.error(err);
+    say('Save nahi hua: ' + (err.code || err.message), true);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Save karein aur agla product';
+});
+
+await loadCategories();
+recalc();
+</script>
+</body>
+</html>
