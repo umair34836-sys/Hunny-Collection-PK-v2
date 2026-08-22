@@ -6,7 +6,11 @@ Allow: /privacy-policy.html
 Allow: /return-policy.html
 
 # Private areas - never index
+Disallow: /admin-analytics.html
+Disallow: /admin-quick-add.html
 Disallow: /admin
+Disallow: /admin-analytics.html
+Disallow: /admin-quick-add.html
 Disallow: /admin-old.html
 Disallow: /hc-staff-7x92k.html
 Disallow: /hc-builder-9x4kt2.html
