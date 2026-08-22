@@ -1,53 +1,14 @@
 // ============================================================
 // Hunny Collection PK - products
 //
-// Is file me HAMESHA saare products hote hain, chahe export me
-// sirf kuch chune gaye hon. Tasveeron ke naam har baar ek jaise
-// bante hain, isliye purani tasveerein bhi theek chalti rehti hain.
+// Tasveerein ab assets/products/ folder me alag files hain,
+// file ke andar nahi. Isi liye ye file itni chhoti hai aur
+// website foran khulti hai.
 //
-// Export: 22/08/2026, 5:56:12 am
-// Products: 92
-// Is baar bheje gaye pages: 2
+// Products: 90
 // ============================================================
 
 window.HUNNY_PRODUCTS = [
- {
-  "id": "HRPN2Q8lp9Z4QBcqBjMQ",
-  "name": "Girls Rexine Hand Bag Set with Top Handle",
-  "category": "Bags",
-  "description": "*Product Description*: Enhance your style with this chic Girl's Hand Bag Set made from durable Rexine. Featuring a sleek plain pattern, this set includes two versatile bags perfect for any occasion. With a convenient top handle design, it's easy to carry your essentials in fashionable comfort. Ideal for young girls looking to express their style!\n*Product Details*:Material: Rexine\nPattern: Plain\nNumber Of Pieces: 2 Pcs\nProduct Feature: Top Handle\nGender: Girl's\nColor: Grey\nPackage Includes: 1 x Hand Bag Set\nLength: 10 Inches\nWidth: 3 Inches\nHeight: 8 Inches\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n",
-  "sellingPrice": 2899,
-  "originalPrice": 3624,
-  "price": 2899,
-  "createdAt": "2026-08-22T00:42:23.264Z",
-  "images": [
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-0.jpg",
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-1.jpg",
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-2.jpg",
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-3.jpg",
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-4.jpg",
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-5.jpg",
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-6.jpg",
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-7.jpg",
-   "assets/products/HRPN2Q8lp9Z4QBcqBjMQ-8.jpg"
-  ],
-  "slug": "girls-rexine-hand-bag-set-with-top-handle-hrpn2q"
- },
- {
-  "id": "BB8UkOJFLypJ0oLTEFBm",
-  "name": "Purple Quilted Mini Crossbody Bag for Girls",
-  "category": "Bags",
-  "description": "*Product Description*: This adorable purple mini crossbody bag is perfect for Pakistani girls who want to stay stylish without breaking the bank. Designed for everyday use or special occasions, it’s lightweight, durable, and features a trendy quilted texture that stands out. The acrylic material is smooth and easy to clean, making it ideal for busy school days or weekend outings.\n\nThe bag is decorated with cute, colorful appliqués including a flower, moon, and “Bye” cloud, adding a playful charm that appeals to young fashionistas. Its gold-tone chain strap and pearl handle offer both elegance and comfort, while the secure clasp ensures your belongings stay safe. The design is not only eye-catching but also practical, with enough space for essentials like phone, keys, and small snacks. Made with premium quality materials, this bag is built to last and looks great with any outfit.\n\n- Mini size perfect for school or casual outings\n- Acrylic material for durability and easy maintenance\n- Stylish quilted texture with cute 3D embellishments\n- Gold-tone chain strap and pearl handle for added elegance\n- Secure clasp for safe storage\n- New arrival with best price in Pakistan\n*Product Details*:Material: Acrylic\nPattern: Texture\nGender: Girl's\nNumber Of Pieces: 1 Pc\nProduct Feature: Mini\nColor: Purple\nPackage Includes: 1 x Chain Crossbody Bag\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\n",
-  "sellingPrice": 2299,
-  "originalPrice": 3537,
-  "price": 2299,
-  "createdAt": "2026-08-20T15:05:55.032Z",
-  "images": [
-   "assets/products/BB8UkOJFLypJ0oLTEFBm-0.jpg",
-   "assets/products/BB8UkOJFLypJ0oLTEFBm-1.jpg"
-  ],
-  "slug": "purple-quilted-mini-crossbody-bag-for-girls-bb8uko"
- },
  {
   "id": "PRMravqJ0ikpLUmC1HC0",
   "name": "Elegant Butterfly Earrings for Women with Gemstones",
@@ -168,38 +129,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "3-piece-embroidered-blue-lawn-suit-for-eid-gg6jb6"
  },
  {
-  "id": "yfQkhC2iTVeMRDmZpPaI",
-  "name": "Luxury Ladies Watch Off White Leather Quartz ",
-  "category": "Watches",
-  "description": "•  Material: Leather\n•  Watch Case Shape: Square\n•  Product Feature: Chic Everyday Design That Upgrades Any Outfit, Lightweight And Comfortable For All Day Wear, Water Resistant For Daily Use, Premium Build Quality That Feels Expensive, Wear It Solo Or Stack With Bracelets\n•  Number Of Pieces: 1 Pc\n•  Color: Off White\n•  Package Includes: 1 x Analogue Watch\n•  Note: There might be slight color differences as a result of varying lighting and monitor effects.",
-  "sellingPrice": 1999,
-  "originalPrice": 3998,
-  "price": 1999,
-  "createdAt": "2026-04-22T15:53:07.671Z",
-  "images": [
-   "assets/products/yfQkhC2iTVeMRDmZpPaI-0.jpg",
-   "assets/products/yfQkhC2iTVeMRDmZpPaI-1.jpg",
-   "assets/products/yfQkhC2iTVeMRDmZpPaI-2.jpg"
-  ],
-  "slug": "luxury-ladies-watch-off-white-leather-quartz-yfqkhc"
- },
- {
-  "id": "gMY45UGYC8hegqdcAzNK",
-  "name": "Luxury Ladies Watch Off White Leather Quartz ",
-  "category": "Watches",
-  "description": "•  Material: Leather\n•  Watch Case Shape: Square\n•  Product Feature: Chic Everyday Design That Upgrades Any Outfit, Lightweight And Comfortable For All Day Wear, Water Resistant For Daily Use, Premium Build Quality That Feels Expensive, Wear It Solo Or Stack With Bracelets\n•  Number Of Pieces: 1 Pc\n•  Color: Off White\n•  Package Includes: 1 x Analogue Watch\n•  Note: There might be slight color differences as a result of varying lighting and monitor effects.",
-  "sellingPrice": 1999,
-  "originalPrice": 3998,
-  "price": 1999,
-  "createdAt": "2026-04-22T15:53:03.867Z",
-  "images": [
-   "assets/products/gMY45UGYC8hegqdcAzNK-0.jpg",
-   "assets/products/gMY45UGYC8hegqdcAzNK-1.jpg",
-   "assets/products/gMY45UGYC8hegqdcAzNK-2.jpg"
-  ],
-  "slug": "luxury-ladies-watch-off-white-leather-quartz-gmy45u"
- },
- {
   "id": "RrAfeNv1qxrcuPKkd3Ne",
   "name": "Purple Embroidered Maxi Dress for Women Party Wear",
   "category": "Women's Stitched Suits",
@@ -224,25 +153,9 @@ window.HUNNY_PRODUCTS = [
   "price": 3799,
   "createdAt": "2026-04-21T03:44:40.077Z",
   "images": [
-   "assets/products/Qzfpamr41VTerPEjE5RB-0.webp"
+   "assets/products/Qzfpamr41VTerPEjE5RB-0.jpg"
   ],
   "slug": "pink-glitter-2pcs-maxi-dress-set-party-wear-qzfpam"
- },
- {
-  "id": "kGY2uAwr2LlARYbLjdfD",
-  "name": "3 Pcs Women's Unstitched Digital Print Suit",
-  "category": "Women's Unstitched",
-  "description": "Shirt Fabric: Lawn\nPattern: Digital Print\nShirt Front Pattern: Digital Print\nNeckline: Printed\nSleeves Pattern: Digital Print\nDaman: Printed\nShirt Back Pattern: Digital Print\nTrouser Fabric: Lawn\nTrouser Pattern: Block Printed\nDupatta Fabric: Lawn\nDupatta Pattern: Digital Print\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Shirt, 1 x Dupatta, 1 x Trouser\nShirt Cutting: 2.75 Meter\nTrouser Cutting: 2.25 Meter\nDupatta Cutting: 2.25 Meter\nColor: Blue\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n ",
-  "sellingPrice": 3998,
-  "originalPrice": 4998,
-  "price": 3998,
-  "createdAt": "2026-04-18T04:19:48.800Z",
-  "images": [
-   "assets/products/kGY2uAwr2LlARYbLjdfD-0.webp",
-   "https://content.public.markaz.app/markazimagevideo/public/products/648-2-719700-product-4.webp",
-   "https://content.public.markaz.app/markazimagevideo/public/products/648-2-719700-product-1.webp"
-  ],
-  "slug": "3-pcs-womens-unstitched-digital-print-suit-kgy2ua"
  },
  {
   "id": "OAhaLjGlr2y0wodnQUls",
@@ -254,7 +167,7 @@ window.HUNNY_PRODUCTS = [
   "price": 5499,
   "createdAt": "2026-04-18T04:17:33.360Z",
   "images": [
-   "assets/products/OAhaLjGlr2y0wodnQUls-0.webp",
+   "assets/products/OAhaLjGlr2y0wodnQUls-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/573-2-705496-product-2.webp"
   ],
   "slug": "3-pcs-womens-unstitched-embroidered-suit-oahalj"
@@ -269,7 +182,7 @@ window.HUNNY_PRODUCTS = [
   "price": 1598,
   "createdAt": "2026-04-18T04:15:16.508Z",
   "images": [
-   "assets/products/Vqjcd0f0nYldjt5Cjflv-0.webp",
+   "assets/products/Vqjcd0f0nYldjt5Cjflv-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1176-3-658312-product-2.webp"
   ],
   "slug": "blue-block-print-katan-silk-2-piece-suit-vqjcd0"
@@ -284,7 +197,7 @@ window.HUNNY_PRODUCTS = [
   "price": 1198,
   "createdAt": "2026-04-18T04:13:08.240Z",
   "images": [
-   "assets/products/q9xNgpOVysw3aCFnzTOf-0.webp",
+   "assets/products/q9xNgpOVysw3aCFnzTOf-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/1176-3-658316-product-2.webp"
   ],
   "slug": "block-printed-katan-silk-2-piece-suit-for-q9xngp"
@@ -299,7 +212,7 @@ window.HUNNY_PRODUCTS = [
   "price": 799,
   "createdAt": "2026-04-18T04:06:07.945Z",
   "images": [
-   "assets/products/BfF5pXuBVHRQ7AuUqz0L-0.png",
+   "assets/products/BfF5pXuBVHRQ7AuUqz0L-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/products/594-242-540531-product-2.jpg"
   ],
   "slug": "mehndi-sticker-plastic-easy-apply-wedding-festival-use-bff5px"
@@ -320,73 +233,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "3-piece-womens-stitched-embroidered-anarkali-set-maroon-amleth"
  },
  {
-  "id": "x2iZXOzMxpoHv54nsthK",
-  "name": "Stainless Steel Adjustable Chain Bracelet for Men",
-  "category": "Jewellery",
-  "description": "This sleek stainless steel chain bracelet is the perfect blend of modern style and rugged durability, ideal for Pakistani men who want to look sharp for daily wear or special occasions. Its polished finish and sturdy construction make it a reliable accessory that won’t tarnish or break easily, even with regular use. Whether you’re heading to work, a wedding, or a casual outing, this bracelet adds a touch of sophistication without overpowering your look. Crafted from high-grade stainless steel, this bracelet is built to last. It resists rust, corrosion, and everyday wear, making it suitable for the local climate and active lifestyles. The adjustable design ensures a comfortable fit for any wrist size, while its classic chain pattern remains trendy and timeless. Unlike cheap imitations, this piece offers premium quality at a best price in Pakistan, giving you value without compromise. - Made from durable stainless steel - Adjustable fit for any wrist size - Stylish modern chain design - Comfortable to wear all day - Ideal for daily wear or special events - Comes with 1 piece only\n\nHIGHLIGHTS\n\nMaterial: Stainless Steel\nNumber Of Pieces: 1 Pc\nSize: Adjustable\nComfortable\nPackage Includes: 1 x Bracelet\nHelpful Info: Keep Jewellery away from water and chemicals. Remove during physical activities. Store separately in a soft pouch. There might be a slight color difference due to different light and monitor effects.\n",
-  "sellingPrice": 799,
-  "originalPrice": 999,
-  "price": 799,
-  "createdAt": "2026-04-13T11:11:48.636Z",
-  "images": [
-   "assets/products/x2iZXOzMxpoHv54nsthK-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/556-43-378422-product-2.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/556-43-378422-product-3.jpg"
-  ],
-  "slug": "stainless-steel-adjustable-chain-bracelet-for-men-x2izxo"
- },
- {
-  "id": "myfm7KzgSqKq0HtGPlxy",
-  "name": "Black Embroidered Women's Abaya with Cross Front Sleeves",
-  "category": "Abaya's",
-  "description": "This elegant Nida Embroidered Classic Abaya is designed for the modern Pakistani woman who values both style and comfort. Perfect for daily wear, office settings, or modest gatherings, it offers a timeless silhouette that suits all seasons. The black color exudes sophistication while the intricate embroidery adds a touch of luxury without overwhelming the design. Crafted from premium quality Nida fabric, this abaya is durable enough to withstand daily use while remaining soft and comfortable against the skin. The round neck and relaxed fit ensure ease of movement, making it ideal for busy lifestyles. The embroidered details are not just decorative—they’re meticulously placed to enhance the garment’s elegance and longevity. Whether you’re dressing for work or a special occasion, this abaya delivers both grace and practicality. - Premium Quality Nida Fabric for Long-Lasting Wear - Stylish Embroidered Design with Elegant Black Finish - Durable Construction Suitable for Daily Use - Classic Round Neck and Flowing Silhouette - New Arrival at Best Price in Pakistan - Perfect for Islamic Modest Fashion and All Seasons\n\nHIGHLIGHTS\n\nMaterial: Nida\nPattern: Embroidered\nGender: Women's\nProduct Feature: Portrait\nNeck Type: Round Neck\nColor: Black\nPackage Includes: 1 x Full Abaya\nLength: 56 Inches\nWidth: 26 Inches\nSleeves: 14/15 Inches\nFlare: 40 Inches\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n",
-  "sellingPrice": 3199,
-  "originalPrice": 3999,
-  "price": 3199,
-  "createdAt": "2026-04-12T03:47:17.494Z",
-  "images": [
-   "assets/products/myfm7KzgSqKq0HtGPlxy-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/573-84-476338-product-2.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/573-84-476338-product-3.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/573-84-476338-product-5.jpg"
-  ],
-  "slug": "black-embroidered-womens-abaya-with-cross-front-sleeves-myfm7k"
- },
- {
-  "id": "ngPcr2knQ6ZZibEMvrM8",
-  "name": "Stylish Georgette Full Abaya for Women - 1 Pc",
-  "category": "Abaya's",
-  "description": "Discover the perfect blend of style and sophistication with our Georgette Full Abaya. Designed specifically for women, this maroon abaya features a flowing silhouette that provides comfort and elegance. Whether for daily wear or special occasions, this classic piece will enhance your wardrobe effortlessly. Experience style redefined with this timeless garment.\n\nHIGHLIGHTS\n\nMaterial: Georgette\nGender: Women's\nColor: Maroon\nPackage Includes: 1 x Classic Abaya\nChest Size 24/25\nLength 50/51\nFlare 100\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n ",
-  "sellingPrice": 2899,
-  "originalPrice": 0,
-  "price": 2899,
-  "createdAt": "2026-04-12T03:22:28.414Z",
-  "images": [
-   "assets/products/ngPcr2knQ6ZZibEMvrM8-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511384-product-2.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511384-product-3.jpg"
-  ],
-  "slug": "stylish-georgette-full-abaya-for-women-1-pc-ngpcr2"
- },
- {
-  "id": "hodp99w6Ox7WARkthVP8",
-  "name": "Stylish Georgette Full Abaya for Women - 1 Pc",
-  "category": "Abaya's",
-  "description": "Discover the perfect blend of style and sophistication with our Georgette Full Abaya. Designed specifically for women, this maroon abaya features a flowing silhouette that provides comfort and elegance. Whether for daily wear or special occasions, this classic piece will enhance your wardrobe effortlessly. Experience style redefined with this timeless garment.\n\nHIGHLIGHTS\n\nMaterial: Georgette\nGender: Women's\nColor: Maroon\nPackage Includes: 1 x Classic Abaya\nChest Size 24/25\nLength 50/51\nFlare 100\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n",
-  "sellingPrice": 2999,
-  "originalPrice": 3749,
-  "price": 2999,
-  "createdAt": "2026-04-12T03:19:47.728Z",
-  "images": [
-   "assets/products/hodp99w6Ox7WARkthVP8-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-1.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-3.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-4.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-5.jpg"
-  ],
-  "slug": "stylish-georgette-full-abaya-for-women-1-pc-hodp99"
- },
- {
   "id": "0uTAPHr59KsWaUEWxUW0",
   "name": "10Pcs Adjustable Fashion Rings Set Black Gold Silver Unisex",
   "category": "Jewellery",
@@ -396,7 +242,7 @@ window.HUNNY_PRODUCTS = [
   "price": 799,
   "createdAt": "2026-04-11T13:43:56.893Z",
   "images": [
-   "assets/products/0uTAPHr59KsWaUEWxUW0-0.webp",
+   "assets/products/0uTAPHr59KsWaUEWxUW0-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/700-44-706765-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/700-44-706765-product-3.webp",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/700-44-706765-product-4.webp",
@@ -425,53 +271,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "hair-threading-machine-for-smooth-skin-and-hair-gf6t6r"
  },
  {
-  "id": "qRmsjIWDTWx973N0OyQZ",
-  "name": "Blackhead Remover Nose Pore Cleaner White Device",
-  "category": "Cosmetics",
-  "description": "Get flawless skin without harsh chemicals with this Premium Quality Black Head Remover. Perfect for Pakistani weather and daily use, it gently extracts impurities while keeping your pores clear and refreshed. Ideal for weddings, office days, or anytime you want to look your best. This stylish device is made from durable synthetic materials that resist wear and tear, ensuring long-lasting performance. Its sleek white design with gold accents adds a touch of elegance to your beauty routine. The included attachments let you customize your experience for different skin types and areas. Whether you’re in Lahore, Karachi, or Islamabad, this New Arrival delivers clean, smooth skin with every use. - Durable synthetic construction for long-term use - Stylish white and gold design that matches any beauty setup - Comes with multiple interchangeable tips for versatile use - Easy-to-use digital display with mode settings - Perfect for daily use and sensitive skin - Best price in Pakistan for premium results\n\nHIGHLIGHTS\n\nMaterial: Synthetic\nColor: White\nProduct Feature: Dead Skin Remover\nPackage Includes: 1 x Black Head Remover\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\nProduct Code: MZ1172200332SE",
-  "sellingPrice": 1899,
-  "originalPrice": 2404,
-  "price": 1899,
-  "createdAt": "2026-04-10T13:43:39.003Z",
-  "images": [
-   "assets/products/qRmsjIWDTWx973N0OyQZ-0.png",
-   "assets/products/qRmsjIWDTWx973N0OyQZ-1.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-2.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-3.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-4.jpg"
-  ],
-  "slug": "blackhead-remover-nose-pore-cleaner-white-device-qrmsji"
- },
- {
-  "id": "mWkzZ0xiihcHEsun0jxs",
-  "name": "Rice Glow Kit: Face Wash, Scrub & Mask Set ",
-  "category": "Cosmetics",
-  "description": "*Product Description*: Discover the secret to glowing, healthy skin with our 3 in 1 Skincare Bundle, specially crafted for Pakistani skin types. This set includes a Rice Face Wash, Rice Scrub, and Rice Mask, all infused with organic rice powder to gently cleanse, exfoliate, and nourish your skin. Perfect for daily use or special occasions, it’s ideal for those seeking a natural, effective routine without harsh chemicals.\n\nMade with premium quality ingredients, this bundle is designed to be durable and effective over time. The rice-based formula is gentle on sensitive skin while delivering visible results. The packaging is stylish and practical, making it easy to store and use. Whether you’re in Lahore, Karachi, or Islamabad, this set is your go-to for a radiant glow that lasts.\n\n- Contains 3 essential products: Face Wash, Scrub, and Mask\n- Made with organic rice powder for natural results\n- Free from parabens and sulfates for sensitive skin\n- Dermatologist tested and suitable for daily use\n- Stylish packaging with golden accents\n- New arrival with best price in Pakistan\n\nEnjoy the benefits of rice-based skincare without the hassle. Treat your skin to a luxurious, affordable routine that delivers real results.\n*Product Details*:Material: Cream\nColor: White, Golden\nProduct Feature: 3 in 1\nPackage Includes: 1 x Rice Face Wash, 1 x Rice Scrub, 1 x Rice Mask\nPack Of 3\n\n\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n\nProduct Code: MZ22100000118MSEE\n",
-  "sellingPrice": 1550,
-  "originalPrice": 2279,
-  "price": 1550,
-  "createdAt": "2026-04-10T12:57:59.456Z",
-  "images": [
-   "assets/products/mWkzZ0xiihcHEsun0jxs-0.jpg",
-   "assets/products/mWkzZ0xiihcHEsun0jxs-1.jpg"
-  ],
-  "slug": "rice-glow-kit-face-wash-scrub-mask-set-mwkzz0"
- },
- {
-  "id": "g5J5JNWYAU61qNtWL7ie",
-  "name": "5 in 1 Makeup & Skincare Bundle 300 g - 5 Pcs",
-  "category": "Cosmetics",
-  "description": "*Product Name*: 5 in 1 Makeup & Skincare Bundle 300 g - 5 Pcs\n*Product Description*: \n*Product Details*:Material: Cream\nColor: Multicolor\nProduct Feature: 5 in 1\nPackage Includes: 1 x Facial Kit, 1 x Sunblock, 1 x Makeup Brushes Set, 1 x Face Sheet Mask, 1 x Face Toner\nWeight: 300 Gram\nPack Of 5\n\n\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n\nProduct Code: MZ1598202201TEWHHB\n",
-  "sellingPrice": 2730,
-  "originalPrice": 3212,
-  "price": 2730,
-  "createdAt": "2026-04-10T12:50:26.344Z",
-  "images": [
-   "assets/products/g5J5JNWYAU61qNtWL7ie-0.jpg"
-  ],
-  "slug": "5-in-1-makeup-skincare-bundle-300-g-g5j5jn"
- },
- {
   "id": "UjdaZSNKESC9ZfvoMnVf",
   "name": "Matte Liquid Lip Gloss Pack of 12 Huda Beauty",
   "category": "Cosmetics",
@@ -481,7 +280,7 @@ window.HUNNY_PRODUCTS = [
   "price": 1999,
   "createdAt": "2026-04-09T12:51:35.764Z",
   "images": [
-   "assets/products/UjdaZSNKESC9ZfvoMnVf-0.webp",
+   "assets/products/UjdaZSNKESC9ZfvoMnVf-0.jpg",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1281-72-444789-product-2.webp",
    "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1281-72-444789-product-3.jpg"
   ],
@@ -497,7 +296,7 @@ window.HUNNY_PRODUCTS = [
   "price": 2299,
   "createdAt": "2026-04-09T09:53:08.823Z",
   "images": [
-   "assets/products/JTkCtqbJDXMDWaaaIkmr-0.webp"
+   "assets/products/JTkCtqbJDXMDWaaaIkmr-0.jpg"
   ],
   "slug": "swiss-lawn-3-pcs-womens-unstitched-printed-suit-jtkctq"
  },
@@ -511,7 +310,7 @@ window.HUNNY_PRODUCTS = [
   "price": 2299,
   "createdAt": "2026-04-09T09:46:27.947Z",
   "images": [
-   "assets/products/3qxOiSLK8Yhwy33izDnJ-0.webp"
+   "assets/products/3qxOiSLK8Yhwy33izDnJ-0.jpg"
   ],
   "slug": "maroon-printed-3-pcs-women-suit-cotton-lawn-3qxois"
  },
@@ -525,23 +324,9 @@ window.HUNNY_PRODUCTS = [
   "price": 2299,
   "createdAt": "2026-04-09T09:45:20.651Z",
   "images": [
-   "assets/products/SXS3PDNWLODmwOdcFqUz-0.webp"
+   "assets/products/SXS3PDNWLODmwOdcFqUz-0.jpg"
   ],
   "slug": "womens-3-pcs-printed-cotton-lawn-suit-black-sxs3pd"
- },
- {
-  "id": "s9zg503Zdorr97IDyfsr",
-  "name": "Women's 3 Pcs Printed Cotton Lawn Suit Grey Eid Shaadi",
-  "category": "Women's Unstitched",
-  "description": "Looking for a fresh, comfortable look that’s perfect for Eid, weddings, or everyday wear? This stunning 3-piece unstitched printed suit is crafted for Pakistani women who want to blend elegance with comfort. The soft grey base with crisp white and black vertical stripes on the shirt and dupatta, paired with plain olive green trousers, makes this outfit ideal for both festive and casual occasions. Made from premium quality cotton lawn, it’s breathable, lightweight, and perfect for the hot summer months. You’ll feel cool and stylish without compromising on durability or design. This new arrival is more than just fashion—it’s a smart investment. The cotton lawn fabric ensures long-lasting wear without losing its shape or softness. The shirt features a flattering 2.5 gazz cut, the trousers offer a comfortable straight fit, and the dupatta is generously sized for easy draping. All pieces are made from the same premium cotton lawn, ensuring uniform quality and feel. The printed design on the shirt and dupatta adds a modern, chic touch, while the plain trousers keep the look grounded and versatile. This set is durable, stylish, and perfect for any occasion from Eid to regular use. - Premium quality cotton lawn fabric for comfort and breathability - Stylish printed design on shirt and dupatta with plain trousers for balanced look - Perfect for Eid, weddings, or summer events - New arrival with affordable pricing in Pakistan - Durable construction with 2.5 gazz cutting on all pieces - Grey color with white and black stripes for a modern, elegant appeal\n\nHIGHLIGHTS\n\nShirt Fabric: Cotton Lawn\nPattern: Printed\nTrouser Fabric: Cotton Lawn\nTrouser Pattern: Plain\nDupatta Fabric: Cotton Lawn\nDupatta Pattern: Printed\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\nShirt Cutting: 2.5 Gazz\nTrouser Cutting: 2.5 Gazz\nDupatta Cutting: 2.5 Gazz\nColor: Grey\nButton Not Included\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ1176200490SHKLFS",
-  "sellingPrice": 2299,
-  "originalPrice": 3832,
-  "price": 2299,
-  "createdAt": "2026-04-09T09:44:18.844Z",
-  "images": [
-   "assets/products/s9zg503Zdorr97IDyfsr-0.webp"
-  ],
-  "slug": "womens-3-pcs-printed-cotton-lawn-suit-grey-s9zg50"
  },
  {
   "id": "MYQRcAl2kdq0c7yVCr6i",
@@ -553,41 +338,9 @@ window.HUNNY_PRODUCTS = [
   "price": 2299,
   "createdAt": "2026-04-09T09:43:12.970Z",
   "images": [
-   "assets/products/MYQRcAl2kdq0c7yVCr6i-0.webp"
+   "assets/products/MYQRcAl2kdq0c7yVCr6i-0.jpg"
   ],
   "slug": "summer-printed-3-pcs-women-suit-cotton-lawn-myqrca"
- },
- {
-  "id": "rNbVhzqWHSJqifs2V1dd",
-  "name": "Summer Printed 3 Pcs Women Suit Cotton Lawn Multicolor",
-  "category": "Women's Unstitched",
-  "description": "Perfect for the warm Pakistani summers and special occasions, this unstitched printed suit lets you create your own unique look with effortless style. The soft cotton lawn fabric feels light and breezy, making it ideal for long days at the office or festive gatherings. The shirt features a classic printed design with vertical stripes in earthy tones, while the matching plain trousers offer a clean, modern silhouette. The dupatta, also in printed stripes, adds a graceful drape and completes the ensemble beautifully. This set is crafted for comfort and durability, perfect for everyday wear or special events like Eid or weddings. Made from premium quality cotton lawn, this 3-piece set is designed to last. The fabric is breathable and gentle on the skin, making it perfect for Pakistan’s hot weather. Each piece is cut to a flattering 2.5 Gazz, ensuring a comfortable fit for most body types. The multicolor printed design adds a vibrant, stylish touch without being overwhelming. The set is durable, easy to care for, and ideal for both casual outings and formal events. Whether you’re shopping for yourself or looking for a thoughtful gift, this is the best price in Pakistan for a complete, elegant look. - Premium Quality cotton lawn fabric for comfort and breathability - Stylish printed shirt with vertical stripe design - Plain trousers for a clean, modern look - Printed dupatta with elegant fringe detailing - 3-piece set includes shirt, trousers, and dupatta - Perfect for Eid, weddings, or regular summer use\n\nHIGHLIGHTS\n\nShirt Fabric: Cotton Lawn\nPattern: Printed\nTrouser Fabric: Cotton Lawn\nTrouser Pattern: Plain\nDupatta Fabric: Cotton Lawn\nDupatta Pattern: Printed\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\nShirt Cutting: 2.5 Gazz\nTrouser Cutting: 2.5 Gazz\nDupatta Cutting: 2.5 Gazz\nColor: Multicolor\nButton Not Included\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ1176200491SHKLFS",
-  "sellingPrice": 2399,
-  "originalPrice": 3998,
-  "price": 2399,
-  "createdAt": "2026-04-09T09:41:22.926Z",
-  "images": [
-   "assets/products/rNbVhzqWHSJqifs2V1dd-0.webp"
-  ],
-  "slug": "summer-printed-3-pcs-women-suit-cotton-lawn-rnbvhz"
- },
- {
-  "id": "p8oraRttYlYpF6qaKH7R",
-  "name": "3 Pcs Women's Unstitched Digital Print Suit",
-  "category": "Women's Unstitched",
-  "description": "Shirt Fabric: Lawn\nPattern: Digital Print\nShirt Front Pattern: Digital Print\nNeckline: Printed\nSleeves Pattern: Digital Print\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Lawn\nTrouser Pattern: Printed\nDupatta Fabric: Chiffon\nDupatta Pattern: Digital Print\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\nShirt Cutting: 2.5 Meter\nTrouser Cutting: 2.25 Meter\nDupatta Cutting: 2.25 Meter\nColor: Brown\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ1094202147AMCN",
-  "sellingPrice": 3350,
-  "originalPrice": 5583,
-  "price": 3350,
-  "createdAt": "2026-04-09T09:02:57.258Z",
-  "images": [
-   "assets/products/p8oraRttYlYpF6qaKH7R-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-1.webp",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-2.webp",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-3.webp",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-4.webp"
-  ],
-  "slug": "3-pcs-womens-unstitched-digital-print-suit-p8orar"
  },
  {
   "id": "Bx64vz1NpJ6buvW2Izvs",
@@ -624,22 +377,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "2-pcs-womens-stitched-shamoz-silk-embroidered-shirt-eaeizl"
  },
  {
-  "id": "mSveFFz6ScZi9Om8aIQj",
-  "name": "288 Pcs Multicolor Fake Nails for Party Wear",
-  "category": "Nails",
-  "description": "\n*Product Description*: Looking for a flawless, long-lasting manicure without the hassle? These 288 Pcs Multicolor Fake Nails are your perfect solution for any occasion, from weddings to office wear. Designed for Pakistani women who love to express their style, these nails offer a salon-quality finish at a best price in Pakistan.\n\nMade from durable synthetic material, these fake nails are lightweight and comfortable to wear, even during long hours. The multicolor range includes soft pinks, warm oranges, creamy whites, and bold reds, allowing you to match any outfit or mood. Each nail is crafted for easy application and removal, ensuring your hands stay beautiful without damage. The stylish design and premium quality make them ideal for both beginners and fashionistas.\n\n- 288 pieces for endless customization and creativity\n- Durable synthetic material for long-lasting wear\n- Multicolor options to match any outfit or event\n- Perfect for parties, weddings, or everyday fashion\n- Easy to apply and remove for hassle-free use\n- New Arrival with premium quality and best price in Pakistan\n*Product Details*:Material: Synthetic\nColor: Multicolor\nProduct Feature: Customization, Endless Creativity\nPackage Includes: 288 x Fake Nails\nPack Of 288\n\n\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n\nProduct Code: MZ1010200078SADS\n",
-  "sellingPrice": 1199,
-  "originalPrice": 1998,
-  "price": 1199,
-  "createdAt": "2026-04-08T18:50:14.140Z",
-  "images": [
-   "assets/products/mSveFFz6ScZi9Om8aIQj-0.jpg",
-   "assets/products/mSveFFz6ScZi9Om8aIQj-1.jpg",
-   "assets/products/mSveFFz6ScZi9Om8aIQj-2.jpg"
-  ],
-  "slug": "288-pcs-multicolor-fake-nails-for-party-wear-msveff"
- },
- {
   "id": "Cpzg5subUkkhZL6Z3rXM",
   "name": "24 Pcs Multicolor Fake Nails DIY Party Wear",
   "category": "Nails",
@@ -662,21 +399,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "24-pcs-multicolor-fake-nails-diy-party-wear-cpzg5s"
  },
  {
-  "id": "gwgfnqmzlLmwxq0OgQpG",
-  "name": "Unisex Perfume Set 3 Pieces J. Alcohol-Free Cedarwood",
-  "category": "Perfumes ",
-  "description": "*Product Description*: Indulge in the luxurious scent of this unisex perfume set, perfect for any occasion from weddings to daily wear. Designed for Pakistani weather and lifestyles, these fragrances offer long-lasting freshness without harsh chemicals, making them ideal for both formal events and casual outings.\n\nEach bottle is crafted with premium materials to ensure durability and elegance. The alcohol-free formula is gentle on skin, while the rich cedarwood oil delivers a sophisticated, pleasant aroma that lingers throughout the day. The stylish black and gold packaging adds a touch of class to any wardrobe, making these perfumes not just fragrances but fashion accessories.\n\n- Premium Quality with a modern, sleek design\n- Alcohol-Free formula for sensitive skin\n- Long-Lasting fragrance that stays fresh all day\n- Stylish packaging perfect for gifting or personal use\n- Durable bottles that maintain scent integrity\n- New Arrival with best price in Pakistan for immediate savings\n*Product Details*:Fragrance: Cedarwood Oil\nMaterial: Liquid\nProduct Feature: Alcohol-Free\nGender Type: Unisex\nPackage Includes: 3 x Perfume\n Color: Blue\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\nProduct Code: MZ1296200256GDBY\n",
-  "sellingPrice": 1998,
-  "originalPrice": 0,
-  "price": 1998,
-  "createdAt": "2026-04-08T18:28:42.812Z",
-  "images": [
-   "assets/products/gwgfnqmzlLmwxq0OgQpG-0.jpg",
-   "assets/products/gwgfnqmzlLmwxq0OgQpG-1.jpg"
-  ],
-  "slug": "unisex-perfume-set-3-pieces-j-alcohol-free-gwgfnq"
- },
- {
   "id": "JJOjjgF041jP2NRFwzXU",
   "name": "SAUVAGE Long Lasting Unisex Perfume - 1 Pcs Citrusy & Woody Fragrance",
   "category": "Perfumes ",
@@ -691,58 +413,6 @@ window.HUNNY_PRODUCTS = [
    "assets/products/JJOjjgF041jP2NRFwzXU-2.jpg"
   ],
   "slug": "sauvage-long-lasting-unisex-perfume-1-pcs-citrusy-jjojjg"
- },
- {
-  "id": "ZNgkB0ce5Edq7LhyuiCF",
-  "name": "Unisex Long Lasting Perfume 100ml Black Galbanum",
-  "category": "Perfumes ",
-  "description": "Product Description*: Looking for a scent that stays with you all day without needing constant reapplication? This premium quality fragrance is your perfect match for Pakistan’s warm climate and busy lifestyle. Designed for both men and women, it’s the best price in Pakistan for a truly stylish, mood-enhancing experience that lasts hours. \n\nCrafted with a sophisticated blend of Galbanum, this unisex perfume delivers a fresh, clean aroma that’s both calming and invigorating. The sleek black bottle is not just durable but also a statement piece for any occasion – from office meetings to evening gatherings. The liquid formula is carefully balanced to ensure long-lasting wear without overpowering your natural scent. Whether you’re dressing for a formal event or a casual day out, this new arrival will elevate your confidence effortlessly.\n\n- Premium Quality fragrance with Galbanum notes for a refined, lasting scent\n- Best price in Pakistan for a luxurious feel without breaking the bank\n- Durable liquid formula designed to stay fresh for hours on your skin\n- Stylish black bottle that complements any outfit or event\n- Mood Enhancing aroma that uplifts your spirit throughout the day\n- New Arrival perfect for daily wear and special occasions alike\n*Product Details*:Fragrance: Galbanum\nMaterial: Liquid\nProduct Feature: Mood Enhancing\nGender Type: Unisex\nPackage Includes: 1 x Perfume\nQuantity: 100 Ml\n Color: Black\nLong Lasting Fragrance Perfume\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\nProduct Code: MZ512200152EACN\n",
-  "sellingPrice": 1549,
-  "originalPrice": 0,
-  "price": 1549,
-  "createdAt": "2026-04-08T18:19:34.997Z",
-  "images": [
-   "assets/products/ZNgkB0ce5Edq7LhyuiCF-0.jpg",
-   "assets/products/ZNgkB0ce5Edq7LhyuiCF-1.jpg",
-   "assets/products/ZNgkB0ce5Edq7LhyuiCF-2.jpg",
-   "assets/products/ZNgkB0ce5Edq7LhyuiCF-3.jpg",
-   "assets/products/ZNgkB0ce5Edq7LhyuiCF-4.jpg",
-   "assets/products/ZNgkB0ce5Edq7LhyuiCF-5.jpg",
-   "assets/products/ZNgkB0ce5Edq7LhyuiCF-6.jpg"
-  ],
-  "slug": "unisex-long-lasting-perfume-100ml-black-galbanum-zngkb0"
- },
- {
-  "id": "sZTVtp9RXaJdVHhCW0Dv",
-  "name": "Long Lasting Floral Pocket Perfume Set 5 Pcs Unisex",
-  "category": "Perfumes ",
-  "description": "*Product Description*: Perfect for Pakistani summers and special occasions, this Long Lasting Floral Perfume Set offers a refreshing, elegant scent that stays with you all day. Whether you’re heading to work, a wedding, or a casual outing, these stylish pocket perfumes ensure you always smell confident and sophisticated. Designed for both men and women, they’re ideal for daily wear and special events alike.\n\nEach perfume is crafted with premium quality liquid that delivers a long-lasting fragrance, thanks to its durable, high-grade glass bottles and sleek, modern packaging. The set includes five distinct scents, each housed in a durable, elegant design that protects the fragrance and adds a touch of luxury to your daily routine. The bottles are compact and easy to carry, making them perfect for your bag or pocket. The floral notes are light, pleasant, and universally appealing, ensuring you’ll enjoy a fresh, uplifting aroma no matter the occasion.\n\n- Long Lasting Fragrance for all-day freshness\n- Stylish, compact design perfect for daily wear\n- Premium quality liquid in durable glass bottles\n- Unisex appeal for both men and women\n- New Arrival – best price in Pakistan\n- Ideal for weddings, office, or casual outings\n*Product Details*:Fragrance: Floral\nMaterial: Liquid\nProduct Feature: Long Lasting Fragrance\nGender Type: Unisex\nPackage Includes: 5 x Pocket Perfume\nQuantity: 35 Ml\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\nProduct Code: MZ1281200161MPPE\n",
-  "sellingPrice": 1498,
-  "originalPrice": 0,
-  "price": 1498,
-  "createdAt": "2026-04-08T18:12:33.645Z",
-  "images": [
-   "assets/products/sZTVtp9RXaJdVHhCW0Dv-0.jpg",
-   "assets/products/sZTVtp9RXaJdVHhCW0Dv-1.jpg"
-  ],
-  "slug": "long-lasting-floral-pocket-perfume-set-5-pcs-sztvtp"
- },
- {
-  "id": "aVlqiLW3Ki1xRpq6r7k4",
-  "name": "Best Friend heart necklaces Gold and Silver set ",
-  "category": "Jewellery ",
-  "description": "•  Material: Metal\n•  Plating: Gold Plated, Silver Plated\n•  Stone: Crystal\n•  Gender Type: Women\n•  Stone Color: White\n•  Number Of Pieces: 2 Pcs\n•  Color: Golden, Silver\n•  Package Includes: 2 x Necklace\n•  Note: Keep jewelry dry, away from chemicals. Store separately in a soft pouch. There might be a slight color difference due to different light and monitor effects.",
-  "sellingPrice": 1099,
-  "originalPrice": 0,
-  "price": 1099,
-  "createdAt": "2026-04-08T14:01:37.418Z",
-  "images": [
-   "assets/products/aVlqiLW3Ki1xRpq6r7k4-0.jpg",
-   "assets/products/aVlqiLW3Ki1xRpq6r7k4-1.jpg",
-   "assets/products/aVlqiLW3Ki1xRpq6r7k4-2.jpg",
-   "assets/products/aVlqiLW3Ki1xRpq6r7k4-3.jpg"
-  ],
-  "slug": "best-friend-heart-necklaces-gold-and-silver-set-avlqil"
  },
  {
   "id": "PIjvoleoVfOl2kmik6gy",
@@ -865,23 +535,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "multicolor-hydrating-lip-oil-gloss-30g-7bkbff"
  },
  {
-  "id": "smbCUgDhAAhqDRULPq5n",
-  "name": "Papaya White SPF 60 Sunblock Face & Body 100ml",
-  "category": "Cosmetics",
-  "description": "Protect your skin from harsh Pakistani sun with this premium sunblock, designed for maximum protection without heavy feel. Perfect for beach days, weddings, or office outings, it offers reliable defense against UV rays that can cause premature aging and sunburn. This sunblock is made with a smooth, lightweight cream formula that absorbs quickly and stays in place all day. Its durable protection ensures your skin stays safe even during long outdoor sessions. The stylish orange packaging makes it easy to spot and carry, while the organic papaya white formula delivers gentle, effective shielding. Made in the USA, it’s built to last and perform under intense heat. - SPF 60 Sunblock for strong UV protection - Lightweight, non-greasy cream texture - Ideal for face and body use - Made in USA with premium quality ingredients - New arrival in Pakistan with best price - Durable formula for all-day defense\n\nHIGHLIGHTS\n\nMaterial: Cream\nProduct Feature: Protects From Sunburn\nPackage Includes: 1 x Sunblock\nVolume: 100 Ml\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\nProduct Code: MZ69100000254AIBSFD",
-  "sellingPrice": 999,
-  "originalPrice": 0,
-  "price": 999,
-  "createdAt": "2026-04-08T09:40:52.123Z",
-  "images": [
-   "assets/products/smbCUgDhAAhqDRULPq5n-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-1.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-2.JPG",
-   "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-3.JPG"
-  ],
-  "slug": "papaya-white-spf-60-sunblock-face-body-100ml-smbcug"
- },
- {
   "id": "LwpkPsfCBJkFXrk7xjSP",
   "name": "Teeth Whitening Serum Purple Toothpaste Daily Use",
   "category": "Cosmetics",
@@ -914,51 +567,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "2-pcs-womens-unstitched-printed-suit-eqpfhz"
  },
  {
-  "id": "hlI4hQGnl1gpARbP1DBx",
-  "name": "2 Pcs Women's Unstitched Printed Suit",
-  "category": "Women's Unstitched",
-  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Blue\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200289INCN",
-  "sellingPrice": 1799,
-  "originalPrice": 3598,
-  "price": 1799,
-  "createdAt": "2026-04-08T09:30:14.745Z",
-  "images": [
-   "assets/products/hlI4hQGnl1gpARbP1DBx-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718752-product-1.webp"
-  ],
-  "slug": "2-pcs-womens-unstitched-printed-suit-hli4hq"
- },
- {
-  "id": "qNxNLbqh9pbTX5NVLeLP",
-  "name": "2 Pcs Women's Unstitched Printed Suit",
-  "category": "Women's Unstitched",
-  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Yellow\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200290INCN",
-  "sellingPrice": 1799,
-  "originalPrice": 2570,
-  "price": 1799,
-  "createdAt": "2026-04-08T09:29:05.946Z",
-  "images": [
-   "assets/products/qNxNLbqh9pbTX5NVLeLP-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718753-product-1.webp"
-  ],
-  "slug": "2-pcs-womens-unstitched-printed-suit-qnxnlb"
- },
- {
-  "id": "mnptsl9FyXPHDJrvF6Dj",
-  "name": "2 Pcs Women's Unstitched Printed Suit",
-  "category": "Women's Unstitched",
-  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Red\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200292INCN",
-  "sellingPrice": 1799,
-  "originalPrice": 2998,
-  "price": 1799,
-  "createdAt": "2026-04-08T09:28:03.860Z",
-  "images": [
-   "assets/products/mnptsl9FyXPHDJrvF6Dj-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718755-product-1.webp"
-  ],
-  "slug": "2-pcs-womens-unstitched-printed-suit-mnptsl"
- },
- {
   "id": "MOvaGPSwkAgO4faeHWTt",
   "name": "2 Pcs Women's Unstitched Printed Suit",
   "category": "Women's Unstitched",
@@ -972,36 +580,6 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718756-product-1.webp"
   ],
   "slug": "2-pcs-womens-unstitched-printed-suit-movagp"
- },
- {
-  "id": "fvfhD4QlPunJbS05jH09",
-  "name": "2 Pcs Women's Unstitched Printed Suit",
-  "category": "Women's Unstitched",
-  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Blue\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200294INCN\n",
-  "sellingPrice": 1799,
-  "originalPrice": 2998,
-  "price": 1799,
-  "createdAt": "2026-04-08T09:25:45.435Z",
-  "images": [
-   "assets/products/fvfhD4QlPunJbS05jH09-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718757-product-1.webp"
-  ],
-  "slug": "2-pcs-womens-unstitched-printed-suit-fvfhd4"
- },
- {
-  "id": "wHKiOW5NeUcveRY88rDC",
-  "name": "2 Pcs Women's Unstitched Printed Suit",
-  "category": "Women's Unstitched",
-  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: White\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200295INCN",
-  "sellingPrice": 1799,
-  "originalPrice": 2570,
-  "price": 1799,
-  "createdAt": "2026-04-08T09:24:44.019Z",
-  "images": [
-   "assets/products/wHKiOW5NeUcveRY88rDC-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718758-product-1.webp"
-  ],
-  "slug": "2-pcs-womens-unstitched-printed-suit-whkiow"
  },
  {
   "id": "L41HYgARiJK0gSALtCc3",
@@ -1019,36 +597,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "2-pcs-womens-unstitched-printed-suit-l41hyg"
  },
  {
-  "id": "a4X05FwUqI5fkDjzXRcd",
-  "name": "Women Printed Polo Cotton Suit Pink 2 Pcs",
-  "category": "Women's Unstitched",
-  "description": "This elegant 2-piece women’s unstitched suit is perfect for daily wear in Pakistan’s changing seasons. The stylish pink base with bold black floral prints adds a touch of sophistication to any outfit, making it ideal for office, casual outings, or festive gatherings. Crafted from premium quality polo cotton, this suit is not only comfortable but also durable enough to withstand daily use. The fabric breathes well, keeping you cool and fresh even during warmer months, while the printed design ensures you stay fashionable without compromising on comfort. The suit is designed for easy customization, with each piece cut to 1 meter, allowing you to tailor it to your preferred fit. The printed pattern covers every part of the shirt and trousers, including the sleeves, neckline, and back, ensuring a cohesive and eye-catching look. Made with care, this new arrival is a smart investment for your wardrobe. You can trust the best price in Pakistan without sacrificing style or quality. Whether you’re shopping for yourself or as a gift, this suit delivers both durability and charm. - Premium quality polo cotton fabric for comfort and durability - Stylish pink and black floral print for a modern look - Includes 1 shirt and 1 trouser for a complete outfit - Perfect for daily wear, office, or casual events - New arrival with best price in Pakistan - Easy to customize to your preferred fit\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Pink\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ11249217790ADTE",
-  "sellingPrice": 1799,
-  "originalPrice": 0,
-  "price": 1799,
-  "createdAt": "2026-04-08T09:22:27.752Z",
-  "images": [
-   "assets/products/a4X05FwUqI5fkDjzXRcd-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1249-3-674408-product-1.webp"
-  ],
-  "slug": "women-printed-polo-cotton-suit-pink-2-pcs-a4x05f"
- },
- {
-  "id": "nXKxaYHupDq1bf3TyB6x",
-  "name": "Women Printed Cotton Suit 2 Pcs Purple All Season",
-  "category": "Women's Unstitched",
-  "description": "Upgrade your wardrobe with this stunning 2-piece women’s unstitched printed suit, crafted for comfort and style in Pakistan’s diverse weather. Perfect for weddings, office wear, or festive occasions, this outfit blends elegance with everyday practicality. The vibrant purple hue and intricate floral patterns make a bold fashion statement while remaining versatile for any occasion. Designed for the local climate, this suit offers breathability and comfort without sacrificing durability. Made from premium quality cotton, this suit is built to last. The shirt and trousers are both crafted from soft, breathable cotton fabric that keeps you cool during hot days and warm during cooler evenings. The detailed printed design covers the entire front, neckline, sleeves, and back of the shirt, while the trousers feature a matching printed pattern for a cohesive, stylish look. The 2.5 Gazz cutting ensures a flattering fit for most body types. With its durable construction and stylish design, this suit is not just a fashion choice but a smart investment for your wardrobe. - Premium Quality Cotton Fabric for All-Season Wear - Stylish Printed Design with Vibrant Purple Accents - Durable Construction for Long-Lasting Use - Perfect Fit with 2.5 Gazz Cutting for Comfort - New Arrival with Trendy Digital Print Pattern - Best Price in Pakistan for Outstanding Value\n\nHIGHLIGHTS\n\nShirt Fabric: Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 2.5 Gazz\nTrouser Cutting: 2.5 Gazz\nColor: Purple\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ779013468ANMCL\n",
-  "sellingPrice": 1799,
-  "originalPrice": 2811,
-  "price": 1799,
-  "createdAt": "2026-04-08T09:21:17.073Z",
-  "images": [
-   "assets/products/nXKxaYHupDq1bf3TyB6x-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1049-3-712161-product-1.webp"
-  ],
-  "slug": "women-printed-cotton-suit-2-pcs-purple-all-nxkxay"
- },
- {
   "id": "IrUab0hFsPjF8X57PQzw",
   "name": "2 Pcs Women Printed Cotton Suit Black",
   "category": "Women's Unstitched",
@@ -1062,22 +610,6 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1249-3-709869-product-1.webp"
   ],
   "slug": "2-pcs-women-printed-cotton-suit-black-iruab0"
- },
- {
-  "id": "uN5wVh1ugv6odvRH4qk9",
-  "name": "Purple Katan Silk 3-Piece Women's Suit Set",
-  "category": "Women's Unstitched",
-  "description": "This stunning 3-piece unstitched suit is perfect for Pakistani women who want to look elegant for weddings, parties, or festive occasions. The rich purple hue and luxurious katan silk fabric make it ideal for both summer and special events, offering comfort without compromising on style. The dupatta, made of sheer net with delicate floral embroidery, adds a graceful touch while remaining light and breathable for warm weather. The katan silk is known for its durability and smooth texture, making this suit not only stylish but also long-lasting. The plain design allows for versatile styling, whether you're pairing it with traditional jewelry or modern accessories. The gold embellishment on the shirt front adds a touch of sophistication without overwhelming the look. This is a new arrival that combines traditional craftsmanship with contemporary fashion. - Made from premium quality katan silk for durability and comfort - Includes 1 shirt, 1 trouser, and 1 dupatta in matching purple - Dupatta features sheer net with floral embroidery for elegance - Perfect for weddings, parties, and festive occasions - Best price in Pakistan for this premium quality set - Stylish design suitable for both summer and festive wear\n\nHIGHLIGHTS\n\nFabric: Katan Silk\nPattern: Plain\nShirt Front Pattern: Plain\nTrouser Pattern: Plain\nDupatta Fabric: Net\nDupatta Pattern: Plain\nNumber Of Pieces: 3 Pcs\nColor: Purple\nPackage Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\nShirt Cutting: 2.5 Yards\nTrouser Cutting: 2.5 Yards\nDupatta Cutting: 2.5 Yards\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ117620061SHKLFS",
-  "sellingPrice": 1799,
-  "originalPrice": 0,
-  "price": 1799,
-  "createdAt": "2026-04-08T09:16:31.214Z",
-  "images": [
-   "assets/products/uN5wVh1ugv6odvRH4qk9-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406080-product-2.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406080-product-1.jpg"
-  ],
-  "slug": "purple-katan-silk-3-piece-womens-suit-set-un5wvh"
  },
  {
   "id": "J1GCcNxmtJxXVxowY741",
@@ -1130,22 +662,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "maroon-embroidered-girls-kurta-shalwar-suit-3pcs-bdm3xn"
  },
  {
-  "id": "cjuK1MuXmCdzzfNScMSd",
-  "name": "3 Pcs Girl's Shamoz Silk Embroidered Shirt And Skirt Set",
-  "category": "kids",
-  "description": "3Pcs Front Neck, Sleeves Embroidered Top With Embroidered Skirt And Four Side Emb With Lace Work Dupatta Kids 3Pcs\n\nHIGHLIGHTS\n\nMaterial: Shamoz Silk\nPattern: Embroidered\nGender: Girl's\nPreferred Ages: 1-12 Years\nAvailable Sizes: 5-6 Years, 7-8 Years, 8-10 Years, 11-12 Years\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Skirt, 1 x Shirt, 1 x Dupatta\nShirt Length: 15 Inches\nChest: 17 Inches\nShoulder: 11 Inches\nArm Length Size: 9 Inches\nDupatta: 1.5 Gazz\nColor: Black\n(30 Size 6-8 Years)\nTop Chest Size 15\nTop length 12\nSkirt Length 29\nSkirt Ghair 72\n(32 Size 8-10 Year)\nTop Chest Size 16\nTop length 13\nSkirt Length 32\n(34 Size 10-12 Years)\nTop Chest Size 17\nTop Length 15\nSkirt length 34\nTop Stuff Silk (Premium Silk)\nSkirt Stuff Silk (Premium Silk)\nDupatta Size 1.5 Yards\nStuff Organza\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ2185200169MBCG",
-  "sellingPrice": 3159,
-  "originalPrice": 0,
-  "price": 3159,
-  "createdAt": "2026-04-04T09:15:36.133Z",
-  "images": [
-   "assets/products/cjuK1MuXmCdzzfNScMSd-0.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/2185-35-700265-product-1.webp",
-   "https://content.public.markaz.app/markazimagevideo/public/products/2185-35-700265-product-2.webp"
-  ],
-  "slug": "3-pcs-girls-shamoz-silk-embroidered-shirt-and-cjuk1m"
- },
- {
   "id": "4Uto6z3FOXHKW6OqZfuN",
   "name": "Women Printed Cotton Night Suit Pink Medium to XL",
   "category": "suits",
@@ -1160,6 +676,597 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/1046-14-403738-product-2.jpg"
   ],
   "slug": "women-printed-cotton-night-suit-pink-medium-to-4uto6z"
+ },
+ {
+  "id": "TmWH2bYGJVfRcRgzkKdq",
+  "name": "Fancy Tissue 3-Piece Women Suit Teal Embroidered",
+  "category": "Women's Unstitched",
+  "description": "This stunning 3-piece tissue suit is perfect for weddings, parties, or any festive occasion in Pakistan. The vibrant teal color and intricate floral embroidery on the neckline and front make it a standout choice for any special event. Designed for comfort and elegance, this outfit is ideal for the warm Pakistani climate while maintaining a luxurious look. The shirt is crafted from premium tissue fabric with heavy embroidery and cut-work details that add sophistication. The inner shirt is made of smooth silk for added comfort and durability. The trouser is plain silk, ensuring a sleek fit, while the dupatta features delicate stone work all over for a touch of glamour. This ensemble is not only stylish but also durable, making it a smart investment for your wardrobe. - Premium quality tissue fabric with heavy embroidery - Includes inner silk shirt for added comfort - Trouser made of plain silk for a sleek fit - Dupatta with all-over stone work for elegance - Perfect for all seasons and festive occasions - New arrival with best price in Pakistan\n• Fabric: Tissue\n• Shirt Front: Heavy Embroidered, Tissue Cut-Work\n• Neckline: Heavy Embroidered\n• Back: Embroidered\n• Trouser: Plain Silk\n• Dupatta: Tissue Stone Work All Over\n• Cuttings: Shirt: 2.5 Gazz, Trouser: 2.5 Gazz, Dupatta: 2.5 Gazz\n• Season: All Season\n• Package Includes: 1 x Shirt, 1 x Inner(Silk), 1 x Trouser, 1 x Dupatta\n• Note: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n• Product Code: MZ6301651SMJ",
+  "sellingPrice": 3999,
+  "originalPrice": 0,
+  "price": 3999,
+  "createdAt": "2026-03-31T06:31:48.990Z",
+  "images": [
+   "https://content.public.markaz.app/markazimagevideo/public/products/74-165-303062-product-1.jpeg"
+  ],
+  "slug": "fancy-tissue-3-piece-women-suit-teal-embroidered-tmwh2b"
+ },
+ {
+  "id": "TKU4efkWDv5BPKveEmb4",
+  "name": "Women Crystal Watch Square Dial Touch Screen Rhinestone Band",
+  "category": "Watches",
+  "description": "*Product Description*: Looking for a watch that’s both elegant and practical for daily use? This stylish crystal bracelet watch is perfect for Pakistani women who want to stay on time while making a fashion statement. Whether you’re heading to the office, a wedding, or a casual outing, its square digital display and sparkling rhinestone band add sophistication without compromising comfort. Designed for durability, the steel construction ensures it lasts through everyday wear, while the touch screen makes it easy to read and operate.\n\nThis new arrival is crafted with premium quality materials and attention to detail, making it a durable and fashionable choice. The rhinestone-encrusted band catches the light beautifully, while the square dial offers a modern, easy-to-read design. Available in four trendy colors — golden, rose gold, silver, and black — it’s ideal for matching any outfit. The watch is lightweight, comfortable to wear, and perfect for gifting on birthdays, anniversaries, or special occasions. With its stylish design and practical features, it’s one of the best price in Pakistan for value and elegance.\n\n- Square digital display for easy time reading\n- Rhinestone-encrusted steel band for sparkle and durability\n- Touch screen functionality for seamless operation\n- Available in four colors: golden, rose gold, silver, black\n- Lightweight and comfortable for all-day wear\n- Perfect gift for birthdays, weddings, or office events\n*Product Details*:Material: Steel\nPattern: Chain Strap\nGender: Women's\nWatch Case Shape: Square\nNumber Of Pieces: 1 Pc\nColor: Golden, Rose Gold, Silver, Black\nPackage Includes: 100 x Bracelet Watch\nWomen's Casual Bracelet Watch with Rhinestone Encrusted Band Electronic Watch Wonderful Watches Gift for Women\n\nDescription:\nFeatures:\n\nStylish and Versatile: Elevate your look with our women's crystal rhinestones bracelet watch, a perfect accessory for any occasion from casual outings to formal events.\n\nMulti-Function Design: Our women's led crystal bracelet watch not only tells time but also adds a touch of sparkle with its rhinestone-encrusted band, making it a statement piece.\n\nPerfect Gift Choice: Whether it's for your girlfriend's birthday or for a meeting or date at the office, our watches make wonderful gifts that are sure to and delight any woman.\n\nQuality Craftsmanship: Each watch is meticulously designed with attention to detail, featuring a rhinestone-encrusted band and a sleek square dial, making it a stylish and elegant accessory for women.\n\nNote: There might be slight color differences as a result of varying lighting and monitor effects.\n\nProduct Code: MZ2131200007HATS\n",
+  "sellingPrice": 1498,
+  "originalPrice": 0,
+  "price": 1498,
+  "createdAt": "2026-03-25T07:46:31.326Z",
+  "images": [
+   "assets/products/TKU4efkWDv5BPKveEmb4-0.jpg",
+   "assets/products/TKU4efkWDv5BPKveEmb4-1.jpg",
+   "assets/products/TKU4efkWDv5BPKveEmb4-2.jpg",
+   "assets/products/TKU4efkWDv5BPKveEmb4-3.jpg",
+   "assets/products/TKU4efkWDv5BPKveEmb4-4.jpg",
+   "assets/products/TKU4efkWDv5BPKveEmb4-5.jpg",
+   "assets/products/TKU4efkWDv5BPKveEmb4-6.jpg"
+  ],
+  "slug": "women-crystal-watch-square-dial-touch-screen-rhinestone-tku4ef"
+ },
+ {
+  "id": "GmDzKK6vng1Gc6x7QWlS",
+  "name": "Black Katan Silk Women's 3-Piece Suit Set",
+  "category": "Women's Unstitched",
+  "description": "This elegant 3-piece unstitched suit is perfect for Pakistani women who want to look stunning for weddings, parties, or festive occasions without compromising on comfort. The black katan silk fabric offers a luxurious drape that flows beautifully, while the sheer net dupatta adds a graceful, airy touch ideal for warm weather. Designed for durability and timeless style, this suit is crafted to last through multiple events and remain fashionable season after season. The premium quality katan silk ensures a smooth, cool feel against the skin, making it ideal for summer and festive wear. The plain design allows for versatile styling, whether you're pairing it with traditional jewelry or modern accessories. The dupatta, adorned with delicate black floral appliqués and a golden embellishment, adds a touch of sophistication without overwhelming the look. This new arrival is not just stylish but also practical, offering the best price in Pakistan for such high-quality material. - Made from premium katan silk for a luxurious feel - Dupatta crafted from sheer net with elegant black floral details - Includes 1 shirt, 1 trouser, and 1 dupatta for complete outfit - Durable construction suitable for multiple occasions - Stylish and modern design perfect for parties and weddings - New arrival with best price in Pakistan for premium quality\n• Fabric: Katan Silk\n• Pattern: Plain\n• Shirt Front Pattern: Plain\n• Trouser Pattern: Plain\n• Dupatta Fabric: Net\n• Dupatta Pattern: Plain\n• Number Of Pieces: 3 Pcs\n• Color: Black\n• Package Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\n• Shirt Cutting: 2.5 Yards\n• Trouser Cutting: 2.5 Yards\n• Dupatta Cutting: 2.5 Yards\n• Note: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n• Product Code: MZ117620055SHKLFS",
+  "sellingPrice": 1599,
+  "originalPrice": 0,
+  "price": 1599,
+  "createdAt": "2026-03-21T12:10:12.072Z",
+  "images": [
+   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406051-product-2.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406051-product-1.jpg"
+  ],
+  "slug": "black-katan-silk-womens-3-piece-suit-set-gmdzkk"
+ },
+ {
+  "id": "PHYS4ND3oxuIFr04qhft",
+  "name": "Long-lasting Odor Protection Body Spray 2",
+  "category": "Cosmetics",
+  "description": "• Material: Solid\n• Product Feature: Long-lasting Odor Protection\n• Package Includes: 2 x Body Spray\n• Pack Of 2\n• Note: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n• Product Code: MZ2017200138LYBY",
+  "sellingPrice": 1999,
+  "originalPrice": 0,
+  "price": 1999,
+  "createdAt": "2026-03-20T09:16:33.017Z",
+  "images": [
+   "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-1.webp",
+   "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-2.webp",
+   "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-3.webp"
+  ],
+  "slug": "long-lasting-odor-protection-body-spray-2-phys4n"
+ },
+ {
+  "id": "BnY7oIazUEvSnLaiy4Sh",
+  "name": "Kushta Hair Oil 120ml Anti-Hair Loss Booster",
+  "category": "Cosmetics",
+  "description": "Perfect for Pakistani weather and daily use, this premium hair oil delivers powerful nourishment to combat thinning and promote thick, lustrous hair. Ideal for weddings, office wear, or everyday styling, it’s crafted to enhance your natural beauty without weighing hair down. The sleek, durable bottle ensures long-lasting freshness and easy application, making it a stylish addition to your grooming essentials. This 120ml anti-hair loss formula is specially designed to stimulate follicles, boost density, and prevent breakage. Infused with herbal extracts, it revitalizes hair from root to tip, leaving it stronger and more resilient. The elegant black and gold packaging reflects premium quality, while the lightweight oil absorbs quickly without greasiness. Perfect for all hair types, it’s a new arrival that delivers visible results with consistent use. - 120ml premium hair oil for maximum coverage - Anti-hair loss formula with herbal nourishment - Promotes hair density and stimulates growth - Stylish black and gold bottle for premium look - Durable packaging for long shelf life - New arrival with best price in Pakistan\n• Material: Oil\n• Hair Types: All Hair Types\n• Product Feature: Anti-Hair Loss, Promotes Hair Density, Hair Growth\n• Package Includes: 1 x Hair Oil\n• Volume: 120 Ml\n• Note: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n• Product Code: MZ19900000068RAAS",
+  "sellingPrice": 899,
+  "originalPrice": 0,
+  "price": 899,
+  "createdAt": "2026-03-20T09:11:16.568Z",
+  "images": [
+   "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-1.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-2.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-3.jpg"
+  ],
+  "slug": "kushta-hair-oil-120ml-anti-hair-loss-booster-bny7oi"
+ },
+ {
+  "id": "QexdqGoUcIp267r3ZhKs",
+  "name": "3 Pcs Women's Unstitched Katan Silk Plain Suit",
+  "category": "Women's Unstitched",
+  "description": "• Fabric: Katan Silk\n• Pattern: Plain\n• Shirt Front Pattern: Plain\n• Trouser Pattern: Plain\n• Dupatta Fabric: Net\n• Dupatta Pattern: Plain\n• Number Of Pieces: 3 Pcs\n• Color: Blue\n• Package Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\n• Shirt Cutting: 2.5 Yards\n• Trouser Cutting: 2.5 Yards\n• Dupatta Cutting: 2.5 Yards\n• Note: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n• Product Code: MZ117620059SHKLFS",
+  "sellingPrice": 1489,
+  "originalPrice": 0,
+  "price": 1489,
+  "createdAt": "2026-03-19T11:29:06.214Z",
+  "images": [
+   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-2.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-1-withcode.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-1.jpg"
+  ],
+  "slug": "3-pcs-womens-unstitched-katan-silk-plain-suit-qexdqg"
+ },
+ {
+  "id": "8fWjaMa9MfQIWr2Vg7vN",
+  "name": "Turquoise Printed Women's 2Pcs Polo Cotton Suit",
+  "category": "Women's Unstitched",
+  "description": "This elegant 2-piece women’s unstitched suit is perfect for both casual and formal occasions in Pakistan. The stylish green fabric with delicate white floral prints adds a touch of sophistication to your wardrobe, making it ideal for office wear, evening events, or daily outings. Crafted from premium quality polo cotton, this suit is not only comfortable but also durable enough to withstand regular use. The soft, breathable material ensures you stay cool and confident throughout the day, whether you’re shopping, attending a gathering, or simply relaxing at home.\n\nThe suit comes in a convenient 2.25-meter cut for both shirt and trouser, allowing you to tailor it to your preferred fit. Designed for all seasons, it’s versatile enough for daily wear or special events. As a new arrival, you’re getting the best price in Pakistan without compromising on style or quality. The fabric’s durability means it will last longer, saving you money in the long run. Plus, the clean, modern design makes it a timeless addition to your closet.\n\n- Premium quality polo cotton for comfort and durability\n- Stylish green with white floral print for a chic look\n- Perfect for daily wear, office, or evening events\n- New arrival with best price in Pakistan\n- All-season suitable for regular use\n- Includes 1 shirt and 1 trouser for easy stitching\nProduct Details:Shirt Fabric: Polo Cotton\nPattern: Printed\nTrouser Fabric: Polo Cotton\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 2.25 Meter\nTrouser Cutting: 2.25 Meter\n Color: Green\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\nProduct Code: MZ1303200285GEBYAD",
+  "sellingPrice": 1699,
+  "originalPrice": 0,
+  "price": 1699,
+  "createdAt": "2026-03-19T10:01:34.631Z",
+  "images": [
+   "https://i.ibb.co/wrPK0GB2/Whats-App-Image-2026-03-19-at-2-55-48-PM.jpg"
+  ],
+  "slug": "turquoise-printed-womens-2pcs-polo-cotton-suit-8fwjam"
+ },
+ {
+  "id": "68sfU9aYCRc8XTaFTGIx",
+  "name": "Black Chiffon Embroidered Maxi Suit Set for Eid Party Wear",
+  "category": "suits",
+  "description": "This elegant black maxi suit is perfect for Pakistani women who want to look stunning at weddings, Eid, or any festive gathering without compromising on comfort. Designed with a flowing silhouette and delicate ruffled detailing, it’s ideal for the warm weather of Pakistan while keeping you stylish and graceful. The chiffon fabric is lightweight, breathable, and durable, making it perfect for long events or daily wear. You’ll love how it drapes beautifully and moves with you, offering both elegance and ease.\n\nThe suit is crafted with premium quality materials that ensure long-lasting wear. The black color is versatile and timeless, making it suitable for both traditional and modern occasions. The stitched design adds sophistication, while the ruffled hem and neckline give it a touch of charm. The three-piece set includes a maxi dress, matching trousers, and a dupatta, allowing you to mix and match or wear as a complete outfit. This new arrival is stylish, comfortable, and best priced in Pakistan for your next special event.\n\n- Made with premium quality chiffon fabric\n- Stylish black color with ruffled detailing\n- Includes 3 pieces: maxi, trousers, and dupatta\n- Durable and comfortable for all-day wear\n- Perfect for Eid, weddings, and festive occasions\n- New arrival with best price in Pakistan\nProduct Details:Fabric: Chiffon\nPattern: Embroidered\nNeck Type: Round Neck\nAvailable Sizes: Standard Size\nNumber Of Pieces: 3 Pcs\nColor: Black\nPackage Includes: 1 x Maxi, 1 x Trouser, 1 x Dupatta\nFlare Length: 90 Inches\nShirt Length: 50 Inches\nShirt Chest: 21 Inches\nTrouser Length: 37 Inches\nTrouser Waist: 21 Inches\nDupatta Dimensions: 2.5 Gazz\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.",
+  "sellingPrice": 2999,
+  "originalPrice": 0,
+  "price": 2999,
+  "createdAt": "2026-03-18T07:50:49.478Z",
+  "images": [
+   "assets/products/68sfU9aYCRc8XTaFTGIx-0.jpg",
+   "https://image2url.com/r2/default/images/1773819589253-f9ae4dd5-1d75-4f16-8444-455a32473a02.jpeg",
+   "https://i.ibb.co/RpQTqXGs/Whats-App-Image-2026-03-18-at-12-31-51-PM-1.jpg",
+   "https://i.ibb.co/Pv3gK9Vb/Whats-App-Image-2026-03-18-at-12-31-50-PM.jpg",
+   "https://i.ibb.co/4w6Y1Yf8/Whats-App-Image-2026-03-18-at-12-31-51-PM.jpg"
+  ],
+  "slug": "black-chiffon-embroidered-maxi-suit-set-for-eid-68sfu9"
+ },
+ {
+  "id": "X8LNFBbOSKHDIk2rYJV3",
+  "name": "Elevate Your Wardrobe With Our Maxi Collection",
+  "category": "Women's Stitched Suits",
+  "description": "Elevate Your Wardrobe With Our Maxi Collection\n• Fabric: Chiffon\n• Product Type: Maxi\n• Pattern: Plain\n• Neck Type: Round Neck\n• Available Sizes: Standard Size\n• Dimensions: Shirt (Chest 21, Length 44), Flare 96 Inches\n• Package Includes: 1 x Maxi\n• Note: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n• Product Code: MZ71000037ALJTC",
+  "sellingPrice": 1599,
+  "originalPrice": 0,
+  "price": 1599,
+  "createdAt": "2026-03-27T06:39:02Z",
+  "images": [
+   "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-1.jpeg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-2.jpeg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-3.jpeg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-4.jpeg"
+  ],
+  "slug": "elevate-your-wardrobe-with-our-maxi-collection-x8lnfb"
+ },
+ {
+  "id": "yfQkhC2iTVeMRDmZpPaI",
+  "name": "Luxury Ladies Watch Off White Leather Quartz ",
+  "category": "Watches",
+  "description": "•  Material: Leather\n•  Watch Case Shape: Square\n•  Product Feature: Chic Everyday Design That Upgrades Any Outfit, Lightweight And Comfortable For All Day Wear, Water Resistant For Daily Use, Premium Build Quality That Feels Expensive, Wear It Solo Or Stack With Bracelets\n•  Number Of Pieces: 1 Pc\n•  Color: Off White\n•  Package Includes: 1 x Analogue Watch\n•  Note: There might be slight color differences as a result of varying lighting and monitor effects.",
+  "sellingPrice": 1999,
+  "originalPrice": 3998,
+  "price": 1999,
+  "createdAt": "2026-04-22T15:53:07.671Z",
+  "images": [
+   "assets/products/yfQkhC2iTVeMRDmZpPaI-0.jpg",
+   "assets/products/yfQkhC2iTVeMRDmZpPaI-1.jpg",
+   "assets/products/yfQkhC2iTVeMRDmZpPaI-2.jpg"
+  ],
+  "slug": "luxury-ladies-watch-off-white-leather-quartz-yfqkhc"
+ },
+ {
+  "id": "gMY45UGYC8hegqdcAzNK",
+  "name": "Luxury Ladies Watch Off White Leather Quartz ",
+  "category": "Watches",
+  "description": "•  Material: Leather\n•  Watch Case Shape: Square\n•  Product Feature: Chic Everyday Design That Upgrades Any Outfit, Lightweight And Comfortable For All Day Wear, Water Resistant For Daily Use, Premium Build Quality That Feels Expensive, Wear It Solo Or Stack With Bracelets\n•  Number Of Pieces: 1 Pc\n•  Color: Off White\n•  Package Includes: 1 x Analogue Watch\n•  Note: There might be slight color differences as a result of varying lighting and monitor effects.",
+  "sellingPrice": 1999,
+  "originalPrice": 3998,
+  "price": 1999,
+  "createdAt": "2026-04-22T15:53:03.867Z",
+  "images": [
+   "assets/products/gMY45UGYC8hegqdcAzNK-0.jpg",
+   "assets/products/gMY45UGYC8hegqdcAzNK-1.jpg",
+   "assets/products/gMY45UGYC8hegqdcAzNK-2.jpg"
+  ],
+  "slug": "luxury-ladies-watch-off-white-leather-quartz-gmy45u"
+ },
+ {
+  "id": "kGY2uAwr2LlARYbLjdfD",
+  "name": "3 Pcs Women's Unstitched Digital Print Suit",
+  "category": "Women's Unstitched",
+  "description": "Shirt Fabric: Lawn\nPattern: Digital Print\nShirt Front Pattern: Digital Print\nNeckline: Printed\nSleeves Pattern: Digital Print\nDaman: Printed\nShirt Back Pattern: Digital Print\nTrouser Fabric: Lawn\nTrouser Pattern: Block Printed\nDupatta Fabric: Lawn\nDupatta Pattern: Digital Print\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Shirt, 1 x Dupatta, 1 x Trouser\nShirt Cutting: 2.75 Meter\nTrouser Cutting: 2.25 Meter\nDupatta Cutting: 2.25 Meter\nColor: Blue\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n ",
+  "sellingPrice": 3998,
+  "originalPrice": 4998,
+  "price": 3998,
+  "createdAt": "2026-04-18T04:19:48.800Z",
+  "images": [
+   "assets/products/kGY2uAwr2LlARYbLjdfD-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/648-2-719700-product-4.webp",
+   "https://content.public.markaz.app/markazimagevideo/public/products/648-2-719700-product-1.webp"
+  ],
+  "slug": "3-pcs-womens-unstitched-digital-print-suit-kgy2ua"
+ },
+ {
+  "id": "x2iZXOzMxpoHv54nsthK",
+  "name": "Stainless Steel Adjustable Chain Bracelet for Men",
+  "category": "Jewellery",
+  "description": "This sleek stainless steel chain bracelet is the perfect blend of modern style and rugged durability, ideal for Pakistani men who want to look sharp for daily wear or special occasions. Its polished finish and sturdy construction make it a reliable accessory that won’t tarnish or break easily, even with regular use. Whether you’re heading to work, a wedding, or a casual outing, this bracelet adds a touch of sophistication without overpowering your look. Crafted from high-grade stainless steel, this bracelet is built to last. It resists rust, corrosion, and everyday wear, making it suitable for the local climate and active lifestyles. The adjustable design ensures a comfortable fit for any wrist size, while its classic chain pattern remains trendy and timeless. Unlike cheap imitations, this piece offers premium quality at a best price in Pakistan, giving you value without compromise. - Made from durable stainless steel - Adjustable fit for any wrist size - Stylish modern chain design - Comfortable to wear all day - Ideal for daily wear or special events - Comes with 1 piece only\n\nHIGHLIGHTS\n\nMaterial: Stainless Steel\nNumber Of Pieces: 1 Pc\nSize: Adjustable\nComfortable\nPackage Includes: 1 x Bracelet\nHelpful Info: Keep Jewellery away from water and chemicals. Remove during physical activities. Store separately in a soft pouch. There might be a slight color difference due to different light and monitor effects.\n",
+  "sellingPrice": 799,
+  "originalPrice": 999,
+  "price": 799,
+  "createdAt": "2026-04-13T11:11:48.636Z",
+  "images": [
+   "assets/products/x2iZXOzMxpoHv54nsthK-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/556-43-378422-product-2.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/556-43-378422-product-3.jpg"
+  ],
+  "slug": "stainless-steel-adjustable-chain-bracelet-for-men-x2izxo"
+ },
+ {
+  "id": "myfm7KzgSqKq0HtGPlxy",
+  "name": "Black Embroidered Women's Abaya with Cross Front Sleeves",
+  "category": "Abaya's",
+  "description": "This elegant Nida Embroidered Classic Abaya is designed for the modern Pakistani woman who values both style and comfort. Perfect for daily wear, office settings, or modest gatherings, it offers a timeless silhouette that suits all seasons. The black color exudes sophistication while the intricate embroidery adds a touch of luxury without overwhelming the design. Crafted from premium quality Nida fabric, this abaya is durable enough to withstand daily use while remaining soft and comfortable against the skin. The round neck and relaxed fit ensure ease of movement, making it ideal for busy lifestyles. The embroidered details are not just decorative—they’re meticulously placed to enhance the garment’s elegance and longevity. Whether you’re dressing for work or a special occasion, this abaya delivers both grace and practicality. - Premium Quality Nida Fabric for Long-Lasting Wear - Stylish Embroidered Design with Elegant Black Finish - Durable Construction Suitable for Daily Use - Classic Round Neck and Flowing Silhouette - New Arrival at Best Price in Pakistan - Perfect for Islamic Modest Fashion and All Seasons\n\nHIGHLIGHTS\n\nMaterial: Nida\nPattern: Embroidered\nGender: Women's\nProduct Feature: Portrait\nNeck Type: Round Neck\nColor: Black\nPackage Includes: 1 x Full Abaya\nLength: 56 Inches\nWidth: 26 Inches\nSleeves: 14/15 Inches\nFlare: 40 Inches\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n",
+  "sellingPrice": 3199,
+  "originalPrice": 3999,
+  "price": 3199,
+  "createdAt": "2026-04-12T03:47:17.494Z",
+  "images": [
+   "assets/products/myfm7KzgSqKq0HtGPlxy-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/573-84-476338-product-2.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/573-84-476338-product-3.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/573-84-476338-product-5.jpg"
+  ],
+  "slug": "black-embroidered-womens-abaya-with-cross-front-sleeves-myfm7k"
+ },
+ {
+  "id": "ngPcr2knQ6ZZibEMvrM8",
+  "name": "Stylish Georgette Full Abaya for Women - 1 Pc",
+  "category": "Abaya's",
+  "description": "Discover the perfect blend of style and sophistication with our Georgette Full Abaya. Designed specifically for women, this maroon abaya features a flowing silhouette that provides comfort and elegance. Whether for daily wear or special occasions, this classic piece will enhance your wardrobe effortlessly. Experience style redefined with this timeless garment.\n\nHIGHLIGHTS\n\nMaterial: Georgette\nGender: Women's\nColor: Maroon\nPackage Includes: 1 x Classic Abaya\nChest Size 24/25\nLength 50/51\nFlare 100\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n ",
+  "sellingPrice": 2899,
+  "originalPrice": 0,
+  "price": 2899,
+  "createdAt": "2026-04-12T03:22:28.414Z",
+  "images": [
+   "assets/products/ngPcr2knQ6ZZibEMvrM8-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511384-product-2.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511384-product-3.jpg"
+  ],
+  "slug": "stylish-georgette-full-abaya-for-women-1-pc-ngpcr2"
+ },
+ {
+  "id": "hodp99w6Ox7WARkthVP8",
+  "name": "Stylish Georgette Full Abaya for Women - 1 Pc",
+  "category": "Abaya's",
+  "description": "Discover the perfect blend of style and sophistication with our Georgette Full Abaya. Designed specifically for women, this maroon abaya features a flowing silhouette that provides comfort and elegance. Whether for daily wear or special occasions, this classic piece will enhance your wardrobe effortlessly. Experience style redefined with this timeless garment.\n\nHIGHLIGHTS\n\nMaterial: Georgette\nGender: Women's\nColor: Maroon\nPackage Includes: 1 x Classic Abaya\nChest Size 24/25\nLength 50/51\nFlare 100\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n",
+  "sellingPrice": 2999,
+  "originalPrice": 3749,
+  "price": 2999,
+  "createdAt": "2026-04-12T03:19:47.728Z",
+  "images": [
+   "assets/products/hodp99w6Ox7WARkthVP8-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-1.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-3.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-4.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/714-84-511382-product-5.jpg"
+  ],
+  "slug": "stylish-georgette-full-abaya-for-women-1-pc-hodp99"
+ },
+ {
+  "id": "qRmsjIWDTWx973N0OyQZ",
+  "name": "Blackhead Remover Nose Pore Cleaner White Device",
+  "category": "Cosmetics",
+  "description": "Get flawless skin without harsh chemicals with this Premium Quality Black Head Remover. Perfect for Pakistani weather and daily use, it gently extracts impurities while keeping your pores clear and refreshed. Ideal for weddings, office days, or anytime you want to look your best. This stylish device is made from durable synthetic materials that resist wear and tear, ensuring long-lasting performance. Its sleek white design with gold accents adds a touch of elegance to your beauty routine. The included attachments let you customize your experience for different skin types and areas. Whether you’re in Lahore, Karachi, or Islamabad, this New Arrival delivers clean, smooth skin with every use. - Durable synthetic construction for long-term use - Stylish white and gold design that matches any beauty setup - Comes with multiple interchangeable tips for versatile use - Easy-to-use digital display with mode settings - Perfect for daily use and sensitive skin - Best price in Pakistan for premium results\n\nHIGHLIGHTS\n\nMaterial: Synthetic\nColor: White\nProduct Feature: Dead Skin Remover\nPackage Includes: 1 x Black Head Remover\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\nProduct Code: MZ1172200332SE",
+  "sellingPrice": 1899,
+  "originalPrice": 2404,
+  "price": 1899,
+  "createdAt": "2026-04-10T13:43:39.003Z",
+  "images": [
+   "assets/products/qRmsjIWDTWx973N0OyQZ-0.jpg",
+   "assets/products/qRmsjIWDTWx973N0OyQZ-1.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-2.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-3.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/thumbnails/products/1172-77-619133-product-4.jpg"
+  ],
+  "slug": "blackhead-remover-nose-pore-cleaner-white-device-qrmsji"
+ },
+ {
+  "id": "mWkzZ0xiihcHEsun0jxs",
+  "name": "Rice Glow Kit: Face Wash, Scrub & Mask Set ",
+  "category": "Cosmetics",
+  "description": "*Product Description*: Discover the secret to glowing, healthy skin with our 3 in 1 Skincare Bundle, specially crafted for Pakistani skin types. This set includes a Rice Face Wash, Rice Scrub, and Rice Mask, all infused with organic rice powder to gently cleanse, exfoliate, and nourish your skin. Perfect for daily use or special occasions, it’s ideal for those seeking a natural, effective routine without harsh chemicals.\n\nMade with premium quality ingredients, this bundle is designed to be durable and effective over time. The rice-based formula is gentle on sensitive skin while delivering visible results. The packaging is stylish and practical, making it easy to store and use. Whether you’re in Lahore, Karachi, or Islamabad, this set is your go-to for a radiant glow that lasts.\n\n- Contains 3 essential products: Face Wash, Scrub, and Mask\n- Made with organic rice powder for natural results\n- Free from parabens and sulfates for sensitive skin\n- Dermatologist tested and suitable for daily use\n- Stylish packaging with golden accents\n- New arrival with best price in Pakistan\n\nEnjoy the benefits of rice-based skincare without the hassle. Treat your skin to a luxurious, affordable routine that delivers real results.\n*Product Details*:Material: Cream\nColor: White, Golden\nProduct Feature: 3 in 1\nPackage Includes: 1 x Rice Face Wash, 1 x Rice Scrub, 1 x Rice Mask\nPack Of 3\n\n\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n\nProduct Code: MZ22100000118MSEE\n",
+  "sellingPrice": 1550,
+  "originalPrice": 2279,
+  "price": 1550,
+  "createdAt": "2026-04-10T12:57:59.456Z",
+  "images": [
+   "assets/products/mWkzZ0xiihcHEsun0jxs-0.jpg",
+   "assets/products/mWkzZ0xiihcHEsun0jxs-1.jpg"
+  ],
+  "slug": "rice-glow-kit-face-wash-scrub-mask-set-mwkzz0"
+ },
+ {
+  "id": "g5J5JNWYAU61qNtWL7ie",
+  "name": "5 in 1 Makeup & Skincare Bundle 300 g - 5 Pcs",
+  "category": "Cosmetics",
+  "description": "*Product Name*: 5 in 1 Makeup & Skincare Bundle 300 g - 5 Pcs\n*Product Description*: \n*Product Details*:Material: Cream\nColor: Multicolor\nProduct Feature: 5 in 1\nPackage Includes: 1 x Facial Kit, 1 x Sunblock, 1 x Makeup Brushes Set, 1 x Face Sheet Mask, 1 x Face Toner\nWeight: 300 Gram\nPack Of 5\n\n\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n\nProduct Code: MZ1598202201TEWHHB\n",
+  "sellingPrice": 2730,
+  "originalPrice": 3212,
+  "price": 2730,
+  "createdAt": "2026-04-10T12:50:26.344Z",
+  "images": [
+   "assets/products/g5J5JNWYAU61qNtWL7ie-0.jpg"
+  ],
+  "slug": "5-in-1-makeup-skincare-bundle-300-g-g5j5jn"
+ },
+ {
+  "id": "s9zg503Zdorr97IDyfsr",
+  "name": "Women's 3 Pcs Printed Cotton Lawn Suit Grey Eid Shaadi",
+  "category": "Women's Unstitched",
+  "description": "Looking for a fresh, comfortable look that’s perfect for Eid, weddings, or everyday wear? This stunning 3-piece unstitched printed suit is crafted for Pakistani women who want to blend elegance with comfort. The soft grey base with crisp white and black vertical stripes on the shirt and dupatta, paired with plain olive green trousers, makes this outfit ideal for both festive and casual occasions. Made from premium quality cotton lawn, it’s breathable, lightweight, and perfect for the hot summer months. You’ll feel cool and stylish without compromising on durability or design. This new arrival is more than just fashion—it’s a smart investment. The cotton lawn fabric ensures long-lasting wear without losing its shape or softness. The shirt features a flattering 2.5 gazz cut, the trousers offer a comfortable straight fit, and the dupatta is generously sized for easy draping. All pieces are made from the same premium cotton lawn, ensuring uniform quality and feel. The printed design on the shirt and dupatta adds a modern, chic touch, while the plain trousers keep the look grounded and versatile. This set is durable, stylish, and perfect for any occasion from Eid to regular use. - Premium quality cotton lawn fabric for comfort and breathability - Stylish printed design on shirt and dupatta with plain trousers for balanced look - Perfect for Eid, weddings, or summer events - New arrival with affordable pricing in Pakistan - Durable construction with 2.5 gazz cutting on all pieces - Grey color with white and black stripes for a modern, elegant appeal\n\nHIGHLIGHTS\n\nShirt Fabric: Cotton Lawn\nPattern: Printed\nTrouser Fabric: Cotton Lawn\nTrouser Pattern: Plain\nDupatta Fabric: Cotton Lawn\nDupatta Pattern: Printed\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\nShirt Cutting: 2.5 Gazz\nTrouser Cutting: 2.5 Gazz\nDupatta Cutting: 2.5 Gazz\nColor: Grey\nButton Not Included\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ1176200490SHKLFS",
+  "sellingPrice": 2299,
+  "originalPrice": 3832,
+  "price": 2299,
+  "createdAt": "2026-04-09T09:44:18.844Z",
+  "images": [
+   "assets/products/s9zg503Zdorr97IDyfsr-0.jpg"
+  ],
+  "slug": "womens-3-pcs-printed-cotton-lawn-suit-grey-s9zg50"
+ },
+ {
+  "id": "rNbVhzqWHSJqifs2V1dd",
+  "name": "Summer Printed 3 Pcs Women Suit Cotton Lawn Multicolor",
+  "category": "Women's Unstitched",
+  "description": "Perfect for the warm Pakistani summers and special occasions, this unstitched printed suit lets you create your own unique look with effortless style. The soft cotton lawn fabric feels light and breezy, making it ideal for long days at the office or festive gatherings. The shirt features a classic printed design with vertical stripes in earthy tones, while the matching plain trousers offer a clean, modern silhouette. The dupatta, also in printed stripes, adds a graceful drape and completes the ensemble beautifully. This set is crafted for comfort and durability, perfect for everyday wear or special events like Eid or weddings. Made from premium quality cotton lawn, this 3-piece set is designed to last. The fabric is breathable and gentle on the skin, making it perfect for Pakistan’s hot weather. Each piece is cut to a flattering 2.5 Gazz, ensuring a comfortable fit for most body types. The multicolor printed design adds a vibrant, stylish touch without being overwhelming. The set is durable, easy to care for, and ideal for both casual outings and formal events. Whether you’re shopping for yourself or looking for a thoughtful gift, this is the best price in Pakistan for a complete, elegant look. - Premium Quality cotton lawn fabric for comfort and breathability - Stylish printed shirt with vertical stripe design - Plain trousers for a clean, modern look - Printed dupatta with elegant fringe detailing - 3-piece set includes shirt, trousers, and dupatta - Perfect for Eid, weddings, or regular summer use\n\nHIGHLIGHTS\n\nShirt Fabric: Cotton Lawn\nPattern: Printed\nTrouser Fabric: Cotton Lawn\nTrouser Pattern: Plain\nDupatta Fabric: Cotton Lawn\nDupatta Pattern: Printed\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\nShirt Cutting: 2.5 Gazz\nTrouser Cutting: 2.5 Gazz\nDupatta Cutting: 2.5 Gazz\nColor: Multicolor\nButton Not Included\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ1176200491SHKLFS",
+  "sellingPrice": 2399,
+  "originalPrice": 3998,
+  "price": 2399,
+  "createdAt": "2026-04-09T09:41:22.926Z",
+  "images": [
+   "assets/products/rNbVhzqWHSJqifs2V1dd-0.jpg"
+  ],
+  "slug": "summer-printed-3-pcs-women-suit-cotton-lawn-rnbvhz"
+ },
+ {
+  "id": "p8oraRttYlYpF6qaKH7R",
+  "name": "3 Pcs Women's Unstitched Digital Print Suit",
+  "category": "Women's Unstitched",
+  "description": "Shirt Fabric: Lawn\nPattern: Digital Print\nShirt Front Pattern: Digital Print\nNeckline: Printed\nSleeves Pattern: Digital Print\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Lawn\nTrouser Pattern: Printed\nDupatta Fabric: Chiffon\nDupatta Pattern: Digital Print\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\nShirt Cutting: 2.5 Meter\nTrouser Cutting: 2.25 Meter\nDupatta Cutting: 2.25 Meter\nColor: Brown\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ1094202147AMCN",
+  "sellingPrice": 3350,
+  "originalPrice": 5583,
+  "price": 3350,
+  "createdAt": "2026-04-09T09:02:57.258Z",
+  "images": [
+   "assets/products/p8oraRttYlYpF6qaKH7R-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-1.webp",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-2.webp",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-3.webp",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1094-2-716042-product-4.webp"
+  ],
+  "slug": "3-pcs-womens-unstitched-digital-print-suit-p8orar"
+ },
+ {
+  "id": "mSveFFz6ScZi9Om8aIQj",
+  "name": "288 Pcs Multicolor Fake Nails for Party Wear",
+  "category": "Nails",
+  "description": "\n*Product Description*: Looking for a flawless, long-lasting manicure without the hassle? These 288 Pcs Multicolor Fake Nails are your perfect solution for any occasion, from weddings to office wear. Designed for Pakistani women who love to express their style, these nails offer a salon-quality finish at a best price in Pakistan.\n\nMade from durable synthetic material, these fake nails are lightweight and comfortable to wear, even during long hours. The multicolor range includes soft pinks, warm oranges, creamy whites, and bold reds, allowing you to match any outfit or mood. Each nail is crafted for easy application and removal, ensuring your hands stay beautiful without damage. The stylish design and premium quality make them ideal for both beginners and fashionistas.\n\n- 288 pieces for endless customization and creativity\n- Durable synthetic material for long-lasting wear\n- Multicolor options to match any outfit or event\n- Perfect for parties, weddings, or everyday fashion\n- Easy to apply and remove for hassle-free use\n- New Arrival with premium quality and best price in Pakistan\n*Product Details*:Material: Synthetic\nColor: Multicolor\nProduct Feature: Customization, Endless Creativity\nPackage Includes: 288 x Fake Nails\nPack Of 288\n\n\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n\nProduct Code: MZ1010200078SADS\n",
+  "sellingPrice": 1199,
+  "originalPrice": 1998,
+  "price": 1199,
+  "createdAt": "2026-04-08T18:50:14.140Z",
+  "images": [
+   "assets/products/mSveFFz6ScZi9Om8aIQj-0.jpg",
+   "assets/products/mSveFFz6ScZi9Om8aIQj-1.jpg",
+   "assets/products/mSveFFz6ScZi9Om8aIQj-2.jpg"
+  ],
+  "slug": "288-pcs-multicolor-fake-nails-for-party-wear-msveff"
+ },
+ {
+  "id": "gwgfnqmzlLmwxq0OgQpG",
+  "name": "Unisex Perfume Set 3 Pieces J. Alcohol-Free Cedarwood",
+  "category": "Perfumes ",
+  "description": "*Product Description*: Indulge in the luxurious scent of this unisex perfume set, perfect for any occasion from weddings to daily wear. Designed for Pakistani weather and lifestyles, these fragrances offer long-lasting freshness without harsh chemicals, making them ideal for both formal events and casual outings.\n\nEach bottle is crafted with premium materials to ensure durability and elegance. The alcohol-free formula is gentle on skin, while the rich cedarwood oil delivers a sophisticated, pleasant aroma that lingers throughout the day. The stylish black and gold packaging adds a touch of class to any wardrobe, making these perfumes not just fragrances but fashion accessories.\n\n- Premium Quality with a modern, sleek design\n- Alcohol-Free formula for sensitive skin\n- Long-Lasting fragrance that stays fresh all day\n- Stylish packaging perfect for gifting or personal use\n- Durable bottles that maintain scent integrity\n- New Arrival with best price in Pakistan for immediate savings\n*Product Details*:Fragrance: Cedarwood Oil\nMaterial: Liquid\nProduct Feature: Alcohol-Free\nGender Type: Unisex\nPackage Includes: 3 x Perfume\n Color: Blue\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\nProduct Code: MZ1296200256GDBY\n",
+  "sellingPrice": 1998,
+  "originalPrice": 0,
+  "price": 1998,
+  "createdAt": "2026-04-08T18:28:42.812Z",
+  "images": [
+   "assets/products/gwgfnqmzlLmwxq0OgQpG-0.jpg",
+   "assets/products/gwgfnqmzlLmwxq0OgQpG-1.jpg"
+  ],
+  "slug": "unisex-perfume-set-3-pieces-j-alcohol-free-gwgfnq"
+ },
+ {
+  "id": "ZNgkB0ce5Edq7LhyuiCF",
+  "name": "Unisex Long Lasting Perfume 100ml Black Galbanum",
+  "category": "Perfumes ",
+  "description": "Product Description*: Looking for a scent that stays with you all day without needing constant reapplication? This premium quality fragrance is your perfect match for Pakistan’s warm climate and busy lifestyle. Designed for both men and women, it’s the best price in Pakistan for a truly stylish, mood-enhancing experience that lasts hours. \n\nCrafted with a sophisticated blend of Galbanum, this unisex perfume delivers a fresh, clean aroma that’s both calming and invigorating. The sleek black bottle is not just durable but also a statement piece for any occasion – from office meetings to evening gatherings. The liquid formula is carefully balanced to ensure long-lasting wear without overpowering your natural scent. Whether you’re dressing for a formal event or a casual day out, this new arrival will elevate your confidence effortlessly.\n\n- Premium Quality fragrance with Galbanum notes for a refined, lasting scent\n- Best price in Pakistan for a luxurious feel without breaking the bank\n- Durable liquid formula designed to stay fresh for hours on your skin\n- Stylish black bottle that complements any outfit or event\n- Mood Enhancing aroma that uplifts your spirit throughout the day\n- New Arrival perfect for daily wear and special occasions alike\n*Product Details*:Fragrance: Galbanum\nMaterial: Liquid\nProduct Feature: Mood Enhancing\nGender Type: Unisex\nPackage Includes: 1 x Perfume\nQuantity: 100 Ml\n Color: Black\nLong Lasting Fragrance Perfume\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\nProduct Code: MZ512200152EACN\n",
+  "sellingPrice": 1549,
+  "originalPrice": 0,
+  "price": 1549,
+  "createdAt": "2026-04-08T18:19:34.997Z",
+  "images": [
+   "assets/products/ZNgkB0ce5Edq7LhyuiCF-0.jpg",
+   "assets/products/ZNgkB0ce5Edq7LhyuiCF-1.jpg",
+   "assets/products/ZNgkB0ce5Edq7LhyuiCF-2.jpg",
+   "assets/products/ZNgkB0ce5Edq7LhyuiCF-3.jpg",
+   "assets/products/ZNgkB0ce5Edq7LhyuiCF-4.jpg",
+   "assets/products/ZNgkB0ce5Edq7LhyuiCF-5.jpg",
+   "assets/products/ZNgkB0ce5Edq7LhyuiCF-6.jpg"
+  ],
+  "slug": "unisex-long-lasting-perfume-100ml-black-galbanum-zngkb0"
+ },
+ {
+  "id": "sZTVtp9RXaJdVHhCW0Dv",
+  "name": "Long Lasting Floral Pocket Perfume Set 5 Pcs Unisex",
+  "category": "Perfumes ",
+  "description": "*Product Description*: Perfect for Pakistani summers and special occasions, this Long Lasting Floral Perfume Set offers a refreshing, elegant scent that stays with you all day. Whether you’re heading to work, a wedding, or a casual outing, these stylish pocket perfumes ensure you always smell confident and sophisticated. Designed for both men and women, they’re ideal for daily wear and special events alike.\n\nEach perfume is crafted with premium quality liquid that delivers a long-lasting fragrance, thanks to its durable, high-grade glass bottles and sleek, modern packaging. The set includes five distinct scents, each housed in a durable, elegant design that protects the fragrance and adds a touch of luxury to your daily routine. The bottles are compact and easy to carry, making them perfect for your bag or pocket. The floral notes are light, pleasant, and universally appealing, ensuring you’ll enjoy a fresh, uplifting aroma no matter the occasion.\n\n- Long Lasting Fragrance for all-day freshness\n- Stylish, compact design perfect for daily wear\n- Premium quality liquid in durable glass bottles\n- Unisex appeal for both men and women\n- New Arrival – best price in Pakistan\n- Ideal for weddings, office, or casual outings\n*Product Details*:Fragrance: Floral\nMaterial: Liquid\nProduct Feature: Long Lasting Fragrance\nGender Type: Unisex\nPackage Includes: 5 x Pocket Perfume\nQuantity: 35 Ml\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\nProduct Code: MZ1281200161MPPE\n",
+  "sellingPrice": 1498,
+  "originalPrice": 0,
+  "price": 1498,
+  "createdAt": "2026-04-08T18:12:33.645Z",
+  "images": [
+   "assets/products/sZTVtp9RXaJdVHhCW0Dv-0.jpg",
+   "assets/products/sZTVtp9RXaJdVHhCW0Dv-1.jpg"
+  ],
+  "slug": "long-lasting-floral-pocket-perfume-set-5-pcs-sztvtp"
+ },
+ {
+  "id": "aVlqiLW3Ki1xRpq6r7k4",
+  "name": "Best Friend heart necklaces Gold and Silver set ",
+  "category": "Jewellery ",
+  "description": "•  Material: Metal\n•  Plating: Gold Plated, Silver Plated\n•  Stone: Crystal\n•  Gender Type: Women\n•  Stone Color: White\n•  Number Of Pieces: 2 Pcs\n•  Color: Golden, Silver\n•  Package Includes: 2 x Necklace\n•  Note: Keep jewelry dry, away from chemicals. Store separately in a soft pouch. There might be a slight color difference due to different light and monitor effects.",
+  "sellingPrice": 1099,
+  "originalPrice": 0,
+  "price": 1099,
+  "createdAt": "2026-04-08T14:01:37.418Z",
+  "images": [
+   "assets/products/aVlqiLW3Ki1xRpq6r7k4-0.jpg",
+   "assets/products/aVlqiLW3Ki1xRpq6r7k4-1.jpg",
+   "assets/products/aVlqiLW3Ki1xRpq6r7k4-2.jpg",
+   "assets/products/aVlqiLW3Ki1xRpq6r7k4-3.jpg"
+  ],
+  "slug": "best-friend-heart-necklaces-gold-and-silver-set-avlqil"
+ },
+ {
+  "id": "smbCUgDhAAhqDRULPq5n",
+  "name": "Papaya White SPF 60 Sunblock Face & Body 100ml",
+  "category": "Cosmetics",
+  "description": "Protect your skin from harsh Pakistani sun with this premium sunblock, designed for maximum protection without heavy feel. Perfect for beach days, weddings, or office outings, it offers reliable defense against UV rays that can cause premature aging and sunburn. This sunblock is made with a smooth, lightweight cream formula that absorbs quickly and stays in place all day. Its durable protection ensures your skin stays safe even during long outdoor sessions. The stylish orange packaging makes it easy to spot and carry, while the organic papaya white formula delivers gentle, effective shielding. Made in the USA, it’s built to last and perform under intense heat. - SPF 60 Sunblock for strong UV protection - Lightweight, non-greasy cream texture - Ideal for face and body use - Made in USA with premium quality ingredients - New arrival in Pakistan with best price - Durable formula for all-day defense\n\nHIGHLIGHTS\n\nMaterial: Cream\nProduct Feature: Protects From Sunburn\nPackage Includes: 1 x Sunblock\nVolume: 100 Ml\nNote: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\nProduct Code: MZ69100000254AIBSFD",
+  "sellingPrice": 999,
+  "originalPrice": 0,
+  "price": 999,
+  "createdAt": "2026-04-08T09:40:52.123Z",
+  "images": [
+   "assets/products/smbCUgDhAAhqDRULPq5n-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-1.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-2.JPG",
+   "https://content.public.markaz.app/markazimagevideo/public/products/691-77-629008-product-3.JPG"
+  ],
+  "slug": "papaya-white-spf-60-sunblock-face-body-100ml-smbcug"
+ },
+ {
+  "id": "hlI4hQGnl1gpARbP1DBx",
+  "name": "2 Pcs Women's Unstitched Printed Suit",
+  "category": "Women's Unstitched",
+  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Blue\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200289INCN",
+  "sellingPrice": 1799,
+  "originalPrice": 3598,
+  "price": 1799,
+  "createdAt": "2026-04-08T09:30:14.745Z",
+  "images": [
+   "assets/products/hlI4hQGnl1gpARbP1DBx-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718752-product-1.webp"
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-hli4hq"
+ },
+ {
+  "id": "qNxNLbqh9pbTX5NVLeLP",
+  "name": "2 Pcs Women's Unstitched Printed Suit",
+  "category": "Women's Unstitched",
+  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Yellow\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200290INCN",
+  "sellingPrice": 1799,
+  "originalPrice": 2570,
+  "price": 1799,
+  "createdAt": "2026-04-08T09:29:05.946Z",
+  "images": [
+   "assets/products/qNxNLbqh9pbTX5NVLeLP-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718753-product-1.webp"
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-qnxnlb"
+ },
+ {
+  "id": "mnptsl9FyXPHDJrvF6Dj",
+  "name": "2 Pcs Women's Unstitched Printed Suit",
+  "category": "Women's Unstitched",
+  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Red\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200292INCN",
+  "sellingPrice": 1799,
+  "originalPrice": 2998,
+  "price": 1799,
+  "createdAt": "2026-04-08T09:28:03.860Z",
+  "images": [
+   "assets/products/mnptsl9FyXPHDJrvF6Dj-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718755-product-1.webp"
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-mnptsl"
+ },
+ {
+  "id": "fvfhD4QlPunJbS05jH09",
+  "name": "2 Pcs Women's Unstitched Printed Suit",
+  "category": "Women's Unstitched",
+  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Blue\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200294INCN\n",
+  "sellingPrice": 1799,
+  "originalPrice": 2998,
+  "price": 1799,
+  "createdAt": "2026-04-08T09:25:45.435Z",
+  "images": [
+   "assets/products/fvfhD4QlPunJbS05jH09-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718757-product-1.webp"
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-fvfhd4"
+ },
+ {
+  "id": "wHKiOW5NeUcveRY88rDC",
+  "name": "2 Pcs Women's Unstitched Printed Suit",
+  "category": "Women's Unstitched",
+  "description": "width 92 inches\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: White\nColor Stuff 100% Guaranteed\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ383200295INCN",
+  "sellingPrice": 1799,
+  "originalPrice": 2570,
+  "price": 1799,
+  "createdAt": "2026-04-08T09:24:44.019Z",
+  "images": [
+   "assets/products/wHKiOW5NeUcveRY88rDC-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/383-3-718758-product-1.webp"
+  ],
+  "slug": "2-pcs-womens-unstitched-printed-suit-whkiow"
+ },
+ {
+  "id": "a4X05FwUqI5fkDjzXRcd",
+  "name": "Women Printed Polo Cotton Suit Pink 2 Pcs",
+  "category": "Women's Unstitched",
+  "description": "This elegant 2-piece women’s unstitched suit is perfect for daily wear in Pakistan’s changing seasons. The stylish pink base with bold black floral prints adds a touch of sophistication to any outfit, making it ideal for office, casual outings, or festive gatherings. Crafted from premium quality polo cotton, this suit is not only comfortable but also durable enough to withstand daily use. The fabric breathes well, keeping you cool and fresh even during warmer months, while the printed design ensures you stay fashionable without compromising on comfort. The suit is designed for easy customization, with each piece cut to 1 meter, allowing you to tailor it to your preferred fit. The printed pattern covers every part of the shirt and trousers, including the sleeves, neckline, and back, ensuring a cohesive and eye-catching look. Made with care, this new arrival is a smart investment for your wardrobe. You can trust the best price in Pakistan without sacrificing style or quality. Whether you’re shopping for yourself or as a gift, this suit delivers both durability and charm. - Premium quality polo cotton fabric for comfort and durability - Stylish pink and black floral print for a modern look - Includes 1 shirt and 1 trouser for a complete outfit - Perfect for daily wear, office, or casual events - New arrival with best price in Pakistan - Easy to customize to your preferred fit\n\nHIGHLIGHTS\n\nShirt Fabric: Polo Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Polo Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 1 Meter\nTrouser Cutting: 1 Meter\nColor: Pink\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ11249217790ADTE",
+  "sellingPrice": 1799,
+  "originalPrice": 0,
+  "price": 1799,
+  "createdAt": "2026-04-08T09:22:27.752Z",
+  "images": [
+   "assets/products/a4X05FwUqI5fkDjzXRcd-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1249-3-674408-product-1.webp"
+  ],
+  "slug": "women-printed-polo-cotton-suit-pink-2-pcs-a4x05f"
+ },
+ {
+  "id": "nXKxaYHupDq1bf3TyB6x",
+  "name": "Women Printed Cotton Suit 2 Pcs Purple All Season",
+  "category": "Women's Unstitched",
+  "description": "Upgrade your wardrobe with this stunning 2-piece women’s unstitched printed suit, crafted for comfort and style in Pakistan’s diverse weather. Perfect for weddings, office wear, or festive occasions, this outfit blends elegance with everyday practicality. The vibrant purple hue and intricate floral patterns make a bold fashion statement while remaining versatile for any occasion. Designed for the local climate, this suit offers breathability and comfort without sacrificing durability. Made from premium quality cotton, this suit is built to last. The shirt and trousers are both crafted from soft, breathable cotton fabric that keeps you cool during hot days and warm during cooler evenings. The detailed printed design covers the entire front, neckline, sleeves, and back of the shirt, while the trousers feature a matching printed pattern for a cohesive, stylish look. The 2.5 Gazz cutting ensures a flattering fit for most body types. With its durable construction and stylish design, this suit is not just a fashion choice but a smart investment for your wardrobe. - Premium Quality Cotton Fabric for All-Season Wear - Stylish Printed Design with Vibrant Purple Accents - Durable Construction for Long-Lasting Use - Perfect Fit with 2.5 Gazz Cutting for Comfort - New Arrival with Trendy Digital Print Pattern - Best Price in Pakistan for Outstanding Value\n\nHIGHLIGHTS\n\nShirt Fabric: Cotton\nPattern: Printed\nShirt Front Pattern: Printed\nNeckline: Printed\nSleeves Pattern: Printed\nDaman: Printed\nShirt Back Pattern: Printed\nTrouser Fabric: Cotton\nTrouser Pattern: Printed\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 2.5 Gazz\nTrouser Cutting: 2.5 Gazz\nColor: Purple\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ779013468ANMCL\n",
+  "sellingPrice": 1799,
+  "originalPrice": 2811,
+  "price": 1799,
+  "createdAt": "2026-04-08T09:21:17.073Z",
+  "images": [
+   "assets/products/nXKxaYHupDq1bf3TyB6x-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1049-3-712161-product-1.webp"
+  ],
+  "slug": "women-printed-cotton-suit-2-pcs-purple-all-nxkxay"
+ },
+ {
+  "id": "uN5wVh1ugv6odvRH4qk9",
+  "name": "Purple Katan Silk 3-Piece Women's Suit Set",
+  "category": "Women's Unstitched",
+  "description": "This stunning 3-piece unstitched suit is perfect for Pakistani women who want to look elegant for weddings, parties, or festive occasions. The rich purple hue and luxurious katan silk fabric make it ideal for both summer and special events, offering comfort without compromising on style. The dupatta, made of sheer net with delicate floral embroidery, adds a graceful touch while remaining light and breathable for warm weather. The katan silk is known for its durability and smooth texture, making this suit not only stylish but also long-lasting. The plain design allows for versatile styling, whether you're pairing it with traditional jewelry or modern accessories. The gold embellishment on the shirt front adds a touch of sophistication without overwhelming the look. This is a new arrival that combines traditional craftsmanship with contemporary fashion. - Made from premium quality katan silk for durability and comfort - Includes 1 shirt, 1 trouser, and 1 dupatta in matching purple - Dupatta features sheer net with floral embroidery for elegance - Perfect for weddings, parties, and festive occasions - Best price in Pakistan for this premium quality set - Stylish design suitable for both summer and festive wear\n\nHIGHLIGHTS\n\nFabric: Katan Silk\nPattern: Plain\nShirt Front Pattern: Plain\nTrouser Pattern: Plain\nDupatta Fabric: Net\nDupatta Pattern: Plain\nNumber Of Pieces: 3 Pcs\nColor: Purple\nPackage Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\nShirt Cutting: 2.5 Yards\nTrouser Cutting: 2.5 Yards\nDupatta Cutting: 2.5 Yards\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ117620061SHKLFS",
+  "sellingPrice": 1799,
+  "originalPrice": 0,
+  "price": 1799,
+  "createdAt": "2026-04-08T09:16:31.214Z",
+  "images": [
+   "assets/products/uN5wVh1ugv6odvRH4qk9-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406080-product-2.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406080-product-1.jpg"
+  ],
+  "slug": "purple-katan-silk-3-piece-womens-suit-set-un5wvh"
+ },
+ {
+  "id": "cjuK1MuXmCdzzfNScMSd",
+  "name": "3 Pcs Girl's Shamoz Silk Embroidered Shirt And Skirt Set",
+  "category": "kids",
+  "description": "3Pcs Front Neck, Sleeves Embroidered Top With Embroidered Skirt And Four Side Emb With Lace Work Dupatta Kids 3Pcs\n\nHIGHLIGHTS\n\nMaterial: Shamoz Silk\nPattern: Embroidered\nGender: Girl's\nPreferred Ages: 1-12 Years\nAvailable Sizes: 5-6 Years, 7-8 Years, 8-10 Years, 11-12 Years\nNumber Of Pieces: 3 Pcs\nPackage Includes: 1 x Skirt, 1 x Shirt, 1 x Dupatta\nShirt Length: 15 Inches\nChest: 17 Inches\nShoulder: 11 Inches\nArm Length Size: 9 Inches\nDupatta: 1.5 Gazz\nColor: Black\n(30 Size 6-8 Years)\nTop Chest Size 15\nTop length 12\nSkirt Length 29\nSkirt Ghair 72\n(32 Size 8-10 Year)\nTop Chest Size 16\nTop length 13\nSkirt Length 32\n(34 Size 10-12 Years)\nTop Chest Size 17\nTop Length 15\nSkirt length 34\nTop Stuff Silk (Premium Silk)\nSkirt Stuff Silk (Premium Silk)\nDupatta Size 1.5 Yards\nStuff Organza\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\nProduct Code: MZ2185200169MBCG",
+  "sellingPrice": 3159,
+  "originalPrice": 0,
+  "price": 3159,
+  "createdAt": "2026-04-04T09:15:36.133Z",
+  "images": [
+   "assets/products/cjuK1MuXmCdzzfNScMSd-0.jpg",
+   "https://content.public.markaz.app/markazimagevideo/public/products/2185-35-700265-product-1.webp",
+   "https://content.public.markaz.app/markazimagevideo/public/products/2185-35-700265-product-2.webp"
+  ],
+  "slug": "3-pcs-girls-shamoz-silk-embroidered-shirt-and-cjuk1m"
  },
  {
   "id": "jjMFoupuMpnQFbAfWRZz",
@@ -1242,20 +1349,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "waterproof-smudge-proof-eyebrow-pencil-brown-ch5bq3"
  },
  {
-  "id": "TmWH2bYGJVfRcRgzkKdq",
-  "name": "Fancy Tissue 3-Piece Women Suit Teal Embroidered",
-  "category": "Women's Unstitched",
-  "description": "This stunning 3-piece tissue suit is perfect for weddings, parties, or any festive occasion in Pakistan. The vibrant teal color and intricate floral embroidery on the neckline and front make it a standout choice for any special event. Designed for comfort and elegance, this outfit is ideal for the warm Pakistani climate while maintaining a luxurious look. The shirt is crafted from premium tissue fabric with heavy embroidery and cut-work details that add sophistication. The inner shirt is made of smooth silk for added comfort and durability. The trouser is plain silk, ensuring a sleek fit, while the dupatta features delicate stone work all over for a touch of glamour. This ensemble is not only stylish but also durable, making it a smart investment for your wardrobe. - Premium quality tissue fabric with heavy embroidery - Includes inner silk shirt for added comfort - Trouser made of plain silk for a sleek fit - Dupatta with all-over stone work for elegance - Perfect for all seasons and festive occasions - New arrival with best price in Pakistan\n• Fabric: Tissue\n• Shirt Front: Heavy Embroidered, Tissue Cut-Work\n• Neckline: Heavy Embroidered\n• Back: Embroidered\n• Trouser: Plain Silk\n• Dupatta: Tissue Stone Work All Over\n• Cuttings: Shirt: 2.5 Gazz, Trouser: 2.5 Gazz, Dupatta: 2.5 Gazz\n• Season: All Season\n• Package Includes: 1 x Shirt, 1 x Inner(Silk), 1 x Trouser, 1 x Dupatta\n• Note: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n• Product Code: MZ6301651SMJ",
-  "sellingPrice": 3999,
-  "originalPrice": 0,
-  "price": 3999,
-  "createdAt": "2026-03-31T06:31:48.990Z",
-  "images": [
-   "https://content.public.markaz.app/markazimagevideo/public/products/74-165-303062-product-1.jpeg"
-  ],
-  "slug": "fancy-tissue-3-piece-women-suit-teal-embroidered-tmwh2b"
- },
- {
   "id": "u5ojz2WA7MKQ1VGboxd1",
   "name": "Stylish Georgette Full Abaya for Women - 1 Pc",
   "category": "Abaya's",
@@ -1270,23 +1363,6 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/714-84-511383-product-4.jpg"
   ],
   "slug": "stylish-georgette-full-abaya-for-women-1-pc-u5ojz2"
- },
- {
-  "id": "X8LNFBbOSKHDIk2rYJV3",
-  "name": "Elevate Your Wardrobe With Our Maxi Collection",
-  "category": "Women's Stitched Suits",
-  "description": "Elevate Your Wardrobe With Our Maxi Collection\n• Fabric: Chiffon\n• Product Type: Maxi\n• Pattern: Plain\n• Neck Type: Round Neck\n• Available Sizes: Standard Size\n• Dimensions: Shirt (Chest 21, Length 44), Flare 96 Inches\n• Package Includes: 1 x Maxi\n• Note: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n• Product Code: MZ71000037ALJTC",
-  "sellingPrice": 1599,
-  "originalPrice": 0,
-  "price": 1599,
-  "createdAt": "2026-03-27T06:39:02.124Z",
-  "images": [
-   "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-1.jpeg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-2.jpeg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-3.jpeg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/729-95-267133-product-4.jpeg"
-  ],
-  "slug": "elevate-your-wardrobe-with-our-maxi-collection-x8lnfb"
  },
  {
   "id": "vGQ3KGkCCSpFHT69sqXq",
@@ -1304,26 +1380,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "purple-daisy-print-18-waterproof-backpack-set-of-vgq3kg"
  },
  {
-  "id": "TKU4efkWDv5BPKveEmb4",
-  "name": "Women Crystal Watch Square Dial Touch Screen Rhinestone Band",
-  "category": "Watches",
-  "description": "*Product Description*: Looking for a watch that’s both elegant and practical for daily use? This stylish crystal bracelet watch is perfect for Pakistani women who want to stay on time while making a fashion statement. Whether you’re heading to the office, a wedding, or a casual outing, its square digital display and sparkling rhinestone band add sophistication without compromising comfort. Designed for durability, the steel construction ensures it lasts through everyday wear, while the touch screen makes it easy to read and operate.\n\nThis new arrival is crafted with premium quality materials and attention to detail, making it a durable and fashionable choice. The rhinestone-encrusted band catches the light beautifully, while the square dial offers a modern, easy-to-read design. Available in four trendy colors — golden, rose gold, silver, and black — it’s ideal for matching any outfit. The watch is lightweight, comfortable to wear, and perfect for gifting on birthdays, anniversaries, or special occasions. With its stylish design and practical features, it’s one of the best price in Pakistan for value and elegance.\n\n- Square digital display for easy time reading\n- Rhinestone-encrusted steel band for sparkle and durability\n- Touch screen functionality for seamless operation\n- Available in four colors: golden, rose gold, silver, black\n- Lightweight and comfortable for all-day wear\n- Perfect gift for birthdays, weddings, or office events\n*Product Details*:Material: Steel\nPattern: Chain Strap\nGender: Women's\nWatch Case Shape: Square\nNumber Of Pieces: 1 Pc\nColor: Golden, Rose Gold, Silver, Black\nPackage Includes: 100 x Bracelet Watch\nWomen's Casual Bracelet Watch with Rhinestone Encrusted Band Electronic Watch Wonderful Watches Gift for Women\n\nDescription:\nFeatures:\n\nStylish and Versatile: Elevate your look with our women's crystal rhinestones bracelet watch, a perfect accessory for any occasion from casual outings to formal events.\n\nMulti-Function Design: Our women's led crystal bracelet watch not only tells time but also adds a touch of sparkle with its rhinestone-encrusted band, making it a statement piece.\n\nPerfect Gift Choice: Whether it's for your girlfriend's birthday or for a meeting or date at the office, our watches make wonderful gifts that are sure to and delight any woman.\n\nQuality Craftsmanship: Each watch is meticulously designed with attention to detail, featuring a rhinestone-encrusted band and a sleek square dial, making it a stylish and elegant accessory for women.\n\nNote: There might be slight color differences as a result of varying lighting and monitor effects.\n\nProduct Code: MZ2131200007HATS\n",
-  "sellingPrice": 1498,
-  "originalPrice": 0,
-  "price": 1498,
-  "createdAt": "2026-03-25T07:46:31.326Z",
-  "images": [
-   "assets/products/TKU4efkWDv5BPKveEmb4-0.jpg",
-   "assets/products/TKU4efkWDv5BPKveEmb4-1.jpg",
-   "assets/products/TKU4efkWDv5BPKveEmb4-2.jpg",
-   "assets/products/TKU4efkWDv5BPKveEmb4-3.jpg",
-   "assets/products/TKU4efkWDv5BPKveEmb4-4.jpg",
-   "assets/products/TKU4efkWDv5BPKveEmb4-5.jpg",
-   "assets/products/TKU4efkWDv5BPKveEmb4-6.jpg"
-  ],
-  "slug": "women-crystal-watch-square-dial-touch-screen-rhinestone-tku4ef"
- },
- {
   "id": "kZ1pBoqwhtVh5W5iRIH0",
   "name": "Stylish Girl's 5-Piece Leather Bag Set in Pink",
   "category": "Bags",
@@ -1339,37 +1395,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "stylish-girls-5-piece-leather-bag-set-in-kz1pbo"
  },
  {
-  "id": "GmDzKK6vng1Gc6x7QWlS",
-  "name": "Black Katan Silk Women's 3-Piece Suit Set",
-  "category": "Women's Unstitched",
-  "description": "This elegant 3-piece unstitched suit is perfect for Pakistani women who want to look stunning for weddings, parties, or festive occasions without compromising on comfort. The black katan silk fabric offers a luxurious drape that flows beautifully, while the sheer net dupatta adds a graceful, airy touch ideal for warm weather. Designed for durability and timeless style, this suit is crafted to last through multiple events and remain fashionable season after season. The premium quality katan silk ensures a smooth, cool feel against the skin, making it ideal for summer and festive wear. The plain design allows for versatile styling, whether you're pairing it with traditional jewelry or modern accessories. The dupatta, adorned with delicate black floral appliqués and a golden embellishment, adds a touch of sophistication without overwhelming the look. This new arrival is not just stylish but also practical, offering the best price in Pakistan for such high-quality material. - Made from premium katan silk for a luxurious feel - Dupatta crafted from sheer net with elegant black floral details - Includes 1 shirt, 1 trouser, and 1 dupatta for complete outfit - Durable construction suitable for multiple occasions - Stylish and modern design perfect for parties and weddings - New arrival with best price in Pakistan for premium quality\n• Fabric: Katan Silk\n• Pattern: Plain\n• Shirt Front Pattern: Plain\n• Trouser Pattern: Plain\n• Dupatta Fabric: Net\n• Dupatta Pattern: Plain\n• Number Of Pieces: 3 Pcs\n• Color: Black\n• Package Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\n• Shirt Cutting: 2.5 Yards\n• Trouser Cutting: 2.5 Yards\n• Dupatta Cutting: 2.5 Yards\n• Note: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n• Product Code: MZ117620055SHKLFS",
-  "sellingPrice": 1599,
-  "originalPrice": 0,
-  "price": 1599,
-  "createdAt": "2026-03-21T12:10:12.072Z",
-  "images": [
-   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406051-product-2.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406051-product-1.jpg"
-  ],
-  "slug": "black-katan-silk-womens-3-piece-suit-set-gmdzkk"
- },
- {
-  "id": "PHYS4ND3oxuIFr04qhft",
-  "name": "Long-lasting Odor Protection Body Spray 2",
-  "category": "Cosmetics",
-  "description": "• Material: Solid\n• Product Feature: Long-lasting Odor Protection\n• Package Includes: 2 x Body Spray\n• Pack Of 2\n• Note: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n• Product Code: MZ2017200138LYBY",
-  "sellingPrice": 1999,
-  "originalPrice": 0,
-  "price": 1999,
-  "createdAt": "2026-03-20T09:16:33.017Z",
-  "images": [
-   "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-1.webp",
-   "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-2.webp",
-   "https://content.public.markaz.app/markazimagevideo/public/products/2017-241-713232-product-3.webp"
-  ],
-  "slug": "long-lasting-odor-protection-body-spray-2-phys4n"
- },
- {
   "id": "fOE0fjQhNmOQqNjdHHSg",
   "name": "Face & Body Scrub Gel 100ml Skin Brightening",
   "category": "Cosmetics",
@@ -1383,22 +1408,6 @@ window.HUNNY_PRODUCTS = [
    "https://content.public.markaz.app/markazimagevideo/public/products/221-36038-197297-product-2.jpeg"
   ],
   "slug": "face-body-scrub-gel-100ml-skin-brightening-foe0fj"
- },
- {
-  "id": "BnY7oIazUEvSnLaiy4Sh",
-  "name": "Kushta Hair Oil 120ml Anti-Hair Loss Booster",
-  "category": "Cosmetics",
-  "description": "Perfect for Pakistani weather and daily use, this premium hair oil delivers powerful nourishment to combat thinning and promote thick, lustrous hair. Ideal for weddings, office wear, or everyday styling, it’s crafted to enhance your natural beauty without weighing hair down. The sleek, durable bottle ensures long-lasting freshness and easy application, making it a stylish addition to your grooming essentials. This 120ml anti-hair loss formula is specially designed to stimulate follicles, boost density, and prevent breakage. Infused with herbal extracts, it revitalizes hair from root to tip, leaving it stronger and more resilient. The elegant black and gold packaging reflects premium quality, while the lightweight oil absorbs quickly without greasiness. Perfect for all hair types, it’s a new arrival that delivers visible results with consistent use. - 120ml premium hair oil for maximum coverage - Anti-hair loss formula with herbal nourishment - Promotes hair density and stimulates growth - Stylish black and gold bottle for premium look - Durable packaging for long shelf life - New arrival with best price in Pakistan\n• Material: Oil\n• Hair Types: All Hair Types\n• Product Feature: Anti-Hair Loss, Promotes Hair Density, Hair Growth\n• Package Includes: 1 x Hair Oil\n• Volume: 120 Ml\n• Note: Before using any new cosmetic product, perform a patch test on a small skin area. Verify ingredients for allergies and follow package warnings and directions.\n• Product Code: MZ19900000068RAAS",
-  "sellingPrice": 899,
-  "originalPrice": 0,
-  "price": 899,
-  "createdAt": "2026-03-20T09:11:16.568Z",
-  "images": [
-   "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-1.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-2.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/199-55-489322-product-3.jpg"
-  ],
-  "slug": "kushta-hair-oil-120ml-anti-hair-loss-booster-bny7oi"
  },
  {
   "id": "a7pD0AN3ZJnxMkGpkpek",
@@ -1418,22 +1427,6 @@ window.HUNNY_PRODUCTS = [
   "slug": "night-cream-for-bright-white-clear-skin-all-a7pd0a"
  },
  {
-  "id": "QexdqGoUcIp267r3ZhKs",
-  "name": "3 Pcs Women's Unstitched Katan Silk Plain Suit",
-  "category": "Women's Unstitched",
-  "description": "• Fabric: Katan Silk\n• Pattern: Plain\n• Shirt Front Pattern: Plain\n• Trouser Pattern: Plain\n• Dupatta Fabric: Net\n• Dupatta Pattern: Plain\n• Number Of Pieces: 3 Pcs\n• Color: Blue\n• Package Includes: 1 x Shirt, 1 x Trouser, 1 x Dupatta\n• Shirt Cutting: 2.5 Yards\n• Trouser Cutting: 2.5 Yards\n• Dupatta Cutting: 2.5 Yards\n• Note: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n• Product Code: MZ117620059SHKLFS",
-  "sellingPrice": 1489,
-  "originalPrice": 0,
-  "price": 1489,
-  "createdAt": "2026-03-19T11:29:06.214Z",
-  "images": [
-   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-2.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-1-withcode.jpg",
-   "https://content.public.markaz.app/markazimagevideo/public/products/1176-2-406078-product-1.jpg"
-  ],
-  "slug": "3-pcs-womens-unstitched-katan-silk-plain-suit-qexdqg"
- },
- {
   "id": "gRcdKZlPTx7paQ6ZyXQA",
   "name": "Turquoise Printed Women's 2Pcs Polo Cotton Suit",
   "category": "Women's Unstitched",
@@ -1446,37 +1439,5 @@ window.HUNNY_PRODUCTS = [
    "https://i.ibb.co/m5Q7CCZW/Whats-App-Image-2026-03-19-at-2-56-PM.jpg"
   ],
   "slug": "turquoise-printed-womens-2pcs-polo-cotton-suit-grcdkz"
- },
- {
-  "id": "8fWjaMa9MfQIWr2Vg7vN",
-  "name": "Turquoise Printed Women's 2Pcs Polo Cotton Suit",
-  "category": "Women's Unstitched",
-  "description": "This elegant 2-piece women’s unstitched suit is perfect for both casual and formal occasions in Pakistan. The stylish green fabric with delicate white floral prints adds a touch of sophistication to your wardrobe, making it ideal for office wear, evening events, or daily outings. Crafted from premium quality polo cotton, this suit is not only comfortable but also durable enough to withstand regular use. The soft, breathable material ensures you stay cool and confident throughout the day, whether you’re shopping, attending a gathering, or simply relaxing at home.\n\nThe suit comes in a convenient 2.25-meter cut for both shirt and trouser, allowing you to tailor it to your preferred fit. Designed for all seasons, it’s versatile enough for daily wear or special events. As a new arrival, you’re getting the best price in Pakistan without compromising on style or quality. The fabric’s durability means it will last longer, saving you money in the long run. Plus, the clean, modern design makes it a timeless addition to your closet.\n\n- Premium quality polo cotton for comfort and durability\n- Stylish green with white floral print for a chic look\n- Perfect for daily wear, office, or evening events\n- New arrival with best price in Pakistan\n- All-season suitable for regular use\n- Includes 1 shirt and 1 trouser for easy stitching\nProduct Details:Shirt Fabric: Polo Cotton\nPattern: Printed\nTrouser Fabric: Polo Cotton\nNumber Of Pieces: 2 Pcs\nPackage Includes: 1 x Shirt, 1 x Trouser\nShirt Cutting: 2.25 Meter\nTrouser Cutting: 2.25 Meter\n Color: Green\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.\n\nProduct Code: MZ1303200285GEBYAD",
-  "sellingPrice": 1699,
-  "originalPrice": 0,
-  "price": 1699,
-  "createdAt": "2026-03-19T10:01:34.631Z",
-  "images": [
-   "https://i.ibb.co/wrPK0GB2/Whats-App-Image-2026-03-19-at-2-55-48-PM.jpg"
-  ],
-  "slug": "turquoise-printed-womens-2pcs-polo-cotton-suit-8fwjam"
- },
- {
-  "id": "68sfU9aYCRc8XTaFTGIx",
-  "name": "Black Chiffon Embroidered Maxi Suit Set for Eid Party Wear",
-  "category": "suits",
-  "description": "This elegant black maxi suit is perfect for Pakistani women who want to look stunning at weddings, Eid, or any festive gathering without compromising on comfort. Designed with a flowing silhouette and delicate ruffled detailing, it’s ideal for the warm weather of Pakistan while keeping you stylish and graceful. The chiffon fabric is lightweight, breathable, and durable, making it perfect for long events or daily wear. You’ll love how it drapes beautifully and moves with you, offering both elegance and ease.\n\nThe suit is crafted with premium quality materials that ensure long-lasting wear. The black color is versatile and timeless, making it suitable for both traditional and modern occasions. The stitched design adds sophistication, while the ruffled hem and neckline give it a touch of charm. The three-piece set includes a maxi dress, matching trousers, and a dupatta, allowing you to mix and match or wear as a complete outfit. This new arrival is stylish, comfortable, and best priced in Pakistan for your next special event.\n\n- Made with premium quality chiffon fabric\n- Stylish black color with ruffled detailing\n- Includes 3 pieces: maxi, trousers, and dupatta\n- Durable and comfortable for all-day wear\n- Perfect for Eid, weddings, and festive occasions\n- New arrival with best price in Pakistan\nProduct Details:Fabric: Chiffon\nPattern: Embroidered\nNeck Type: Round Neck\nAvailable Sizes: Standard Size\nNumber Of Pieces: 3 Pcs\nColor: Black\nPackage Includes: 1 x Maxi, 1 x Trouser, 1 x Dupatta\nFlare Length: 90 Inches\nShirt Length: 50 Inches\nShirt Chest: 21 Inches\nTrouser Length: 37 Inches\nTrouser Waist: 21 Inches\nDupatta Dimensions: 2.5 Gazz\n\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.",
-  "sellingPrice": 2999,
-  "originalPrice": 0,
-  "price": 2999,
-  "createdAt": "2026-03-18T07:50:49.478Z",
-  "images": [
-   "assets/products/68sfU9aYCRc8XTaFTGIx-0.jpg",
-   "https://image2url.com/r2/default/images/1773819589253-f9ae4dd5-1d75-4f16-8444-455a32473a02.jpeg",
-   "https://i.ibb.co/RpQTqXGs/Whats-App-Image-2026-03-18-at-12-31-51-PM-1.jpg",
-   "https://i.ibb.co/Pv3gK9Vb/Whats-App-Image-2026-03-18-at-12-31-50-PM.jpg",
-   "https://i.ibb.co/4w6Y1Yf8/Whats-App-Image-2026-03-18-at-12-31-51-PM.jpg"
-  ],
-  "slug": "black-chiffon-embroidered-maxi-suit-set-for-eid-68sfu9"
  }
 ];
