@@ -5,12 +5,48 @@
 // sirf kuch chune gaye hon. Tasveeron ke naam har baar ek jaise
 // bante hain, isliye purani tasveerein bhi theek chalti rehti hain.
 //
-// Export: 22/08/2026, 11:45:23 pm
-// Products: 93
-// Is baar bheje gaye pages: 3
+// Export: 22/08/2026, 11:54:38 pm
+// Products: 95
+// Is baar bheje gaye pages: 2
 // ============================================================
 
 window.HUNNY_PRODUCTS = [
+ {
+  "id": "jld64IiJZg8EciuBAusE",
+  "name": "Green PU Leather Crossbody Bag Set with Pouch",
+  "category": "Bags",
+  "description": "Looking for a stylish and practical bag that matches your everyday needs? This elegant green PU leather set is perfect for Pakistani women who want to carry their essentials with grace and comfort. Designed for both casual outings and office wear, it’s ideal for the warm weather and busy lifestyle of our cities. The sturdy construction ensures durability, while the chic design keeps you looking fashionable without compromise.\n\nThis set includes a main crossbody bag and a matching pouch, both crafted from premium quality PU leather that resists wear and tear. The gold-tone hardware adds a touch of sophistication, while the soft green hue complements any outfit. The adjustable strap allows for versatile wear, and the secure zipper closure keeps your belongings safe. Whether you’re heading to work, school, or a special event, this bag offers both style and functionality.\n\n- Premium Quality PU Leather for long-lasting use\n- Stylish Green Color with Gold Hardware\n- Perfect for Daily Use, Office, or Casual Events\n- Includes 2 Pieces: Main Bag + Matching Pouch\n- Durable Design with Secure Zipper Closure\n- New Arrival at Best Price in Pakistan\n\nMaterial: PU Leather\nPattern: Plain\nSize: Length: 8 Inches, Height: 9 Inches, Width: 4.5 Inches\nNumber Of Pieces: 2 Pcs\nGender: Women's\nColor: Green\nPackage Includes: 1 x Cross Body Bag\n\nNote: There might be an error of 1-3 cm due to manual measurement, and slight color differences may occur as a result of varying lighting and monitor effects.",
+  "sellingPrice": 2420,
+  "originalPrice": 3030,
+  "price": 2420,
+  "stock": 10,
+  "sku": "MZ119920023ACBSSE",
+  "createdAt": "2026-08-22T18:53:41.620Z",
+  "images": [
+   "assets/products/jld64IiJZg8EciuBAusE-0.jpg",
+   "assets/products/jld64IiJZg8EciuBAusE-1.jpg",
+   "assets/products/jld64IiJZg8EciuBAusE-2.jpg"
+  ],
+  "slug": "green-pu-leather-crossbody-bag-set-with-pouch-jld64i"
+ },
+ {
+  "id": "Cp0PRk2LtnL77QfFX1WF",
+  "name": "Yellow Embroidered Lawn 3-Piece Suit for Women",
+  "category": "Women's Unstitched",
+  "description": "This elegant 3-piece unstitched lawn suit is perfect for Pakistani women who want to look stunning for weddings, parties, or formal events without the hassle of stitching. The vibrant yellow embroidery on crisp white fabric makes it ideal for summer wear, offering both style and comfort. Designed with precision, this set is durable enough to last through multiple occasions while keeping you cool and confident.\n\nThe premium quality lawn fabric ensures breathability and softness, making it comfortable for long hours. The intricate cross-stitch embroidery adds a touch of traditional charm while maintaining a modern, stylish look. Whether you’re dressing for a festive gathering or a professional event, this suit delivers both elegance and practicality. The design is not only visually appealing but also built to withstand daily wear, making it a smart investment.\n\n- Made from premium quality lawn fabric for comfort and durability\n- Stylish yellow embroidery on white base for a bold, festive look\n- Perfect for parties, weddings, and formal events\n- New arrival with best price in Pakistan for exceptional value\n- Includes shirt, trousers, and dupatta for a complete outfit\n- Ideal for summer wear with its lightweight and breathable design\n\nFabric: Lawn\nShirt: Embroidered, Cross Stitch\nTrouser: Embroidered\nDupatta: Embroidered\nCuttings: Shirt: 2.5 Gazz, Trouser: 2.5 Gazz, Dupatta: 2.5 Gazz\nPackage Includes: 1 x Shirt, 1 x Trousers, 1 x Dupatta\n\nNote: There might be 1-3 cm errors of dimension data due to pure manual measurement",
+  "sellingPrice": 2640,
+  "originalPrice": 3300,
+  "price": 2640,
+  "stock": 10,
+  "sku": "MZ83800096ZRACL",
+  "createdAt": "2026-08-22T18:52:58.014Z",
+  "images": [
+   "assets/products/Cp0PRk2LtnL77QfFX1WF-0.jpg",
+   "assets/products/Cp0PRk2LtnL77QfFX1WF-1.jpg",
+   "assets/products/Cp0PRk2LtnL77QfFX1WF-2.jpg"
+  ],
+  "slug": "yellow-embroidered-lawn-3-piece-suit-for-women-cp0prk"
+ },
  {
   "id": "OYF7NsDyC22uq8l6QINT",
   "name": "Avocado Print Night Suit for Women Medium to XL",
