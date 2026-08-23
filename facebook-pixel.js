@@ -13,7 +13,7 @@
  *   Events Manager -> Connect data sources -> Web -> Meta Pixel -> Connect
  */
 
-const PIXEL_ID = '000000000000000';   // <-- yahan apna Pixel ID likhein
+const PIXEL_ID = '911380268296859';   // <-- yahan apna Pixel ID likhein
 
 /* ============================================================
    Neeche kuch badalne ki zaroorat nahi
