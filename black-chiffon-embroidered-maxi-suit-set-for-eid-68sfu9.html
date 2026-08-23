@@ -82,10 +82,20 @@ window.addEventListener('beforeinstallprompt', function (e) {
   .pd-grid>*{min-width:0}
   @media(max-width:860px){.pd-grid{grid-template-columns:minmax(0,1fr);gap:24px}}
   @media(max-width:560px){
-    .pd{padding:16px 14px 50px}
-    .pd h1{font-size:20px}
+    .pd{padding:12px 14px 50px}
+    .pd h1{font-size:19px;line-height:1.3}
     .pd-now{font-size:24px}
-    .pd-thumbs img{width:60px;height:60px}
+    .pd-thumbs img{width:52px;height:52px}
+    /* A square hero eats the whole screen on a small phone, pushing the
+       price and the buy button out of sight. Visitors arriving from an ad
+       have already seen the picture; what they need next is the price. */
+    .pd-hero{aspect-ratio:auto;height:44vh;max-height:340px;object-fit:cover}
+    .pd-crumb{margin-bottom:10px;font-size:12px}
+    .pd-thumbs{margin-top:8px}
+    .pd-grid{gap:16px}
+    .pd-cat{margin-bottom:4px}
+    .pd-price{margin:10px 0 4px}
+    .pd-stock{margin-bottom:14px}
     /* A two-column table is unreadable at this width, so each row becomes
        a stacked label and value. */
     .pd-spec,.pd-spec tbody,.pd-spec tr,.pd-spec th,.pd-spec td{display:block;width:auto}
@@ -97,8 +107,25 @@ window.addEventListener('beforeinstallprompt', function (e) {
     .pd-sec h2{font-size:19px}
   }
   @media(max-width:360px){
-    .pd-thumbs img{width:52px;height:52px}
+    .pd-thumbs img{width:48px;height:48px}
     .pd-buy,.pd-cart{font-size:15px;padding:14px}
+  }
+
+  /* Buying stays one tap away no matter how far down the page the customer
+     has read, or whether they scrolled at all. On the smallest phones the
+     main button sits just below the fold, and this covers that. */
+  .pd-bar{position:fixed;left:0;right:0;bottom:0;background:#fff;
+           border-top:1px solid #e8e8e8;box-shadow:0 -4px 18px rgba(0,0,0,.09);
+           padding:9px 13px;display:none;align-items:center;gap:11px;z-index:900}
+  .pd-bar .p{font-weight:800;font-size:16px;white-space:nowrap;line-height:1.15}
+  .pd-bar .p small{display:block;font-weight:400;font-size:10.5px;color:#8a8279}
+  .pd-bar button{flex:1;background:linear-gradient(135deg,#E8B44F,#C0872B);
+                  color:#1a1409;border:0;border-radius:50px;padding:13px 10px;
+                  font-size:15px;font-weight:800;font-family:inherit;cursor:pointer}
+  @media(max-width:768px){
+    .pd-bar{display:flex}
+    body{padding-bottom:72px}
+    .whatsapp-float{bottom:86px}
   }
   .pd-hero{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;background:#f5f2ef}
   .pd-thumbs{display:flex;gap:9px;margin-top:10px;flex-wrap:wrap}
@@ -211,10 +238,35 @@ window.addEventListener('beforeinstallprompt', function (e) {
   <section class="pd-sec" style="max-width:none"><h2>Isi tarah ki cheezein</h2><div class="pd-more"><a href="women-printed-cotton-night-suit-pink-medium-to-4uto6z.html"><img src="assets/products/4Uto6z3FOXHKW6OqZfuN-0.jpg" alt="Women Printed Cotton Night Suit Pink Medium to XL" loading="lazy"><span>Women Printed Cotton Night Suit Pink Medium to XL</span><b>Rs. 1,679</b></a></div></section>
 </div>
 
+<div class="pd-bar">
+  <div class="p">Rs.&nbsp;2,999<small>Cash on Delivery</small></div>
+  <button type="button" onclick="hcBuyNow()">Buy Now</button>
+</div>
+
 <script>
   // The product this page is about. Written into the page at build time so
   // the cart works without any network request.
   var HC_PRODUCT = {"id": "68sfU9aYCRc8XTaFTGIx", "name": "Black Chiffon Embroidered Maxi Suit Set for Eid Party Wear", "category": "suits", "sellingPrice": 2999, "originalPrice": null, "price": 2999, "images": ["assets/products/68sfU9aYCRc8XTaFTGIx-0.jpg"], "slug": "black-chiffon-embroidered-maxi-suit-set-for-eid-68sfu9", "sku": "68sfU9aYCRc8XTaFTGIx"};
+
+  // These pages were built without any analytics events, so a visitor who
+  // landed straight on a product from an ad was invisible in the funnel.
+  window.dataLayer = window.dataLayer || [];
+  function hcTrack(name, extra) {
+    var items = [{
+      item_id: HC_PRODUCT.id,
+      item_name: HC_PRODUCT.name,
+      item_category: HC_PRODUCT.category,
+      price: Number(HC_PRODUCT.sellingPrice || 0),
+      quantity: 1
+    }];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      event: name,
+      ecommerce: Object.assign({ currency: 'PKR',
+        value: Number(HC_PRODUCT.sellingPrice || 0), items: items }, extra || {})
+    });
+  }
+  hcTrack('view_item');
 
   // Same shape and same localStorage key that app.js uses, so the cart,
   // the header count and checkout all stay in agreement.
@@ -244,11 +296,13 @@ window.addEventListener('beforeinstallprompt', function (e) {
 
   function hcBuyNow() {
     hcPutInCart();
+    hcTrack('add_to_cart');
     window.location.href = 'checkout.html';
   }
 
   function hcAddToCart() {
     hcPutInCart();
+    hcTrack('add_to_cart');
     var el = document.createElement('div');
     el.textContent = 'Cart me add ho gaya';
     el.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:90px;' +
