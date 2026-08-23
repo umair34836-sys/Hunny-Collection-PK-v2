@@ -1,126 +1,136 @@
-# Quick Add — Asli Markaz Format Ke Hisaab Se
+# Ad Se Log Aa Rahe Hain, Page Unhe Rok Nahi Raha
 
 ---
 
 # ⬆️ UPLOAD KAREIN
 
-**GitHub par:** poora zip
-**Firebase Console par:** `firestore.rules` (analytics ke liye, agar abhi tak nahi kiya)
-
-Kholne ka pata: **admin panel → sidebar → ⚡ Quick Add**
+**GitHub par:** poora zip (khaaskar **90 product pages** aur `hc-export-products.html`)
 
 ---
 
-## Aap ka text dekh kar teen cheezein badalni pari
+## Aap ke numbers ka matlab
 
-Pehle maine andaza laga kar parser banaya tha. Aap ka asli text dekh kar
-pata chala ke teen baatein meri soch se alag hain:
-
-### 1. Markaz ke text me price hota hi nahi
-
-Maine parser price dhoondne ke liye banaya tha. Aap ke teeno products me
-**ek bhi price nahi hai.**
-
-Ab page saaf likhta hai: *"Price Markaz ke text me nahi hota, woh khud
-daalna parega."* Ye batana zaroori tha, warna khali khana dekh kar lagta
-ke tool toot gaya.
-
-### 2. Aap ek saath kai products paste karte hain
-
-Aap ne teen products ek hi baar me bheje. Pehle wala tool ek waqt me ek
-hi sambhalta.
-
-**Ab queue ban jati hai.** Teeno paste karein, aur upar patti dikhegi:
-
-> **1 / 3** — 3 baaki hain
-> `Cotton Night Suit` `Cool Undertone Lipstick` `YARA PRIMER`
-
-Har save ke baad **agla product khud bhar jata hai.** Aap ko sirf price aur
-tasveerein deni hain. Dobara paste karne ki zaroorat nahi.
-
-### 3. `Product Code` ab SKU ban jata hai
-
-`MZ1176200322SHKLFS` — ab ye khud SKU ke khane me chala jata hai.
-Isse baad me pata chalta rahega ke kaun sa product Markaz par kaun sa tha.
-
----
-
-## Ab kya kya khud nikal jata hai
-
-| Khana | Kahan se |
+| | |
 |---|---|
-| **Naam** | `*Product Name*:` |
-| **Tafseel** | `*Product Description*:` — poori copy aur bullets |
-| **Spec** | `*Product Details*:` — Fabric, Pattern, Neck Type waghera |
-| **Sizes** | `Available Sizes:` ki line |
-| **SKU** | `Product Code:` |
-| **Price** | ✗ text me hai hi nahi — khud daalein |
+| Kharcha (dono ads) | ~PKR 465 |
+| Asli visitors | 37 |
+| **Per visitor** | **~PKR 12** |
 
-Aur do safaiyan jo dhyan se ki hain:
+Pakistan me ye **sasta hai.** Aap ka ad kaam kar raha hai.
 
-**`*` ke nishan nikal jate hain.** `*Product Name*:` wala nishan naam me
-nahi jata.
+Lekin ab ye:
 
-**Note ek hi baar aata hai.** Markaz wahi warning do jagah likhta hai —
-description me bhi aur details ke baad bhi. Ab woh sirf ek baar aati hai.
-
-**Aur ek cheez:** aap ke teesre product (YARA PRIMER) ka description
-**bilkul khali** tha. Aisi soorat me tool spec se hi description bana deta
-hai, warna us product ka page khali reh jata.
-
----
-
-## Test kiya hua — 37/37
-
-Ab andaze par nahi, **aap ke asli text par**:
-
-| Check | Nateeja |
+| | |
 |---|---|
-| Teeno products mile | 3/3 |
-| Teeno naam bilkul theek | Theek |
-| `*` ke nishan nikle | Theek |
-| Product Code SKU bana | Theek |
-| Sizes details se nikle | Medium, Large, X-Large |
-| Sizes ki line tafseel me dobara nahi | Theek |
-| **Price bana kar nahi daali** | **Theek** |
-| Selling copy bachi | Theek |
-| Bullets bache | Theek |
-| Spec lines bachi | Theek |
-| Product Code tafseel me nahi | Theek |
-| **Note teeno me ek ek baar** | **Theek** |
-| **Khali description spec se bhara** | **Theek** |
-| Ajeeb text par crash | Nahi hota |
-| Purana aam text bhi chalta hai | Price 2400 mila |
-| Queue aage barhti hai | Theek |
-| Queue khatam hone tak text nahi mitta | Theek |
+| Kul users | 37 |
+| **Scroll kisne kiya** | **5** |
+| **10 second se zyada kisne guzare** | **5** |
 
-Aur baaki sab — kul **241 test, sab paas.**
+**32 log aaye aur bina scroll kiye chale gaye.**
 
 ---
 
-# ISTEMAL KA TAREEQA
+## Wajah — maine naap kar dekhi
 
-1. Markaz se **ek ya kai** products ka text copy karein
-2. Quick Add me paste karein — khud alag ho jayenge
-3. Pehle product ka **Markaz price** daalein
-4. **Tasveerein** chunein (kai ek saath)
-5. **Save** dabayein
-6. Agla product khud bhar jayega — sirf price aur tasveerein dein
-7. Queue khatam hone tak yehi chalta rahega
+Aap ke product page par tasveer **poori screen** kha jati thi.
 
-Uske baad hamesha ki tarah: **Export tool → ZIP → GitHub upload**
+Chhote Android par (360×640 — Pakistan me bahut aam):
+
+| Cheez | Kahan thi | Nateeja |
+|---|---|---|
+| Tasveer | 362px | Poori screen |
+| **Price** | 550px | **Screen se neeche** |
+| **Buy Now** | 636px | **Screen se neeche** |
+
+Screen par sirf 530px nazar aate hain. Yani jo banda scroll nahi karta,
+usne **na price dekha, na Buy Now.**
+
+Aur ye Instagram ke ad traffic ke liye khaas taur par bura hai: **unhone
+tasveer ad me pehle hi dekh li hai.** Dobara wahi poori screen ki tasveer
+dikhane ka koi faida nahi. Unhe price chahiye.
+
+### Ab kya kiya
+
+**1. Tasveer ki hadd bandh di** — ab screen ke 44% se zyada nahi leti.
+
+**2. Neeche chipka hua Buy Now bar** — price aur button **hamesha** nazar
+aate hain, chahe banda scroll kare ya na kare.
+
+Naap kar dekha:
+
+| | Pehle | Ab |
+|---|---|---|
+| Price (chhota phone) | 550px — chupa | **477px — nazar aata hai** |
+| Buy Now | 636px — chupa | **hamesha chipka hua** |
 
 ---
 
-## Jo abhi bhi khud karna parega
+## Ek kami jo meri thi
 
-- **Tasveerein download karna** — Markaz doosri website ko seedha lene nahi
-  deta (CORS), iska hal browser me nahi hai
-- **Price daalna** — text me hota hi nahi
-- **Category chunna** — pehli baar. Uske baad yaad rehti hai
+Aap ke Events me sirf `page_view`, `scroll`, `session_start` thay.
+`view_item` aur `add_to_cart` **bilkul nahi.**
 
-Baaki sab khud ho jata hai. Teen products ka andaza: pehle **12–15 minute**
-lagte, ab **4–5 minute.**
+Wajah: jo 90 static product pages maine banaye, **unme ye events daale hi
+nahi thay.** Maine woh sirf purane dynamic `product.html` me rakhe thay.
+Ye meri chook hai.
 
-Agar kisi product ka text ajeeb tarah se toote to woh text mujhe bhej dein,
-parser me us shakal ke liye bhi bandobast kar doonga.
+Isi liye aap ko nazar nahi aa raha tha ke us bag wale page par 21 log aaye
+aur un me se kitno ne cart tak haath badhaya.
+
+**Ab dono events lag gaye hain**, aur naye export me bhi khud aayenge.
+
+---
+
+## Ek cheez jo aap ke numbers me chhupi hai
+
+Aap ka **doosra ad sasta tha:**
+
+| Ad | Kya naapa | Qeemat |
+|---|---|---|
+| Instagram post (bag) | 146 "link clicks" | PKR 423 |
+| Website wala ad | **9 Landing Page Views** | **PKR 4.69 per view** |
+
+Dhyan dein Meta ne khud alag lafz istemal kiye: pehle me "link clicks",
+doosre me "**Landing Page Views**".
+
+Farq ye hai: **click** ka matlab sirf ungli laga. **Landing page view** ka
+matlab page waqai khula. Isi liye Meta ne 146 clicks dikhaye lekin GA4 me
+sirf 37 log aaye.
+
+Aap ne woh sasta wala ad **pause kar rakha hai.**
+
+---
+
+# AB KYA KAREIN — tarteeb se
+
+### 1. Ye files upload karein
+Bina iske aage koi test bekar hai, kyunki abhi bhi purane pages live hain.
+
+### 2. Ek din rukein, phir Events dobara dekhein
+GA4 → Events. Ab `view_item` aur `add_to_cart` nazar aane chahiyein.
+
+**Yahi asal jawab dega:**
+- `view_item` bahut, `add_to_cart` zero → page dekh kar log ruk jate hain
+  (price, bharosa, ya tasveer ka masla)
+- `add_to_cart` hai lekin `purchase` zero → checkout me masla hai
+
+Ye do baatein bilkul alag hain, aur ilaaj bhi alag hai.
+
+### 3. Doosra ad dobara chalayein
+Woh PKR 4.69 per landing page view par tha. **Resume** dabayein aur usay
+chalne dein. Pehle wale se sasta hai.
+
+---
+
+## Ek baat sach mein
+
+86% log ka bina scroll kiye chale jana **thoda normal bhi hai** — Instagram
+ke ad par ungli aksar galti se lag jati hai, aur woh banda kharidne ke irade
+se nahi aata.
+
+Ye fix us ginti ko zero nahi karega. Lekin jo log **waqai** dilchaspi rakhte
+hain, unhe ab price aur Buy Now dhoondna nahi parega. Abhi unhe bhi nahi
+mil raha tha.
+
+Agla asal faisla **`add_to_cart` ki ginti** dekh kar hoga. Woh aane do,
+phir batayein — us par agla kadam tay karenge.
