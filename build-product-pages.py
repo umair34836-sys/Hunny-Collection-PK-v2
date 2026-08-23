@@ -98,6 +98,7 @@ TEMPLATE = """<!DOCTYPE html>
 <link rel="apple-touch-icon" href="assets/favicon-180.png">
 <link rel="stylesheet" href="style.css">
 <script src="/analytics.js"></script>
+<script src="/facebook-pixel.js"></script>
 <link rel="manifest" href="/manifest.json">
 <script>
 // Catches Chrome's install event before pwa.js loads; otherwise it is lost.
