@@ -5,12 +5,34 @@
 // sirf kuch chune gaye hon. Tasveeron ke naam har baar ek jaise
 // bante hain, isliye purani tasveerein bhi theek chalti rehti hain.
 //
-// Export: 24/08/2026, 11:13:54 am
-// Products: 96
+// Export: 24/08/2026, 12:46:00 pm
+// Products: 97
 // Is baar bheje gaye pages: 1
 // ============================================================
 
 window.HUNNY_PRODUCTS = [
+ {
+  "id": "nmOBMWwzvLItd7uzAOPe",
+  "name": "Butterfly Necklace Set Gold Tones Lightweight Alloy for Women",
+  "category": "Women's Stitched Suits",
+  "description": "This elegant butterfly necklace set is perfect for Pakistani women who want to look chic for any occasion, from office wear to festive gatherings. The delicate butterfly design adds a touch of grace and charm, while the alloy material ensures it’s both lightweight and durable enough to handle daily wear. Whether you’re dressing up for a wedding, a dinner date, or simply adding a stylish accent to your outfit, this set offers timeless beauty without compromising on quality.\n\nThe set includes four pieces: a necklace, a pair of earrings, and a ring, all featuring a soft white enamel finish with gold-toned edges. The alloy construction makes it resistant to tarnishing and comfortable to wear, even during long hours. Designed with attention to detail, each piece is crafted to match seamlessly, making it ideal for gifting or personal use. The set is not only stylish but also practical, with a design that suits various skin tones and outfits.\n\n- Premium Quality alloy material for long-lasting wear\n- Stylish butterfly design that complements any outfit\n- Includes 4 pieces: necklace, earrings, and ring\n- Lightweight and comfortable for daily use\n- Best price in Pakistan for such a beautiful set\n- New Arrival – perfect for gifting or personal use\n\nMaterial: Alloy\nNumber Of Pieces: 4 Pcs\nColor: Black, White\nPackage Includes: 4 x Necklace Set\n\nNote: Keep jewelry dry, away from chemicals. Store separately in a soft pouch. There might be a slight color difference due to different light and monitor effects.",
+  "sellingPrice": 1650,
+  "originalPrice": 2060,
+  "price": 1650,
+  "stock": 10,
+  "sku": "MZ1967200003JRCS",
+  "createdAt": "2026-08-24T07:45:27.189Z",
+  "images": [
+   "assets/products/nmOBMWwzvLItd7uzAOPe-0.jpg",
+   "assets/products/nmOBMWwzvLItd7uzAOPe-1.jpg",
+   "assets/products/nmOBMWwzvLItd7uzAOPe-2.jpg",
+   "assets/products/nmOBMWwzvLItd7uzAOPe-3.jpg",
+   "assets/products/nmOBMWwzvLItd7uzAOPe-4.jpg",
+   "assets/products/nmOBMWwzvLItd7uzAOPe-5.jpg",
+   "assets/products/nmOBMWwzvLItd7uzAOPe-6.jpg"
+  ],
+  "slug": "butterfly-necklace-set-gold-tones-lightweight-alloy-for-nmobmw"
+ },
  {
   "id": "gWMc8OQGyZJipoYCxqQO",
   "name": "Women High Waist Belly Shaping Pants Black Buckle Pressurized",
