@@ -5,12 +5,30 @@
 // sirf kuch chune gaye hon. Tasveeron ke naam har baar ek jaise
 // bante hain, isliye purani tasveerein bhi theek chalti rehti hain.
 //
-// Export: 24/08/2026, 10:24:05 am
-// Products: 95
-// Is baar bheje gaye pages: 5
+// Export: 24/08/2026, 11:13:54 am
+// Products: 96
+// Is baar bheje gaye pages: 1
 // ============================================================
 
 window.HUNNY_PRODUCTS = [
+ {
+  "id": "gWMc8OQGyZJipoYCxqQO",
+  "name": "Women High Waist Belly Shaping Pants Black Buckle Pressurized",
+  "category": "Women's Stitched Suits",
+  "description": "Perfect for Pakistani women seeking comfort and style, these high-waist shaping pants are designed to flatter your figure while keeping you cool in warm weather. Ideal for daily wear, postpartum recovery, or special occasions, they offer a sleek, modern look that suits any outfit. Made with premium quality, breathable fabric, they’re both durable and easy to clean, ensuring long-lasting use without sacrificing comfort.\n\nThese pants feature a double-layered design that gently lifts and shapes your waist and hips, giving you a more defined silhouette. The adjustable buckle system allows for a customized, secure fit that adapts to your body’s needs. The breathable mesh panels enhance airflow, making them perfect for hot climates. The stylish, classic cut ensures you look polished while staying comfortable. Whether you’re at home, at work, or out for a walk, these pants offer both support and elegance.\n\n- Double-layered construction for enhanced shaping and support\n- Adjustable buckle system for a personalized, secure fit\n- Breathable mesh panels for improved ventilation\n- Premium quality, durable fabric that withstands daily wear\n- Easy to clean and maintain for long-term use\n- Stylish, classic design suitable for any occasion\n\nTarget: Women\nType: Pants/Bottoms\nQuality: High Quality Material\nCare: Easy to Clean and Maintain.",
+  "sellingPrice": 1980,
+  "originalPrice": 2480,
+  "price": 1980,
+  "stock": 1000,
+  "sku": "MZCHYHAM1253",
+  "createdAt": "2026-08-24T06:13:21.897Z",
+  "images": [
+   "assets/products/gWMc8OQGyZJipoYCxqQO-0.jpg",
+   "assets/products/gWMc8OQGyZJipoYCxqQO-1.jpg",
+   "assets/products/gWMc8OQGyZJipoYCxqQO-2.jpg"
+  ],
+  "slug": "women-high-waist-belly-shaping-pants-black-buckle-gwmc8o"
+ },
  {
   "id": "jld64IiJZg8EciuBAusE",
   "name": "Green PU Leather Crossbody Bag Set with Pouch",
