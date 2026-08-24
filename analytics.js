@@ -44,7 +44,13 @@ const GA4_ID = 'G-4TRMYR09SQ';   // Hunny Collection PK
   gtag('config', GA4_ID, {
     // Pakistan me bohat se log privacy ko lekar hassas hain, aur ye setting
     // IP ka aakhri hissa kaat deti hai. Rehnumai ke liye kaafi hai.
-    anonymize_ip: true
+    anonymize_ip: true,
+
+    // Buy Now aur Confirm Order foran doosre page par le jate hain. Aam
+    // request us waqt beech me hi mar jati hai, aur event kabhi pahunchta
+    // nahi. sendBeacon page band hone ke baad bhi request poori karta hai,
+    // isi liye add_to_cart aur purchase ab zaya nahi honge.
+    transport_type: 'beacon'
   });
 
   // ---------------------------------------------------------
