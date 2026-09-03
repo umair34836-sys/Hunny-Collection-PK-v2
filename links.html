@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Links | Quick Access Hub</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --primary: #8CE4FF;
+    --primary-dark: #5CC8FF;
+    --accent: #FFA239;
+    --accent-2: #FF5656;
+    --soft: #FEEE91;
+    --bg: #FFFBF0;
+    --card-bg: #FFFFFF;
+    --text: #2D2D2D;
+    --text-light: #6B6B6B;
+    --border: #EFEAD8;
+    --shadow: 0 8px 30px rgba(140,228,255,0.18);
+    --shadow-hover: 0 16px 45px rgba(140,228,255,0.32);
+    --radius: 18px;
+    --transition: 0.25s cubic-bezier(.4,0,.2,1);
+  }
+  [data-theme="dark"]{
+    --bg: #14161c;
+    --card-bg: #1c1f28;
+    --text: #f2f2f2;
+    --text-light: #a3a8b5;
+    --border: #2a2e3a;
+    --shadow: 0 8px 30px rgba(0,0,0,0.45);
+    --shadow-hover: 0 16px 45px rgba(0,0,0,0.6);
+  }
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  body{
+    font-family: 'Segoe UI', 'Poppins', Tahoma, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background var(--transition), color var(--transition);
+    padding-bottom: 60px;
+  }
+  .bg-blob{
+    position: fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none;
+  }
+  .bg-blob span{
+    position:absolute; border-radius:50%; filter: blur(80px); opacity:.35;
+  }
+  .bg-blob span:nth-child(1){ width:420px;height:420px; background:var(--primary); top:-120px; left:-100px; }
+  .bg-blob span:nth-child(2){ width:380px;height:380px; background:var(--accent); bottom:-140px; right:-100px; }
+  .bg-blob span:nth-child(3){ width:300px;height:300px; background:var(--soft); top:40%; left:60%; }
+
+  header{
+    max-width: 1100px; margin: 0 auto; padding: 48px 20px 20px;
+    text-align:center; position:relative;
+  }
+  header h1{
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+  }
+  header p{
+    color: var(--text-light);
+    margin-top: 8px;
+    font-size: 15px;
+  }
+
+  .top-controls{
+    display:flex; justify-content:center; gap:10px; margin-top: 18px; flex-wrap:wrap;
+  }
+  .theme-toggle, .add-btn{
+    border:none; cursor:pointer;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    display:flex; align-items:center; gap:6px;
+    box-shadow: var(--shadow);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .theme-toggle:hover, .add-btn:hover{ transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+
+  .search-wrap{
+    max-width: 640px; margin: 26px auto 0; padding: 0 20px;
+  }
+  .search-box{
+    display:flex; align-items:center; gap:10px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 12px 20px;
+    box-shadow: var(--shadow);
+  }
+  .search-box input{
+    flex:1; border:none; outline:none; background:transparent;
+    font-size: 15px; color: var(--text);
+  }
+  .search-box svg{ flex-shrink:0; opacity:.6; }
+
+  .tabs{
+    max-width: 1100px; margin: 24px auto 0; padding: 0 20px;
+    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+  }
+  .tab{
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-light);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .tab.active, .tab:hover{
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    border-color: transparent;
+  }
+
+  main{
+    max-width: 1100px; margin: 34px auto 0; padding: 0 20px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .card{
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display:flex; flex-direction:column; gap: 12px;
+    text-decoration:none; color: var(--text);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    animation: fadeUp .5s ease both;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    opacity:0; transition: opacity var(--transition);
+    z-index:0;
+  }
+  .card:hover{
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    border-color: transparent;
+  }
+  .card-top{
+    display:flex; align-items:center; gap:12px; z-index:1;
+  }
+  .favicon{
+    width: 42px; height:42px; border-radius: 12px;
+    background: var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; flex-shrink:0;
+    border: 1px solid var(--border);
+  }
+  .favicon img{ width: 26px; height:26px; }
+  .card-title{ font-weight:700; font-size:16px; line-height:1.25; }
+  .card-desc{
+    font-size: 13px; color: var(--text-light); line-height:1.5; z-index:1;
+    flex:1;
+  }
+  .card-footer{
+    display:flex; align-items:center; justify-content:space-between; z-index:1;
+  }
+  .card-tag{
+    font-size: 11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px;
+    padding: 4px 10px; border-radius: 999px;
+    background: var(--soft); color:#8a6d00;
+  }
+  [data-theme="dark"] .card-tag{ background:#3a341a; color:#ffe38a; }
+  .copy-btn{
+    border:none; background: var(--bg); color: var(--text-light);
+    width:32px; height:32px; border-radius:50%; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--border);
+    transition: all var(--transition);
+  }
+  .copy-btn:hover{ background: var(--primary); color:#fff; }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(14px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .empty{
+    text-align:center; padding: 60px 20px; color: var(--text-light);
+  }
+
+  .toast{
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: var(--bg);
+    padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight:600;
+    opacity:0; pointer-events:none; transition: all .3s ease;
+    z-index: 999;
+  }
+  .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+
+  footer{
+    text-align:center; margin-top: 50px; color: var(--text-light); font-size: 13px;
+  }
+
+  /* --- Add / Edit modal --- */
+  .modal-overlay{
+    position: fixed; inset:0; background: rgba(0,0,0,.45);
+    display:none; align-items:center; justify-content:center; z-index: 1000; padding: 20px;
+  }
+  .modal-overlay.show{ display:flex; }
+  .modal{
+    background: var(--card-bg); border-radius: var(--radius);
+    padding: 26px; width: 100%; max-width: 420px;
+    box-shadow: var(--shadow-hover);
+    display:flex; flex-direction:column; gap: 12px;
+  }
+  .modal h2{ font-size: 18px; margin-bottom: 4px; }
+  .modal label{ font-size: 12.5px; font-weight:600; color: var(--text-light); }
+  .modal input{
+    width:100%; padding: 10px 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    font-size: 14px; outline:none;
+  }
+  .modal-actions{ display:flex; gap:10px; margin-top: 8px; }
+  .modal-actions button{
+    flex:1; padding: 10px; border-radius: 10px; border:none; cursor:pointer;
+    font-weight:700; font-size: 14px;
+  }
+  .btn-save{ background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; }
+  .btn-cancel{ background: var(--bg); color: var(--text); border: 1px solid var(--border) !important; }
+</style>
+</head>
+<body>
+
+<div class="bg-blob"><span></span><span></span><span></span></div>
+
+<header>
+  <h1>🔗 My Links Hub</h1>
+  <p>Apni tamam websites aik jagah, aik click mein.</p>
+  <div class="top-controls">
+    <button class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+    <button class="add-btn" id="addBtn">➕ Add Link</button>
+  </div>
+</header>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="searchInput" placeholder="Link search karain (naam ya category)...">
+  </div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="emptyState" style="display:none;">Koi link nahi mila 🙁</div>
+</main>
+
+<footer>Made for quick access • Links is your browser mein save hain (localStorage)</footer>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>➕ Naya Link Add Karain</h2>
+    <label>Website Ka Naam</label>
+    <input type="text" id="inpName" placeholder="e.g. Facebook Page">
+    <label>URL</label>
+    <input type="text" id="inpUrl" placeholder="https://example.com">
+    <label>Description (optional)</label>
+    <input type="text" id="inpDesc" placeholder="Short note">
+    <label>Category</label>
+    <input type="text" id="inpCat" placeholder="e.g. Social, Store, Admin">
+    <div class="modal-actions">
+      <button class="btn-cancel" id="cancelBtn">Cancel</button>
+      <button class="btn-save" id="saveBtn">Save Link</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------------------------------------------------------
+  // Yahan apne default links add/edit kar sakte hain.
+  // Naye links "Add Link" button se bhi add ho sakte hain
+  // (wo browser ke localStorage mein save hote hain).
+  // ---------------------------------------------------------
+  const defaultLinks = [
+    { name: "Hunny Collection PK — Home", url: "index.html", desc: "Main store homepage", category: "Store" },
+    { name: "Shop", url: "shop.html", desc: "All products listing", category: "Store" },
+    { name: "Admin Panel", url: "admin.html", desc: "Store admin dashboard", category: "Admin" },
+    { name: "Account", url: "account.html", desc: "Customer account page", category: "Store" },
+    { name: "Facebook", url: "https://facebook.com", desc: "Apna Facebook page yahan link karain", category: "Social" },
+    { name: "Instagram", url: "https://instagram.com", desc: "Apna Instagram page yahan link karain", category: "Social" },
+    { name: "WhatsApp Business", url: "https://wa.me/", desc: "Apna WhatsApp number yahan add karain", category: "Social" },
+  ];
+
+  const STORAGE_KEY = "hc_my_links_v1";
+
+  function loadLinks(){
+    try{
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if(saved) return JSON.parse(saved);
+    }catch(e){}
+    return defaultLinks;
+  }
+  function saveLinks(links){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(links)); }catch(e){}
+  }
+
+  let links = loadLinks();
+  let activeCategory = "All";
+  let searchTerm = "";
+
+  const grid = document.getElementById("grid");
+  const tabsEl = document.getElementById("tabs");
+  const emptyState = document.getElementById("emptyState");
+  const searchInput = document.getElementById("searchInput");
+  const toast = document.getElementById("toast");
+
+  function getFaviconUrl(url){
+    try{
+      if(!/^https?:\/\//i.test(url)) return null;
+      const u = new URL(url);
+      return `https://www.google.com/s2/favicons?sz=64&domain=${u.hostname}`;
+    }catch(e){ return null; }
+  }
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(()=> toast.classList.remove("show"), 1800);
+  }
+
+  function renderTabs(){
+    const categories = ["All", ...new Set(links.map(l => l.category || "Other"))];
+    tabsEl.innerHTML = "";
+    categories.forEach(cat => {
+      const btn = document.createElement("button");
+      btn.className = "tab" + (cat === activeCategory ? " active" : "");
+      btn.textContent = cat;
+      btn.onclick = () => { activeCategory = cat; render(); };
+      tabsEl.appendChild(btn);
+    });
+  }
+
+  function render(){
+    renderTabs();
+    const filtered = links.filter(l => {
+      const matchesCat = activeCategory === "All" || (l.category || "Other") === activeCategory;
+      const term = searchTerm.toLowerCase();
+      const matchesSearch = !term || l.name.toLowerCase().includes(term) ||
+        (l.category || "").toLowerCase().includes(term) ||
+        (l.desc || "").toLowerCase().includes(term);
+      return matchesCat && matchesSearch;
+    });
+
+    grid.innerHTML = "";
+    emptyState.style.display = filtered.length ? "none" : "block";
+
+    filtered.forEach((link, i) => {
+      const card = document.createElement("a");
+      card.className = "card";
+      card.href = link.url;
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
+      card.style.animationDelay = (i * 0.04) + "s";
+
+      const favUrl = getFaviconUrl(link.url);
+      const initial = (link.name || "?").trim().charAt(0).toUpperCase();
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="favicon">${favUrl ? `<img src="${favUrl}" alt="" onerror="this.style.display='none'; this.parentElement.textContent='${initial}'">` : initial}</div>
+          <div class="card-title">${escapeHtml(link.name)}</div>
+        </div>
+        <div class="card-desc">${escapeHtml(link.desc || "")}</div>
+        <div class="card-footer">
+          <span class="card-tag">${escapeHtml(link.category || "Other")}</span>
+          <button class="copy-btn" title="Copy link" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+      `;
+
+      const copyBtn = card.querySelector(".copy-btn");
+      copyBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        navigator.clipboard.writeText(link.url).then(() => showToast("Link copy ho gaya ✅"));
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[c]));
+  }
+
+  searchInput.addEventListener("input", (e) => {
+    searchTerm = e.target.value;
+    render();
+  });
+
+  // Theme toggle
+  const themeToggle = document.getElementById("themeToggle");
+  function applyTheme(theme){
+    document.documentElement.setAttribute("data-theme", theme);
+    themeToggle.textContent = theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+    try{ localStorage.setItem("hc_links_theme", theme); }catch(e){}
+  }
+  (function initTheme(){
+    let theme = "light";
+    try{ theme = localStorage.getItem("hc_links_theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); }catch(e){}
+    applyTheme(theme);
+  })();
+  themeToggle.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme");
+    applyTheme(current === "dark" ? "light" : "dark");
+  });
+
+  // Add link modal
+  const modalOverlay = document.getElementById("modalOverlay");
+  const addBtn = document.getElementById("addBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const saveBtn = document.getElementById("saveBtn");
+  const inpName = document.getElementById("inpName");
+  const inpUrl = document.getElementById("inpUrl");
+  const inpDesc = document.getElementById("inpDesc");
+  const inpCat = document.getElementById("inpCat");
+
+  addBtn.addEventListener("click", () => {
+    inpName.value = ""; inpUrl.value = ""; inpDesc.value = ""; inpCat.value = "";
+    modalOverlay.classList.add("show");
+    inpName.focus();
+  });
+  cancelBtn.addEventListener("click", () => modalOverlay.classList.remove("show"));
+  modalOverlay.addEventListener("click", (e) => { if(e.target === modalOverlay) modalOverlay.classList.remove("show"); });
+
+  saveBtn.addEventListener("click", () => {
+    const name = inpName.value.trim();
+    let url = inpUrl.value.trim();
+    if(!name || !url){ showToast("Naam aur URL zaroori hain"); return; }
+    if(!/^https?:\/\//i.test(url) && !url.endsWith(".html") && !url.startsWith("/")){
+      url = "https://" + url;
+    }
+    links.push({ name, url, desc: inpDesc.value.trim(), category: inpCat.value.trim() || "Other" });
+    saveLinks(links);
+    modalOverlay.classList.remove("show");
+    render();
+    showToast("Link add ho gaya 🎉");
+  });
+
+  render();
+</script>
+</body>
+</html>
